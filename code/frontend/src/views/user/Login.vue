@@ -7,11 +7,11 @@
           <p class="title">LOGIN</p>
         </div>
         <!-- login 큰 클자 -->
-        <div style="width : 500px; height:35%;
+        <div style="width : 100%; height:35%;
       margin: auto; padding-top: 30px;
   ">
           <!-- 로그인 입력 큰 틀 -->
-          <div style="float : left; width: 80%;">
+          <div style="float : left; width: 76%;">
             <!-- 로그인 입력 -->
             <div style="margin : 5px auto;">
               <div
@@ -20,7 +20,7 @@
               >이메일</div>
               <div>
                 <input
-                  style="height:25px; width: 75%; border : 0px solid white; border-radius:5px;"
+                  class="input-text"
                   type="text"
                 />
               </div>
@@ -33,14 +33,14 @@
               >비밀번호</div>
               <div>
                 <input
-                  style="height:25px; width: 75%; border : 0px solid white; border-radius:5px;"
+                  class="input-text"
                   type="text"
                 />
               </div>
             </div>
             <!-- 비밀번호 -->
           </div>
-          <div style="float:right; width:20%;">
+          <div style="float:right; width:21%;">
             <button
               style="width:75px; height:75px; background-color:yellowgreen; color: white; border : 0px solid white; border-radius:5px;"
             >LOGIN</button>
@@ -48,11 +48,10 @@
           <!-- 로그인 버튼 -->
         </div>
         <div
-          style="width : 80%; height:15%; margin: auto; text-align: center; padding-top: 15px; color: white"
+          style="width : 100%; height:15%; margin: auto; text-align: center; padding-top: 20px; color: white"
         >
-          <router-link to="/" class="bottom-btn">아이디 찾기</router-link>|
-          <router-link to="/" class="bottom-btn">비밀번호 찾기</router-link>|
-          <router-link to="/user/join" class="bottom-btn">회원가입</router-link>
+          <router-link to="/" class="bottom-btn">비밀번호 찾기 </router-link>|
+          <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; width: 100%">

@@ -1,7 +1,7 @@
 <template>
     <div class="google-login">
         <button >
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="55" height="55" viewBox="0 0 55 55">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 55 55">
                 <defs>
                     <clipPath id="clip-path">
                     <path id="패스_155" data-name="패스 155" d="M21.023,10.057H11.847v3.8h5.282c-.492,2.417-2.551,3.8-5.282,3.8a5.819,5.819,0,1,1,0-11.637,5.693,5.693,0,0,1,3.625,1.3l2.865-2.865a9.841,9.841,0,1,0-6.49,17.232c4.923,0,9.4-3.581,9.4-9.847A8.169,8.169,0,0,0,21.023,10.057Z" transform="translate(-2 -2)"/>

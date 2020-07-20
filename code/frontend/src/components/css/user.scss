@@ -49,6 +49,15 @@
     }
     .bottom-btn {
       color: white;
+      &:hover {
+        color: black;
+      }
+    }
+    .input-text {
+      height:30px; 
+      width: 75%; 
+      border : 0px solid white; 
+      border-radius:5px;
     }
     // .main {
     //     position: absolute;
@@ -114,7 +123,7 @@
     #kakao-login,
     .google-login {
       margin: 0 5px;
-      width: 49px;
+      width: 30px;
       display: inline-block;
     }
     .sns-login {
