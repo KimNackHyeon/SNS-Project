@@ -2,9 +2,9 @@
 
 - 팀원 소개
 
-  팀장 : 김낙현
+  팀장 : 김낙현(nack)
 
-  팀원 : 권남선, 류혜명, 박건호, 윤종현
+  팀원 : 권남선(kwon), 류혜명(myong), 박건호(park), 윤종현(yoon)
 
 
 
@@ -69,7 +69,7 @@
 **branch**
 
 ``` 
-master -> front -> back
+master -> front(kwon, myong, yoon) -> back(nack, park)
 ```
 
 **merge**
