@@ -69,11 +69,12 @@ import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
+import Home from "../Home.vue";
 
 export default {
   components: {
     KakaoLogin,
-    GoogleLogin
+    GoogleLogin,
   },
   created() {
     this.component = this;
