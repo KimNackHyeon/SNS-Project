@@ -2,61 +2,52 @@
   <div class="user" id="login">
     <div class="wrapC">
       <!-- -------------------------------- -->
-      <div style="width:100%; height : 200px;">
-        <div style="height : 35%;">
+      <div style="width:100%; height : 400px;">
+        <div style="height : 25%;">
           <p class="title">LOGIN</p>
         </div>
         <!-- login 큰 클자 -->
-        <div style="width : 100%; height:35%;
-      margin: auto; padding-top: 30px;
-  ">
+        <div style="width : 100%; height:25%; margin: auto;">
           <!-- 로그인 입력 큰 틀 -->
-          <div style="float : left; width: 76%;">
+          <div style="float : left; width: 77%;">
             <!-- 로그인 입력 -->
             <div style="margin : 5px auto;">
-              <div
-                id="describe"
-                style="float:left; width:15%; text-align:center; padding:5px; color: white;"
-              >이메일</div>
+              <div id="describe" class="login-input-text">이메일</div>
               <div>
                 <input
                   v-model="email"
                   v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
                   @keyup.enter="Login"
-                  id="email"
-                  style="height:25px; width: 60%; border : 0px solid white; border-radius:5px;"
                   type="text"
+                  class="login-input"
                 />
                 <div class="error-text" v-if="error.email">{{ error.email }}</div>
               </div>
+              
             </div>
             <!--이메일 -->
             <div style="margin : 5px auto; padding-top: 10px;">
-              <div
-                id="describe"
-                style="float:left; width:15%; text-align:center; padding:5px; color: white;"
-              >비밀번호</div>
+              <div id="describe" class="login-input-text">비밀번호</div>
               <div>
                 <input
-                  style="height:25px; width: 60%; border : 0px solid white; border-radius:5px;"
+                  v-model="password"
+                  v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
+                  @keyup.enter="Login"
                   type="password"
+                  class="login-input"
                 />
               </div>
             </div>
             <!-- 비밀번호 -->
           </div>
-          <div style="float:right; width:21%;">
-            <button
-              style="width:75px; height:75px; background-color:yellowgreen; color: white; border : 0px solid white; border-radius:5px;"
-            >LOGIN</button>
+          <div style="margin-top:5px; float:right; width:20%;">
+            <button class="login-btn">LOGIN</button>
           </div>
           <!-- 로그인 버튼 -->
         </div>
-        <div
-          style="width : 100%; height:15%; margin: auto; text-align: center; padding-top: 20px; color: white"
-        >
-          <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기</router-link>|
-          <router-link to="/user/join" class="bottom-btn">회원가입</router-link>
+        <div style="width : 100%; height:5%; margin: auto; text-align: center; color: white">
+          <router-link to="/" class="bottom-btn">비밀번호 찾기 </router-link>|
+          <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; width: 100%">
@@ -65,9 +56,9 @@
         </div>
         <!-- 다른 플랫폼으로 로그인 -->
       </div>
-
       <!-- -------------------------------- -->
     </div>
+    <div class="error-message" v-if="error.email||error.password">이메일이 등록되지 않았거나 비밀번호가 달라요.</div>
   </div>
 </template>
 
