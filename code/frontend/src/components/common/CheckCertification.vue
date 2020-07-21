@@ -14,13 +14,22 @@
       </div>
 
       <div class="input-with-label">
-        <input v-model="certificationNumber" id="certificationNumber" type="text" />
+        <input
+          v-model="certificationNumber"
+          id="certificationNumber"
+          type="text"
+          style="width: 75%"
+        />
         <label for="certificationNumber">인증번호</label>
+        <button
+          class="btn-bottom"
+          style="width: 20%; border-radius: 7px; float: right; position: unset; margin: 0;"
+        >재전송</button>
       </div>
     </div>
 
     <div>
-      <router-link to="/user/checkcertification">
+      <router-link to="/">
         <button
           class="btn-bottom"
           style="margin-bottom: 0px; position: absolute; bottom: 0; width: 320px"

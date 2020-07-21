@@ -16,25 +16,30 @@
             <div style="margin : 5px auto;">
               <div
                 id="describe"
-                style="float:left; width:20%; text-align:center; padding:5px; color: white;"
+                style="float:left; width:15%; text-align:center; padding:5px; color: white;"
               >이메일</div>
               <div>
                 <input
-                  class="input-text"
+                  v-model="email"
+                  v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
+                  @keyup.enter="Login"
+                  id="email"
+                  style="height:25px; width: 60%; border : 0px solid white; border-radius:5px;"
                   type="text"
                 />
+                <div class="error-text" v-if="error.email">{{ error.email }}</div>
               </div>
             </div>
             <!--이메일 -->
             <div style="margin : 5px auto; padding-top: 10px;">
               <div
                 id="describe"
-                style="float:left; width:20%; text-align:center; padding:5px; color: white;"
+                style="float:left; width:15%; text-align:center; padding:5px; color: white;"
               >비밀번호</div>
               <div>
                 <input
-                  class="input-text"
-                  type="text"
+                  style="height:25px; width: 60%; border : 0px solid white; border-radius:5px;"
+                  type="password"
                 />
               </div>
             </div>
@@ -50,8 +55,8 @@
         <div
           style="width : 100%; height:15%; margin: auto; text-align: center; padding-top: 20px; color: white"
         >
-          <router-link to="/" class="bottom-btn">비밀번호 찾기 </router-link>|
-          <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
+          <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기</router-link>|
+          <router-link to="/user/join" class="bottom-btn">회원가입</router-link>
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; width: 100%">
