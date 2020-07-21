@@ -291,6 +291,10 @@
     }
     .mypage-body {
       padding-top: 50px;
+      height: 100%;
+    }
+    .profil {
+      height: 25%;
     }
     .myphoto {
       width: 30%;
@@ -302,6 +306,65 @@
       margin: 1rem 0;
       width: 60%;
       float: right;
+      .user-name {
+        display: inline-block;
+      }
+      .myprofil-icon {
+        margin-left: 5px;
+      }
+    }
+    .myprofil-boxes {
+      padding: 0;
+      h2 {
+        font-weight: bold;
+      }
+    }
+    .myprofil-box {
+      border-left: 1px solid black;
+      text-align: center;
+      h2 {
+        padding-top: 5px;
+      }
+    }
+    .myfeed {
+      height: 20%;
+    }
+    .myprofil-text {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      
+    }
+    .myprofil-feed {
+      width: 50%;
+      height: 100%;
+      float: left;
+      border: 1px solid black;
+      border-left: none;
+      img {
+        width: 30px;
+        height: 30px;
+        padding-bottom: 5px;
+      }
+    }
+    .myprofil-scrap {
+      width: 50%;
+      height: 100%;
+      float: right;
+      border: 1px solid black;
+      border-left: none;
+      border-right: none;
+      img {
+        width: 30px;
+        height: 30px;
+        padding-bottom: 5px;
+      }
+    }
+    .myrecipe-title {
+      text-align: center;
+      margin: 10px 0;
     }
   }
 }
