@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 <script>
 import "./components/css/style.scss";
 export default {
-  name: "app"
+  name: "app",
 };
 </script>
