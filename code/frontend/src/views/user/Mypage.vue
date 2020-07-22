@@ -10,7 +10,7 @@
               <h2 class="user-name">사용자 이름</h2>
               <span class="myprofil-icon"><i class="fas fa-cog"></i></span>
             </div>
-            <v-container class="grey lighten-5" style="min-height: 0; padding: 10px" >
+            <v-container style="min-height: 0; padding: 10px" >
               <v-row class="myprofil-boxes" no-gutters>
                 <v-col class="myprofil-box" cols="4">
                   <span>레시피 수</span>
@@ -46,19 +46,20 @@
         </div>
         <div class="myrecipe">
           <h3 class="myrecipe-title">내 레시피</h3>
-          <v-container class="grey lighten-5" style="min-height: 0; padding: 10px" >
-              <v-row class="" no-gutters style="padding: 0;">
-                <v-col class="" cols="4">
-                  <img src="" alt="">
-                </v-col>
-                <v-col class="" cols="4">
-                  <img src="" alt="">
-                </v-col>
-                <v-col class="" cols="4">
-                  <img src="" alt="">
-                </v-col>
-              </v-row>
-            </v-container>
+          <div class="myrecipe-body">
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
+            </div>
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food2.png" alt="food">
+            </div>
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food3.jpg" alt="food">
+            </div>
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            </div>
+          </div>
         </div>
       </div>
     </div>

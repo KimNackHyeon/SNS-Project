@@ -4,7 +4,7 @@
       <!-- -------------------------------- -->
       <div style="width:100%; height : 400px;">
         <div style="height : 25%;">
-          <p class="title">LOGIN</p>
+          <p class="login-title">LOGIN</p>
         </div>
         <!-- login 큰 클자 -->
         <div style="width : 100%; height:25%; margin: auto;">
@@ -21,9 +21,7 @@
                   type="text"
                   class="login-input"
                 />
-                <div class="error-text" v-if="error.email">{{ error.email }}</div>
               </div>
-              
             </div>
             <!--이메일 -->
             <div style="margin : 5px auto; padding-top: 10px;">
@@ -41,12 +39,12 @@
             <!-- 비밀번호 -->
           </div>
           <div style="margin-top:5px; float:right; width:20%;">
-            <button class="login-btn">LOGIN</button>
+            <router-link to="/home"><button class="login-btn" @click="$emit('login', email, password)">LOGIN</button></router-link>
           </div>
           <!-- 로그인 버튼 -->
         </div>
         <div style="width : 100%; height:5%; margin: auto; text-align: center; color: white">
-          <router-link to="/" class="bottom-btn">비밀번호 찾기 </router-link>|
+          <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기 </router-link>|
           <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
@@ -116,35 +114,35 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
-    onLogin() {
-      if (this.isSubmit) {
-        let { email, password } = this;
-        let data = {
-          email,
-          password
-        };
+    // onLogin() {
+      // if (this.isSubmit) {
+      //   let { email, password } = this;
+      //   let data = {
+      //     email,
+      //     password
+      //   };
 
-        //요청 후에는 버튼 비활성화
-        this.isSubmit = false;
+      //   //요청 후에는 버튼 비활성화
+      //   this.isSubmit = false;
 
-        UserApi.requestLogin(
-          data,
-          res => {
-            //통신을 통해 전달받은 값 콘솔에 출력
-            //console.log(res);
+      //   UserApi.requestLogin(
+      //     data,
+      //     res => {
+      //       //통신을 통해 전달받은 값 콘솔에 출력
+      //       //console.log(res);
 
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
+      //       //요청이 끝나면 버튼 활성화
+      //       this.isSubmit = true;
 
-            this.$router.push("/main");
-          },
-          error => {
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-          }
-        );
-      }
-    }
+      //       this.$router.push("/main");
+      //     },
+      //     error => {
+      //       //요청이 끝나면 버튼 활성화
+      //       this.isSubmit = true;
+      //     }
+      //   );
+      // }
+    // }
   },
   data: () => {
     return {
