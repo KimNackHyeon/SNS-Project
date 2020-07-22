@@ -21,6 +21,9 @@
                   type="text"
                   class="login-input"
                 />
+                <div class="error-text" v-if="error.email">
+                  {{ error.email }}
+                </div>
               </div>
             </div>
             <!--이메일 -->
@@ -93,7 +96,7 @@ export default {
     },
     email: function(v) {
       this.checkForm();
-    }
+    },
   },
   methods: {
     checkForm() {
@@ -109,7 +112,7 @@ export default {
       else this.error.password = false;
 
       let isSubmit = true;
-      Object.values(this.error).map(v => {
+      Object.values(this.error).map((v) => {
         if (v) isSubmit = false;
       });
       this.isSubmit = isSubmit;
@@ -151,11 +154,11 @@ export default {
       passwordSchema: new PV(),
       error: {
         email: false,
-        passowrd: false
+        passowrd: false,
       },
       isSubmit: false,
-      component: this
+      component: this,
     };
-  }
+  },
 };
 </script>
