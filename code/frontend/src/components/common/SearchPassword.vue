@@ -12,11 +12,6 @@
         <input v-model="phonenumber" id="phonenumber" type="text" />
         <label for="phonenumber">휴대폰 번호</label>
       </div>
-
-      <div class="input-with-label">
-        <input v-model="certificationNumber" id="certificationNumber" type="text" />
-        <label for="certificationNumber">인증번호</label>
-      </div>
     </div>
 
     <div>
@@ -52,5 +47,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

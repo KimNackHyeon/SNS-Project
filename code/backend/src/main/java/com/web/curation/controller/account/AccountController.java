@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiResponses;
 //  http://localhost:9999/food/swagger-ui.html
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
+@RequestMapping("/api/")
 public class AccountController {
 
 	@Autowired
