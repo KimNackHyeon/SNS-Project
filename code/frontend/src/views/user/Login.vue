@@ -41,7 +41,7 @@
             <!-- 비밀번호 -->
           </div>
           <div style="margin-top:5px; float:right; width:20%;">
-            <button class="login-btn">LOGIN</button>
+            <router-link to="/home"><button class="login-btn">LOGIN</button></router-link>
           </div>
           <!-- 로그인 버튼 -->
         </div>

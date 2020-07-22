@@ -6,6 +6,7 @@ import Mypage from './views/user/Mypage.vue'
 import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Home from './views/Home.vue'
+import Main from './views/Main.vue'
 
 export default [
 
@@ -17,7 +18,7 @@ export default [
     },
     {
         path : '/home',
-        name : 'Home',
+        name : 'Header',
         component : Home
     },
     {
