@@ -19,7 +19,7 @@ export default [
     },
     {
         path : '/home',
-        name : 'Home',
+        name : 'Header',
         component : Home
     },
     {
