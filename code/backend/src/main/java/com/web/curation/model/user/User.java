@@ -25,13 +25,21 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uid;
+    private String no;
 
     @JsonIgnore
     private String password;
     private String email;
+    private String nickname;
+    private String address;
 
     @Column(insertable = false, updatable = false)
     private LocalDateTime createDate;
+
+	@Override
+	public String toString() {
+		return "User [no=" + no + ", password=" + password + ", email=" + email + ", nickname=" + nickname
+				+ ", address=" + address + ", createDate=" + createDate + "]";
+	}
 
 }
