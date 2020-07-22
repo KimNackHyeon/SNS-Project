@@ -19,6 +19,7 @@ import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import com.web.curation.service.user.UserService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -36,6 +37,9 @@ public class AccountController {
 
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	UserService userService;
 
 	@GetMapping("/account/login")
 	@ApiOperation(value = "로그인")
@@ -71,6 +75,28 @@ public class AccountController {
 		result.data = "success";
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/account/searchpwd")
+	@ApiOperation(value = "비밀번호 찾기")
+	public Object searchpwd(@RequestParam(required = true) final String email) {
+		Optional<User> userOpt = userDao.findByEmail(email);
+
+		ResponseEntity response = null;
+
+		if (userOpt.isPresent()) {
+			final BasicResponse result = new BasicResponse();
+			System.out.println("비밀번호 찾기 아이디 정보");
+			System.out.println(userOpt);
+			userService.sendMail(userOpt.get().getPassword(), userOpt.get().getEmail());
+			result.status = true;
+			result.data = "success";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		return response;
 	}
 
 }

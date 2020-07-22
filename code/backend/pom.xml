@@ -90,6 +90,13 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 
+		<!-- 비밀번호 찾기 시 이메일 전송 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>1.4.3.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
