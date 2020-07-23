@@ -5,17 +5,16 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.web.curation.model.Member;
-import com.web.curation.repo.MemberRepo;
+import com.web.curation.model.GenerateCertCharacter;
 
 @Service
 public class MemberService {
-	
-	
+
 	@Autowired
 	private JavaMailSender mailSender;
 	private static final String FROM_ADDRESS = "skrgus0226@gmail.com";
-	
+	private GenerateCertCharacter GCC = new GenerateCertCharacter();
+
 	public void sendMail(String pwd, String address) {
 
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -26,6 +25,17 @@ public class MemberService {
 		System.out.println(pwd + "," + address);
 		mailSender.send(message);
 
+	}
+
+	public void sendMail(String address) {
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		String certificateNumber = GCC.excuteGenerate();
+		message.setTo(address);
+		message.setFrom(FROM_ADDRESS);
+		message.setSubject("회원가입 인증번호입니다.");
+		message.setText("인증번호는 <b>" + certificateNumber + "</b>입니다.");
+		mailSender.send(message);
 	}
 
 }

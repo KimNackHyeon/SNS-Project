@@ -110,14 +110,23 @@ public class AccountController {
 
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
-	public Object signup(@Valid @RequestBody SignupRequest request) {
-		// 이메일, 닉네임 중복처리 필수
-		// 회원가입단을 생성해 보세요.
 
+	public Object signup(@Valid @RequestBody Member member) {
 		final BasicResponse result = new BasicResponse();
-		result.status = true;
-		result.data = "success";
-
+		// 이메일, 닉네임 중복처리 필수
+		memberService.sendMail(member.getEmail());
+		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
+			result.status = true;
+			result.data = "이메일 중복됩니다.";
+		} else if (memberRepo.getUserByNickname(member.getNickname()) != null) {
+			result.status = true;
+			result.data = "닉네임이 중복됩니다.";
+		} else {
+			// 회원가입단을 생성해 보세요.
+			memberRepo.save(member);
+			result.status = true;
+			result.data = "success";
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -142,15 +151,14 @@ public class AccountController {
 
 		return response;
 	}
-	
+
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
 	public String getToken(Member member) {
 		// Useremail로 토큰을 만든다.
 		// plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
 		JWT jwt = new JWT().setIssuer(member.getEmail()).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
-				.setSubject("hellossafy")
-				.setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(30));
+				.setSubject("hellossafy").setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(30));
 		// Sign and encode the JWT to a JSON string representation
 		String token = JWT.getEncoder().encode(jwt, signer);
 
@@ -160,8 +168,7 @@ public class AccountController {
 	public String getToken(String data) {
 		// Useremail로 토큰을 만든다.
 		// plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
-		JWT jwt = new JWT().setIssuer(data).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
-				.setSubject("hellossafy")
+		JWT jwt = new JWT().setIssuer(data).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC)).setSubject("hellossafy")
 				.setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(3));
 		// Sign and encode the JWT to a JSON string representation
 		String token = JWT.getEncoder().encode(jwt, signer);
