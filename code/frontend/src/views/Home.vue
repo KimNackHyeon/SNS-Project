@@ -3,7 +3,10 @@
     <div style="width:100%; height:60px;">
         <v-btn flat icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn>
-        <v-btn flat icon><v-icon size="30px">mdi-fridge</v-icon></v-btn>
+        <v-btn flat icon style="width:30px; height:30px; background-size:cover; "><img style="width:auto; height:30px;" src="../assets/images/ref_close.png"></v-btn>
+    </div>
+    <div style="width:100%; height:100%;">
+    <MyRef/>
     </div>
     
     <Main/>
@@ -58,7 +61,7 @@
         <h2 class="categorysub">공동구매</h2>
       </div>
       <div class="category">
-        <v-icon size="50px" color="#808080b5">mdi-magnify</v-icon>
+        <v-icon size="50px" color="#808080b5">mdi-chef-hat</v-icon>
         <h2 class="categorysub">레시피 찾기</h2>
       </div>
 
@@ -74,6 +77,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import Main from './Main.vue'
+import MyRef from './user/MyRef.vue'
 
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
