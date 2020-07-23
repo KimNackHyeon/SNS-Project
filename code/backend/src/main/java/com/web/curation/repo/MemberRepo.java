@@ -12,6 +12,8 @@ import com.web.curation.model.Member;
 public interface MemberRepo extends JpaRepository<Member, Long> {
     Member getUserByEmail(String email);
 
+    Member getUserByNickname(String nickname);
+    
     Optional<Member> findUserByEmailAndPassword(String email, String password);
     
     Optional<Member> findByEmail(String email);
