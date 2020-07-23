@@ -4,6 +4,8 @@ import Mypage from "./views/user/Mypage.vue";
 import FeedMain from "./views/feed/IndexFeed.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
+import MarketPlace from "./views/store/Marketplace.vue";
+import GroupBuying from "./views/store/Groupbuying.vue";
 import SearchPassword from "./components/common/SearchPassword.vue";
 import CheckCertification from "./components/common/CheckCertification";
 
@@ -47,5 +49,15 @@ export default [
     path: "/user/checkcertification",
     name: "CheckCertification",
     component: CheckCertification,
+  },
+  {
+    path: "/store/marketplace",
+    name: "MarketPlace",
+    component: MarketPlace,
+  },
+  {
+    path: "/store/groupbuying",
+    name: "GroupBuying",
+    component: GroupBuying,
   },
 ];
