@@ -1,6 +1,30 @@
 @charset "utf-8";
 @import '../../css/common';
 
+.feed-wrapB {
+    padding: 0;
+}
+.searchbar {
+    overflow: hidden;
+}
+.search-input {
+    margin: 0 !important;
+    width: 100%;
+}
+
+.feed-body {
+    overflow: scroll;
+    height: 547px;
+}
+input:hover {
+    border: none;
+}
+.v-label {
+    padding-left: 10px;
+}
+input {
+    padding-left: 10px !important;
+}
 .feed-card {
     box-sizing: content-box;
     box-shadow: 0 0 0 1px #ddd;
@@ -57,6 +81,22 @@
     margin-bottom: 30px;
     border-bottom: 1px solid $grey;
     padding-bottom: 20px;
+    .feed-profil {
+        overflow: hidden;
+    }
+    .feed-user {
+        width: 90%;
+        float: left;
+        padding-left: 10px
+    }
+    .feed-detail {
+        width: 10%;
+        float: right;
+    }
+    .feed-detail-btn {
+        border-radius: 0;
+        background-color: #f1f3f5;
+    }
     .profile-image {
         float: left;
     }

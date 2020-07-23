@@ -21,9 +21,6 @@
                   type="text"
                   class="login-input"
                 />
-                <div class="error-text" v-if="error.email">
-                  {{ error.email }}
-                </div>
               </div>
             </div>
             <!--이메일 -->
