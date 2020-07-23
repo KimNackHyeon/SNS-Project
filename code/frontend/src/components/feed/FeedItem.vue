@@ -1,6 +1,41 @@
 <template>
   <div class="feed-item">
-    <div class="top">
+    <div class="feed-profil">
+      <div class="feed-user">
+        <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
+        <h4 style="display:inline-block; padding-left:5px">사용자 이름</h4>
+      </div>
+      <div class="feed-detail">
+        <v-btn class="feed-detail-btn" text icon color="blue lighten-2">
+          <v-icon color="#a0d469" size="40">mdi-chevron-right</v-icon>
+        </v-btn>
+        <!-- <v-btn><v-icon color="#a0d469">mdi-chevron-right</v-icon></v-btn> -->
+      </div>
+    </div>
+    <v-carousel
+      cycle
+      height="400"
+      hide-delimiter-background
+      show-arrows-on-hover
+    >
+      <v-carousel-item
+        v-for="(slide, i) in slides"
+        :key="i"
+      >
+        <v-sheet
+          height="100%"
+        >
+          <v-row
+            class="fill-height"
+            align="center"
+            justify="center"
+          >
+            <div class="display-3">{{ slide }} Slide</div>
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel>
+    <!-- <div class="top">
       <div class="profile-image" :style="{'background-image': 'url('+defaultProfile+')'}"></div>
       <div class="user-info">
         <div class="user-name">
@@ -23,7 +58,7 @@
           <p class="date">2020.06.18</p>
         </div>
       </div>
-    </div>
+    </div> -->
     <!---->
     <div class="btn-group wrap">
       <div class="like likeScrap">
@@ -109,7 +144,17 @@ import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 export default {
   data: () => {
-    return { defaultImage, defaultProfile };
+    return { 
+      defaultImage, 
+      defaultProfile,
+      slides: [
+          'First',
+          'Second',
+          'Third',
+          'Fourth',
+          'Fifth',
+        ],
+    };
   }
 };
 </script>

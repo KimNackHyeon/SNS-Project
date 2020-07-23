@@ -23,11 +23,11 @@ export default {
         password: password,
       };
       console.log(loginData);
-      axios
-        .post(`${SERVER_URL}/account/login`, loginData)
+      axios.post(`${SERVER_URL}/account/login`, loginData)
         .then((response) => {
           console.log(response);
           this.$cookies.set("auth-token", response.data.key);
+          this.isLoggedIn = true
           this.$router.push("/home");
         })
         .catch((error) => {
