@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.SignupRequest;
 import com.web.curation.model.Member;
+import com.web.curation.model.MyBoard;
 import com.web.curation.repo.MemberRepo;
+import com.web.curation.repo.MyBoardRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -50,6 +50,9 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	MyBoardRepo myboardRepo;
 
 //	@GetMapping("/account/login")
 //	@ApiOperation(value = "로그인")
@@ -110,7 +113,6 @@ public class AccountController {
 
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
-
 	public Object signup(@Valid @RequestBody Member member) {
 		final BasicResponse result = new BasicResponse();
 		// 이메일, 닉네임 중복처리 필수
@@ -151,7 +153,24 @@ public class AccountController {
 
 		return response;
 	}
-
+	
+	@PostMapping("/account/mypage")
+	@ApiOperation(value = "내 페이지 보기")
+	public Object showmypage(@RequestParam(required = true) final String email) {
+		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		ResponseEntity response = null;
+		if(myBoardOpt.isPresent()) {
+			final BasicResponse result = new BasicResponse();
+			System.out.println(myBoardOpt);
+			result.status = true;
+			result.data = "success";
+			result.object = myBoardOpt;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		return response;
+	}
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
 	public String getToken(Member member) {
