@@ -38,108 +38,108 @@
           <v-row dense style="padding: 0;">
             <v-col cols="12">
               <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                     <v-img height="80" width="80" padding="60"  src="../../assets/images/store/onion.png" style="border-radius: 5px;"></v-img>
                   </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">양파 필요하신분</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 양파</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">양파 필요하신분</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 양파</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
                   </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px">9/10</v-card-text>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">9/10</v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
             <v-col cols="12">
               <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                     <v-img height="80" width="80" padding="60"  src="../../assets/images/store/potato.png" style="border-radius: 5px;"></v-img>
                   </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">♡감자가 좋아♡</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 감자</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">♡감자가 좋아♡</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 감자</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
                   </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px;">4/5</v-card-text>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">4/5</v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
             <v-col cols="12">
               <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                     <v-img height="80" width="80" padding="60"  src="../../assets/images/store/onion.png" style="border-radius: 5px;"></v-img>
                   </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">양파 급하게 필요하신 분만!</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 양파</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/07/16</v-card-text>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">양파 급하게 필요하신 분만!</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 양파</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/07/16</v-card-text>
                   </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px">1/3</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">한밭대 달걀 공구</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/08/20</v-card-text>
-                  </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px">2/5</v-card-text>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">1/3</v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
             <v-col cols="12">
               <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                     <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
                   </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">달걀 도매 구매</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">한밭대 달걀 공구</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/20</v-card-text>
                   </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px;">11/30</v-card-text>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">2/5</v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
             <v-col cols="12">
               <v-card style="padding: 5px;">
-                <v-row justify="space-between" style="padding: 0; margin: 0;">
-                  <v-col cols="auto" style="padding: 0;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                     <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
                   </v-col>
-                  <v-col cols="auto" class="text-left pl-0" style="padding: 0; border-left: solid 1px lightgray;">
-                    <v-card-text style="padding: 0 0 0 5px;">달걀 도매 구매</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
-                    <v-card-text style="padding: 0 0 0 5px; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">달걀 도매 구매</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
                   </v-col>
-                  <v-col cols="auto" style="padding: 0;">
-                    <v-card-text style="padding: 16px 0 0; margin-top: 15px; font-size: 40px; height: 0px;">11/30</v-card-text>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">11/30</v-card-text>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+            <v-col cols="12">
+              <v-card style="padding: 5px;">
+                <v-row justify="space-start" style="padding: 0; margin: 0;">
+                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
+                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
+                  </v-col>
+                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                    <v-card-text style="padding: 0;">달걀 도매 구매</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
+                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
+                  </v-col>
+                  <v-col cols="3" style="padding: 0;">
+                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">11/30</v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
