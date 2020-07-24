@@ -84,32 +84,36 @@ public class AccountController {
 	public ResponseEntity<String> login(@RequestBody Member member) {
 		System.out.println(member.getEmail() + " " + member.getPassword());
 		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
-
+		System.out.println(userOpt.isPresent());
 		if (userOpt.isPresent()) {
 			System.out.println("로그인된 아이디 정보");
-			System.out.println(userOpt.get());
+			System.out.println(userOpt.get().getEmail());
 			String token = getToken(userOpt.get());
 			return new ResponseEntity<String>(token, HttpStatus.OK);
 		} else {
+			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "토큰 검증")
+	@PostMapping("/info")
+	public ResponseEntity<String> verify(@RequestParam String token) {
+		System.out.println(token);
+//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
+
+		boolean check = cmpToekn(token);
+		System.out.println(check);
+		if (check) {
+//			System.out.println("로그인된 아이디 정보");
+//			System.out.println(userOpt.get().getEmail());
+//			String token = getToken(userOpt.get());
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
 		}
-		
-//		ResponseEntity response = null;
-//
-//		if (userOpt.isPresent()) {
-//			final BasicResponse result = new BasicResponse();
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt);
-//			result.status = true;
-//			result.data = "success";
-//			response = new ResponseEntity<>(result, HttpStatus.OK);
-//		} else {
-//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//
-//		return response;
-
 	}
+	
+	
 
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
