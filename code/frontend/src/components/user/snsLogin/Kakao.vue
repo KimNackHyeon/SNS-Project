@@ -1,5 +1,13 @@
 <template>
-    <div id="kakao-login">
+<div id="app">
+    <KakaoLogin
+      api-key="4c86227162ae9066234fa38d59d75010"
+      image="kakao_login_btn_small"
+      :on-success=onSuccess
+      :on-failure=onFailure
+      />
+  </div>
+    <!-- <div id="kakao-login">
 
         <button>
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 55 55">
@@ -20,9 +28,42 @@
             </svg>
 
         </button>
-    </div>
+    </div> -->
 </template>
 
 <script>
-    export default {}
+    import KakaoLogin from 'vue-kakao-login'
+    import axios from 'axios'
+ 
+    let onSuccess = (data) => {
+        alert("성공");
+        console.log(data)
+        console.log("success")
+        // const header = {
+        //   Authorization : `${data.token_type} ${data.access_token}`
+        // };
+        // const userInfo = 
+        // axios
+        // .get(`https://kapi.kakao.com/v2/user/me`,header)
+        // .then((response)=>{
+        //   console.log(response);
+        // });
+        // console.log(userInfo);
+         this.$router.push("/home");
+    }
+    let onFailure = (data) => {
+        console.log(data)
+        console.log("failure")
+    }
+ 
+export default {
+  name: 'App',
+  components: {
+    KakaoLogin
+  },
+  methods: {
+    onSuccess,
+    onFailure
+  }
+}
 </script>
