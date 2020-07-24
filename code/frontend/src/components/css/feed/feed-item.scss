@@ -14,7 +14,7 @@
 
 .feed-body {
     overflow: scroll;
-    height: 547px;
+    height: 540px;
 }
 input:hover {
     border: none;
@@ -78,24 +78,48 @@ input {
 
 .feed-item {
     @include wrap;
-    margin-bottom: 30px;
-    border-bottom: 1px solid $grey;
-    padding-bottom: 20px;
+    // margin-bottom: 30px;
+    // border-bottom: 1px solid $grey;
+    // padding-bottom: 20px;
     .feed-profil {
         overflow: hidden;
     }
     .feed-user {
         width: 90%;
         float: left;
-        padding-left: 10px
+        padding-left: 10px;
+        margin: 5px 0;
     }
     .feed-detail {
-        width: 10%;
         float: right;
-    }
-    .feed-detail-btn {
-        border-radius: 0;
+        padding: 5px 0;
         background-color: #f1f3f5;
+    }
+    .v-carousel__controls {
+        background: none;
+    }
+    .v-window {
+        height: 360px !important;
+    }
+    .v-carousel__item {
+        height: 360px !important;
+    }
+    .v-responsive__sizer {
+        padding: 0 !important;
+    }
+    .v-image__image {
+        height: 360px;
+    }
+    .v-carousel__controls__item {
+        width: 24px;
+        height: 24px;
+        margin: 0 !important;
+    }
+    .v-btn--active {
+        color: #a0d469 !important;
+    }
+    .mdi-circle {
+        font-size: 8px !important;
     }
     .profile-image {
         float: left;
