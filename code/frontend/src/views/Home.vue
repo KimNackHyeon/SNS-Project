@@ -8,6 +8,8 @@
     <div style="width:100%; height:100%;">
     <MyRef/>
     </div>
+    
+    <Main/>
     <v-navigation-drawer
       v-model="drawer"
       temporary
