@@ -1,6 +1,6 @@
 <template>
   <v-layout wrap style="width:360px; height: 600px; margin:auto;">
-    <div style="width:100%; height:60px;">
+    <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn flat icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn>
         <v-btn flat icon style="width:30px; height:30px; background-size:cover; "><img style="width:auto; height:30px;" src="../assets/images/ref_close.png"></v-btn>
@@ -83,7 +83,7 @@ Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })
   export default {
-    components:{Main},
+    components:{ MyRef},
     data () {
       return {
         drawer: null,
