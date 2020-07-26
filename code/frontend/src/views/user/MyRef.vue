@@ -1,22 +1,17 @@
 <template>
   <div class="rootContainer">
         <div id="insideRef">
-               <div v-for="food in foods" :key="food">
-                <button type="button" v-on:click="openShare(food.gra_kor)" style="float:left"><img :class="'F'+food.num" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+               <div v-for="(food,index) in foods" :key="(food,index)">
+                <button type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food.gra_kor)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
                 </button>
             </div>
-            <!-- <div class="smallboxInside" style="height: 76px;"></div>
-            <div class="smallboxInside" style="height: 79px;"></div>
-            <div class="smallboxInside" style="height: 117px;"></div>
-            <div class="smallboxInside" style="height: 89px; width:92px;"></div>
-            <div class="smallboxInside" style="height: 91px; width:92px;"></div> -->
         </div>
         <div id="basket">
             <v-btn flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
         </div>
         <div id="FillBtn" style="position:fixed; margin-left: 256px;
     margin-top: 10px; display:unset;">
-            <v-btn  v-on:click="registMater" v-show="!hidden" color="rgb(160,212,105)" width="90px" height="50px" >
+            <v-btn  v-on:click="openregistMater" v-show="!hidden" color="rgb(160,212,105)" width="90px" height="50px" >
                   <v-icon >mdi-cart</v-icon>
                   <h4>채우기</h4>
                 </v-btn>
@@ -24,11 +19,41 @@
         <div class="inputFeild"> <!-- 바구니에 넣기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea">
-                <h4 style="font-size:15px;">공유할 개수</h4>
+                <div class="longNameBox">{{Nowgra}}</div> <input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+            </div>
+            <div class="textArea" style="height:24px; padding:0px;">
+                <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra}}</div>와 교환할 재료
+            </div>
+            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
+                <div class="changeFood" v-for="food in changeFoods" :key="food" style="font-size:13px;">
+                    {{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개
+                </div>
+                <div class="changeFood">
+                    <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
+                <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5> <input type="text" v-model="nowCgradient" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5>
+                
+                </div>
+                <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
+                    <v-btn v-on:click="addChangeGradient" color="rgb(160,212,105)" width="80px;"><v-icon size="15px">mdi-arrow-up-bold</v-icon><h5>추가하기</h5></v-btn>
+                </div>
+                </button>
+            </div>
+            <div class="textArea">
+                <h4>판매가격</h4>
+                <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><input type="text" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
+            </div>
+            
+            <div style="width:100%; height:33px;">
+             <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:red; font-weight:bold; color:white; font-size:16px;">삭제</button>
+             <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">담기</button>
+            </div>
+            <div style="width:100%; height:100px; background-color:black;">
+                <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
+            
             </div>
         </div><!-- end of 바구니에 넣기 -->
 
-        <div class="registMaterial">
+        <div class="registMaterial"> <!-- 채우기 박스 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">채우기<button v-on:click="closeregistMater" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div style="width:100%; height:190px;">
                 <div class="textArea">
@@ -62,10 +87,11 @@
                 </div>
             </div>
             <button type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
-        </div><!-- end of registMeterial -->
+        </div><!-- end of 채우기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
             <button type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
+        
         </div>
   </div>
 </template>
@@ -79,20 +105,25 @@ data: () => ({
       menu: false,
       modal: false,
       menu2: false,
+      nowmyamount:'',
+    nowCgradient:'',
+    nowCamount:0,
       foods:[
-            {gradient:"egg",gra_kor:"계란",num:1},
-            {gradient:"flour",gra_kor:"밀가루",num:2},
-            {gradient:"milk",gra_kor:"우유",num:3},
-            {gradient:"olive-oil",gra_kor:"올리브유",num:4},
-            {gradient:"potato",gra_kor:"감자",num:5},
-            {gradient:"vanilla",gra_kor:"바닐라빈",num:6},
-            {gradient:"sugar",gra_kor:"설탕",num:7},
-            {gradient:"sweetpotato",gra_kor:"고구마",num:8}
+            {gradient:"egg",gra_kor:"계란fkfkfkfk"},
+            {gradient:"flour",gra_kor:"밀가루"},
+            {gradient:"milk",gra_kor:"우유"},
+            {gradient:"olive-oil",gra_kor:"올리브유"},
+            {gradient:"potato",gra_kor:"감자"},
+            {gradient:"vanilla",gra_kor:"바닐라빈"},
+            {gradient:"sugar",gra_kor:"설탕"},
+            {gradient:"sweetpotato",gra_kor:"고구마"}
         ],
-        
+        changeFoods:[
+              ],
     }),
     methods:{
-            registMater: function () {
+            openregistMater: function () {
+                this.closeShare();
                 $('.registMaterial').css('display','unset');
                 $('#FillBtn').css('display','none');
             },
@@ -106,20 +137,40 @@ data: () => ({
                 return src;
             },
             openShare:function(now){
+                this.closeregistMater();
                 this.Nowgra = now;
                 $('.inputFeild').css('display','unset');
                 $('#FillBtn').css('display','none');
+                this.changeFoods = [];
             },
             closeShare:function(now){
                 this.Nowgra = now;
                 $('.inputFeild').css('display','none');
                 $('#FillBtn').css('display','unset');
+            },
+            addChangeGradient:function(){
+                this.changeFoods.push({
+                    Mygradient:this.Nowgra,
+                    myamount:this.nowmyamount,
+                    Cgradient:this.nowCgradient,
+                    Camount:this.nowCamount
+                })
             }
     }
 }
 </script>
 
 <style>
+.longNameBox{
+    width: 67px;
+    height: 30px;
+    float: left;
+    white-space: break-spaces;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    padding: 4px 4px;
+}
 .rootContainer{
     width:100%;
     height:100%;
@@ -181,7 +232,7 @@ h5{
 }
 .v-btn:not(.v-btn--round).v-size--default {
     height: 30px;
-    min-width: 50px;
+    min-width: 0px;
     padding: 0 4px;
 }
 .textArea{
@@ -237,6 +288,11 @@ margin:20px 106px 10px 15px;
 width: 60px;
 height: 60px;
 float: left;
-margin:20px 106px 10px 15px;
+margin:14px 106px 10px 15px;
+}
+.changeFood{
+    height:30px;
+    border-bottom: 1px solid #8080802e;
+    padding: 3px;
 }
 </style>
