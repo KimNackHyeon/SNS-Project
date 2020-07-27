@@ -2,12 +2,12 @@
   <div class="rootContainer">
         <div id="insideRef">
                <div v-for="(food,index) in foods" :key="(food,index)">
-                <button type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food.gra_kor)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+                <button id="Gradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food.gra_kor,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
                 </button>
             </div>
         </div>
         <div id="basket">
-            <v-btn flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
+            <v-btn @mousedown="openCheckBasket()" @mouseleave="closeCheckBasket()"  @mouseup="closeCheckBasket()"  @touchstart="openCheckBasket()"  @touchend="closeCheckBasket()"  @touchcancel="closeCheckBasket()" flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
         </div>
         <div id="FillBtn" style="position:fixed; margin-left: 256px;
     margin-top: 10px; display:unset;">
@@ -16,7 +16,7 @@
                   <h4>채우기</h4>
                 </v-btn>
         </div>
-        <div class="inputFeild"> <!-- 바구니에 넣기 -->
+        <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea">
                 <div class="longNameBox">{{Nowgra}}</div> <input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
@@ -25,7 +25,7 @@
                 <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra}}</div>와 교환할 재료
             </div>
             <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
-                <div class="changeFood" v-for="food in changeFoods" :key="food" style="font-size:13px;">
+                <div class="changeFood" v-for="food in changeFoodsTemp" :key="food" style="font-size:13px;">
                     {{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개
                 </div>
                 <div class="changeFood">
@@ -45,7 +45,7 @@
             
             <div style="width:100%; height:33px;">
              <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:red; font-weight:bold; color:white; font-size:16px;">삭제</button>
-             <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">담기</button>
+             <button type="button" v-on:click="ShareComplete" style="width:50%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">담기</button>
             </div>
             <div style="width:100%; height:100px; background-color:black;">
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
@@ -88,6 +88,15 @@
             </div>
             <button type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
         </div><!-- end of 채우기 -->
+
+        <div class="checkBasket"> <!-- 장바구니 안 보기 -->
+            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px;">공유 바구니</div>
+           <div v-for="food in changeFoods" :key="food" style="font-size:13px;">
+                    {{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개
+            </div>
+            
+
+        </div><!-- end of 장바구니 안 보기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
             <button type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
@@ -98,9 +107,11 @@
 
 <script>
 import $ from 'jquery';
+
 export default {
 data: () => ({
         Nowgra : '',
+        NowClassNum : 1, //클릭한 칸의 클래스 넘버
       date: new Date().toISOString().substr(0, 10),
       menu: false,
       modal: false,
@@ -118,8 +129,14 @@ data: () => ({
             {gradient:"sugar",gra_kor:"설탕"},
             {gradient:"sweetpotato",gra_kor:"고구마"}
         ],
-        changeFoods:[
+        changeFoodsTemp:[
               ],
+        changeFoods:[
+            {Mygradient:"egg",Mygra_kor:"계란", myamount:5, Cgradient:"milk",Cgra_kor:"우유", Camount:1},
+            {Mygradient:"potato",Mygra_kor:"감자", myamount:3, Cgradient:"milk",Cgra_kor:"우유", Camount:1},
+            {Mygradient:"egg",Mygra_kor:"계란", myamount:5, Cgradient:"sweetpotato",Cgra_kor:"고구마", Camount:1},             
+            ],
+
     }),
     methods:{
             openregistMater: function () {
@@ -136,26 +153,43 @@ data: () => ({
                alert(src);
                 return src;
             },
-            openShare:function(now){
+            openShare:function(now,index){
                 this.closeregistMater();
                 this.Nowgra = now;
-                $('.inputFeild').css('display','unset');
+                $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
-                this.changeFoods = [];
+                this.changeFoodsTemp = [];
+                this.NowClassNum = index;
             },
             closeShare:function(now){
                 this.Nowgra = now;
-                $('.inputFeild').css('display','none');
+                $('#shareField').css('display','none');
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
-                this.changeFoods.push({
+                this.changeFoodsTemp.push({
                     Mygradient:this.Nowgra,
                     myamount:this.nowmyamount,
                     Cgradient:this.nowCgradient,
                     Camount:this.nowCamount
                 })
-            }
+            },
+            ShareComplete:function(){
+                var className = '.F'+(this.NowClassNum+1);
+                this.closeShare();
+                var shareMotion = 'share'+(this.NowClassNum+1);
+                $(className).addClass(shareMotion);
+                var afterclass = className+' '+shareMotion;
+                setTimeout('location.reload()',900);
+                $(afterclass).removeClass(shareMotion);
+                this.changeFood.push(this.changeFoodsTemp);
+            },
+            openCheckBasket:function(){
+                $('.checkBasket').css('display','unset');
+            },
+            closeCheckBasket:function(){
+                $('.checkBasket').css('display','none');
+            },
     }
 }
 </script>
@@ -213,6 +247,15 @@ data: () => ({
     margin-left: 212px;
     margin-top: 25px;
     display:none;
+}
+.checkBasket{
+    width: 143px;
+    height: 226px;
+    background-color: white;
+    position: fixed;
+    margin-left: 212px;
+    margin-top: 25px;
+    display: none;
 }
 h5{
     font-size: 13px;
@@ -294,5 +337,46 @@ margin:14px 106px 10px 15px;
     height:30px;
     border-bottom: 1px solid #8080802e;
     padding: 3px;
+}
+
+.share1{
+    z-index: 100;
+        transform: translate(220px,360px) scale(0,0);
+    transition:all ease 0.9s;
+}
+.share2{
+    z-index: 100;
+     transform: translate(108px,360px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share3{
+    z-index: 100;
+     transform: translate(250px,300px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share4{
+    z-index: 100;
+     transform: translate(108px,300px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share5{
+    z-index: 100;
+     transform: translate(250px,250px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share6{
+    z-index: 100;
+     transform: translate(108px,250px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share7{
+    z-index: 100;
+     transform: translate(250px,100px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.share8{
+    z-index: 100;
+     transform: translate(108px,0px) scale(0,0);
+    transition:all ease 0.8s;
 }
 </style>

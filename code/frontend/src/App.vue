@@ -1,6 +1,7 @@
 <template>
 <div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
+    <Home></Home>
     <router-view @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
@@ -9,11 +10,12 @@
 import "./components/css/style.scss";
 import axios from "axios";
 import Swal from 'sweetalert2'
+import Home from './views/Home.vue'
 
 const SERVER_URL = "http://127.0.0.1:9999";
 
 export default {
-  // components:{Home},
+  components:{Home},
   name: "app",
   data() {
     return {

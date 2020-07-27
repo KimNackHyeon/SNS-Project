@@ -1,9 +1,14 @@
 <template>
-  <v-layout wrap style="width:360px; margin:auto;">
+  <v-layout wrap style="width:360px; height:50px; margin:auto;">
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn flat icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <router-link to="/Main"><v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
-        <router-link to="/MyRef"><v-btn flat icon style="width:30px; height:30px; background-size:cover; "><img style="width:auto; height:30px;" src="../assets/images/ref_close.png"></v-btn></router-link>
+        <router-link to="/MyRef"><v-btn  flat icon style="width:30px; height:30px; background-size:cover; ">
+          <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
+          <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+          </v-btn></router-link>    
+              
+        
     </div>
     
     <v-navigation-drawer
@@ -77,7 +82,7 @@
 <script>
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-
+import $ from 'jquery'
 
 
 Vue.use(Vuetify, {
@@ -106,8 +111,13 @@ Vue.use(Vuetify, {
             }
             slides[slideIndex-1].style.display = "block";  
             dots[slideIndex-1].className += " active";
-        }
-    }
+        },
+        isOpen(){
+          
+            return true;
+          
+        },
+    },
   }
 </script>
 
