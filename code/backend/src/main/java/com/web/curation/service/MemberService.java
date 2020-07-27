@@ -34,7 +34,7 @@ public class MemberService {
 		message.setTo(address);
 		message.setFrom(FROM_ADDRESS);
 		message.setSubject("회원가입 인증번호입니다.");
-		message.setText("인증번호는 <b>" + certificateNumber + "</b>입니다.");
+		message.setText("인증번호는 " + certificateNumber + "입니다.");
 		mailSender.send(message);
 	}
 
