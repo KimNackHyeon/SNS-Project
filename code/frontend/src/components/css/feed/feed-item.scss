@@ -4,14 +4,24 @@
 .feed-wrapB {
     padding: 0;
 }
-.searchbar {
-    overflow: hidden;
-}
 .search-input {
     margin: 0 !important;
     width: 100%;
 }
-
+.v-input__slot {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+.v-input__append-inner {
+    display: none !important;
+}
+.v-chip--select {
+    background-color: #a0d469 !important;
+    color: white !important;
+}
+.mdi-magnify {
+    color: black !important;
+}
 .feed-body {
     overflow: scroll;
     height: 540px;
@@ -87,15 +97,23 @@ input {
     .feed-user {
         width: 90%;
         float: left;
-        padding-left: 10px;
-        margin: 5px 0;
+        padding: 5px 0 5px 10px;
+    }
+    .v-input__append-inner {
+        display: none;
     }
     .feed-detail {
+        width: 10%;
         float: right;
         padding: 5px 0;
         background-color: #f1f3f5;
+        border-left: 1px solid lightgray;
+    }
+    .feed-right-icon:hover {
+        color: #a0d469;
     }
     .v-carousel__controls {
+        height: 30px;
         background: none;
     }
     .v-window {
@@ -117,6 +135,9 @@ input {
     }
     .v-btn--active {
         color: #a0d469 !important;
+    }
+    .v-btn:before {
+        background: none !important;
     }
     .mdi-circle {
         font-size: 8px !important;
