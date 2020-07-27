@@ -1,4 +1,5 @@
 # 우리동네 냉장고
+- 팀명 : 냉 우 동 (B301)
 
 - 팀원 소개
 
@@ -9,6 +10,7 @@
 
 
 ## 주제
+- 프로젝트명 : 우리 동네 냉장고
 
 - 우리동네 냉장고는 음식물 쓰레기의 증가로 인한 환경문제를 개선하기 위해 남은 식재료를 교환/판매하는 서비스를 제공한다.
 
@@ -20,11 +22,11 @@
 
 - Frontend
 
-  Vue.js
+  Vue.js, Vuetify
 
 - Backend
 
-  Java, Spring
+  Java, Spring, MariaDB
 
 
 
@@ -69,7 +71,7 @@
 **branch**
 
 ``` 
-master -> front(kwon, myong, yoon) -> back(nack, park)
+master -> develop -> feature/fe(권남선, 류혜명, 윤종현) or feature/be(김낙현, 박건호)
 ```
 
 **merge**

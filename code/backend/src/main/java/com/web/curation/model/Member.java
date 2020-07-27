@@ -23,8 +23,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Getter
-@Setter
 public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
