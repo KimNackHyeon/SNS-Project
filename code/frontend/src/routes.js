@@ -2,6 +2,7 @@ import Login from "./views/user/Login.vue";
 import Join from "./views/user/Join.vue";
 import Mypage from "./views/user/Mypage.vue";
 import FeedMain from "./views/feed/IndexFeed.vue";
+import FeedDetail from "./views/feed/FeedDetail.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
@@ -34,6 +35,11 @@ export default [
     path: "/feed/main",
     name: "FeedMain",
     component: FeedMain,
+  },
+  {
+    path: "/feed/detail",
+    name: "FeedDetail",
+    component: FeedDetail,
   },
   {
     path: "/components",
