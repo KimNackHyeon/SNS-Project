@@ -118,6 +118,7 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody Member member) {
+		System.out.println(member.toString());
 		final BasicResponse result = new BasicResponse();
 		// 이메일, 닉네임 중복처리 필수
 		memberService.sendMail(member.getEmail());
@@ -128,7 +129,7 @@ public class AccountController {
 			result.status = true;
 			result.data = "닉네임이 중복됩니다.";
 		} else {
-			// 회원가입단을 생성해 보세요.
+			// 회원가입단을 생성해 보세요.'
 			memberRepo.save(member);
 			result.status = true;
 			result.data = "success";

@@ -33,9 +33,11 @@ public class Member {
 
 	@NotEmpty
 	private String password;
-
+	
+	@NotEmpty
 	private String nickname;
-
+	
+	@NotEmpty
 	private String address;
 
 	@Column(name = "create_date")
@@ -102,4 +104,10 @@ public class Member {
 		this.create_date = create_date;
 	}
 
+	@Override
+	public String toString() {
+		return "Member [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
+				+ ", address=" + address + ", create_date=" + create_date + "]";
+	}
+	
 }
