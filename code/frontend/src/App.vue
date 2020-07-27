@@ -1,15 +1,20 @@
 <template>
+<div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
+  <Home></Home>
     <router-view @login="onLogin" @signup="onLogin"></router-view>
   </v-app>
+</div>
 </template>
 <script>
 import "./components/css/style.scss";
 import axios from "axios";
+import Home from './views/Home.vue'
 
 const SERVER_URL = "http://127.0.0.1:9999";
 
 export default {
+  components:{Home},
   name: "app",
   data() {
     return {

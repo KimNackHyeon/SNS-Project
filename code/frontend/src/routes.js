@@ -9,6 +9,8 @@ import MarketPlace from "./views/store/Marketplace.vue";
 import GroupBuying from "./views/store/Groupbuying.vue";
 import SearchPassword from "./components/common/SearchPassword.vue";
 import CheckCertification from "./components/common/CheckCertification";
+import Main from "./views/Main.vue";
+import MyRef from "./views/user/MyRef.vue";
 
 export default [
   {
@@ -65,5 +67,15 @@ export default [
     path: "/store/groupbuying",
     name: "GroupBuying",
     component: GroupBuying,
+  },
+  {
+    path: "/Main",
+    name: "Main",
+    component: Main,
+  },
+  {
+    path: "/MyRef",
+    name: "MyRef",
+    component: MyRef,
   },
 ];
