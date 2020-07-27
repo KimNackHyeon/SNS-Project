@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 const SERVER_URL = "http://127.0.0.1:9999";
 
 export default {
-  components:{Home},
+  // components:{Home},
   name: "app",
   data() {
     return {
