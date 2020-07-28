@@ -12,7 +12,7 @@ import axios from "axios";
 import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
-const SERVER_URL = "http://127.0.0.1:9999";
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
 
 export default {
   components:{Home},
@@ -29,11 +29,12 @@ export default {
         password: password,
       };
       console.log(loginData);
-      axios.post(`${SERVER_URL}/account/login`, loginData)
+      axios
+        .post(`${SERVER_URL}/account/login`, loginData)
         .then((response) => {
           console.log(response);
-          this.$cookies.set("auth-token", response.data.key);
-          this.isLoggedIn = true
+          this.$cookies.set("auth-token", response.data);
+          this.isLoggedIn = true;
           this.$router.push("/home");
         })
         .catch((error) => {
