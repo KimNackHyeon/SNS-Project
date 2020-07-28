@@ -1,6 +1,9 @@
 <template>
 <div>
   <div>
+    <div class="introduce">
+      <div class="introduceIMG"></div>
+    </div>
   <v-carousel height="300px" hide-delimiters cycle vertical-delimiters="true" interval="2000" show-arrows-on-hover = "true">
     <v-carousel-item  cycle 
       v-for="(item,i) in items"
@@ -69,5 +72,14 @@ padding: 13px;
 h4{
   font-weight: 1000;
   font-size: 17px;
+}
+.introduceIMG{
+ background-image: url(/img/login_backgroundimg.3ff816a3.gif);
+    height: 100px;
+    width: 100px;
+    background-size: 141%;
+    background-position-x: -20px;
+    background-position-y: -90px;
+    margin:5px 0px;
 }
 </style>

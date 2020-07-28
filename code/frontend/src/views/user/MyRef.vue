@@ -25,12 +25,18 @@
                 <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra}}</div>와 교환할 재료
             </div>
             <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
-                <div class="changeFood" v-for="food in changeFoodsTemp" :key="food" style="font-size:13px;">
-                    {{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개
-                </div>
+                <div class="changeFood" v-for="(food,index) in changeFoodsTemp" :key="food" style="font-size:13px;">
+                    <div>
+                    <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                    <div style="width:20%; float:left;">
+                    <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
+                    </div>
+                    </div>
+            </div>
                 <div class="changeFood">
                     <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
-                <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5> <input type="text" v-model="nowCgradient" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5>
+                <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5> <input type="text" v-model="nowCgradient" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;">
+                <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5>
                 
                 </div>
                 <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
@@ -40,7 +46,8 @@
             </div>
             <div class="textArea">
                 <h4>판매가격</h4>
-                <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><input type="text" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
+                <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;">
+                <h5 style="float:left">개당</h5><input type="text" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
             </div>
             
             <div style="width:100%; height:33px;">
@@ -90,12 +97,10 @@
         </div><!-- end of 채우기 -->
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
-            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px;">공유 바구니</div>
-           <div v-for="food in changeFoods" :key="food" style="font-size:13px;">
-                    {{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개
-            </div>
-            
-
+            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:scroll;">공유 바구니</div>
+           <div class="textArea" v-for="food in changeFoods" :key="food" >
+                    <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+           </div>
         </div><!-- end of 장바구니 안 보기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
@@ -158,7 +163,6 @@ data: () => ({
                 this.Nowgra = now;
                 $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
-                this.changeFoodsTemp = [];
                 this.NowClassNum = index;
             },
             closeShare:function(now){
@@ -182,7 +186,9 @@ data: () => ({
                 var afterclass = className+' '+shareMotion;
                 setTimeout('location.reload()',900);
                 $(afterclass).removeClass(shareMotion);
-                this.changeFood.push(this.changeFoodsTemp);
+                $(afterclass).css('transition','all ease 0.9s');
+                this.changeFoods.push(this.changeFoodsTemp);
+                alert(this.changeFoods.size());
             },
             openCheckBasket:function(){
                 $('.checkBasket').css('display','unset');
@@ -190,6 +196,9 @@ data: () => ({
             closeCheckBasket:function(){
                 $('.checkBasket').css('display','none');
             },
+            deleteShareList:function(index){
+                this.changeFoodsTemp.splice(index,1);
+            }
     }
 }
 </script>
@@ -254,7 +263,8 @@ data: () => ({
     background-color: white;
     position: fixed;
     margin-left: 212px;
-    margin-top: 25px;
+    margin-top: 168px;
+    box-shadow: 1px 3px 15px #8080806b;
     display: none;
 }
 h5{
