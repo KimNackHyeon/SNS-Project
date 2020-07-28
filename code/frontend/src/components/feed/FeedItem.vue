@@ -5,10 +5,10 @@
         <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
         <h4 style="display:inline-block; padding-left:5px">사용자 이름</h4>
       </div>
-      <div style="height: 45px; float: right;">
+      <div style="height: 45px; float: right; width: 10%;">
         <router-link to="/feed/detail">
           <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
-            <v-icon class="left-icon" size="35px">mdi-chevron-right</v-icon>
+            <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
           </v-btn>
         </router-link>
       </div>

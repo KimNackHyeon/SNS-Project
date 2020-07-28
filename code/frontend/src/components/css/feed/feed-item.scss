@@ -8,6 +8,25 @@
   margin: 0 !important;
   width: 100%;
 }
+.searchBarBtn {
+    float: left; 
+    width: 90%; 
+    height: 100%;
+    border-right: 1px solid lightgray; 
+    border-radius: unset !important;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+.v-select__selections {
+    display: block !important;
+  }
+.v-autocomplete:not(.v-input--is-disabled).v-select.v-text-field input {
+    width: 80px !important;
+}
+.mdi-close-circle {
+    color: white !important;
+}
 .v-input__slot {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
@@ -98,6 +117,8 @@ input:hover {
         width: 90%;
         float: left;
         padding: 5px 0 5px 10px;
+        border-right: 1px solid lightgray;
+        box-sizing: border-box;
     }
     .v-input__append-inner {
         display: none;
