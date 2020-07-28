@@ -183,12 +183,11 @@ data: () => ({
                 this.closeShare();
                 var shareMotion = 'share'+(this.NowClassNum+1);
                 $(className).addClass(shareMotion);
-                var afterclass = className+' '+shareMotion;
-                setTimeout('location.reload()',900);
-                $(afterclass).removeClass(shareMotion);
-                $(afterclass).css('transition','all ease 0.9s');
                 this.changeFoods.push(this.changeFoodsTemp);
-                alert(this.changeFoods.size());
+                var afterclass = className+shareMotion;
+                var combackclass = 'comback'+(this.NowClassNum+1);
+                $('#Gradient').addClass(combackclass);
+
             },
             openCheckBasket:function(){
                 $('.checkBasket').css('display','unset');
@@ -352,7 +351,7 @@ margin:14px 106px 10px 15px;
 .share1{
     z-index: 100;
         transform: translate(220px,360px) scale(0,0);
-    transition:all ease 0.9s;
+        transition:all ease 0.9s;
 }
 .share2{
     z-index: 100;
@@ -385,6 +384,47 @@ margin:14px 106px 10px 15px;
     transition:all ease 0.8s;
 }
 .share8{
+    z-index: 100;
+     transform: translate(108px,0px) scale(0,0);
+    transition:all ease 0.8s;
+}
+
+.comback1{
+    z-index: 100;
+        transform: translate(-220px,-360px) scale(0,0);
+        transition:all ease 0.9s;
+}
+.comback2{
+    z-index: 100;
+     transform: translate(108px,360px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback3{
+    z-index: 100;
+     transform: translate(250px,300px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback4{
+    z-index: 100;
+     transform: translate(108px,300px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback5{
+    z-index: 100;
+     transform: translate(250px,250px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback6{
+    z-index: 100;
+     transform: translate(108px,250px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback7{
+    z-index: 100;
+     transform: translate(250px,100px) scale(0,0);
+    transition:all ease 0.8s;
+}
+.comback8{
     z-index: 100;
      transform: translate(108px,0px) scale(0,0);
     transition:all ease 0.8s;
