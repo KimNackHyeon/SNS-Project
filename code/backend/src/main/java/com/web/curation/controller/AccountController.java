@@ -50,7 +50,7 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
-	
+
 	@Autowired
 	MyBoardRepo myboardRepo;
 
@@ -78,7 +78,7 @@ public class AccountController {
 //	}
 
 //	@RequestParam(required = false) String email, @RequestParam(required = false) String password
-	
+
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
 	public ResponseEntity<String> login(@RequestBody Member member) {
@@ -94,7 +94,7 @@ public class AccountController {
 			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@ApiOperation(value = "토큰 검증")
 	@PostMapping("/info")
 	public ResponseEntity<String> verify(@RequestParam String token) {
@@ -112,28 +112,15 @@ public class AccountController {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
 		}
 	}
-	
-	
 
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody Member member) {
-		System.out.println(member.toString());
 		final BasicResponse result = new BasicResponse();
-		// 이메일, 닉네임 중복처리 필수
-		memberService.sendMail(member.getEmail());
-		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			result.status = true;
-			result.data = "이메일 중복됩니다.";
-		} else if (memberRepo.getUserByNickname(member.getNickname()) != null) {
-			result.status = true;
-			result.data = "닉네임이 중복됩니다.";
-		} else {
-			// 회원가입단을 생성해 보세요.'
-			memberRepo.save(member);
-			result.status = true;
-			result.data = "success";
-		}
+		// 회원가입단을 생성해 보세요.'
+		memberRepo.save(member);
+		result.status = true;
+		result.data = "success";
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -158,13 +145,13 @@ public class AccountController {
 
 		return response;
 	}
-	
+
 	@PostMapping("/account/mypage")
 	@ApiOperation(value = "내 페이지 보기")
 	public Object showmypage(@RequestParam(required = true) final String email) {
 		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
 		ResponseEntity response = null;
-		if(myBoardOpt.isPresent()) {
+		if (myBoardOpt.isPresent()) {
 			final BasicResponse result = new BasicResponse();
 			System.out.println(myBoardOpt);
 			result.status = true;
@@ -176,6 +163,37 @@ public class AccountController {
 		}
 		return response;
 	}
+
+	@PostMapping("/account/emailconfirm")
+	@ApiOperation(value = "이메일 인증하기")
+	public Object emailconfirm(@RequestParam(required = true) final String email) {
+		final BasicResponse result = new BasicResponse();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(email) != null) {
+			result.status = true;
+			result.data = "이미 존재하는 이메일입니다.";
+		} else {
+			String code = memberService.sendMail(email);
+			result.status = true;
+			result.data = code;
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	@PostMapping("/account/nicknameconfirm")
+	@ApiOperation(value = "닉네임 중복검사")
+	public Object nicknameconfirm(@RequestParam(required = true) final String nickname) {
+		final BasicResponse result = new BasicResponse();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByNickname(nickname) != null) {
+			result.status = true;
+			result.data = "1";
+		} else {
+			result.status = true;
+			result.data = "0";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
 	public String getToken(Member member) {

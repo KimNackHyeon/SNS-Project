@@ -27,15 +27,16 @@ public class MemberService {
 
 	}
 
-	public void sendMail(String address) {
+	public String sendMail(String address) {
 
 		SimpleMailMessage message = new SimpleMailMessage();
 		String certificateNumber = GCC.excuteGenerate();
 		message.setTo(address);
 		message.setFrom(FROM_ADDRESS);
 		message.setSubject("회원가입 인증번호입니다.");
-		message.setText("인증번호는 " + certificateNumber + "입니다.");
+		message.setText("인증번호는    " + certificateNumber + "    입니다.");
 		mailSender.send(message);
+		return certificateNumber;
 	}
 
 }
