@@ -13,8 +13,10 @@
           id="nickname"
           placeholder="닉네임을 입력하세요."
           type="text"
+          style="padding-left: none;"
+          @keypress.enter="signup"
         />
-        <label for="nickname">닉네임</label>
+        <label for="nickname" class="label-color">닉네임</label>
       </div>
 
       <div class="input-with-label">
@@ -23,6 +25,7 @@
           id="email"
           placeholder="이메일을 입력하세요."
           type="text"
+          @keypress.enter="signup"
         />
         <label for="email">이메일</label>
       </div>
@@ -33,6 +36,7 @@
           id="password"
           :type="passwordType"
           placeholder="비밀번호를 입력하세요."
+          @keypress.enter="signup"
         />
         <label for="password">비밀번호</label>
       </div>
@@ -43,6 +47,7 @@
           :type="passwordConfirmType"
           id="password-confirm"
           placeholder="비밀번호를 다시한번 입력하세요."
+          @keypress.enter="signup"
         />
         <label for="password-confirm">비밀번호 확인</label>
       </div>

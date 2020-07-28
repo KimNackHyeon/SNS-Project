@@ -4,14 +4,24 @@
 .feed-wrapB {
   padding: 0;
 }
-.searchbar {
-  overflow: hidden;
-}
 .search-input {
   margin: 0 !important;
   width: 100%;
 }
-
+.v-input__slot {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+.v-input__append-inner {
+    display: none !important;
+}
+.v-chip--select {
+    background-color: #a0d469 !important;
+    color: white !important;
+}
+.mdi-magnify {
+    color: black !important;
+}
 .feed-body {
   overflow: scroll;
   height: 540px;
@@ -20,7 +30,7 @@ input:hover {
   border: none;
 }
 .v-label {
-  padding-left: 10px;
+    padding-left: 10px;
 }
 // input {
 //     padding-left: 10px !important;
@@ -77,74 +87,60 @@ input:hover {
 }
 
 .feed-item {
-  @include wrap;
-  // margin-bottom: 30px;
-  // border-bottom: 1px solid $grey;
-  // padding-bottom: 20px;
-  .feed-profil {
-    overflow: hidden;
-  }
-  .feed-user {
-    width: 90%;
-    float: left;
-    padding-left: 10px;
-    margin: 5px 0;
-  }
-  .feed-detail {
-    float: right;
-    padding: 5px 0;
-    background-color: #f1f3f5;
-  }
-  .v-carousel__controls {
-    background: none;
-  }
-  .v-window {
-    height: 360px !important;
-  }
-  .v-carousel__item {
-    height: 360px !important;
-  }
-  .v-responsive__sizer {
-    padding: 0 !important;
-  }
-  .v-image__image {
-    height: 360px;
-  }
-  .v-carousel__controls__item {
-    width: 24px;
-    height: 24px;
-    margin: 0 !important;
-  }
-  .v-btn--active {
-    color: #a0d469 !important;
-  }
-  .mdi-circle {
-    font-size: 8px !important;
-  }
-  .profile-image {
-    float: left;
-  }
-  .user-info,
-  .content {
-    width: calc(100% - 50px);
-    float: right;
-  }
-  .user-info {
-    .user-name {
-      float: left;
-      //font-weight: $f600;
-      button {
-        font-weight: $f600;
-      }
-      span {
-        margin-left: 10px;
-      }
+    @include wrap;
+    // margin-bottom: 30px;
+    // border-bottom: 1px solid $grey;
+    // padding-bottom: 20px;
+    .feed-profil {
+        overflow: hidden;
     }
-    .date {
-      float: right;
-      font-size: $font-size__5;
-      font-weight: $f600;
-      color: #999;
+    .feed-user {
+        width: 90%;
+        float: left;
+        padding: 5px 0 5px 10px;
+    }
+    .v-input__append-inner {
+        display: none;
+    }
+    .feed-detail {
+        width: 10%;
+        float: right;
+        padding: 5px 0;
+        background-color: #f1f3f5;
+        border-left: 1px solid lightgray;
+    }
+    .feed-right-icon:hover {
+        color: #a0d469;
+    }
+    .v-carousel__controls {
+        height: 30px;
+        background: none;
+    }
+    .v-window {
+        height: 360px !important;
+    }
+    .v-carousel__item {
+        height: 360px !important;
+    }
+    .v-responsive__sizer {
+        padding: 0 !important;
+    }
+    .v-image__image {
+        height: 360px;
+    }
+    .v-carousel__controls__item {
+        width: 24px;
+        height: 24px;
+        margin: 0 !important;
+    }
+    .v-btn--active {
+        color: #a0d469 !important;
+    }
+    .v-btn:before {
+        background: none !important;
+    }
+    .mdi-circle {
+        font-size: 8px !important;
     }
   }
   .content {

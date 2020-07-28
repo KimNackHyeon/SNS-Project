@@ -39,7 +39,7 @@
             <!-- 비밀번호 -->
           </div>
           <div style="margin-top:5px; float:right; width:20%;">
-            <router-link to="/home"><button class="login-btn" @click="$emit('login', email, password)">LOGIN</button></router-link>
+            <router-link to="/Main"><button class="login-btn" @click="$emit('login', email, password)">LOGIN</button></router-link>
           </div>
           <!-- 로그인 버튼 -->
         </div>
@@ -67,7 +67,7 @@ import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
-import Home from "../Home.vue";
+import Main from "../Main.vue";
 
 export default {
   components: {

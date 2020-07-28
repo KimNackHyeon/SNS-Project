@@ -1,20 +1,22 @@
 <template>
-  <v-layout wrap style="width:360px; height: 600px; margin:auto;">
+  <v-layout wrap style="width:360px; height:50px; margin:auto;">
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn flat icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
-        <v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn>
-        <v-btn flat icon style="width:30px; height:30px; background-size:cover; "><img style="width:auto; height:30px;" src="../assets/images/ref_close.png"></v-btn>
-    </div>
-    <div style="width:100%; height:100%;">
-    <MyRef/>
+        <router-link to="/Main"><v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
+        <router-link to="/MyRef"><v-btn  flat icon style="width:30px; height:30px; background-size:cover; ">
+          <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
+          <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+          </v-btn></router-link>    
+              
+        
     </div>
     
-    <Main/>
     <v-navigation-drawer
       v-model="drawer"
       temporary
       absolute
       width=320px
+      style="z-index: 100;"
     >
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
@@ -52,18 +54,22 @@
 
       <v-list style="height:100px; width:100%;">
       </v-list>
-      <div class="category" style="border-top:1px solid #8080802e;">
+      <router-link to="/store/marketplace"><div class="category" style="border-top:1px solid #8080802e;">
          <v-icon size="50px" color="#808080b5">mdi-basket</v-icon>
         <h2 class="categorysub">우리동네 장터</h2>
-      </div>
+      </div></router-link>
+      <router-link to="/store/groupbuying">
       <div class="category">
         <v-icon size="50px" color="#808080b5">mdi-cart</v-icon>
         <h2 class="categorysub">공동구매</h2>
       </div>
+      </router-link>
+      <router-link to="/feed/main">
       <div class="category">
         <v-icon size="50px" color="#808080b5">mdi-chef-hat</v-icon>
         <h2 class="categorysub">레시피 찾기</h2>
       </div>
+      </router-link>
 
       <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position:fixed; bottom:0; width:100%;"> <!-- 하단 -->
         <v-icon style="margin:8px">mdi-cog</v-icon>
@@ -76,14 +82,14 @@
 <script>
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import Main from './Main.vue'
-import MyRef from './user/MyRef.vue'
+import $ from 'jquery'
+
 
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })
   export default {
-    components:{ MyRef},
+    components:{ },
     data () {
       return {
         drawer: null,
@@ -105,13 +111,17 @@ Vue.use(Vuetify, {
             }
             slides[slideIndex-1].style.display = "block";  
             dots[slideIndex-1].className += " active";
-        }
-    }
+        },
+        isOpen(){
+          
+            return true;
+          
+        },
+    },
   }
 </script>
 
 <style>
-
 .categorysub{
 display: inline-block;
   vertical-align: center;
@@ -129,7 +139,6 @@ display: inline-block;
     margin-top: 15px;
 }
 .circlePhoto{
-  
     width: 100%;
     height:100%;
     object-fit: cover;
