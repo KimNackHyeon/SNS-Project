@@ -772,11 +772,12 @@ p {
   position: relative;
   margin-bottom: 10px;
   input[type="text"],
-  input[type="password"] {
+  input[type="password"],
+  select {
     @include wrap;
     height: 50px;
     line-height: 1;
-    padding: 2px 15px 0 105px;
+    padding: 2px 15px 0 85px;
     box-sizing: border-box;
     color: green;
     border: 4px solid yellowgreen;

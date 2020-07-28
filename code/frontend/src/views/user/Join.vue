@@ -5,10 +5,54 @@
  -->
 <template>
   <div class="user join wrapC">
-    <h1>가입하기</h1>
+    <h1 style="margin-bottom: 5px;">가입하기</h1>
     <div class="form-wrap">
       <div class="input-with-label">
-        <input
+        <label for="">이메일</label>
+        <input v-model='signupData.email' type="text" id='email-join' placeholder="example" style="width: 80%;">
+        <button type="button" @click="checkConfirm" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">인증</button>
+        <p v-if="confirm">success</p>
+        <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
+        <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
+        <p v-if="mailSucMsg && !finalMail && flag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+      </div>
+
+      <div class="input-with-label">
+        <label for="">비밀번호</label>
+        <input v-model='signupData.password' type="password" class="common-input-join" placeholder="password" >
+        <p v-if="passwordErrorMsg" class='err-msg join-err-msg'>영문,숫자 포함 8 자리이상이어야 합니다.</p>
+        <p v-if="passwordSuccessMsg" class='suc-msg join-suc-msg'>사용 가능한 비밀번호 입니다.</p> 
+        <!-- <input
+          v-model="signupData.password"
+          id="password"
+          :type="passwordType"
+          placeholder="비밀번호를 입력하세요."
+          @keypress.enter="signup"
+        />
+        <label for="password">비밀번호</label> -->
+      </div>
+
+      <div class="input-with-label">
+        <label for="">비밀번호 확인</label>
+        <input v-model='signupData.passwordConfirm' type="password" class="common-input-join" placeholder="password confirm">
+        <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
+        <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
+        <!-- <input
+          v-model="signupData.passwordConfirm"
+          :type="passwordConfirmType"
+          id="password-confirm"
+          placeholder="비밀번호를 다시한번 입력하세요."
+          @keypress.enter="signup"
+        /> -->
+        <!-- <label for="password-confirm">비밀번호 확인</label> -->
+      </div>
+
+      <div class="input-with-label">
+        <label for="">닉네임</label>
+        <input v-on:input="signupData.nickname = $event.target.value" type="text" class="common-input-join" placeholder="nickname"  maxlength="128">
+        <p v-if="nickErrMsg" class='err-msg join-err-msg'>이미 사용중인 닉네임입니다.</p>
+        <p v-if="nickSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
+        <!-- <input
           v-model="signupData.nickname"
           id="nickname"
           placeholder="닉네임을 입력하세요."
@@ -16,41 +60,9 @@
           style="padding-left: none;"
           @keypress.enter="signup"
         />
-        <label for="nickname" class="label-color">닉네임</label>
+        <label for="nickname" class="label-color">닉네임</label> -->
       </div>
 
-      <div class="input-with-label">
-        <input
-          v-model="signupData.email"
-          id="email"
-          placeholder="이메일을 입력하세요."
-          type="text"
-          @keypress.enter="signup"
-        />
-        <label for="email">이메일</label>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="signupData.password"
-          id="password"
-          :type="passwordType"
-          placeholder="비밀번호를 입력하세요."
-          @keypress.enter="signup"
-        />
-        <label for="password">비밀번호</label>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="signupData.passwordConfirm"
-          :type="passwordConfirmType"
-          id="password-confirm"
-          placeholder="비밀번호를 다시한번 입력하세요."
-          @keypress.enter="signup"
-        />
-        <label for="password-confirm">비밀번호 확인</label>
-      </div>
             <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
       @click="addressgo()">주소검색</button>
       <div class="input-address">
@@ -240,6 +252,9 @@
 import DaumPostcode from "vuejs-daum-postcode";
 import Vue from 'vue';
 import VueOverflowScroll from 'vue-overflow-scroll';
+import PasswordValidator from 'password-validator'
+import * as EmailValidator from "email-validator"
+
 export default {
   name: 'App',
   components:{
@@ -251,10 +266,27 @@ export default {
       signupData: {
         email: "",
         password: "",
-        nickname: "",
         passwordConfirm: "",
+        nickname: "",
         address: "",
       },
+      passwordErrorMsg: false,
+      passwordSuccessMsg: false,
+      passwordSchema: new PasswordValidator(),
+      confirm: true,
+      JoinBtn: true,
+      pwErrMsg: false,
+      pwSucMsg: false,
+      mailErrMsg: false,
+      mailSucMsg: false,
+      finalMail: false,
+      nickErrMsg: false,
+      nickSucMsg: false,
+      isFemale: false,
+      isEmail: false,
+      changeProfile: false,
+      isCancle: false,
+      flag: false,
       isTerm: false,
       isLoading: false,
       open:false,
@@ -272,6 +304,45 @@ export default {
       termPopup: false,
     };
   },
+  created() {
+    this.passwordSchema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .digits()
+      .has()
+      .letters();
+  },
+  watch: {
+    select() {
+      this.checkSelect();
+      this.checkEmailValidate();
+      this.checkJoinForm();
+    },
+    'signupData.passwordConfirm'() {
+      this.checkPassword();
+    },
+    'signupData.password'() {
+      this.checkPasswordValidate();
+      this.checkPassword();
+    },
+    'signupData.email'() {
+      this.checkEmailValidate();
+    },
+    'signupData.nickname'() {
+      this.checkNickname();
+    },
+    'finalMail'() {
+      this.finalMailCheck();
+    },
+    input: {
+      handler() {
+        this.checkJoinForm();
+      }, deep:true
+    },
+  },
   methods: {
     handleAddress(data){
         let fullAddress = data.address
@@ -283,7 +354,7 @@ export default {
           if (data.buildingName !== '') {
             extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName)
           }
-         fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '')
+          fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '')
         }
           this.signupData.address = fullAddress
           this.open = false;
@@ -307,6 +378,166 @@ export default {
         close_toggle: function(){ 
           this.is_show = false; // #2, #3
         },
+    checkJoinForm() {
+      if(this.signupData.email && this.signupData.password
+      && this.signupData.passwordConfirm && this.signupData.nickname && this.passwordSuccessMsg
+      && !this.finalMail && this.pwSucMsg && this.nickSucMsg){
+        this.JoinBtn = false;
+      } else {
+        this.JoinBtn = true
+      }
+    },
+    checkPassword() {
+      if (this.signupData.passwordConfirm !== '') {
+
+        if(this.signupData.password != this.signupData.passwordConfirm) {
+          this.pwErrMsg = true
+          this.pwSucMsg = false
+        } else if (this.signupData.password && this.signupData.passwordConfirm && this.signupData.password === this.signupData.passwordConfirm) {
+          this.pwErrMsg = false
+          this.pwSucMsg = true
+        }
+      }
+    },
+    checkEmail() {
+      if(this.signupData.email) {
+        this.mailSucMsg = true
+      } else {
+        this.mailSucMsg = false
+      }
+    },
+    checkConfirm: function() {
+      console.log(this.confirm)
+      this.confirm = !this.confirm;
+    },
+    checkNickname() {
+      axios.get('http://localhost:8080/account/checkNickname',{ 
+        params: {
+          nickname: this.signupData.nickname
+          }
+      }).then(data => {
+        if (data.data.data == "exist") {
+          this.nickErrMsg = true;
+          this.nickSucMsg = false;
+          this.checkJoinForm()
+        } else {
+          this.nickSucMsg = true;
+          this.nickErrMsg = false;
+          this.checkJoinForm()        
+        }
+      })
+      .catch(function(){
+          })
+      
+    },
+    checkPasswordValidate() {
+      if (
+        this.signupData.password.length >= 0 &&
+        !this.passwordSchema.validate(this.signupData.password)
+      )
+        { this.passwordErrorMsg= true;
+        this.passwordSuccessMsg = false; }
+      else { this.passwordSuccessMsg = true; 
+      this.passwordErrorMsg= false;
+      }
+    },
+    nextJoin() {
+      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
+      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
+
+      firstPage.classList.add('goNext-front')
+      SecondPage.classList.remove('hidden')
+      firstPage.classList.remove('return')
+      SecondPage.classList.add('goNext-end')
+    },
+
+    goBack() {
+      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
+      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
+
+      firstPage.classList.remove('goNext-front')
+      firstPage.classList.add('return')
+      SecondPage.classList.remove('goNext-end')
+      SecondPage.classList.add('hidden')
+    },
+    signupFinish() {
+      axios.post('http://localhost:8080/account/signup',{
+
+          email: this.signupData.email+'@'+this.signupData.url,
+          password: this.signupData.password,
+          nickname: this.signupData.nickname,
+
+      }).then(function(data){
+        console.log(data.data.data);
+        Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+      )
+      })
+      .catch(function(data){
+        console.log(data.data.data)
+      });
+    },
+    notTab() {
+      window.addEventListener('keydown', event => {
+        const WRAPJOIN = document.querySelector('.wrap-join')
+        if (WRAPJOIN) {
+          
+          if(event.defaultPrevented) {
+            return;
+          }
+          var handled = false;
+        
+          if (event.keyCode === 9) {
+            handled = true;
+          }
+        
+          if (handled) {
+            event.preventDefault();
+          }
+        }
+      })
+    },
+    finalMailCheck() {
+      this.checkJoinForm();
+    },
+    checkEmailValidate() {
+      if (this.signupData.email.length >= 4 && EmailValidator.validate((this.signupData.email)))
+        { 
+        this.mailSucMsg = true;
+        this.mailErrMsg = false;
+        this.finalMail = false;
+          if (this.mailSucMsg) {
+            axios.get('http://localhost:8080/account/checkDoubleEmail',{ 
+              params: {
+                email: this.signupData.email
+                }
+            }).then(data => {
+              if (data.data.data == "exist") {
+                this.finalMail = true;
+                this.flag = false;
+              } else {
+                this.finalMail = false;
+                this.flag = true;
+              }
+            })
+            .catch(function(){
+            })}
+        }
+      else { 
+      this.mailSucMsg = false;
+      this.mailErrMsg = true; }
+    },
+    onCancleBtn() {
+      this.isCancle = true
+    },
+    offCancleBtn() {
+      this.isCancle = false
+    },
+    checkcheck() {
+      console.log('hi')
+    },
   },
 };
 </script>
