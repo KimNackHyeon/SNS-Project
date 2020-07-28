@@ -1,7 +1,7 @@
 <template>
 <div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
-    <Home></Home>
+    <Home/>
     <router-view @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
@@ -29,11 +29,12 @@ export default {
         password: password,
       };
       console.log(loginData);
-      axios.post(`${SERVER_URL}/account/login`, loginData)
+      axios
+        .post(`${SERVER_URL}/account/login`, loginData)
         .then((response) => {
           console.log(response);
-          this.$cookies.set("auth-token", response.data.key);
-          this.isLoggedIn = true
+          this.$cookies.set("auth-token", response.data);
+          this.isLoggedIn = true;
           this.$router.push("/home");
         })
         .catch((error) => {
