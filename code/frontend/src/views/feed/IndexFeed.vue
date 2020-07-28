@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div style="height:60px">Header</div>
     <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
       <div>

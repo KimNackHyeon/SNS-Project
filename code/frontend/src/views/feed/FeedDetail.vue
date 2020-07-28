@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height:60px">Header</div>
+    
     <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
         <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 38px;">
