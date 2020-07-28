@@ -11,6 +11,7 @@ import SearchPassword from "./components/common/SearchPassword.vue";
 import CheckCertification from "./components/common/CheckCertification";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
+import WriteRecipe from "./views/feed/WriteRecipe.vue"
 
 export default [
   {
@@ -77,5 +78,10 @@ export default [
     path: "/MyRef",
     name: "MyRef",
     component: MyRef,
+  },
+  {
+    path:"/feed/write",
+    name : "WriteRecipe",
+    component : WriteRecipe
   },
 ];
