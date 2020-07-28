@@ -2,7 +2,7 @@
   <div>
     <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
-      <div>
+      <div style="height: 100%;">
         <v-combobox
           v-model="model"
           :filter="filter"
@@ -15,30 +15,16 @@
           small-chips
           solo
           dense
-          style="float: left; width: 89%; border-right: 1px solid lightgray; border-radius: unset;"
+          deletable-chips
+          class="searchBarBtn"
         ></v-combobox>
-        <div>
+        <div style="overflow: hidden;">
           <v-btn icon>
-            <v-icon>mdi-magnify</v-icon>
+            <v-icon class="right-icon">mdi-magnify</v-icon>
           </v-btn>
         </div>
       </div>
       
-
-      <!-- 간단한 검색창 -->
-      <!-- <v-text-field
-      v-model="searchData"
-      label="Search"
-      outlined
-      clearable
-      class="search-input"
-      append-icon="mdi-magnify"
-      color="#a0d469 "
-      dense
-      click:append-outer
-      hide-details
-      style="margin-top:0px; border-radius: unset;"
-      ></v-text-field> -->
     </div>
     <div class="feed-body">
         <FeedItem />
