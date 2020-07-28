@@ -1,298 +1,288 @@
 @charset "utf-8";
-@import '../../css/common';
+@import "../../css/common";
 
 .feed-wrapB {
-    padding: 0;
+  padding: 0;
 }
 .searchbar {
-    overflow: hidden;
+  overflow: hidden;
 }
 .search-input {
-    margin: 0 !important;
-    width: 100%;
+  margin: 0 !important;
+  width: 100%;
 }
 
 .feed-body {
-    overflow: scroll;
-    height: 540px;
+  overflow: scroll;
+  height: 540px;
 }
 input:hover {
-    border: none;
+  border: none;
 }
 .v-label {
-    padding-left: 10px;
+  padding-left: 10px;
 }
-input {
-    padding-left: 10px !important;
-}
+// input {
+//     padding-left: 10px !important;
+// }
 .feed-card {
-    box-sizing: content-box;
-    box-shadow: 0 0 0 1px #ddd;
-    color: #000;
+  box-sizing: content-box;
+  box-shadow: 0 0 0 1px #ddd;
+  color: #000;
+  float: left;
+  border-radius: 5px;
+  overflow: hidden;
+  .img {
+    @include background-img;
+    width: $c100;
+    height: 190px;
+  }
+  .contentsWrap {
+    @include wrap;
+    box-sizing: border-box;
+    padding: 12px;
     float: left;
-    border-radius: 5px;
-    overflow: hidden;
-    .img {
-        @include background-img;
-        width: $c100;
-        height: 190px;
+    //width: calc(100% - 36px);
+    .title {
+      @include ellipsisMulti(2);
+      font: {
+        weight: $f600;
+      }
+      color: #000;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-wrap: break-word;
+      line-height: 1.5em;
+      font-size: 0.929em;
+      @include ellipsis;
+      margin: 0 0 8px;
+      white-space: normal;
     }
-    .contentsWrap {
-        @include wrap;
-        box-sizing: border-box;
-        padding: 12px;
-        float: left;
-        //width: calc(100% - 36px);
-        .title {
-            @include ellipsisMulti(2);
-            font: { 
-                weight: $f600;
-            }
-            color:#000;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            word-wrap:break-word; 
-            line-height: 1.5em;
-            font-size: .929em;
-            @include ellipsis;
-            margin: 0 0 8px;
-            white-space: normal;
-        } 
-        .url {
-            @include ellipsis;
-            width: calc(100% - 80px);
-            float: left;
-            a {
-                font-size: .714em;
-                color:rgba(0, 0, 0, .5)
-            }
-        }
-        .date {
-            float: right;
-            font-size: .714em;
-            color:rgba(0, 0, 0, .5);
-        }
+    .url {
+      @include ellipsis;
+      width: calc(100% - 80px);
+      float: left;
+      a {
+        font-size: 0.714em;
+        color: rgba(0, 0, 0, 0.5);
+      }
     }
+    .date {
+      float: right;
+      font-size: 0.714em;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
 }
 
 .feed-item {
-    @include wrap;
-    // margin-bottom: 30px;
-    // border-bottom: 1px solid $grey;
-    // padding-bottom: 20px;
-    .feed-profil {
-        overflow: hidden;
+  @include wrap;
+  // margin-bottom: 30px;
+  // border-bottom: 1px solid $grey;
+  // padding-bottom: 20px;
+  .feed-profil {
+    overflow: hidden;
+  }
+  .feed-user {
+    width: 90%;
+    float: left;
+    padding-left: 10px;
+    margin: 5px 0;
+  }
+  .feed-detail {
+    float: right;
+    padding: 5px 0;
+    background-color: #f1f3f5;
+  }
+  .v-carousel__controls {
+    background: none;
+  }
+  .v-window {
+    height: 360px !important;
+  }
+  .v-carousel__item {
+    height: 360px !important;
+  }
+  .v-responsive__sizer {
+    padding: 0 !important;
+  }
+  .v-image__image {
+    height: 360px;
+  }
+  .v-carousel__controls__item {
+    width: 24px;
+    height: 24px;
+    margin: 0 !important;
+  }
+  .v-btn--active {
+    color: #a0d469 !important;
+  }
+  .mdi-circle {
+    font-size: 8px !important;
+  }
+  .profile-image {
+    float: left;
+  }
+  .user-info,
+  .content {
+    width: calc(100% - 50px);
+    float: right;
+  }
+  .user-info {
+    .user-name {
+      float: left;
+      //font-weight: $f600;
+      button {
+        font-weight: $f600;
+      }
+      span {
+        margin-left: 10px;
+      }
     }
-    .feed-user {
-        width: 90%;
-        float: left;
-        padding-left: 10px;
-        margin: 5px 0;
+    .date {
+      float: right;
+      font-size: $font-size__5;
+      font-weight: $f600;
+      color: #999;
     }
-    .feed-detail {
-        float: right;
-        padding: 5px 0;
-        background-color: #f1f3f5;
+  }
+  .content {
+    p {
+      display: -webkit-box;
+      word-wrap: break-word;
+      line-height: 1.5em;
+      margin: 5px 0 10px;
+      white-space: normal;
+      font-size: 0.929em;
     }
-    .v-carousel__controls {
-        background: none;
+    .btn--text {
+      float: right;
     }
-    .v-window {
-        height: 360px !important;
+  }
+  .feed-card {
+    width: calc(100% - 50px);
+    float: right;
+    //max-width: $c100;
+  }
+  .btn-group {
+    margin: 15px 0;
+    width: calc(100% - 50px);
+    float: right;
+    div {
+      float: left;
+      margin-right: 30px;
+      color: #000;
+      font-weight: $f600;
+      font-size: $font-size__5;
+      .icon {
+        color: $ssafy;
+        margin-right: 5px;
+        font-weight: $f600;
+        width: auto;
+        font-size: 15px;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
     }
-    .v-carousel__item {
-        height: 360px !important;
-    }
-    .v-responsive__sizer {
-        padding: 0 !important;
-    }
-    .v-image__image {
-        height: 360px;
-    }
-    .v-carousel__controls__item {
-        width: 24px;
-        height: 24px;
-        margin: 0 !important;
-    }
-    .v-btn--active {
-        color: #a0d469 !important;
-    }
-    .mdi-circle {
-        font-size: 8px !important;
-    }
-    .profile-image {
-        float: left;
-    }
-    .user-info, .content {
-        width: calc(100% - 50px);
-        float: right; 
-    }
-    .user-info {
-        .user-name {
-            float: left;
-            //font-weight: $f600;
-            button {
-                font-weight: $f600;
-            }
-            span {
-                margin-left: 10px;
-            }
+    .likeScrap {
+      position: relative;
+      line-height: 20px;
+      text-indent: 23px;
+      &.active {
+        color: $ssafy;
+        .icon {
+          &.full {
+            display: inline-block;
+          }
+          &.empty {
+            display: none;
+          }
         }
-        .date {
-            float: right;
-            font-size: $font-size__5;
-            font-weight: $f600;
-            color:#999;
+      }
+      .icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        &.full {
+          display: none;
         }
+        &.empty {
+          display: inline-block;
+        }
+      }
     }
-    .content {
-        p {
-            display: -webkit-box;
-            word-wrap:break-word; 
-            line-height: 1.5em;
-            margin: 5px 0 10px;
-            white-space: normal;
-            font-size: .929em;
-        }
-        .btn--text {
-            float: right;
-        }
+  }
+  .comment-btn {
+    width: calc(100% - 50px);
+    float: right;
+    button {
+      color: $ssafy;
+      font-weight: $f600;
+      font-size: $font-size__5;
     }
-    .feed-card {
-        width:calc(100% - 50px);
-        float:right;
-        //max-width: $c100;
-    }
-    .btn-group {
-        margin: 15px 0;
-        width: calc(100% - 50px);
-        float:right;
-        div {
-            float: left;
-            margin-right: 30px;
-            color:#000;
-            font-weight: $f600;
-            font-size: $font-size__5;
-            .icon {
-                color:$ssafy;
-                margin-right: 5px;
-                font-weight: $f600;
-                width: auto;
-                font-size: 15px;
-            }
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-        .likeScrap {
-            position: relative;
-            line-height: 20px;
-            text-indent: 23px;
-            &.active {
-                color:$ssafy;
-                .icon {
-                    &.full {
-                        display: inline-block;
-                    }
-                    &.empty {
-                        display: none;
-                    }
-                }
-            }
-            .icon {
-                position: absolute;
-                left: 0;
-                top:0;
-                &.full {
-                    display: none;
-                }
-                &.empty {
-                    display: inline-block;
-                }
-            }
-        }
-    }
-    .comment-btn {
-        width: calc(100% - 50px);
-        float:right;
-        button {
-            color:$ssafy;
-            font-weight: $f600;
-            font-size: $font-size__5;
-        }
-    }
+  }
 }
 
 .scrab-feed-item {
-    @include wrap;
-    padding:15px 0;
-    border-bottom: 1px solid $grey;
-    height: 100px;
+  @include wrap;
+  padding: 15px 0;
+  border-bottom: 1px solid $grey;
+  height: 100px;
+  position: relative;
+  .img {
+    @include background-img;
+    width: 100px;
+    height: 100%;
+    box-sizing: border-box;
+    float: left;
+    border: 1px solid $grey;
+    border-radius: 3px;
+  }
+  .content {
+    float: right;
+    width: calc(100% - 120px);
+    height: 100%;
     position: relative;
-    .img {
-        @include background-img;
-        width: 100px;
-        height: 100%;
-        box-sizing: border-box;
-        float:left;
-        border:1px solid $grey;
-        border-radius: 3px;
+    h4 {
+      @include ellipsisMulti(2);
+      margin-bottom: 5px;
+      font-weight: $f600;
+      transform: rotate(0.1deg);
+      color: #000;
     }
-    .content {
-        float:right;
-        width: calc(100% - 120px);
-        height: 100%;
-        position: relative;
-        h4 {
-            @include ellipsisMulti(2);
-            margin-bottom: 5px;
-            font-weight: $f600;
-            transform: rotate(.1deg);
-            color:#000;
-        }
-        .url {
-            @include ellipsis;
-            @include wrap;
-            color:$black;
-            font-size: $font-size__5;
-        }
-        .bottom-wrap {
-            width: 100%;
-            position: absolute;
-            left: 0px;
-            bottom:0px;
-            .date {
-                font-size: $font-size__5;
-                color:$black;
-            }
-            button {
-                font-size: $font-size__5;
-                margin-left: 20px;
-                float:right;
-                font-weight: $f600;
-                transform: rotate(.1deg);
-                &:last-of-type {
-                    margin-left: 0;
-                }
-                &.posting {
-                    color:#787878;
-                    &.highlight {
-                        color:$ssafy;
-                    }
-                }
-            }
-        }
+    .url {
+      @include ellipsis;
+      @include wrap;
+      color: $black;
+      font-size: $font-size__5;
     }
+    .bottom-wrap {
+      width: 100%;
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      .date {
+        font-size: $font-size__5;
+        color: $black;
+      }
+      button {
+        font-size: $font-size__5;
+        margin-left: 20px;
+        float: right;
+        font-weight: $f600;
+        transform: rotate(0.1deg);
+        &:last-of-type {
+          margin-left: 0;
+        }
+        &.posting {
+          color: #787878;
+          &.highlight {
+            color: $ssafy;
+          }
+        }
+      }
+    }
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
