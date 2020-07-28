@@ -22,6 +22,7 @@ export default {
       isLoggedIn: false,
     };
   },
+  
   methods: {
     onLogin(email, password) {
       const loginData = {
@@ -57,27 +58,9 @@ export default {
         })
         .catch((error) => {
           console.log(error.response);
-          if(error.response.data.email) {
-            Swal.fire({
-              title: 'Error!',
-              text: error.response.data.email,
-              confirmButtonText: '취소'
-            })
-          } else if(error.response.data.password) {
-            Swal.fire({
-              title: 'Error!',
-              text: error.response.data.password,
-              confirmButtonText: '취소'
-            })
-          } else {
-            Swal.fire({
-              title: 'Error!',
-              text: '비밀번호가 일치하지 않습니다!',
-              confirmButtonText: '취소'
-            })
-          }
         });
     },
+    
   },
   mounted() {
     this.isLoggedIn = this.$cookies.isKey("auth-token");
