@@ -27,6 +27,25 @@
 .mdi-close-circle {
     color: white !important;
 }
+.searchBarBtn {
+    float: left; 
+    width: 90%; 
+    height: 100%;
+    border-right: 1px solid lightgray; 
+    border-radius: unset !important;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+.v-select__selections {
+    display: block !important;
+  }
+.v-autocomplete:not(.v-input--is-disabled).v-select.v-text-field input {
+    width: 80px !important;
+}
+.mdi-close-circle {
+    color: white !important;
+}
 .v-input__slot {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
