@@ -298,7 +298,7 @@ float: left;
 margin: 10px 15px;
 }
 .F3{
-width: 60px;
+width: 60px; 
 height: 60px;
 float: left;
 margin: 10px 15px;
