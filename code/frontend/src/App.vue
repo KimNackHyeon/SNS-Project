@@ -12,7 +12,8 @@ import axios from "axios";
 import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
+const SERVER_URL = "http://127.0.0.1:9999/food/api"; // 로컬
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api"; // 원격
 
 export default {
   components:{Home},
