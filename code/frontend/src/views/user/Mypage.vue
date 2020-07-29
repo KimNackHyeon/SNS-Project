@@ -1,32 +1,34 @@
 <template>
   <div class="user">
     <div class="mypage">
-      <div class="header">Header</div>
       <div class="mypage-body">
         <div class="profil">
-          <div class="myphoto"><v-avatar size="100"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar></div>
-          <div class="myprofil">
-            <div style="margin: 10px">
-              <h2 class="user-name">사용자 이름</h2>
-              <span class="myprofil-icon"><i class="fas fa-cog"></i></span>
+          <div style="overflow: hidden; margin: 20px 0;">
+            <div class="myphoto"><v-avatar size="100"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar></div>
+            <div class="myprofil">
+              <div style="margin: 10px">
+                <h2 class="user-name">사용자 이름</h2>
+                <span class="myprofil-icon"><i class="fas fa-cog" style="color: gray"></i></span>
+              </div>
+              <v-container style="min-height: 0; padding: 10px" >
+                <v-row class="myprofil-boxes" no-gutters>
+                  <v-col class="myprofil-box" cols="4">
+                    <span>레시피 수</span>
+                    <h1>5</h1>
+                  </v-col>
+                  <v-col class="myprofil-box" cols="4">
+                    <span>팔로우</span>
+                    <h1>32</h1>
+                  </v-col>
+                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray">
+                    <span>팔로잉</span>
+                    <h1>49</h1>
+                  </v-col>
+                </v-row>
+              </v-container>
             </div>
-            <v-container style="min-height: 0; padding: 10px" >
-              <v-row class="myprofil-boxes" no-gutters>
-                <v-col class="myprofil-box" cols="4">
-                  <span>레시피 수</span>
-                  <h2>5</h2>
-                </v-col>
-                <v-col class="myprofil-box" cols="4">
-                  <span>팔로우</span>
-                  <h2>32</h2>
-                </v-col>
-                <v-col class="myprofil-box" cols="4" style="border-right: 1px solid black">
-                  <span>팔로잉</span>
-                  <h2>49</h2>
-                </v-col>
-              </v-row>
-            </v-container>
           </div>
+          
         </div>
         <div class="myfeed">
           <div class="myprofil-feed">
@@ -67,9 +69,31 @@
 </template>
 
 <script>
+import axios from "axios"
 import "../../components/css/user.scss";
 
-export default {
+const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
 
+export default {
+  data() {
+    return {
+      userData: [],
+    }
+  },
+  methods: {
+    fetchUser() {
+      axios.get(`${SERVER_URL}/mypage`)
+        .then(response => {
+          console.log(response)
+          this.userData = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    }
+  },
+  created() {
+    this.fetchUser()
+  },
 }
 </script>

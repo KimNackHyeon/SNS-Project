@@ -101,11 +101,11 @@ export default {
         {img: "flour", name: "박력분", amount: "105g"},
       ],
       outFoods: [
-        {img: "egg", name: "달걀", amount: "1개", showBtn: false},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개", showBtn: false},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개", showBtn: false},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개", showBtn: false},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개", showBtn: false},
+        {img: "egg", name: "달걀", amount: "1개"},
+        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
+        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
+        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
+        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
       ],
       onBuying: false,
       comment: "",
@@ -134,7 +134,7 @@ export default {
   methods: {
     onBuyingBtn(food) {
       this.nowFood = food.name;
-      food.showBtn = !food.showBtn; 
+      // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block'){
         $('.balloon').css('display','none');  
       }else{
@@ -180,12 +180,12 @@ export default {
     margin: 0 5px 5px 5px;
   }
   .balloon {  
-  position: fixed; 
-  width: 120px; 
-  background:rgba(44, 44, 44, 0.8);
-  border-radius: 5px;
-   margin-top: 40px;
-   display: none;
+    position: fixed; 
+    width: 120px; 
+    background:rgba(44, 44, 44, 0.8);
+    border-radius: 5px;
+    margin-top: 40px;
+    display: none;
   }
   .commentDiv {
     border: 1px solid lightgray;
