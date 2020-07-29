@@ -6,9 +6,7 @@
         <router-link to="/MyRef"><v-btn  flat icon style="width:30px; height:30px; background-size:cover; ">
           <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
           <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
-          </v-btn></router-link>    
-              
-        
+          </v-btn></router-link> 
     </div>
     
     <v-navigation-drawer
@@ -21,13 +19,15 @@
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
             <div style="width:100%; height:52%; padding:auto; text-align: center;">
-                <div class="profilePhotobox">
-                    <img class="circlePhoto" src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg" />
+              <div style="position:fixed; width: 25px; height: 25px; margin-left: 214px;
+    margin-top: 10px;"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></div>
+                <div class="profilePhotobox" :key="user">
+                    <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  />
                 </div>
-                <div style=" width:100px; height:100%; display: inline-table; overflow: hidden;">
-                    <h3>mamtte 님</h3>
+                <router-link to="/user/mypage"><div style=" width:100px; height:100%; display: inline-table; overflow: hidden;">
+                    <h3>{{user.nickname}} 님</h3>
                     <h4>안녕하세요.</h4>
-                </div>
+                </div></router-link>
             </div>
             <div  style="width:100%; height:48%;">
                 <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
@@ -47,8 +47,6 @@
                   </div>
                 </div>
             </div>
-
-
         </div>
       </v-list>
 
@@ -93,6 +91,8 @@ Vue.use(Vuetify, {
     data () {
       return {
         drawer: null,
+        user:{email:"bu03101@naver.com",nickname:"mamtte",profilePhoto:'mamtte.png',address:'대전광역시 유성구 덕명동'},
+        // user:{email:"nack@naver.com",nickname:"nack",profilePhoto:'nack.png',address:'대전광역시 유성구 궁동'},
       }
     },
     methods:{
@@ -122,6 +122,16 @@ Vue.use(Vuetify, {
 </script>
 
 <style>
+
+a h2{
+  color: black;
+}
+a h3{
+  color: black;
+}
+a h4{
+  color: black;
+}
 .categorysub{
 display: inline-block;
   vertical-align: center;
