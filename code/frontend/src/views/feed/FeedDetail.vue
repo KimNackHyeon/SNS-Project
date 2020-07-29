@@ -1,6 +1,5 @@
 <template>
-  <div>
-    
+  <div style="width:100%; height:100%;">
     <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
         <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 38px;">
@@ -133,13 +132,13 @@ export default {
   },
   methods: {
     onBuyingBtn(food) {
-      this.nowFood = food.name;
       // food.showBtn = !food.showBtn;
-      if($('.balloon').css('display')=='block'){
+      if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
         $('.balloon').css('display','none');  
       }else{
         $('.balloon').css('display','unset');
       }
+      this.nowFood = food.name;
     },
   }
 }

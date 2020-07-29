@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%; height:100%">
     <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
       <div style="height: 100%;">
@@ -23,7 +23,12 @@
           </v-btn>
         </div>
       </div>
-      
+      <router-link to="/feed/write">
+       <div class="writeButton">
+         <v-icon color="white">mdi-lead-pencil</v-icon>
+         <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+      </div>
+      </router-link>
     </div>
     <div class="feed-body">
         <FeedItem />
@@ -31,6 +36,7 @@
         <FeedItem />
         <FeedItem />
     </div>
+    
   </div>
 </template>
 
@@ -107,3 +113,19 @@ export default {
 };
 </script>
 
+<style scoped>
+.writeButton{
+  width: 60px;
+    height: 60px;
+    position: fixed;
+    margin-top: 466px;
+    margin-left: 284px;
+    background-color: rgb(147 203 88);
+    z-index: 100;
+    border-radius: 30px;
+    box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+    text-align: center;
+    padding-top: 7px;;
+}
+
+</style>
