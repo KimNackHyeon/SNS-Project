@@ -17,6 +17,7 @@
   3. FileZila를 사용해서 dist 폴더 aws로 옮기기
 
   4. sites-available 파일 수정
+        - vi /etc/nginx/sites-available/default
 
      ```
      root [dist폴더 경로]
