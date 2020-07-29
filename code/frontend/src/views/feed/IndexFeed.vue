@@ -32,9 +32,9 @@
     </div>
     <div class="feed-body">
         <FeedItem />
+        <!-- <FeedItem />
         <FeedItem />
-        <FeedItem />
-        <FeedItem />
+        <FeedItem /> -->
     </div>
     
   </div>
@@ -54,17 +54,9 @@ export default {
   data () {
     return {
       searchData: [],
-      // activator: null,
-      // attach: null,
-      // editing: null,
-      // index: -1,
-      // nonce: 1,
-      // menu: false,
       items: [],
       model: [],
       search: null,
-      // x: 0,
-      // y: 0,
     }
   },
   props: ["keyword"],

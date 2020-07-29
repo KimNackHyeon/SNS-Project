@@ -60,14 +60,14 @@
         </div>
         <div>
           <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
-          <p style="padding-top: 10px">1. 실온 버터는 마요네즈 상태로 풀어준 뒤, 설탕과 소금을 넣고 크림화를 합니다.</p>
+          <p style="padding: 10px">1. 실온 버터는 마요네즈 상태로 풀어준 뒤, 설탕과 소금을 넣고 크림화를 합니다.</p>
         </div>
       </div>
       <!-- 댓글 -->
       <div>
         <div class="commentDiv">
-          <input v-model="comment" type="text" class="commentInput" placeholder="Comment">
-          <v-btn icon class="sendBtn">
+          <input v-model="comment" @keyup.enter="onCommentBtn" class="commentInput" placeholder="Comment">
+          <v-btn icon class="sendBtn" @click="onCommentBtn">
             <v-icon>mdi-send</v-icon>
           </v-btn>
         </div>
@@ -126,7 +126,7 @@ export default {
         $('.sendBtn').css('color', '#a0d469')
       }
       else {
-        $('.sendBtn').css('color', 'unset')
+        $('.sendBtn').css('color', 'rgba(0, 0, 0, 0.54)')
       }
     },
   },
@@ -139,6 +139,17 @@ export default {
         $('.balloon').css('display','unset');
       }
       this.nowFood = food.name;
+    },
+    onCommentBtn(feedData_id) {
+      // 댓글 추가기능
+      this.comments.push({
+          img: "https://cdn.vuetifyjs.com/images/john.jpg", 
+          name: "Sara12", 
+          content: this.comment,
+          created_at: "2020-07-28 17:59"
+        },)
+      // 댓글 input 초기화 해주기
+      this.comment = ""
     },
   }
 }
@@ -189,6 +200,7 @@ export default {
   .commentDiv {
     border: 1px solid lightgray;
     height: 40px;
+    margin-bottom: 5px;
   }
   .commentInput {
     height: inherit;
@@ -201,7 +213,7 @@ export default {
     color: black;
   }
   .comments {
-    padding: 10px 10px 0 10px;
+    padding: 5px 10px 5px 10px;
     overflow: hidden;
   }
   .userImg {
