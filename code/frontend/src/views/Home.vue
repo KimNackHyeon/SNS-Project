@@ -6,7 +6,7 @@
         <router-link to="/MyRef"><v-btn  flat icon style="width:30px; height:30px; background-size:cover; ">
           <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
           <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
-          </v-btn></router-link>    
+          </v-btn></router-link>
               
         
     </div>

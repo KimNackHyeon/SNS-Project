@@ -14,6 +14,9 @@
               <div class="text-h6 mx-auto">
                 우리 동네 장터
               </div>
+                <router-link to="/store/marketmap"><v-btn  flat icon style="width:30x; height:30px; background-size:cover; ">
+                <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px;width:auto; height:35px;" src="../../assets/images/map.png">
+          </v-btn></router-link>
             </v-toolbar>
           </v-flex>
         </v-layout>
