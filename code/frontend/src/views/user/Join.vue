@@ -8,61 +8,35 @@
     <h1 style="margin-bottom: 5px;">가입하기</h1>
     <div class="form-wrap">
       <div class="input-with-label">
-        <label for="">이메일</label>
-        <input v-model='signupData.email' type="text" id='email-join' placeholder="example" style="width: 80%;">
+        <label for="email-join">이메일</label>
+        <input v-model='signupData.email' type="text" id='email-join' placeholder="example@naver.com" style="width: 80%;">
         <button type="button" @click="checkConfirm" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">인증</button>
-        <p v-if="confirm">success</p>
-        <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
-        <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg && !finalMail && flag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+        <div v-if="!confirm" style="margin-top: 10px">
+          <label v-if="!confirm" for="confirmNumber" style="margin-top: 3.65rem;">인증번호</label>
+          <input v-if="!confirm" type="text" id="confirmNumber" placeholder="comfirm" style="width: 80%;">
+          <button type="button" @click="checkConfirm" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">인증</button>
+        </div>
+        <p v-if="emailErrMsg" style="color: red;">유효하지 않은 이메일 형식입니다.</p>
+        <p v-if="emailSucMsg && completeMail" style="color: red;">이미 사용중인 이메일입니다.</p>
       </div>
 
       <div class="input-with-label">
-        <label for="">비밀번호</label>
-        <input v-model='signupData.password' type="password" class="common-input-join" placeholder="password" >
-        <p v-if="passwordErrorMsg" class='err-msg join-err-msg'>영문,숫자 포함 8 자리이상이어야 합니다.</p>
-        <p v-if="passwordSuccessMsg" class='suc-msg join-suc-msg'>사용 가능한 비밀번호 입니다.</p> 
-        <!-- <input
-          v-model="signupData.password"
-          id="password"
-          :type="passwordType"
-          placeholder="비밀번호를 입력하세요."
-          @keypress.enter="signup"
-        />
-        <label for="password">비밀번호</label> -->
+        <label for="password">비밀번호</label>
+        <input v-model='signupData.password' :type="passwordType" id="password" placeholder="password" >
+        <p v-if="pwdErrMsg" style="color: red;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
       </div>
 
       <div class="input-with-label">
-        <label for="">비밀번호 확인</label>
-        <input v-model='signupData.passwordConfirm' type="password" class="common-input-join" placeholder="password confirm">
-        <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
-        <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
-        <!-- <input
-          v-model="signupData.passwordConfirm"
-          :type="passwordConfirmType"
-          id="password-confirm"
-          placeholder="비밀번호를 다시한번 입력하세요."
-          @keypress.enter="signup"
-        /> -->
-        <!-- <label for="password-confirm">비밀번호 확인</label> -->
+        <label for="password-confirm">비밀번호 확인</label>
+        <input v-model='signupData.passwordConfirm' :type="passwordConfirmType" id="password-confirm" placeholder="password confirm">
+        <p v-if="pwErrMsg" style="color: red;">비밀번호가 일치하지 않습니다.</p>
       </div>
 
       <div class="input-with-label">
-        <label for="">닉네임</label>
-        <input v-on:input="signupData.nickname = $event.target.value" type="text" class="common-input-join" placeholder="nickname"  maxlength="128">
-        <p v-if="nickErrMsg" class='err-msg join-err-msg'>이미 사용중인 닉네임입니다.</p>
-        <p v-if="nickSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
-        <!-- <input
-          v-model="signupData.nickname"
-          id="nickname"
-          placeholder="닉네임을 입력하세요."
-          type="text"
-          style="padding-left: none;"
-          @keypress.enter="signup"
-        />
-        <label for="nickname" class="label-color">닉네임</label> -->
+        <label for="nickname">닉네임</label>
+        <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
+        <p v-if="nickErrMsg" style="color: red;">이미 사용중인 닉네임입니다.</p>
       </div>
-
             <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
       @click="addressgo()">주소검색</button>
       <div class="input-address">
@@ -238,13 +212,7 @@
             확인
         </button>
     </div>
-    <button
-      style="margin-top:60px;"
-      class="btn-bottom"
-      @click="$emit('signup', signupData)"
-    >
-      가입하기
-    </button>
+    <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
   </div>
 </template>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -270,16 +238,15 @@ export default {
         nickname: "",
         address: "",
       },
-      passwordErrorMsg: false,
-      passwordSuccessMsg: false,
+      pwdErrMsg: false,
+      pwdSucMsg: false,
       passwordSchema: new PasswordValidator(),
       confirm: true,
-      JoinBtn: true,
       pwErrMsg: false,
       pwSucMsg: false,
-      mailErrMsg: false,
-      mailSucMsg: false,
-      finalMail: false,
+      emailErrMsg: false,
+      emailSucMsg: false,
+      completeMail: false,
       nickErrMsg: false,
       nickSucMsg: false,
       isFemale: false,
@@ -334,8 +301,8 @@ export default {
     'signupData.nickname'() {
       this.checkNickname();
     },
-    'finalMail'() {
-      this.finalMailCheck();
+    'completeMail'() {
+      this.completeMailCheck();
     },
     input: {
       handler() {
@@ -380,8 +347,8 @@ export default {
         },
     checkJoinForm() {
       if(this.signupData.email && this.signupData.password
-      && this.signupData.passwordConfirm && this.signupData.nickname && this.passwordSuccessMsg
-      && !this.finalMail && this.pwSucMsg && this.nickSucMsg){
+      && this.signupData.passwordConfirm && this.signupData.nickname && this.pwdSucMsg
+      && !this.completeMail && this.pwSucMsg && this.nickSucMsg){
         this.JoinBtn = false;
       } else {
         this.JoinBtn = true
@@ -401,9 +368,9 @@ export default {
     },
     checkEmail() {
       if(this.signupData.email) {
-        this.mailSucMsg = true
+        this.emailSucMsg = true
       } else {
-        this.mailSucMsg = false
+        this.emailSucMsg = false
       }
     },
     checkConfirm: function() {
@@ -435,90 +402,32 @@ export default {
         this.signupData.password.length >= 0 &&
         !this.passwordSchema.validate(this.signupData.password)
       )
-        { this.passwordErrorMsg= true;
-        this.passwordSuccessMsg = false; }
-      else { this.passwordSuccessMsg = true; 
-      this.passwordErrorMsg= false;
+        { this.pwdErrMsg= true;
+        this.pwdSucMsg = false; }
+      else { this.pwdSucMsg = true; 
+      this.pwdErrMsg= false;
       }
     },
-    nextJoin() {
-      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
-      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
-
-      firstPage.classList.add('goNext-front')
-      SecondPage.classList.remove('hidden')
-      firstPage.classList.remove('return')
-      SecondPage.classList.add('goNext-end')
-    },
-
-    goBack() {
-      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
-      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
-
-      firstPage.classList.remove('goNext-front')
-      firstPage.classList.add('return')
-      SecondPage.classList.remove('goNext-end')
-      SecondPage.classList.add('hidden')
-    },
-    signupFinish() {
-      axios.post('http://localhost:8080/account/signup',{
-
-          email: this.signupData.email+'@'+this.signupData.url,
-          password: this.signupData.password,
-          nickname: this.signupData.nickname,
-
-      }).then(function(data){
-        console.log(data.data.data);
-        Swal.fire(
-        '환영해요!',
-        '자신만의 패션을 뽐내보세요!',
-        'success'
-      )
-      })
-      .catch(function(data){
-        console.log(data.data.data)
-      });
-    },
-    notTab() {
-      window.addEventListener('keydown', event => {
-        const WRAPJOIN = document.querySelector('.wrap-join')
-        if (WRAPJOIN) {
-          
-          if(event.defaultPrevented) {
-            return;
-          }
-          var handled = false;
-        
-          if (event.keyCode === 9) {
-            handled = true;
-          }
-        
-          if (handled) {
-            event.preventDefault();
-          }
-        }
-      })
-    },
-    finalMailCheck() {
+    completeMailCheck() {
       this.checkJoinForm();
     },
     checkEmailValidate() {
       if (this.signupData.email.length >= 4 && EmailValidator.validate((this.signupData.email)))
         { 
-        this.mailSucMsg = true;
-        this.mailErrMsg = false;
-        this.finalMail = false;
-          if (this.mailSucMsg) {
+        this.emailSucMsg = true;
+        this.emailErrMsg = false;
+        this.completeMail = false;
+          if (this.emailSucMsg) {
             axios.get('http://localhost:8080/account/checkDoubleEmail',{ 
               params: {
                 email: this.signupData.email
                 }
             }).then(data => {
               if (data.data.data == "exist") {
-                this.finalMail = true;
+                this.completeMail = true;
                 this.flag = false;
               } else {
-                this.finalMail = false;
+                this.completeMail = false;
                 this.flag = true;
               }
             })
@@ -526,17 +435,8 @@ export default {
             })}
         }
       else { 
-      this.mailSucMsg = false;
-      this.mailErrMsg = true; }
-    },
-    onCancleBtn() {
-      this.isCancle = true
-    },
-    offCancleBtn() {
-      this.isCancle = false
-    },
-    checkcheck() {
-      console.log('hi')
+      this.emailSucMsg = false;
+      this.emailErrMsg = true; }
     },
   },
 };
