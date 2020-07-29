@@ -10,7 +10,7 @@
   h1 {
     color: #000;
     font-weight: $f600;
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
   }
 
   /*로그인*/
@@ -287,16 +287,13 @@
   .mypage {
     height: 100%;
 
-    .header {
-      height: 60px;
-      border-bottom: 1px solid black;
-    }
     .mypage-body {
-      padding-top: 60px;
       height: 100%;
+      border-top: 1px solid lightgray;
     }
     .profil {
       height: 25%;
+      overflow: hidden;
     }
     .myphoto {
       width: 30%;
@@ -322,14 +319,14 @@
       }
     }
     .myprofil-box {
-      border-left: 1px solid black;
+      border-left: 1px solid lightgray;
       text-align: center;
       h2 {
         padding-top: 5px;
       }
     }
     .myfeed {
-      height: 20%;
+      height: 15%;
     }
     .myprofil-text {
       width: 100%;
@@ -343,7 +340,7 @@
       width: 50%;
       height: 100%;
       float: left;
-      border: 1px solid black;
+      border: 1px solid lightgray;
       border-left: none;
       img {
         width: 30px;
@@ -355,7 +352,7 @@
       width: 50%;
       height: 100%;
       float: right;
-      border: 1px solid black;
+      border: 1px solid lightgray;
       border-left: none;
       border-right: none;
       img {
@@ -364,9 +361,12 @@
         padding-bottom: 5px;
       }
     }
+    .myrecipe {
+      height: 60%;
+    }
     .myrecipe-title {
       text-align: center;
-      margin: 10px 0;
+      padding: 10px 0;
     }
     .myrecipe-img {
       display: inline-block;

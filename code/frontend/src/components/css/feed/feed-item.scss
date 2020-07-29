@@ -173,6 +173,18 @@ input:hover {
         height: 24px;
         margin: 0 !important;
     }
+    .imgCount {
+      // float: right; 
+      height: 28px !important; 
+      color: white !important; 
+      position: absolute;
+      top: 0;
+      left: 300px;
+    }
+    .v-chip__content {
+      font-size: 12px;
+      height: 26px !important; 
+    }
     .v-btn--active {
         color: #a0d469 !important;
     }

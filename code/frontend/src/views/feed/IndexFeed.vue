@@ -5,7 +5,6 @@
       <div style="height: 100%;">
         <v-combobox
           v-model="model"
-          :filter="filter"
           :hide-no-data="!search"
           hide-details
           :search-input.sync="search"
@@ -45,6 +44,7 @@ import FeedItem from "../../components/feed/FeedItem.vue";
 
 
 export default {
+  
   data () {
     return {
       searchData: [],
