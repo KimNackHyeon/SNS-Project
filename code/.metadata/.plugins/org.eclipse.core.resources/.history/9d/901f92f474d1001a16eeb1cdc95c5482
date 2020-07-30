@@ -175,7 +175,6 @@ public class AccountController {
 			result.data = "이미 존재하는 이메일입니다.";
 		} else {
 			String code = memberService.sendMail(email);
-			System.out.println(2);
 			result.status = true;
 			result.data = code;
 		}
