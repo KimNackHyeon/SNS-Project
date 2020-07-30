@@ -15,7 +15,6 @@
       v-for="(item,i) in items"
       :key="i"
       :src="item.src"
-      :link="item.link"
       
       hide-delimiters
       width="360px"
@@ -47,28 +46,24 @@
 </template>
 
 <script>
-// store.commit('incrememt');
-// console.log(store.state.count);
+
    export default {
     data () {
       return {
         items: [
           {
             src: 'http://blogfiles.naver.net/MjAxNzA4MTBfMjU3/MDAxNTAyMjk0NTY0NjM4.PgCFLkJ-2gU3G2Fi8dpxAi4sXgzbq-fWJ5GH3fFRLmEg.wyLGBUA21aGglsiWM8MxChVcjKcvI6lGegMGsr3juLcg.JPEG.shin00512/%B1%CD%C2%FA%C0%BB_%B6%A7_%B5%FC_%C1%C1%C0%BA_%C3%CA%B0%A3%B4%DC_%B7%B9%BD%C3%C7%C7_%B8%F0%C0%BD1.jpg',
-            link:'http://blogfiles.naver.net/MjAxNzA4MTBfMjU3/MDAxNTAyMjk0NTY0NjM4.PgCFLkJ-2gU3G2Fi8dpxAi4sXgzbq-fWJ5GH3fFRLmEg.wyLGBUA21aGglsiWM8MxChVcjKcvI6lGegMGsr3juLcg.JPEG.shin00512'
           },
           {
             src:'https://www.gompyo.net:444/upld/bd/2020/04/09/thmb_img_20200409173757_3787.jpg',
-            link: 'http://blogfiles.naver.net/MjAxNzA4MTBfMjU3/MDAxNTAyMjk0NTY0NjM4.PgCFLkJ-2gU3G2Fi8dpxAi4sXgzbq-fWJ5GH3fFRLmEg.wyLGBUA21aGglsiWM8MxChVcjKcvI6lGegMGsr3juLcg.JPEG.shin00512'
-          },
+             },
           // {
           //   src: 'https://image7.coupangcdn.com/image/bannerunit/bannerunit_2243356c-de84-4983-aa65-695a41d83356.jpg',
           //   link: 'https:'
           // },
           {
             src:'https://image7.coupangcdn.com/image/bannerunit/bannerunit_a277f0a2-707b-4f7f-9d21-183b9e4a90c1.jpg',
-            link:'https://www.coupang.com/vp/products/306157806?vendorItemId=5369794953&isAddedCart='
-          }
+             }
         ],
       }
     },

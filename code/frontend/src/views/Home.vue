@@ -1,9 +1,9 @@
 <template>
   <v-layout wrap style="width:360px; height:50px; margin:auto;">
     <div style="width:100%; height:47px;background-color:white; z-index:100">
-        <v-btn flat icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
-        <router-link to="/Main"><v-btn flat icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
-        <router-link to="/MyRef"><v-btn  flat icon style="width:30px; height:30px; background-size:cover; ">
+        <v-btn icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
+        <router-link to="/Main"><v-btn icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
+        <router-link to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
           <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
           <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
           </v-btn></router-link> 
@@ -22,10 +22,11 @@
               <div style="position:fixed; width: 25px; height: 25px; margin-left: 214px;
     margin-top: 10px;"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></div>
                 <div class="profilePhotobox" :key="user">
-                    <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  />
+                    <!-- <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  /> -->
+                    <img class="circlePhoto" :src="kakaoUserInfo.profile_image_url" />
                 </div>
                 <router-link to="/user/mypage"><div style=" width:100px; height:100%; display: inline-table; overflow: hidden;">
-                    <h3>{{user.nickname}} 님</h3>
+                    <h3>{{kakaoUserInfo.nickname}} 님</h3>
                     <h4>안녕하세요.</h4>
                 </div></router-link>
             </div>
@@ -72,7 +73,7 @@
       <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
     margin-top: 110px; width:100%;"> <!-- 하단 -->
         <v-icon style="margin:8px">mdi-cog</v-icon>
-        <v-btn flat icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
+        <v-btn icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
     </v-navigation-drawer>
   </v-layout>
@@ -82,25 +83,22 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import $ from 'jquery'
+import Vuex from 'vuex'
+ import store from '../vuex/store.js'
 
-// const store = new Vuex.Store({
-//   state:{
-//     count : 0,
-//   },
-//   mutations:{
-//     increment (state) {
-//       state.count++;
-//     }
-//   }
-// })
+Vue.use(Vuex)
 
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })
   export default {
+    created(){
+      this.kakaoUserInfo = store.state.kakaoUserInfo;
+    },
     components:{ },
     data () {
       return {
+        kakaoUserInfo:'',
         drawer: null,
         user:{email:"bu03101@naver.com",nickname:"mamtte",profilePhoto:'mamtte.png',address:'대전광역시 유성구 덕명동'},
         // user:{email:"nack@naver.com",nickname:"nack",profilePhoto:'nack.png',address:'대전광역시 유성구 궁동'},

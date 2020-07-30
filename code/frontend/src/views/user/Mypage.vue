@@ -4,10 +4,10 @@
       <div class="mypage-body">
         <div class="profil">
           <div style="overflow: hidden; margin: 20px 0;">
-            <div class="myphoto"><v-avatar size="100"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar></div>
+            <div class="myphoto"><v-avatar size="100"><img :src="kakaoUserInfo.profile_image_url" alt="John"></v-avatar></div>
             <div class="myprofil">
               <div style="margin: 10px">
-                <h2 class="user-name">사용자 이름</h2>
+                <h2 class="user-name">{{kakaoUserInfo.nickname}}</h2>
                 <span class="myprofil-icon"><i class="fas fa-cog" style="color: gray"></i></span>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
@@ -70,11 +70,15 @@
 
 <script>
 import axios from "axios"
-import "../../components/css/user.scss";
+import "../../components/css/user.scss"
+import store from '../../vuex/store.js'
 
 const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
 
 export default {
+  mounted(){
+      this.kakaoUserInfo = store.state.kakaoUserInfo;
+    },
   data() {
     return {
       userData: [],

@@ -69,6 +69,8 @@ import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
 import Main from "../Main.vue";
 
+
+
 export default {
   components: {
     KakaoLogin,

@@ -35,7 +35,10 @@
     import KakaoLogin from 'vue-kakao-login'
     import axios from 'axios'
     import $ from 'jquery'
+    import store from '../../../vuex/store.js'
  
+    
+
     let onSuccess = (data) => {
         console.log("success");
         console.log(data);
@@ -45,6 +48,8 @@
             url: '/v2/user/me',
             success: function(response) {
                 console.log(response);
+                store.commit('setUserInfo',response.kakao_account);
+                
             },
             fail: function(error) {
                 console.log(error);
@@ -64,6 +69,9 @@ export default {
   methods: {
     onSuccess,
     onFailure
-  }
+  },
+  mounted(){
+        console.log(store.state.kakaoUserInfo);
+    }
 }
 </script>
