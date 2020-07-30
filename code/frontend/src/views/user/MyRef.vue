@@ -1,13 +1,20 @@
 <template>
   <div class="rootContainer">
+      <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
         <div id="insideRef">
+            <div id="justMove" class="F1" style="display:none; position:fixed;">
+                    <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
+                </div>
                <div v-for="(food,index) in foods" :key="(food,index)">
-                <button id="Gradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food.gra_kor,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+                
                 </button>
             </div>
         </div>
         <div id="basket">
-            <v-btn @mousedown="openCheckBasket()" @mouseleave="closeCheckBasket()"  @mouseup="closeCheckBasket()"  @touchstart="openCheckBasket()"  @touchend="closeCheckBasket()"  @touchcancel="closeCheckBasket()" flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
+            <!-- <v-btn @click="openCheckBasket()" @mouseleave="closeCheckBasket()"  @mouseup="closeCheckBasket()"  @touchstart="openCheckBasket()"  @touchend="closeCheckBasket()"  @touchcancel="closeCheckBasket()" flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn> -->
+            <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
+
         </div>
         <div id="FillBtn" style="position:fixed; margin-left: 256px;
     margin-top: 10px; display:unset;">
@@ -17,12 +24,12 @@
                 </v-btn>
         </div>
         <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
-            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
+            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra_kor}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea">
-                <div class="longNameBox">{{Nowgra}}</div> <input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+                <div class="longNameBox">{{Nowgra_kor}}</div> <input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
             </div>
             <div class="textArea" style="height:24px; padding:0px;">
-                <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra}}</div>와 교환할 재료
+                <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra_kor}}</div>와 교환할 재료
             </div>
             <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
                 <div class="changeFood" v-for="(food,index) in changeFoodsTemp" :key="food" style="font-size:13px;">
@@ -98,8 +105,10 @@
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:scroll;">공유 바구니</div>
-           <div class="textArea" v-for="food in changeFoods" :key="food" >
+           <div style="width:100%; height:196px; overflow:scroll;">
+           <div class="textArea" v-for="food in changeFoods" :key="food">
                     <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+           </div>
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
@@ -115,15 +124,17 @@ import $ from 'jquery';
 
 export default {
 data: () => ({
-        Nowgra : '',
+    Nowgra:'',
+        Nowgra_kor : '',
         NowClassNum : 1, //클릭한 칸의 클래스 넘버
       date: new Date().toISOString().substr(0, 10),
       menu: false,
       modal: false,
       menu2: false,
-      nowmyamount:'',
+      nowmyamount:0,
     nowCgradient:'',
     nowCamount:0,
+    intoFood:'egg',
       foods:[
             {gradient:"egg",gra_kor:"계란fkfkfkfk"},
             {gradient:"flour",gra_kor:"밀가루"},
@@ -136,10 +147,7 @@ data: () => ({
         ],
         changeFoodsTemp:[
               ],
-        changeFoods:[
-            {Mygradient:"egg",Mygra_kor:"계란", myamount:5, Cgradient:"milk",Cgra_kor:"우유", Camount:1},
-            {Mygradient:"potato",Mygra_kor:"감자", myamount:3, Cgradient:"milk",Cgra_kor:"우유", Camount:1},
-            {Mygradient:"egg",Mygra_kor:"계란", myamount:5, Cgradient:"sweetpotato",Cgra_kor:"고구마", Camount:1},             
+        changeFoods:[  
             ],
 
     }),
@@ -158,42 +166,57 @@ data: () => ({
                alert(src);
                 return src;
             },
-            openShare:function(now,index){
+            openShare:function(nowfood,index){
                 this.closeregistMater();
-                this.Nowgra = now;
+                this.Nowgra_kor = nowfood.gra_kor;
+                this.Nowgra = nowfood.gradient;
+                this.nowmyamount = nowfood.myamount;
+                this.nowCgradient = nowfood.Cgradient;
+                this.nowCamount = nowfood.Camount;
                 $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
                 this.NowClassNum = index;
+                var className = '.F'+(this.NowClassNum+1);
+                var classN = 'F'+(this.NowClassNum+1);
+                this.intoFood =  this.Nowgra;
+                $('#justMoveImg').attr('src',this.intoFood);
+                $('#justMove').attr('class',classN);
+                $('#justMove').css('display','unset');
+                this.intoFood = this.Nowgra;
             },
-            closeShare:function(now){
-                this.Nowgra = now;
+            closeShare:function(){
                 $('#shareField').css('display','none');
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
                 this.changeFoodsTemp.push({
-                    Mygradient:this.Nowgra,
+                    Mygradient:this.Nowgra_kor,
                     myamount:this.nowmyamount,
                     Cgradient:this.nowCgradient,
                     Camount:this.nowCamount
                 })
             },
             ShareComplete:function(){
-                var className = '.F'+(this.NowClassNum+1);
                 this.closeShare();
                 var shareMotion = 'share'+(this.NowClassNum+1);
-                $(className).addClass(shareMotion);
-                this.changeFoods.push(this.changeFoodsTemp);
-                var afterclass = className+shareMotion;
-                var combackclass = 'comback'+(this.NowClassNum+1);
-                $('#Gradient').addClass(combackclass);
-
-            },
+                $('#justMove').addClass(shareMotion);
+                for(var i=0; i<this.changeFoodsTemp.length;i++){
+                    this.changeFoods.push(this.changeFoodsTemp[i]);
+                    this.changeFoodsTemp = [];
+                }
+                },
+                
             openCheckBasket:function(){
-                $('.checkBasket').css('display','unset');
+                if($('.checkBasket').css('display')=='none'){
+                    $('.checkBasket').css('display','unset');
+                }else{
+                    $('.checkBasket').css('display','none');
+                }
+                $('#dark').css('display','unset');
             },
             closeCheckBasket:function(){
                 $('.checkBasket').css('display','none');
+                $('#dark').css('display','none');
             },
             deleteShareList:function(index){
                 this.changeFoodsTemp.splice(index,1);
@@ -265,6 +288,7 @@ data: () => ({
     margin-top: 168px;
     box-shadow: 1px 3px 15px #8080806b;
     display: none;
+    z-index: 1000;
 }
 h5{
     font-size: 13px;
@@ -296,51 +320,71 @@ h5{
 .F1{
 width: 60px;
 height: 60px;
-float: left;
-margin: 10px 15px;
-
+position:fixed;
+margin-left: 15px;
+margin-top:10px;
 }
 .F2{
 width: 60px;
 height: 60px;
-float: left;
-margin: 10px 15px;
+position:fixed;
+margin-left: 108px;
+margin-top:10px;
 }
 .F3{
 width: 60px; 
 height: 60px;
-float: left;
-margin: 10px 15px;
+/* float: left;
+margin: 10px 15px; */
+position:fixed;
+margin-left: 15px;
+margin-top:87px;
 }
 .F4{
 width: 60px;
 height: 60px;
-float: left;
-margin: 10px 15px;
+/* float: left;
+margin: 10px 15px; */
+position:fixed;
+margin-left: 108px;
+margin-top:87px;
 }
 .F5{
 width: 60px;
 height: 60px;
-float: left;
-margin: 46px 15px 10px 15px;
+/* float: left;
+margin: 46px 15px 10px 15px; */
+position:fixed;
+margin-left: 15px;
+    margin-top: 202px;
 }
+
 .F6{
 width: 60px;
 height: 60px;
-float: left;
-margin: 46px 15px 10px 15px;
+/* float: left;
+margin: 46px 15px 10px 15px; */
+position:fixed;
+    margin-left: 108px;
+    margin-top: 202px;
 }
 .F7{
 width: 60px;
 height: 60px;
-float: left;
-margin:20px 106px 10px 15px;
+/* float: left;
+margin:20px 106px 10px 15px; */
+position:fixed;
+    margin-left: 15px;
+    margin-top: 291px;
 }
 .F8{
 width: 60px;
 height: 60px;
-float: left;
-margin:14px 106px 10px 15px;
+/* float: left;
+margin:14px 106px 10px 15px; */
+position:fixed;
+margin-left: 15px;
+    margin-top: 372px;
 }
 .changeFood{
     height:30px;
@@ -350,8 +394,10 @@ margin:14px 106px 10px 15px;
 
 .share1{
     z-index: 100;
-        transform: translate(220px,360px) scale(0,0);
-        transition:all ease 0.9s;
+    /* animation-name: move;
+    animation-duration: 0.9s; */
+    transform: translate(220px,360px) scale(0,0);
+    transition:all ease 0.9s;
 }
 .share2{
     z-index: 100;
