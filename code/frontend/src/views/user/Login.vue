@@ -94,7 +94,7 @@ export default {
     email: function(v) {
       this.checkForm();
     },
-  },
+  }, 
   methods: {
     checkForm() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))

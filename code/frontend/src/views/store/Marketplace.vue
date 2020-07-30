@@ -5,10 +5,13 @@
       <v-container fluid style="padding: 0; margin: 0;">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
+            <router-link to="/Main">
             <v-btn icon style="margin: 5px">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
+            </router-link>
           </div>
+          
           <v-flex>
             <v-toolbar flat style="border: solid 1px lightgrey" height="48px">
               <div class="text-h6 mx-auto">
