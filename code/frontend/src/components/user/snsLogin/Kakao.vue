@@ -30,26 +30,26 @@
         </button>
     </div> -->
 </template>
-
+ <script src="//developers.kakao.com/sdk/js/kakao.min.js" language="javascript" type="text/javascript"></script>
 <script>
     import KakaoLogin from 'vue-kakao-login'
     import axios from 'axios'
+    import $ from 'jquery'
  
     let onSuccess = (data) => {
-        alert("성공");
-        console.log(data)
-        console.log("success")
-        // const header = {
-        //   Authorization : `${data.token_type} ${data.access_token}`
-        // };
-        // const userInfo = 
-        // axios
-        // .get(`https://kapi.kakao.com/v2/user/me`,header)
-        // .then((response)=>{
-        //   console.log(response);
-        // });
-        // console.log(userInfo);
-         this.$router.push("/home");
+        console.log("success");
+        console.log(data);
+        console.log(data.access_token);
+        // this.$cookie.set("auth-token", data.access_token);
+        Kakao.API.request({
+            url: '/v2/user/me',
+            success: function(response) {
+                console.log(response);
+            },
+            fail: function(error) {
+                console.log(error);
+            }
+        });
     }
     let onFailure = (data) => {
         console.log(data)
@@ -57,7 +57,7 @@
     }
  
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     KakaoLogin
   },

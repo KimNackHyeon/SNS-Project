@@ -69,7 +69,8 @@
       </div>
       </router-link>
 
-      <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position:fixed; bottom:0; width:100%;"> <!-- 하단 -->
+      <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
+    margin-top: 110px; width:100%;"> <!-- 하단 -->
         <v-icon style="margin:8px">mdi-cog</v-icon>
         <v-btn flat icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
@@ -82,6 +83,16 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import $ from 'jquery'
 
+// const store = new Vuex.Store({
+//   state:{
+//     count : 0,
+//   },
+//   mutations:{
+//     increment (state) {
+//       state.count++;
+//     }
+//   }
+// })
 
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'

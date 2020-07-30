@@ -47,6 +47,8 @@
 </template>
 
 <script>
+// store.commit('incrememt');
+// console.log(store.state.count);
    export default {
     data () {
       return {

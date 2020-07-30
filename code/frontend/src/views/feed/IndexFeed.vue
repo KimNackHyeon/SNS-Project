@@ -113,7 +113,7 @@ export default {
     margin-top: 466px;
     margin-left: 284px;
     background-color: rgb(147 203 88);
-    z-index: 100;
+    z-index: 90;
     border-radius: 30px;
     box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
     text-align: center;
