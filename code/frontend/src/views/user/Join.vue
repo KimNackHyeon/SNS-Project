@@ -242,6 +242,7 @@ export default {
       pwdSucMsg: false,
       passwordSchema: new PasswordValidator(),
       confirm: true,
+      JoinBtn: false,
       pwErrMsg: false,
       pwSucMsg: false,
       emailErrMsg: false,
@@ -378,7 +379,7 @@ export default {
       this.confirm = !this.confirm;
     },
     checkNickname() {
-      axios.get('http://localhost:8080/account/checkNickname',{ 
+      axios.get('http://i3b301.p.ssafy.io:9999/food/api/account/nicknameconfirm',{ 
         params: {
           nickname: this.signupData.nickname
           }
@@ -418,15 +419,19 @@ export default {
         this.emailErrMsg = false;
         this.completeMail = false;
           if (this.emailSucMsg) {
-            axios.get('http://localhost:8080/account/checkDoubleEmail',{ 
+            console.log('sucsess1')
+            console.log(this.signupData.email)
+            axios.get('http://i3b301.p.ssafy.io:9999/food/api/account/emailconfirm',{ 
               params: {
                 email: this.signupData.email
                 }
             }).then(data => {
+              console.log('sucsess2')
               if (data.data.data == "exist") {
                 this.completeMail = true;
                 this.flag = false;
               } else {
+                console.log('failed')
                 this.completeMail = false;
                 this.flag = true;
               }

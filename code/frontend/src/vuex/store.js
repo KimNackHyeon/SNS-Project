@@ -11,7 +11,11 @@ const state = {
 }
 
 export default new Vuex.Store({
-    state,
+    state: {
+        user: '',
+        pwd: '',
+        confirm: '',
+    },
     mutations,
     getters,
     actions,

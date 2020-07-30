@@ -170,12 +170,10 @@ public class AccountController {
 		final BasicResponse result = new BasicResponse();
 		// 이메일, 닉네임 중복처리 필수
 		if (memberRepo.getUserByEmail(email) != null) {
-			System.out.println(1);
 			result.status = true;
 			result.data = "이미 존재하는 이메일입니다.";
 		} else {
 			String code = memberService.sendMail(email);
-			System.out.println(2);
 			result.status = true;
 			result.data = code;
 		}
