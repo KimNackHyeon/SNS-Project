@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
+import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
 import com.web.curation.service.MemberService;
@@ -58,6 +60,9 @@ public class AccountController {
 	
 	@Autowired
 	MyBoardRepo myboardRepo;
+	
+	@Autowired
+	FollowRepo followRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -179,22 +184,18 @@ public class AccountController {
 		return response;
 	}
 
-	@GetMapping("/account/mypage")
+	@GetMapping("/account/mypage/{email}")
 	@ApiOperation(value = "내 페이지 보기")
-	public Object showmypage(@RequestParam(required = true) final String email) {
-		Optional<Member> myBoardOpt = memberRepo.findByEmail(email);
-		ResponseEntity response = null;
-		if (myBoardOpt.isPresent()) {
-			final BasicResponse result = new BasicResponse();
-			System.out.println(myBoardOpt);
-			result.status = true;
-			result.data = "success";
-			result.object = myBoardOpt;
-			response = new ResponseEntity<>(result, HttpStatus.OK);
-		} else {
-			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-		return response;
+	public ResponseEntity<Map> showmypage(@PathVariable String email) {
+//		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		Long following = followRepo.countByEmail(email);
+		Long follower = followRepo.countByYourEmail(email);
+		Map<String, Long> map = new HashMap<String, Long>();
+//		final BasicResponse result = new BasicResponse();
+//		result.status = true;
+		map.put("following", following);
+		map.put("follower", follower);
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	@PostMapping("/account/emailconfirm")
