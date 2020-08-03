@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Login from "./views/user/Login.vue";
 import Join from "./views/user/Join.vue";
 import Mypage from "./views/user/Mypage.vue";
+import ModifyUser from "./views/user/ModifyUser.vue";
 import SearchPassword from "./views/user/SearchPassword.vue";
 import CheckCertification from "./views/user/CheckCertification";
 import ChangePassword from "./views/user/ChangePassword";
@@ -44,6 +45,11 @@ export default [
     path: "/user/mypage",
     name: "Mypage",
     component: Mypage,
+  },
+  {
+    path: "/user/modifyuser",
+    name: "ModifyUser",
+    component: ModifyUser,
   },
   {
     path: "/feed/main",

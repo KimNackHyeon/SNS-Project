@@ -55,6 +55,8 @@
       border-radius:5px; 
       font-weight:bold;
       font-size: 15px;
+      -webkit-box-shadow: unset;
+      box-shadow: unset;
     }
     .bottom-btn {
       color: white;
@@ -293,7 +295,7 @@
       border-top: 1px solid lightgray;
     }
     .profil {
-      height: 25%;
+      height: 23%;
       overflow: hidden;
     }
     .myphoto {
@@ -327,7 +329,7 @@
       }
     }
     .myfeed {
-      height: 15%;
+      height: 13%;
     }
     .myprofil-text {
       width: 100%;
@@ -363,7 +365,7 @@
       }
     }
     .myrecipe {
-      height: 60%;
+      height: 100%;
     }
     .myrecipe-title {
       text-align: center;

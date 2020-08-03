@@ -8,7 +8,7 @@
             <div class="myprofil">
               <div style="margin: 10px">
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
-                <span class="myprofil-icon"><i class="fas fa-cog" style="color: gray"></i></span>
+                <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
                 <v-row class="myprofil-boxes" no-gutters>
@@ -28,7 +28,10 @@
               </v-container>
             </div>
           </div>
-          
+        </div>
+        <!-- 팔로우 버튼 -->
+        <div style="margin: 10px;">
+          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;">팔로우</v-btn>
         </div>
         <div class="myfeed">
           <div class="myprofil-feed">
@@ -78,7 +81,11 @@ const SERVER_URL = 'http://localhost:9999/food/api'
 
 export default {
   mounted(){
-      
+      if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
     },
   data() {
     return {
