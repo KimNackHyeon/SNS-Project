@@ -225,6 +225,9 @@ import * as EmailValidator from "email-validator"
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
+// const SERVER_URL = "http://127.0.0.1:9999/food/api";
+const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+
 export default {
   name: 'App',
   components:{
@@ -376,7 +379,7 @@ export default {
     },
     checkNickname() {
       axios
-      .post('http://127.0.0.1:9999/food/api/account/nicknameconfirm', this.signupData)
+      .post(`${SERVER_URL}/account/nicknameconfirm`, this.signupData)
       .then(data => {
         console.log(data.data.data)
         if (data.data.data == "1") {
@@ -411,7 +414,11 @@ export default {
     },
     checkEmail() {
       if(this.signupData.email) {
-        axios.post('http://127.0.0.1:9999/food/api/account/emailconfirm', this.signupData)
+        Swal.fire({
+            title: '이메일을 확인해주세요.',
+            text: '입력하신 이메일로 인증번호를 전송했습니다.',
+          })
+        axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
         .then(data => {
           if (data.data.data == "1") {
             console.log('success')
@@ -442,7 +449,7 @@ export default {
           if (this.emailSucMsg) {
             console.log('sucsess1')
             console.log(this.signupData.email)
-            axios.post('http://127.0.0.1:9999/food/api/account/emailconfirm', signupData)
+            axios.post(`${SERVER_URL}/account/emailconfirm`, signupData)
             .then(data => {
               console.log('sucsess2')
               if (data.data.data === "1") {

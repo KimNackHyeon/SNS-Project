@@ -24,19 +24,22 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
-      kakaoUserInfo:{
-            email:'',
-            nickname:'',
-            profile_image_url:'',
-            thumbnail_image_url:''
-      },
-      userInfo: {
-        email: null,
-        password: null,
-        nickname: null,
-        address: null,
-        profile_image_url: '/img/ref_close.748290f9.png',
-      }
+    user: '',
+    pwd: '',
+    confirm: '',
+    kakaoUserInfo:{
+          email:'',
+          nickname:'',
+          profile_image_url:'',
+          thumbnail_image_url:''
+    },
+    userInfo: {
+      email: null,
+      password: null,
+      nickname: null,
+      address: null,
+      profile_image_url: '/img/ref_close.748290f9.png',
+    }
   },
   mutations: {
     setUserInfo(state, userinfo) {
@@ -62,6 +65,12 @@ export default new Vuex.Store({
       state.kakaoUserInfo.profile_image_url = null;
       state.kakaoUserInfo.nickname = null;
       state.kakaoUserInfo.thumbnail_image_url = null;
+    },
+    confirmPwd(state, data){
+      state.confirm = data;
+    },
+    userEmail(state, data) {
+      state.pwd = data;
     },
   },
   getters,
