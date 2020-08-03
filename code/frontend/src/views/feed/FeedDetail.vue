@@ -2,7 +2,7 @@
   <div style="width:100%; height:100%;">
     <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
-        <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 38px;">
+        <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 100%;">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
       </router-link>
@@ -45,11 +45,11 @@
               <h5 class="food-name">{{food.name}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
-              <div  class="balloon">
-                <h5 style="color: white">{{nowFood}}</h5>
-                <v-btn class="buybtn">공동<br>구매</v-btn>
-                <v-btn class="changebtn">물물<br>교환</v-btn>
-              </div>
+            <div  class="balloon">
+              <h5 style="color: white">{{nowFood}}</h5>
+              <router-link to="/store/groupbuying"><v-btn class="buybtn">공동<br>구매</v-btn></router-link>
+              <router-link to="/store/marketplace"><v-btn class="changebtn">물물<br>교환</v-btn></router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default {
         {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
         {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
       ],
-      onBuying: false,
+      // onBuying: false,
       comment: "",
       comments: [
         {img: "https://cdn.vuetifyjs.com/images/john.jpg", 

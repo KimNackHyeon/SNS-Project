@@ -15,18 +15,18 @@
         </div>
       </div>
       <div style="position: relative;">
-        <v-carousel show-arrows-on-hover>
+        <v-carousel v-model="feedData.pictureNum">
+        <!-- <v-carousel show-arrows-on-hover> -->
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
             :src="item.src"
-            @click="countItem(i)"
           ></v-carousel-item>
         </v-carousel>
         <v-chip
             class="ma-2 imgCount"
             color="#2c2c2c">
-            {{imgNumber + 1}}/{{feedData.items.length}} 
+            {{feedData.pictureNum + 1}}/{{feedData.items.length}} 
           </v-chip>
       </div>
       <!-- 좋아요, 댓글, 스크랩 버튼 -->
