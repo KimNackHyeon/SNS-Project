@@ -57,37 +57,12 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
-
+	
 	@Autowired
 	MyBoardRepo myboardRepo;
 	
 	@Autowired
 	FollowRepo followRepo;
-
-//	@GetMapping("/account/login")
-//	@ApiOperation(value = "로그인")
-//	public Object login(@RequestParam(required = true) final String email,
-//			@RequestParam(required = true) final String password) {
-//
-//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(email, password);
-//
-//		ResponseEntity response = null;
-//
-//		if (userOpt.isPresent()) {
-//			final BasicResponse result = new BasicResponse();
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt);
-//			result.status = true;
-//			result.data = "success";
-//			response = new ResponseEntity<>(result, HttpStatus.OK);
-//		} else {
-//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//
-//		return response;
-//	}
-
-//	@RequestParam(required = false) String email, @RequestParam(required = false) String password
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
