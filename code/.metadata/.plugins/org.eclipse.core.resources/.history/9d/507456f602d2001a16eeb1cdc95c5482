@@ -1,0 +1,242 @@
+package com.web.curation.controller;
+
+import static org.junit.Assert.assertEquals;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Member;
+import com.web.curation.model.MyBoard;
+import com.web.curation.repo.MemberRepo;
+import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.service.MemberService;
+
+import io.fusionauth.jwt.Signer;
+import io.fusionauth.jwt.Verifier;
+import io.fusionauth.jwt.domain.JWT;
+import io.fusionauth.jwt.hmac.HMACSigner;
+import io.fusionauth.jwt.hmac.HMACVerifier;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+@ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
+		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
+		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
+		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
+
+//  http://localhost:9999/food/swagger-ui.html
+@CrossOrigin(origins = { "http://localhost:8080" })
+@RestController
+@RequestMapping("/api/")
+public class AccountController {
+
+	@Autowired
+	MemberRepo memberRepo;
+
+	@Autowired
+	MemberService memberService;
+
+	@Autowired
+	MyBoardRepo myboardRepo;
+
+//	@GetMapping("/account/login")
+//	@ApiOperation(value = "로그인")
+//	public Object login(@RequestParam(required = true) final String email,
+//			@RequestParam(required = true) final String password) {
+//
+//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(email, password);
+//
+//		ResponseEntity response = null;
+//
+//		if (userOpt.isPresent()) {
+//			final BasicResponse result = new BasicResponse();
+//			System.out.println("로그인된 아이디 정보");
+//			System.out.println(userOpt);
+//			result.status = true;
+//			result.data = "success";
+//			response = new ResponseEntity<>(result, HttpStatus.OK);
+//		} else {
+//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//		}
+//
+//		return response;
+//	}
+
+//	@RequestParam(required = false) String email, @RequestParam(required = false) String password
+
+	@ApiOperation(value = "로그인 처리")
+	@PostMapping("/account/login")
+	public ResponseEntity<String> login(@RequestBody Member member) {
+		System.out.println(member.getEmail() + " " + member.getPassword());
+		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
+		System.out.println(userOpt.isPresent());
+		if (userOpt.isPresent()) {
+			System.out.println("로그인된 아이디 정보");
+			System.out.println(userOpt.get().getEmail());
+			String token = getToken(userOpt.get());
+			return new ResponseEntity<String>(token, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation(value = "토큰 검증")
+	@PostMapping("/info")
+	public ResponseEntity<String> verify(@RequestParam String token) {
+		System.out.println(token);
+//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
+
+		boolean check = cmpToekn(token);
+		System.out.println(check);
+		if (check) {
+//			System.out.println("로그인된 아이디 정보");
+//			System.out.println(userOpt.get().getEmail());
+//			String token = getToken(userOpt.get());
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@PostMapping("/account/signup")
+	@ApiOperation(value = "가입하기")
+	public Object signup(@Valid @RequestBody Member member) {
+		final BasicResponse result = new BasicResponse();
+		// 회원가입단을 생성해 보세요.'
+		memberRepo.save(member);
+		result.status = true;
+		result.data = "success";
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/account/searchpwd")
+	@ApiOperation(value = "비밀번호 찾기")
+	public Object searchpwd(@RequestParam(required = true) final String email) {
+		Optional<Member> userOpt = memberRepo.findByEmail(email);
+		System.out.println(email);
+		ResponseEntity response = null;
+
+		if (userOpt.isPresent()) {
+			final BasicResponse result = new BasicResponse();
+			System.out.println("비밀번호 찾기 아이디 정보");
+			System.out.println(userOpt);
+			memberService.sendMail(userOpt.get().getPassword(), userOpt.get().getEmail());
+			result.status = true;
+			result.data = "success";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		return response;
+	}
+
+	@PostMapping("/account/mypage")
+	@ApiOperation(value = "내 페이지 보기")
+	public Object showmypage(@RequestParam(required = true) final String email) {
+		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		ResponseEntity response = null;
+		if (myBoardOpt.isPresent()) {
+			final BasicResponse result = new BasicResponse();
+			System.out.println(myBoardOpt);
+			result.status = true;
+			result.data = "success";
+			result.object = myBoardOpt;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		return response;
+	}
+
+	@PostMapping("/account/emailconfirm")
+	@ApiOperation(value = "이메일 인증하기")
+	public Object emailconfirm(@RequestParam(required = true) final String email) {
+		final BasicResponse result = new BasicResponse();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(email) != null) {
+			System.out.println(1);
+			result.status = true;
+			result.data = "이미 존재하는 이메일입니다.";
+		} else {
+			String code = memberService.sendMail(email);
+			System.out.println(2);
+			result.status = true;
+			result.data = code;
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	@PostMapping("/account/nicknameconfirm")
+	@ApiOperation(value = "닉네임 중복검사")
+	public Object nicknameconfirm(@RequestParam(required = true) final String nickname) {
+		final BasicResponse result = new BasicResponse();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByNickname(nickname) != null) {
+			result.status = true;
+			result.data = "1";
+		} else {
+			result.status = true;
+			result.data = "0";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
+
+	public String getToken(Member member) {
+		// Useremail로 토큰을 만든다.
+		// plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
+		JWT jwt = new JWT().setIssuer(member.getEmail()).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
+				.setSubject("hellossafy").setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(30));
+		// Sign and encode the JWT to a JSON string representation
+		String token = JWT.getEncoder().encode(jwt, signer);
+
+		return token;
+	}
+
+	public String getToken(String data) {
+		// Useremail로 토큰을 만든다.
+		// plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
+		JWT jwt = new JWT().setIssuer(data).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC)).setSubject("hellossafy")
+				.setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(3));
+		// Sign and encode the JWT to a JSON string representation
+		String token = JWT.getEncoder().encode(jwt, signer);
+
+		return token;
+	}
+
+	// 복호화 하는 방법 : 내이름 넣음
+	// 토큰이 필요한 API 정보에 대해서 유효성을 체크해주면된다
+	static Verifier verifier = HMACVerifier.newVerifier("coldudong");
+
+	// Token이 유효하면 True 유효하지 않으면 False를 반환한다.
+	// API를 받을때 유효한 토큰인지 함께 검사한다.
+	public boolean cmpToekn(String token) {
+		try {
+			// Build an HMC verifier using the same secret that was used to sign the JWT
+			JWT jwt = JWT.getDecoder().decode(token, verifier);
+			assertEquals(jwt.subject, "hellossafy");
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+}
