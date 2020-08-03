@@ -24,3 +24,6 @@ pnpm-debug.log*
 # Lock files
 package-lock.json
 yarn.lock
+
+# Environments
+.env
