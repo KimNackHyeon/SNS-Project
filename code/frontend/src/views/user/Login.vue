@@ -37,7 +37,8 @@
             <!-- 비밀번호 -->
           </div>
           <div style="margin-top:5px; float:right; width:20%;">
-            <button class="login-btn" @click="$emit('login', email, password)">LOGIN</button>
+            <v-btn class="login-btn" @click="$emit('login', email, password)">LOGIN</v-btn>
+            <!-- <button  >LOGIN</button> -->
           </div>
           <!-- 로그인 버튼 -->
         </div>
@@ -46,7 +47,7 @@
           <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
-        <div id="otherLogin" style="display: inline-block; width: 100%">
+        <div id="otherLogin" style="display: inline-block; float: right">
           <!-- <kakaoLogin :component="component" /> -->
           <KakaoLogin
             api-key="4c86227162ae9066234fa38d59d75010"
@@ -135,16 +136,21 @@ export default {
     },
 
     checkForm() {
-      if (this.email.length >= 0 && !EmailValidator.validate(this.email))
+      if (this.email.length > 0 && !EmailValidator.validate(this.email))
         this.error.email = "이메일 형식이 아닙니다.";
-      else this.error.email = false;
+      else if (this.email == "")
+        this.error.email = false;
+      else this.error.email = false; 
 
       if (
-        this.password.length >= 0 &&
+        this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
       )
         this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+      else if (this.password == "") 
+        this.error.password = false;
       else this.error.password = false;
+
 
       let isSubmit = true;
       Object.values(this.error).map((v) => {
