@@ -23,19 +23,19 @@
       <div class="input-with-label">
         <label for="password">비밀번호</label>
         <input v-model='signupData.password' :type="passwordType" id="password" placeholder="password" >
-        <p v-if="pwdErrMsg" style="color: red;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
+        <p v-if="pwdErrMsg" style="color: red; display: inline;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
       </div>
 
       <div class="input-with-label">
         <label for="password-confirm">비밀번호 확인</label>
         <input v-model='signupData.passwordConfirm' :type="passwordConfirmType" id="password-confirm" placeholder="password confirm">
-        <p v-if="pwErrMsg" style="color: red;">비밀번호가 일치하지 않습니다.</p>
+        <p v-if="pwErrMsg" style="color: red; display: inline;">비밀번호가 일치하지 않습니다.</p>
       </div>
 
       <div class="input-with-label">
         <label for="nickname">닉네임</label>
         <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
-        <p v-if="nickErrMsg" style="color: red;">이미 사용중인 닉네임입니다.</p>
+        <p v-if="nickErrMsg" style="color: red; display: inline;">이미 사용중인 닉네임입니다.</p>
       </div>
             <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
       @click="addressgo()">주소검색</button>
