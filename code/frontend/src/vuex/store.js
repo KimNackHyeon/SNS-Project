@@ -24,19 +24,19 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
-      kakaoUserInfo:{
-            email:'',
-            nickname:'',
-            profile_image_url:'',
-            thumbnail_image_url:''
-      },
-      userInfo: {
-        email: null,
-        password: null,
-        nickname: null,
-        address: null,
-        profile_image_url: '/img/ref_close.748290f9.png',
-      }
+    kakaoUserInfo:{
+      email:'',
+      nickname:'',
+      profile_image_url:'',
+      thumbnail_image_url:''
+    },
+    userInfo: {
+      email: null,
+      password: null,
+      nickname: null,
+      address: null,
+      profile_image_url: '/img/ref_close.748290f9.png',
+    }
   },
   mutations: {
     setUserInfo(state, userinfo) {
@@ -46,10 +46,10 @@ export default new Vuex.Store({
       state.userInfo.address = userinfo.address;
     },
     setKakaoUserInfo(state,kakaoLoginResult) {
-    state.kakaoUserInfo.email = kakaoLoginResult.email;
-    state.kakaoUserInfo.nickname = kakaoLoginResult.profile.nickname;
-    state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile.profile_image_url;
-    state.kakaoUserInfo.thumbnail_image_url = kakaoLoginResult.profile.thumbnail_image_url;
+      state.kakaoUserInfo.email = kakaoLoginResult.email;
+      state.kakaoUserInfo.nickname = kakaoLoginResult.profile.nickname;
+      state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile.profile_image_url;
+      state.kakaoUserInfo.thumbnail_image_url = kakaoLoginResult.profile.thumbnail_image_url;
     },
     deluserInfo(state) {
       state.userInfo.email = null;

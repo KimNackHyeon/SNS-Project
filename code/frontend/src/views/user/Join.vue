@@ -212,7 +212,7 @@
             확인
         </button>
     </div>
-    <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
+    <button  style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
   </div>
 </template>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
