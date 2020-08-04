@@ -14,7 +14,7 @@
     </div>
     <div class="modifyBody">
       <div class="myphoto">
-        <v-avatar size="100"><img :src="userinfo.profile_image_url" alt="John"></v-avatar>
+        <v-avatar size="120"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
         <div class="filebox">
           <v-btn color="#a0d469">
             <label for="changeFile">사진 변경</label>
@@ -24,38 +24,46 @@
       </div>
       <div class="input-with-label">
         <label for="nickname">닉네임</label>
-        <input v-model="newNickname" type="text" id="nickname" :placeholder="userinfo.nickname"  maxlength="128">
+        <input v-model="newUserInfo.newNickname" type="text" id="nickname" placeholder="닉네임을 입력하세요."  maxlength="128">
         <p v-if="nickErrMsg" style="color: red;">이미 사용중인 닉네임입니다.</p>
       </div>
       <div class="input-with-label">
         <label for="password">비밀번호</label>
-        <input v-model="newPassword" type="password" id="password" placeholder="password">
+        <input v-model="newUserInfo.newPassword" type="password" id="password" placeholder="비밀번호를 입력하세요.">
         <p v-if="pwdErrMsg" style="color: red;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
       </div>
       <div class="input-with-label">
         <label for="password-confirm">비밀번호 확인</label>
-        <input v-model="newPasswordConfirm" type="password" id="password-confirm" placeholder="password confirm">
+        <input v-model="newUserInfo.newPasswordConfirm" type="password" id="password-confirm" placeholder="비밀번호를 확인해주세요.">
         <p v-if="pwdCofErrMsg" style="color: red;">비밀번호가 일치하지 않습니다.</p>
       </div>
-      <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;" @click="addressgo()">주소검색</button>
-      <div class="input-address">
-        <v-text-field
-          readonly=""
-          v-model="newAddress"
-          placeholder="주소가 입력될 공간입니다."
-          value=""
-          single-line
-          @click="addressgo()"
-          width="300px;"
-          color="#a0d469"
-        >
-        </v-text-field>
+      <div class="input-with-label">
+        <label for="address">주소</label>
+        <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
       </div>
-      <div v-if="open">
-        <DaumPostcode style="height:200px" :on-complete="handleAddress" />
-      </div>
+      <v-dialog v-model="dialog" width="100%">
+        <v-card>
+          <v-card-title class="headline">주소 검색</v-card-title>
+          <v-card-text>
+            <DaumPostcode style="height:300px" :on-complete="handleAddress" />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false">삭제</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <div>
-        <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 50px; color: white; font-size: 18px;">수정하기</v-btn>
+        <router-link to="/user/mypage">
+          <v-btn 
+          color="rgb(160, 212, 105)" 
+          style="width: 100%; height: 50px; color: white; font-size: 18px; margin-top: 35px;" 
+          v-if="newUserInfo.newImgUrl && newUserInfo.newNickname && newUserInfo.newPassword && newUserInfo.newPasswordConfirm && newUserInfo.newAddress && (newUserInfo.newPassword === newUserInfo.newPasswordConfirm)"
+          @click="onModify"
+          >
+          수정하기
+          </v-btn>
+        </router-link>
       </div>
     </div>
   </div>
@@ -67,49 +75,79 @@
 import "../../assets/css/components.scss";
 import store from '../../vuex/store.js'
 import DaumPostcode from "vuejs-daum-postcode";
+import axios from 'axios';
 
+// const SERVER_URL = "http://127.0.0.1:9999/food/api";
+const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 export default {
   data() {
     return {
       userinfo: "",
-      newImgUrl: "",
-      newEmail: "",
-      newNickname: "",
+      newUserInfo: {
+        newImgUrl: "",
+        newNickname: "",
+        newPassword: "",
+        newPasswordConfirm: "",
+        newAddress: "",
+      },
       nickErrMsg: false,
-      newPassword: "",
       pwdErrMsg: false,
-      newPasswordConfirm: "",
       pwdCofErrMsg: false,
-      newAddress: "",
       open: false,
+      dialog: false,
     }
   },
   components: {
     DaumPostcode
   },
+  created() {
+    this.checkUser()
+  },
   mounted() {
     if(store.state.kakaoUserInfo.email != null){
       this.userinfo = store.state.kakaoUserInfo;
-    }else{
+      this.newUserInfo.newNickname = this.userinfo.nickname;
+      this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
+      this.newUserInfo.newAddress = this.userinfo.address;
+      console.log(this.userinfo)
+    }
+    else{
+      console.log(store.state.userInfo)
+      console.log(this.userinfo)
       this.userinfo = store.state.userInfo;
+      this.newUserInfo.newNickname = this.userinfo.nickname;
+      this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
+      this.newUserInfo.newAddress = this.userinfo.address;
+      this.newUserInfo.newPassword = this.userinfo.password
     }
     // console.log(this.userinfo)
   },
   methods: {
+    checkUser() {
+      var token = this.$cookies.get("auth-token");
+      axios.post(`${SERVER_URL}/?`, {params: { token : token}})
+        .then((response) => {
+          
+        })
+        .catch(error => {
+          console.log(error.response);
+        })
+    },
     changeImg(event) {
       const newImg = event.target.files[0];
       console.log(newImg)
-      this.userinfo.profile_image_url = URL.createObjectURL(newImg);
+      this.newUserInfo.newImgUrl = URL.createObjectURL(newImg);
       console.log(this.userinfo.profile_image_url)
     },
     addressgo(){
-      if(this.open==false){
-        this.open = true;
+      if(this.dialog==false){
+        this.dialog = true;
       }else{
-        this.open = false
+        this.dialog = false
       }
     },
     handleAddress(data){
+      console.log(data)
       let fullAddress = data.address
       let extraAddress = ''
       if (data.addressType === 'R') {
@@ -121,9 +159,19 @@ export default {
         }
         fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '')
       }
-      this.signupData.address = fullAddress
-      this.open = false;
+      this.newUserInfo.newAddress = fullAddress
+      this.dialog = false;
       this.inputAddress = true
+    },
+    onModify() {
+      if(store.state.kakaoUserInfo.email != null) {
+        store.commit('modifyKakaoUserInfo', this.newUserInfo)
+        console.log(store.state.kakaoUserInfo)
+      }
+      else {
+        store.commit('modifyUserInfo', this.newUserInfo)
+        console.log(store.state.userInfo)
+      }
     },
   }
 }

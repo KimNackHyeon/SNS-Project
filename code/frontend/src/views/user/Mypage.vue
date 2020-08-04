@@ -94,19 +94,19 @@ export default {
     }
   },
   methods: {
-    fetchUser() {
-      axios.get(`${SERVER_URL}/mypage`)
-        .then(response => {
-          console.log(response)
-          this.userData = response.data
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-    }
+    // fetchUser() {
+    //   axios.get(`${SERVER_URL}/mypage`)
+    //     .then(response => {
+    //       console.log(response)
+    //       this.userData = response.data
+    //     })
+    //     .catch(error => {
+    //       console.log(error.response)
+    //     })
+    // }
   },
   created() {
-    this.fetchUser()
+    // this.fetchUser()
   },
 }
 </script>
