@@ -62,7 +62,7 @@ public class Trade {
 
 	public Trade(@NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
 			@NotEmpty String price, @NotEmpty String tradefood1, String tradefood2, @NotEmpty String foodcount1,
-			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl, LocalDateTime regist_date) {
+			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl) {
 		super();
 		this.no = no;
 		this.email = email;
