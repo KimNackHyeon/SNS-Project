@@ -246,8 +246,27 @@
 </template>
 
 <script>
+// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = 'http://localhost:9999/food'
+import axios from 'axios'
+import { mapState } from 'vuex'
 export default {
-
+  data() {
+    return {
+      tradelist: [
+      ]
+    }
+  },
+created() {
+      axios.get(`${SERVER_URL}/trade/`)
+        .then(response => {
+          this.tradelist = response.data.list
+          console.log(this.tradelist)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+  },
 }
 </script>
 

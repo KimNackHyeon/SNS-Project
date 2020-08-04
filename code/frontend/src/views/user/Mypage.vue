@@ -17,12 +17,12 @@
                     <h1>5</h1>
                   </v-col>
                   <v-col class="myprofil-box" cols="4">
-                    <span>팔로우</span>
-                    <h1>32</h1>
+                    <span>팔로워</span>
+                    <h1>{{userData.follower}}</h1>
                   </v-col>
                   <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray">
                     <span>팔로잉</span>
-                    <h1>49</h1>
+                    <h1>{{userData.following}}</h1>
                   </v-col>
                 </v-row>
               </v-container>
@@ -76,8 +76,8 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
-// const SERVER_URL = 'http://localhost:9999/food/api'
+// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = 'http://localhost:9999/food/api'
 
 export default {
   mounted(){
@@ -90,12 +90,17 @@ export default {
   data() {
     return {
       userinfo:'',
-      userData: [],
+      userData:{
+        recipe:"",
+        follower:"",
+        following:"",
+      },
     }
   },
   methods: {
     // fetchUser() {
-    //   axios.get(`${SERVER_URL}/mypage`)
+    //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
+    //   )
     //     .then(response => {
     //       console.log(response)
     //       this.userData = response.data
@@ -106,7 +111,22 @@ export default {
     // }
   },
   created() {
-    // this.fetchUser()
+    if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`${SERVER_URL}/account/mypage/`+ this.userinfo.email)
+        .then(response => {
+          console.log(response)
+          this.userData.following = response.data.following
+          this.userData.follower = response.data.follower
+          console.log(this.userData.follower+" "+this.userData.following)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+      console.log(this.kakaoUserInfo);
   },
 }
 </script>

@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.web.curation.model.MyBoard;
+import com.web.curation.model.Comment;
 
 @Repository
-public interface MyBoardRepo extends JpaRepository<MyBoard, Long> {
+public interface CommentRepo extends JpaRepository<Comment, Long> {
 //	Optional<MyBoard> getMyBoardByEmail(String email);
 	
-	List<MyBoard> findAll();
+	List<Comment> findByFeedNo(Long feedNo);
 }

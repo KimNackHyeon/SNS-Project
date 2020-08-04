@@ -4,7 +4,7 @@
       <div class="feed-profil">
         <div class="feed-user">
           <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
-          <h4 style="display:inline-block; padding-left:5px">사용자 이름</h4>
+          <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link to="/feed/detail">
@@ -36,7 +36,7 @@
               <v-icon v-if="!feedData.islike" size="30px" color="black">mdi-heart-outline</v-icon>
               <v-icon v-if="feedData.islike" size="30px" color="red">mdi-heart</v-icon>
           </v-btn>
-          <v-btn icon color="black" @click="onComment(feedData.id)">
+          <v-btn icon color="black" @click="onComment(feedData.no)">
               <v-icon size="30px">mdi-chat-outline</v-icon>
           </v-btn>
         </div>
@@ -50,8 +50,8 @@
       <!-- 댓글 -->
       <div class="commentbody" v-if="feedData.openComment">
         <div class="commentDiv">
-          <input v-model="feedData.comment" @keyup.enter="onCommentBtn(feedData.id)" type="text" class="commentInput" placeholder="Comment">
-          <v-btn icon class="sendBtn" @click="onCommentBtn(feedData.id)">
+          <input v-model="inputComment" @keyup.enter="onCommentBtn(feedData.no)" type="text" class="commentInput" placeholder="Comment">
+          <v-btn icon class="sendBtn" @click="onCommentBtn(feedData.no)">
             <v-icon>mdi-send</v-icon>
           </v-btn>
         </div>
@@ -61,8 +61,8 @@
           </div>
           <div class="content">
             <div>
-              <p class="commentUser">{{comment.name}}</p>
-              <span>{{comment.content}}</span>
+              <p class="commentUser">{{comment.nickname}}</p>
+              <span>{{comment.comment}}</span>
             </div>
             <!-- <span style="font-size: 12px">{{comment.created_at}}</span> -->
           </div>
@@ -75,108 +75,78 @@
 
 <script>
 import axios from "axios";
+import store from '../../vuex/store'
+import moment from "moment";
 import $ from 'jquery';
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 
 export default {
   data: () => {
     return {
-      feedDatas: [
-        {
-          id: 1,
-          pictureNum: 0,
-          islike: false,
-          isscrap: false,
-          openComment: false,
-          comment: "",
-          items: [
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-            },
-          ],
-          comments: [
-            {
-              img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-              name: "Jhon34", 
-              content: "아이들도 담백한 맛에 잘 먹을 것 같아요 한번 만들어보세요!! 감사합니다!",
-              created_at: "2020-07-28 15:59"
-            },
-            {
-              img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-              name: "Sara12", 
-              content: "비주얼도 좋고 영양도 듬뿍~~ 다욧식품으로 좋을것 같아요",
-              created_at: "2020-07-28 17:59"
-            },
-          ],
-        },
-        {
-          id: 2,
-          pictureNum: 0,
-          islike: false,
-          isscrap: false,
-          openComment: false,
-          comment: "",
-          items: [
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-            },
-            {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-            },
-          ],
-          comments: [
-            {
-              img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-              name: "Jhon34", 
-              content: "두번째 댓글 아이들도 담백한 맛에 잘 먹을 것 같아요 한번 만들어보세요!! 감사합니다!",
-              created_at: "2020-07-28 15:59"
-            },
-            {
-              img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-              name: "Sara12", 
-              content: "두번째 댓글 비주얼도 좋고 영양도 듬뿍~~ 다욧식품으로 좋을것 같아요",
-              created_at: "2020-07-28 17:59"
-            },
-          ],
-        },
-      ],
+      feedDatas: [],
       imgNumber: "",
+      inputComment: '',
       commentData: [],
     };
   },
+  computed: {
+  },
   watch: {
-    feedDatas: function(v) {
-      this.feedDatas.forEach(feedData => {
-        console.log(feedData)
-        if (feedData.comment.length > 0) {
-          $('.sendBtn').css('color', '#a0d469')
-        }
-        else {
-          $('.sendBtn').css('color', 'rgba(0, 0, 0, 0.54)')
-        }
-      })
-    },
-    // nowpicture: function(v) {
-    //   this.countItem();
+    // feedDatas: function(v) {
+    //   this.feedDatas.forEach(feedData => {
+    //     console.log(feedData)
+    //     if (feedData.comment.length > 0) {
+    //       $('.sendBtn').css('color', '#a0d469')
+    //     }
+    //     else {
+    //       $('.sendBtn').css('color', 'rgba(0, 0, 0, 0.54)')
+    //     }
+    //   })
     // },
+  },
+
+  mounted(){
+      axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
+        .then(response => {
+          response.data.forEach(d =>{
+            console.log(d);
+            var data = { // 하나의 피드 데이터
+              no: d.no,
+              nickname : d.nickname,
+              islike: false,
+              isscrap: false,
+              openComment: false,
+              comment: "",
+              items: [],
+              comments:[],
+            }
+
+            axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
+            .then(response => {
+              // console.log(response);
+              response.data.forEach(c =>{
+                var comment = { // 피드에 해당하는 하나의 댓글
+                  img : '',
+                  nickname : c.nickname,
+                  content : c.comment,
+                  created_at : c.create_date,
+                }
+                console.log(c);
+                data.comments.push(c);
+              })
+            })
+
+            this.feedDatas.push(data); // 피드 데이터 저장
+          })
+          console.log(this.feedDatas);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
   },
   methods: {
     countItem(i) {
@@ -184,29 +154,37 @@ export default {
     },
     onComment(feedData_id) {
       this.feedDatas.forEach(feedData => {
-        if (feedData.id == feedData_id) {
+        if (feedData.no == feedData_id) {
           feedData.openComment = !feedData.openComment
         }
       })
     },
     onCommentBtn(feedData_id) {
       // 댓글 추가기능
+      var comment = {
+        img: store.state.userInfo.profile_image_url, 
+        nickname: store.state.userInfo.nickname,
+        email:store.state.userInfo.email,
+        feedNo: feedData_id,
+        comment: this.inputComment
+      }
+      console.log(comment);
+      axios.post(`${SERVER_URL}/feed/register`,comment)
+      .then(response=>{
+        console.log(response);
+        this.inputComment = "";
+      })
+
       this.feedDatas.forEach(feedData => {
-        if (feedData.id == feedData_id) {
-          feedData.comments.push({
-              img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-              name: "Sara12", 
-              content: feedData.comment,
-              created_at: "2020-07-28 17:59"
-            },)
+        if (feedData.no == feedData_id) {
+          feedData.comments.push(comment);
         }
         // 댓글 input 초기화 해주기
-        feedData.comment = ""
       })
     },
     likedbtn(feedData_id) {
       this.feedDatas.forEach(feedData => {
-        if (feedData.id == feedData_id) {
+        if (feedData.no == feedData_id) {
           feedData.islike = !feedData.islike
         }
       })
@@ -226,7 +204,7 @@ export default {
     },
     scrapedbtn(feedData_id) {
       this.feedDatas.forEach(feedData => {
-        if (feedData.id == feedData_id) {
+        if (feedData.no == feedData_id) {
           feedData.isscrap = !feedData.isscrap
         }
       })
