@@ -19,6 +19,7 @@
                   v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
                   type="text"
                   class="login-input"
+                  @keyup.enter="$emit('login', email, password)"
                 />
               </div>
             </div>
@@ -31,6 +32,7 @@
                   v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
                   type="password"
                   class="login-input"
+                  @keyup.enter="$emit('login', email, password)"
                 />
               </div>
             </div>
