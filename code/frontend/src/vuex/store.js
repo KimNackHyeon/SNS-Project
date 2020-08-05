@@ -45,6 +45,7 @@ export default new Vuex.Store({
       state.userInfo.password = userinfo.password;
       state.userInfo.nickname = userinfo.nickname;
       state.userInfo.address = userinfo.address;
+      state.userInfo.profile_image_url = userinfo.image;
     },
     setKakaoUserInfo(state,kakaoLoginResult) {
       state.kakaoUserInfo.email = kakaoLoginResult.email;

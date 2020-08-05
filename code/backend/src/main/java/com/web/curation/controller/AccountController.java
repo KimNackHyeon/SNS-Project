@@ -2,8 +2,11 @@ package com.web.curation.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -17,18 +20,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
-import com.web.curation.model.MyBoard;
+import com.web.curation.model.MyRef;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.MyRefRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -57,12 +62,15 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
-	
+
 	@Autowired
 	MyBoardRepo myboardRepo;
-	
+
 	@Autowired
 	FollowRepo followRepo;
+
+	@Autowired
+	MyRefRepo myrefRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -82,7 +90,21 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	@ApiOperation(value = "내 냉장고")
+	@GetMapping("/account/myref/{email}")
+	public ResponseEntity<Map> myRef(@PathVariable String email) {
+		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
+		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
+		if (!myrefList.isEmpty()) {
+			System.out.println("hihi");
+			map.put("myreflist", myrefList);
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@ApiOperation(value = "로그아웃 처리")
 	@GetMapping("/account/logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "token") String token) {
@@ -98,17 +120,13 @@ public class AccountController {
 	}
 
 	@ApiOperation(value = "토큰 검증")
-	@PostMapping("/info")
+	@GetMapping("/info")
 	public ResponseEntity<String> verify(@RequestParam String token) {
 		System.out.println(token);
-//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
 
 		boolean check = cmpToekn(token);
 		System.out.println(check);
 		if (check) {
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt.get().getEmail());
-//			String token = getToken(userOpt.get());
 			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
@@ -226,6 +244,54 @@ public class AccountController {
 			result.status = true;
 			result.data = "0";
 		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PutMapping("/account/update")
+	@ApiOperation(value = "회원정보 수정")
+	public Object update(@RequestBody Member member) {
+		System.out.println(member);
+		Member temp = memberRepo.getUserByEmail(member.getEmail());
+		System.out.println(temp);
+		final BasicResponse result = new BasicResponse();
+		member.setNo(temp.getNo());
+		member.setCreate_date(temp.getCreate_date());
+		memberRepo.save(member);
+//		memberRepo.saveAndFlush(member);
+		result.status = true;
+		result.data = "success";
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/account/upload")
+	@ApiOperation(value = "프로필사진 업로드")
+	public Object upload(@RequestParam MultipartFile image, @RequestParam String email) throws IllegalStateException, IOException {
+		System.out.println("UPLOAD =======================");
+		String filename = image.getOriginalFilename(); // 파일 이름
+		System.out.println(filename);
+		Member member = memberRepo.getUserByEmail(email); // 폴더명
+//		String filepath = "/image/" + member.getNo() + "/profile";// 폴더 상대 경로
+		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
+		
+		
+		
+		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
+		System.out.println(path); // 상대경로
+		File folder = new File(path);
+
+		if (!folder.exists()) {
+			try {
+				folder.mkdirs(); // 폴더 생성
+				System.out.println("폴더가 생성");
+
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("폴더가 이미 존재");
+		}
+		image.transferTo(new File(path+"/"+filename));
+		String result = "/img/"+ member.getNo() +"/profile/"+ filename;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

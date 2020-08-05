@@ -13,6 +13,7 @@ import Home from "./views/Home.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
 import MarketPlaceDetail from "./views/store/MarketplaceDetail.vue";
 import GroupBuying from "./views/store/Groupbuying.vue";
+import GroupBuyingdetail from "./views/store/Groupbuyingdetail.vue";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
@@ -101,6 +102,11 @@ export default [
     path: "/store/groupbuying",
     name: "GroupBuying",
     component: GroupBuying,
+  },
+  {
+    path: "/store/groupbuying/:id?",
+    name: "GroupBuyingdetail",
+    component: GroupBuyingdetail,
   },
   {
     path: "/Main",
