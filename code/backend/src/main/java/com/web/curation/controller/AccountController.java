@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Member;
@@ -56,10 +57,10 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
-	
+
 	@Autowired
 	MyBoardRepo myboardRepo;
-	
+
 	@Autowired
 	FollowRepo followRepo;
 
@@ -81,7 +82,7 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@ApiOperation(value = "로그아웃 처리")
 	@GetMapping("/account/logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "token") String token) {
@@ -223,7 +224,7 @@ public class AccountController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/account/update")
 	@ApiOperation(value = "회원정보 수정")
 	public Object update(@RequestBody Member member) {
@@ -240,6 +241,14 @@ public class AccountController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@PostMapping("/account/upload")
+	@ApiOperation(value = "프로필사진 업로드")
+	public Object upload(@RequestParam MultipartFile image) {
+		System.out.println("UPLOAD =======================");
+		System.out.println(image.getOriginalFilename());
+		
+		return new ResponseEntity<>("success", HttpStatus.OK);
+	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
