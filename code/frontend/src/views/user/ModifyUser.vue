@@ -70,7 +70,6 @@
 </template>
 
 
-
 <script>
 import "../../assets/css/components.scss";
 import store from '../../vuex/store.js'
@@ -98,6 +97,7 @@ export default {
       pwdCofErrMsg: false,
       addErrMsg: false,
       dialog: false,
+
     }
   },
   components: {
@@ -206,6 +206,7 @@ export default {
       this.newUserInfo.newImgUrl = URL.createObjectURL(newImg);
       console.log(this.userinfo.profile_image_url)
       // this.createImage(newImg);
+      this.uploadImage();
     },
     addressgo(){
       if(this.dialog==false){
@@ -241,6 +242,7 @@ export default {
           console.log(store.state.kakaoUserInfo)
         }
         else {
+          console.log(this.newUserInfo);
           axios.put(`${SERVER_URL}/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
@@ -255,6 +257,7 @@ export default {
           }).catch(error => {
             console.log(error.response);
           })
+
         }
       }
       else {
@@ -264,11 +267,19 @@ export default {
         this.checkPassword()
       }
     },
-    createBase64Image(filename){
-      const reader = new FileReader();
-      reader.readAsBinaryString(filename);
-      console.log(filename);
-    },
+    uploadImage() {
+      // var file = this.state.file;
+      var formData = new FormData();
+      formData.append("image", this.image); // 변경할 프로필 사진
+      formData.append("email",store.state.userInfo.email); // 사용자 이메일
+
+      axios.post(`${SERVER_URL}/account/upload/`, formData, { 
+          headers: { 'Content-Type': 'multipart/form-data' } 
+      }).then(response => {
+        console.log(response);
+        this.newUserInfo.newImgUrl = response.data;
+      });
+    }
   }
 }
 </script>

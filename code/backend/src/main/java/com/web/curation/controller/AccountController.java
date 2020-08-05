@@ -2,6 +2,8 @@ package com.web.curation.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -23,10 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Member;
-import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
@@ -60,13 +62,13 @@ public class AccountController {
 
 	@Autowired
 	MemberService memberService;
-	
+
 	@Autowired
 	MyBoardRepo myboardRepo;
-	
+
 	@Autowired
 	FollowRepo followRepo;
-	
+
 	@Autowired
 	MyRefRepo myrefRepo;
 
@@ -88,6 +90,7 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	@ApiOperation(value = "내 냉장고")
 	@GetMapping("/account/myref/{email}")
 	public ResponseEntity<Map> myRef(@PathVariable String email) {
@@ -101,7 +104,7 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@ApiOperation(value = "로그아웃 처리")
 	@GetMapping("/account/logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "token") String token) {
@@ -243,7 +246,7 @@ public class AccountController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/account/update")
 	@ApiOperation(value = "회원정보 수정")
 	public Object update(@RequestBody Member member) {
@@ -259,7 +262,38 @@ public class AccountController {
 		result.data = "success";
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
+	@PostMapping("/account/upload")
+	@ApiOperation(value = "프로필사진 업로드")
+	public Object upload(@RequestParam MultipartFile image, @RequestParam String email) throws IllegalStateException, IOException {
+		System.out.println("UPLOAD =======================");
+		String filename = image.getOriginalFilename(); // 파일 이름
+		System.out.println(filename);
+		Member member = memberRepo.getUserByEmail(email); // 폴더명
+//		String filepath = "/image/" + member.getNo() + "/profile";// 폴더 상대 경로
+		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
+		
+		
+		
+		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
+		System.out.println(path); // 상대경로
+		File folder = new File(path);
+
+		if (!folder.exists()) {
+			try {
+				folder.mkdirs(); // 폴더 생성
+				System.out.println("폴더가 생성");
+
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("폴더가 이미 존재");
+		}
+		image.transferTo(new File(path+"/"+filename));
+		String result = "/img/"+ member.getNo() +"/profile/"+ filename;
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
