@@ -23,9 +23,10 @@
       <h4>재료추가</h4>
     </div><!-- end of 재료 등록 -->
     <div class="addFood">
-      <div @click="closeAddFood" style="width:40px; height:40px;position:fixed;"><v-icon style="margin-left:330px;">mdi-close</v-icon></div>
-      <div style="width:100%; height:20px;"></div>
-      <search-food></search-food>
+      <div @click="closeAddFood" style="width:40px; height:40px;"><v-icon style="margin-left:330px;">mdi-close</v-icon></div>
+      <div style="width:100%; height:470px">
+        <search-food></search-food>
+      </div>
     </div>
     <div class="carousel-container" style="height:480px; width:100%;">
     <div class="carousel-slide" style="display: flex; overflow: hidden; margin-left:11px;">
@@ -196,7 +197,7 @@ export default {
 }
 
 .addFood{
- width: 360px;
+    width: 360px;
     height: 510px;
     background-color: white;
     position: fixed;
