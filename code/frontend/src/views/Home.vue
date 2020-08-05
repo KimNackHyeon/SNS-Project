@@ -20,7 +20,7 @@
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
             <div style="width:100%; height:52%; padding:auto; text-align: center;">
               <div style="position:fixed; width: 25px; height: 25px; margin-left: 214px;
-    margin-top: 10px;"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></div>
+    margin-top: 10px;"><router-link to="/user/modifyuser"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></router-link></div>
                 <div class="profilePhotobox">
                     <!-- <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  /> -->
                     <img class="circlePhoto" :src="userinfo.profile_image_url" />

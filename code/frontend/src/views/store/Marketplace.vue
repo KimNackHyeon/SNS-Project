@@ -41,62 +41,64 @@
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row style="padding: 0; margin: 0;">
-                  <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                    <v-img height="105" width="105" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                    <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">계란</v-card-text>
-                    <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 덕명동</v-card-text>
-                  </v-col>
-                  <v-col cols="5" class="text-center" style="padding: 0;">
-                    <v-row class="pa-0">
-                      <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
-                    </v-row>
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">2개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/onion.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">3개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/potato.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
-                      </v-col>
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="12" class="pa-1 text-center">
-                        <span class="text-center pa-0" style="font-size: 18px; color: red;">187.3</span>
-                        <span class="text-center pa-0" style="font-size: 18px;">원</span>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
+            <router-link to="/store/marketplace/detail">
+              <v-col cols="12">
+                <v-card style="padding: 5px;">
+                  <v-row style="padding: 0; margin: 0;">
+                    <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
+                      <v-img height="105" width="105" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
+                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">계란</v-card-text>
+                      <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 덕명동</v-card-text>
+                    </v-col>
+                    <v-col cols="5" class="text-center" style="padding: 0;">
+                      <v-row class="pa-0">
+                        <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
+                      </v-row>
+                      <v-row class="pa-0 ma-1">
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">2개당</v-card-text>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/onion.png"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">3개당</v-card-text>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/potato.png"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
+                      <v-row class="pa-0 ma-1">
+                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
+                          <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
+                        </v-col>
+                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
+                          <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
+                        </v-col>
+                        <v-col cols="12" class="pa-1 text-center">
+                          <span class="text-center pa-0" style="font-size: 18px; color: red;">187.3</span>
+                          <span class="text-center pa-0" style="font-size: 18px;">원</span>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </router-link>
             <v-col cols="12">
               <v-card style="padding: 5px;">
                 <v-row style="padding: 0; margin: 0;">

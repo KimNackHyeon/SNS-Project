@@ -242,7 +242,6 @@ export default {
           console.log(store.state.kakaoUserInfo)
         }
         else {
-          console.log(this.newUserInfo);
           axios.put(`${SERVER_URL}/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
@@ -257,7 +256,6 @@ export default {
           }).catch(error => {
             console.log(error.response);
           })
-
         }
       }
       else {
