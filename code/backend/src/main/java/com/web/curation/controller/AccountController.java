@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
@@ -117,17 +117,13 @@ public class AccountController {
 	}
 
 	@ApiOperation(value = "토큰 검증")
-	@PostMapping("/info")
+	@GetMapping("/info")
 	public ResponseEntity<String> verify(@RequestParam String token) {
 		System.out.println(token);
-//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
 
 		boolean check = cmpToekn(token);
 		System.out.println(check);
 		if (check) {
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt.get().getEmail());
-//			String token = getToken(userOpt.get());
 			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
@@ -247,6 +243,23 @@ public class AccountController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@PutMapping("/account/update")
+	@ApiOperation(value = "회원정보 수정")
+	public Object update(@RequestBody Member member) {
+		System.out.println(member);
+		Member temp = memberRepo.getUserByEmail(member.getEmail());
+		System.out.println(temp);
+		final BasicResponse result = new BasicResponse();
+		member.setNo(temp.getNo());
+		member.setCreate_date(temp.getCreate_date());
+		memberRepo.save(member);
+//		memberRepo.saveAndFlush(member);
+		result.status = true;
+		result.data = "success";
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 

@@ -29,14 +29,13 @@ public class MyBoard {
 	private String nickname; // 작성자 닉네임
 
 	@NotEmpty
+	private String title; // 레시피 제목
+
+	@NotEmpty
 	private String email; // 작성자 이메일
 
 	@NotEmpty
 	private String content; // 글내용
-
-	private String tag; // 글태그
-
-	private String imageUrl; // 이미지 경로
 
 	private Long likecount; // 좋아요 수
 
@@ -59,22 +58,6 @@ public class MyBoard {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
 	}
 
 	public Long getLikecount() {
@@ -109,10 +92,18 @@ public class MyBoard {
 		this.email = email;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	@Override
 	public String toString() {
-		return "MyBoard [no=" + no + ", nickname=" + nickname + ", email=" + email + ", content=" + content + ", tag="
-				+ tag + ", imageUrl=" + imageUrl + ", likecount=" + likecount + ", create_date=" + create_date + "]";
+		return "MyBoard [no=" + no + ", nickname=" + nickname + ", title=" + title + ", email=" + email + ", content="
+				+ content + ", likecount=" + likecount + ", create_date=" + create_date + "]";
 	}
 
 }
