@@ -14,8 +14,8 @@ import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+// const SERVER_URL = "http://127.0.0.1:9999/food/api";
+const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 export default {
   components:{Home},
   name: "app",
@@ -101,7 +101,6 @@ export default {
   },
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
-    console.log(store.state.userInfo)
   },
 };
 </script>

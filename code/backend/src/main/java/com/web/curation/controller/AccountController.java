@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,9 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Member;
+import com.web.curation.model.MyBoard;
+import com.web.curation.model.MyRef;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.MyRefRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -62,6 +66,9 @@ public class AccountController {
 	
 	@Autowired
 	FollowRepo followRepo;
+	
+	@Autowired
+	MyRefRepo myrefRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -76,6 +83,19 @@ public class AccountController {
 			String token = getToken(userOpt.get());
 			map.put("token", token);
 			map.put("userinfo", userOpt.get());
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@ApiOperation(value = "내 냉장고")
+	@GetMapping("/account/myref/{email}")
+	public ResponseEntity<Map> myRef(@PathVariable String email) {
+		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
+		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
+		if (!myrefList.isEmpty()) {
+			System.out.println("hihi");
+			map.put("myreflist", myrefList);
 			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
