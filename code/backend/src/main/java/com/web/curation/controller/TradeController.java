@@ -43,7 +43,7 @@ public class TradeController {
 	@Autowired
 	private TradeRepo tradeRepo;
 	
-	@Autowired
+	@Autowired 
 	private MyRefRepo myrefRepo;
 	
 	@GetMapping("/")
