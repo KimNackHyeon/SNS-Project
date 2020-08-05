@@ -120,11 +120,16 @@
 </template>
 
 <script>
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 import $ from 'jquery';
-
+import axios from "axios";
+import store from '../../vuex/store.js'
 export default {
-data: () => ({
-    Nowgra:'',
+data() {
+    return {
+      userinfo:'',
+      Nowgra:'',
         Nowgra_kor : '',
         NowClassNum : 1, //클릭한 칸의 클래스 넘버
       date: new Date().toISOString().substr(0, 10),
@@ -149,8 +154,9 @@ data: () => ({
               ],
         changeFoods:[  
             ],
-
-    }),
+        myreflist:[],
+    }
+  },
     methods:{
             openregistMater: function () {
                 this.closeShare();
@@ -221,7 +227,23 @@ data: () => ({
             deleteShareList:function(index){
                 this.changeFoodsTemp.splice(index,1);
             }
-    }
+    },
+    created() {
+        if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+        console.log(this.userinfo);
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`${SERVER_URL}/account/myref/`+this.userinfo.email)
+        .then(response => {
+          this.myreflist = response.data.myreflist
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+      
+  },
 }
 </script>
 

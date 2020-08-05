@@ -25,15 +25,19 @@
         </v-layout>
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <v-flex>
+            <div class="searchBox">
+              <textarea placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" value=""></textarea>
+            </div>
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-switch label="물물교환 가능 물품만 보기" style="margin-top:18px; margin-right: 18px;"></v-switch>
+              <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:18px; margin-right: 18px;"></v-switch>
             </v-toolbar>
           </v-flex>
-          <div style="border: solid 1px lightgrey">
-            <v-btn icon style="margin: 5px">
+          <div @click="search" style="border: solid 1px lightgrey">
+            <v-btn icon  style="margin: 5px">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </div>
+      
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
@@ -246,11 +250,100 @@
 </template>
 
 <script>
+import $ from 'jquery'
+// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = 'http://localhost:9999/food'
+import axios from 'axios'
+import { mapState } from 'vuex'
+import store from '../../vuex/store.js'
 export default {
-
+  data() {
+    return {
+      tradelist: [
+      ],
+      switched:true,
+      userinfo:'',
+      show:false,
+    }
+  },
+  methods:{
+    search(){
+      if($('.searchBox').css('display')=='none'){
+        $('.searchBox').css('display','unset');
+      }else{
+        if(document.getElementById("searchcontent").value != ""){
+          axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
+          .then(response => {
+          this.tradelist = response.data.list
+          console.log(this.tradelist)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        $('.searchBox').css('display','none')
+        document.getElementById("searchcontent").value = ""
+        }else{
+          $('.searchBox').css('display','none')
+        }
+      }
+    },
+    call(){
+      if(this.switched == true){
+        console.log(this.userinfo.email)
+    axios.post(`${SERVER_URL}/trade/` , {email:this.userinfo.email})
+        .then(response => {
+          this.tradelist = response.data.list
+          console.log(this.tradelist)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = false;
+    }
+    else{
+      axios.get(`${SERVER_URL}/trade/`)
+        .then(response => {
+          this.tradelist = response.data.list
+          console.log(this.tradelist)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = true;
+    }
+    }
+  },
+created() {
+      if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`${SERVER_URL}/trade/`)
+        .then(response => {
+          this.tradelist = response.data.list
+          console.log(this.tradelist)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+  },
+  updated(){
+    
+  }
 }
 </script>
 
 <style>
-  
+  .searchBox{
+    width: 306px;
+    height: 38px;
+    background-color: white;
+    display: none;
+    position: fixed;
+    z-index: 100;
+    margin: 5px;
+    font-size: 21px;
+    padding: 4px 6px;
+  }
 </style>
