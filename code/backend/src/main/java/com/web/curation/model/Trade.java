@@ -59,10 +59,18 @@ public class Trade {
 
 	public Trade() {
 	}
+	
+	@Override
+	public String toString() {
+		return "Trade [no=" + no + ", email=" + email + ", nickname=" + nickname + ", myfood=" + myfood + ", price="
+				+ price + ", tradefood1=" + tradefood1 + ", tradefood2=" + tradefood2 + ", foodcount1=" + foodcount1
+				+ ", foodcount2=" + foodcount2 + ", content=" + content + ", address=" + address + ", imgUrl=" + imgUrl
+				+ ", regist_date=" + regist_date + "]";
+	}
 
 	public Trade(@NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
 			@NotEmpty String price, @NotEmpty String tradefood1, String tradefood2, @NotEmpty String foodcount1,
-			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl, LocalDateTime regist_date) {
+			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl) {
 		super();
 		this.no = no;
 		this.email = email;
