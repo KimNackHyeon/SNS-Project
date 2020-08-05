@@ -11,6 +11,7 @@ import FeedDetail from "./views/feed/FeedDetail.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
+import MarketPlaceDetail from "./views/store/MarketplaceDetail.vue";
 import GroupBuying from "./views/store/Groupbuying.vue";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
@@ -85,6 +86,11 @@ export default [
     path: "/store/marketplace",
     name: "MarketPlace",
     component: MarketPlace,
+  },
+  {
+    path: "/store/marketplace/detail",
+    name: "MarketPlaceDetail",
+    component: MarketPlaceDetail,
   },
   {
     path: "/store/marketmap",
