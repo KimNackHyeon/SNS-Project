@@ -83,6 +83,7 @@ export default {
   data() {
     return {
       userinfo: "",
+      image:'',
       newUserInfo: {
         newImgUrl: "",
         newNickname: "",
@@ -125,19 +126,23 @@ export default {
   methods: {
     checkUser() {
       var token = this.$cookies.get("auth-token");
-      axios.post(`${SERVER_URL}/?`, {params: { token : token}})
+      axios.get(`${SERVER_URL}/info`, {params: { token : token}})
         .then((response) => {
-          
+          console.log(response);
         })
         .catch(error => {
           console.log(error.response);
+          // this.$cookies.remove('auth-token');
+          this.$router.push('/');
         })
     },
     changeImg(event) {
       const newImg = event.target.files[0];
+      this.image = event.target.files[0];
       console.log(newImg)
       this.newUserInfo.newImgUrl = URL.createObjectURL(newImg);
       console.log(this.userinfo.profile_image_url)
+      // this.createImage(newImg);
     },
     addressgo(){
       if(this.dialog==false){
@@ -170,9 +175,35 @@ export default {
       }
       else {
         store.commit('modifyUserInfo', this.newUserInfo)
-        console.log(store.state.userInfo)
+        // console.log(store.state.userInfo) 
+        console.log(this.newUserInfo)
+        
+        axios.put(`${SERVER_URL}/account/update/`,{
+          email : store.state.userInfo.email,
+          nickname : this.newUserInfo.newNickname,
+          address : this.newUserInfo.newAddress,
+          password : this.newUserInfo.newPassword,
+          image : this.newUserInfo.newImgUrl
+        }).then(response => {
+          console.log(response);
+        }).catch(error => {
+          console.log(error.response);
+        })
+
+        this.uploadImage();
       }
     },
+    uploadImage(file) {
+      // var file = this.state.file;
+      var formData = new FormData();
+      formData.append("image", this.image);
+
+      axios.post(`${SERVER_URL}/account/upload/`, formData, { 
+          headers: { 'Content-Type': 'multipart/form-data' } 
+      }).then(response => {
+        console.log(response);
+      });
+    }
   }
 }
 </script>
