@@ -1,36 +1,84 @@
 <template>
   <div style="width:100%; height:100%;">
-      <div style="width:100%; height:10%;" v-on:keyup.down="selectValue('down')"
+      <div style="width:100%; height:10%; z-index:101;" v-on:keyup.down="selectValue('down')"
        v-on:keyup.up="selectValue('up')"> <!-- 검색 -->
-            <div class="search">
-          <input class="s" placeholder="'장'을 써보세요" 
-                v-on:input="searchQuery=event.target.value">
-          <ul class="r" tabindex="0" 
-              v-bind:class="{ show: isActive }"
+            <div class="search" >
+          <input class="s" placeholder="음식재료 이름 검색" 
+                v-on:input="searchQuery=$event.target.value" style="text-align:left;">
+          <ul style="display:none;" tabindex="3" 
+              
               v-on:mouseover="removeValue">
             <li tabindex="-1" 
                 v-for="(el, index) in filterList" 
-                v-on:click="changeValue(el.name)"
-                v-on:keyup.enter="selectValue('enter', el.name)"
-                :key="index">
-              <span>{{ el.name }}</span>
+                v-on:click="changeValue(el.name_kor)"
+                v-on:keyup.enter="selectValue('enter', el.name_kor)"
+                :key="index"
+                style="z-index:102;"
+                >
+              <span>{{ el.name_kor }}</span>
             </li>
           </ul>
         </div>
       </div> <!-- end of 검색 --> 
 
-      <div style="height:82%; border-top:1px solid #9e9e9e6b;overflow-y: scroll;">
-        <div class="card" v-for="(food,index) in allFoodList" :key="index">
+      <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:90;">
+        <div @click="changeValue(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
         <div>
           <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../assets/images/food/${food.name}.png`)"/>
         </div>
         <div>
           {{ food.name_kor }}
         </div>
-    </div>
+      </div>
+      <div class="putFoodInform">
+        <div style="width:100%; height:50px; overflow:hidden text-align:center; padding:13px; font-size:17px; border-bottom:1px solid #80808033;">
+          <div style="width:63px; overflow:hidden; float:left;">
+            <h4 style="float:left;">{{thisSelectedFood.name_kor}}</h4> 
+          </div>
+          <h5 style="float:left;">필요한 갯수</h5>
+        </div>
+        <div style="width:100%; height:60px; padding: 14px 0px;">
+          <button @click="selectAmountType" id="natureBtn" class="nature">1개 미만</button>
+            <div class="Nature" style="float:right;">
+                <input type="text" style="float:left" v-model="amount">
+                <h5>개</h5>
+            </div>
+            <div class="underNature" style="display:none; float:right;">
+                <input type="text" style="float:left;" v-model="amount">
+                <h5 style="float:left">/</h5>
+                <input type="text" style="float:left;" v-model="amountundernature">
+                <h5>개</h5>
+            </div>
+        </div>
+        <div @click="closeinputForm" style="    width: 50%;
+    height: 40px;
+    background-color: red;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bolder;
+    color: white;
+    text-shadow: 1px 1px 5px #0000004f; float:left;">
+          취소
+        </div>
+        <div @click="addIngradient" style="    width: 50%;
+    height: 40px;
+    background-color: rgb(160, 212, 105);
+    text-align: center;
+    font-size: 22px;
+    font-weight: bolder;
+    color: white;
+    text-shadow: 1px 1px 5px #0000004f; float:left;">
+          추가
+        </div>
+      </div>
+      </div>
+      <div style="width:100%; height:8%; background-color:white; overflow-x:scroll; white-space: nowrap; box-shadow: 0px -1px 13px #0000002b;">
+        <div v-for="(food,index) in selectedFood" :key="index" class="addedfood">
+          {{food.name_kor}} {{food.amount}}개
+        </div>
       </div>
       <div style="width:100%; height:8%;">
-        <div style="width:100%; height:100%; height: 45px;
+        <div @click="addFoodComplete" style="width:100%; height:100%; height: 45px;
     width: 100%;
     background-color: rgb(160,212,105); text-align:center; padding:4px;"><h3>등록하기</h3></div>
       </div>
@@ -38,6 +86,7 @@
 </template>
 
 <script>
+import $ from 'jquery'
 
 export default {
          
@@ -45,6 +94,10 @@ export default {
         return {
             isActive: false,
             searchQuery: '',
+            selectedFood:[],
+            thisSelectedFood:'',
+            amount:'',
+            amountundernature:'',
             names : [
             {name:'egg',
             name_kor:'계란',
@@ -82,28 +135,54 @@ export default {
             img:'vanilla'
             },
             {name:'egg',
-            name_kor:'계란',
+            name_kor:'설탕계란',
             img:'egg'},
             {name:'egg',
-            name_kor:'계란',
+            name_kor:'계란양',
             img:'egg'},
             {name:'egg',
-            name_kor:'계란',
+            name_kor:'계감란',
             img:'egg'},
             {name:'egg',
-            name_kor:'계란',
+            name_kor:'가계란',
             img:'egg'},
             ],
       
     }
   },
   methods: {
-    changeValue(str) {
-      console.log(`change value: ${str}`);
+    addFoodComplete(){
+      this.$emit('addfood',this.selectedFood);
+    },
+    changeValue(food) {
+      console.log(`change value: ${food}`);
       this.isActive = false;
-      document.querySelector('.s').value = str;
+      document.querySelector('.s').value = '';
+      // this.selectedFood.push(food);
+      this.thisSelectedFood = food;
+      $('.putFoodInform').css('display','block');
+    },
+    addIngradient(){
+      var resultamount ='';
+      if(this.amount==''){
+        alert("필요한 갯수를 적어주세요.");
+      }else{
+        if(this.amountundernature !=''){
+          resultamount = this.amount + '/'+this.amountundernature;
+      }else{
+        resultamount = this.amount;
+      }
+      this.selectedFood.push({name:this.thisSelectedFood.name,name_kor:this.thisSelectedFood.name_kor,img:this.thisSelectedFood.img,amount:resultamount});
+      $('.putFoodInform').css('display','none');
+        }
+        this.amount = '';
+        this.amountundernature = '';
+    },
+    closeinputForm(){
+       $('.putFoodInform').css('display','none');
     },
     selectValue(keycode, str) {
+      $('.r').css('display','unset');
       if (this.isActive === true) {
         const hasClass = document.querySelector('.r').classList.contains('key');
         if (keycode === 'down') {
@@ -146,21 +225,49 @@ export default {
         document.querySelector('.r li.sel').classList.remove('sel');
       }
     },
+    selectAmountType(){
+      if($('.Nature').css('display')=='none'){
+        $('.Nature').css('display','block');
+        $('.underNature').css('display','none');
+        $('#natureBtn').css('background-color','#e0e0e0bf');
+         $('#natureBtn').css('color','#1e1e1e61');
+      }else{
+        $('.Nature').css('display','none');
+         $('.underNature').css('display','block');
+        $('#natureBtn').css('background-color','rgb(160,212,105)');
+         $('#natureBtn').css('color','black');
+         
+      }
+    }
   },
   computed: {
-    filterList:function() {
+    filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
       console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
+        // this.isActive = true;
         return this.names.filter((el) => {
-          return el.name.match(str);
+          return el.name_kor.match(str);
         });
-      } else {
-        
+      }else{
+        return '';
+      }
+    },
+    filterListImg() {
+      const str = this.searchQuery;
+      const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
+      console.log(`typing value: ${str}`);
+      if (reg === false && str !== '' && str !== ' ') {
+        // this.isActive = true;
         return this.names.filter((el) => {
-          return el.name.match(str);
+          return el.name_kor.match(str);
         });
+      } else if(str == '') {
+        // this.isActive = false;
+        return this.names;
+      }else{
+        return '';
       }
     },
   },
@@ -168,6 +275,47 @@ export default {
 </script>
 
 <style scoped>
+input{
+  padding:0px;
+  background-color: #ebebeb;
+  width:25px;
+  height:25px;
+  text-align: right;
+}
+.undernature{
+  float:right; display:none;background-color:rgb(160,212,105);padding:5px; border-radius:7px; font-weight:800; margin:0px 8px;
+}
+.addedfood{
+      float: left;
+    margin: 8px 4px;
+    background-color: rgb(160 212 105 / 25%);
+    padding: 4px 6px;
+    font-size: 12px;
+    border-radius: 6px;
+    box-shadow: 1px 1px 4px #0000002e;
+    
+}
+.nature{
+float: left;
+    background-color: #e0e0e0bf;
+    padding: 5px;
+    border-radius: 7px;
+    font-weight: 800;
+    color: #1e1e1e61;
+    margin-left: 8px;
+    box-shadow: 0px 0px 4px #00000057 inset;
+}
+.putFoodInform{
+      width: 160px;
+    height: 150px;
+    background-color: white;
+    z-index: 200;
+    position: fixed;
+    display: none;
+    margin: 98px 100px;
+    -webkit-box-shadow: 0px 0px 105px #0000001a;
+    box-shadow: 0px 0px 105px #00000061;
+}
 .searchBox{
     width: 90%;
     height:38px;
@@ -188,6 +336,7 @@ export default {
     overflow: hidden;
     transition: .15s all ease-in-out;
     float:left;
+    z-index: -1;
 }
 
 .card:hover {
@@ -201,5 +350,52 @@ h3{
     font-weight: 550;
     color: white;
     text-shadow: 1px 1px 4px #0000004f;
+}
+.search{
+      z-index: 101;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+    height: 44px;
+}
+ .s {
+          padding: 10px 20px;
+    width: 90%;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 0 3px rgba(#000, 0.2);
+    box-shadow: 0 0 3px rgba(#000, 0.2);
+    border-bottom: 1px solid #8888882b;
+    font-size: 16px;
+    background-color: #eee;
+    border-radius: 30px;
+    margin: 0px 18px;
+    }
+    .v-application ul, .v-application ol {
+    padding-left: 0px;
+}
+ul{
+  box-shadow: 1px 1px 10px #00000047;
+    width: 77%;
+    margin: 0px 42px;
+}
+li {
+            /* margin-top: -1px; */
+    padding: 0 20px;
+    width: 100%;
+    height: 40px;
+    background-color: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #88888830;
+    outline: none;
+    font-size: 16px;
+    line-height: 40px;
+    cursor: pointer;
+        }
+li:hover {
+          background-color: darken(#fff, 5%);
 }
 </style>

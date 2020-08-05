@@ -25,7 +25,7 @@
     <div class="addFood">
       <div @click="closeAddFood" style="width:40px; height:40px;"><v-icon style="margin-left:330px;">mdi-close</v-icon></div>
       <div style="width:100%; height:470px">
-        <search-food></search-food>
+        <search-food @addfood="addFood"></search-food>
       </div>
     </div>
     <div class="carousel-container" style="height:480px; width:100%;">
@@ -88,11 +88,7 @@ export default {
           imageUrl: null,
           desc:null
       },
-      ingradient:[
-        {food:'apple', amount:'2'},
-        {food:'banana', amount:'1'},
-        {food:'carrot', amount:'1/4'},
-      ],
+      foodlist:'',
       tags:[
         {tag:'한식'},
         {tag:'베이킹'}
@@ -107,6 +103,11 @@ export default {
     }
   },
   methods: {
+    addFood(foodlist){
+      alert(foodlist);
+      this.foodlist = foodlist;
+      $('.addFood').css('display','none');
+    },
     onChange(e,index) {
       const file = e.target.files[0];
     //   this.item.imageUrl = URL.createObjectURL(file);
