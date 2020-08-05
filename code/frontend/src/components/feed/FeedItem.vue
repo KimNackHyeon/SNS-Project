@@ -7,7 +7,7 @@
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
-          <router-link to="/feed/detail">
+          <router-link :to="{name : 'FeedDetail',params:{feedNo : feedData.no}}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
@@ -32,7 +32,7 @@
       <!-- 좋아요, 댓글, 스크랩 버튼 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 45px;">
         <div style="float: left;">
-          <v-btn icon @click="likedbtn(feedData.id)">
+          <v-btn icon @click="likedbtn(feedData.no)">
               <v-icon v-if="!feedData.islike" size="30px" color="black">mdi-heart-outline</v-icon>
               <v-icon v-if="feedData.islike" size="30px" color="red">mdi-heart</v-icon>
           </v-btn>
@@ -41,7 +41,7 @@
           </v-btn>
         </div>
         <div style="float: right;">
-          <v-btn icon @click="scrapedbtn(feedData.id)">
+          <v-btn icon @click="scrapedbtn(feedData.no)">
               <v-icon v-if="!feedData.isscrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
               <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
@@ -113,7 +113,6 @@ export default {
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
           response.data.forEach(d =>{
-            console.log(d);
             var data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
@@ -135,14 +134,12 @@ export default {
                   content : c.comment,
                   created_at : c.create_date,
                 }
-                console.log(c);
                 data.comments.push(c);
               })
             })
 
             this.feedDatas.push(data); // 피드 데이터 저장
           })
-          console.log(this.feedDatas);
         })
         .catch((error) => {
           console.log(error.response);
@@ -184,6 +181,7 @@ export default {
     },
     likedbtn(feedData_id) {
       this.feedDatas.forEach(feedData => {
+        console.log(feedData_id);
         if (feedData.no == feedData_id) {
           feedData.islike = !feedData.islike
         }

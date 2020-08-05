@@ -24,14 +24,12 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
-    user: '',
-    pwd: '',
-    confirm: '',
     kakaoUserInfo:{
-          email:'',
-          nickname:'',
-          profile_image_url:'',
-          thumbnail_image_url:''
+      email:'',
+      nickname:'',
+      profile_image_url:'',
+      thumbnail_image_url:'',
+      address:'',
     },
     userInfo: {
       email: null,
@@ -47,12 +45,13 @@ export default new Vuex.Store({
       state.userInfo.password = userinfo.password;
       state.userInfo.nickname = userinfo.nickname;
       state.userInfo.address = userinfo.address;
+      state.userInfo.profile_image_url = userinfo.image;
     },
     setKakaoUserInfo(state,kakaoLoginResult) {
-    state.kakaoUserInfo.email = kakaoLoginResult.email;
-    state.kakaoUserInfo.nickname = kakaoLoginResult.profile.nickname;
-    state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile.profile_image_url;
-    state.kakaoUserInfo.thumbnail_image_url = kakaoLoginResult.profile.thumbnail_image_url;
+      state.kakaoUserInfo.email = kakaoLoginResult.email;
+      state.kakaoUserInfo.nickname = kakaoLoginResult.profile.nickname;
+      state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile.profile_image_url;
+      state.kakaoUserInfo.thumbnail_image_url = kakaoLoginResult.profile.thumbnail_image_url;
     },
     deluserInfo(state) {
       state.userInfo.email = null;
@@ -65,13 +64,18 @@ export default new Vuex.Store({
       state.kakaoUserInfo.profile_image_url = null;
       state.kakaoUserInfo.nickname = null;
       state.kakaoUserInfo.thumbnail_image_url = null;
+      state.kakaoUserInfo.address = null;
     },
-    confirmPwd(state, data){
-      state.confirm = data;
+    modifyUserInfo(state, modifyResult) {
+      state.userInfo.nickname = modifyResult.newNickname;
+      state.userInfo.profile_image_url = modifyResult.newImgUrl;
+      state.userInfo.address = modifyResult.newAddress;
     },
-    userEmail(state, data) {
-      state.pwd = data;
-    },
+    modifyKakaoUserInfo(state, kakaoModifyResult) {
+      state.kakaoUserInfo.nickname = kakaoModifyResult.newNickname;
+      state.kakaoUserInfo.profile_image_url = kakaoModifyResult.newImgUrl;
+      state.kakaoUserInfo.address = kakaoModifyResult.newAddress;
+    }
   },
   getters,
   actions,

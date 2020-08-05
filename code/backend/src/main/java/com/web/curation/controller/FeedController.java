@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
+import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.repo.CommentRepo;
 import com.web.curation.repo.MyBoardRepo;
@@ -41,7 +43,7 @@ public class FeedController {
 	@Autowired
 	CommentRepo commentRepo;
 
-	@ApiOperation(value = "피드 불러오기")
+	@ApiOperation(value = "피드 전체 불러오기")
 	@GetMapping("/feed/searchAll")
 	public ResponseEntity<List> searchAll() {
 
@@ -55,6 +57,19 @@ public class FeedController {
 			return new ResponseEntity<List>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<List>(list, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation(value = "피드 게시글 상세정보 불러오기")
+	@GetMapping("/feed/search")
+	public ResponseEntity<MyBoard> search(@RequestParam Long feedNo) {
+
+		Optional<MyBoard> myBoard = myboardRepo.findMyBoardByNo(feedNo);
+		System.out.println(myBoard);
+		if (myBoard.isPresent()) {
+			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -75,13 +90,25 @@ public class FeedController {
 		}
 	}
 
-	@ApiOperation(value = "피드에 대한 댓글 달기")
+	@ApiOperation(value = "피드에 대한 댓글 등록")
 	@PostMapping("/feed/register")
 	public ResponseEntity<String> register(@RequestBody Comment comment) {
 		System.out.println(comment);
-		
+
 		commentRepo.save(comment);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "피드 등록")
+	@PostMapping("/feed/registerfeed")
+	public ResponseEntity<String> registerFeed(@RequestBody MyBoard myBoard) {
+		System.out.println(myBoard);
+		if (myBoard.getEmail() != null) {
+			myboardRepo.save(myBoard);
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
