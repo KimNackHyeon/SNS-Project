@@ -1,5 +1,5 @@
 <template>
-  <div class="user">
+  <div class="user" >
     <div class="mypage">
       <div class="mypage-body">
         <div class="profil">
@@ -8,7 +8,7 @@
             <div class="myprofil">
               <div style="margin: 10px">
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
-                <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
+                <span class="myprofil-icon"><i class="fas fa-cog" style="color: gray"></i></span>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
                 <v-row class="myprofil-boxes" no-gutters>
@@ -17,21 +17,18 @@
                     <h1>5</h1>
                   </v-col>
                   <v-col class="myprofil-box" cols="4">
-                    <span>팔로워</span>
-                    <h1>{{userData.follower}}</h1>
+                    <span>팔로우</span>
+                    <h1>32</h1>
                   </v-col>
                   <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray">
                     <span>팔로잉</span>
-                    <h1>{{userData.following}}</h1>
+                    <h1>49</h1>
                   </v-col>
                 </v-row>
               </v-container>
             </div>
           </div>
-        </div>
-        <!-- 팔로우 버튼 -->
-        <div style="margin: 10px;">
-          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;">팔로우</v-btn>
+          
         </div>
         <div class="myfeed">
           <div class="myprofil-feed">
@@ -76,8 +73,8 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
-const SERVER_URL = 'http://localhost:9999/food/api'
+const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+// const SERVER_URL = 'http://localhost:9999/food/api'
 
 export default {
   mounted(){
@@ -86,47 +83,28 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+      console.log(this.kakaoUserInfo);
     },
   data() {
     return {
       userinfo:'',
-      userData:{
-        recipe:"",
-        follower:"",
-        following:"",
-      },
+      userData: [],
     }
   },
   methods: {
-    // fetchUser() {
-    //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
-    //   )
-    //     .then(response => {
-    //       console.log(response)
-    //       this.userData = response.data
-    //     })
-    //     .catch(error => {
-    //       console.log(error.response)
-    //     })
-    // }
-  },
-  created() {
-    if(store.state.kakaoUserInfo.email != null){
-        this.userinfo = store.state.kakaoUserInfo;
-      }else{
-        this.userinfo = store.state.userInfo;
-      }
-      axios.get(`${SERVER_URL}/account/mypage/`+ this.userinfo.email)
+    fetchUser() {
+      axios.get(`${SERVER_URL}/mypage`)
         .then(response => {
           console.log(response)
-          this.userData.following = response.data.following
-          this.userData.follower = response.data.follower
-          console.log(this.userData.follower+" "+this.userData.following)
+          this.userData = response.data
         })
         .catch(error => {
           console.log(error.response)
         })
-      console.log(this.kakaoUserInfo);
+    }
+  },
+  created() {
+    this.fetchUser()
   },
 }
 </script>

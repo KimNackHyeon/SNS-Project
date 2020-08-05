@@ -34,8 +34,7 @@ import * as EmailValidator from "email-validator"
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { mapState, mapMutations } from 'vuex'
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+
 export default {
   name: 'SearchPassword',
   data: () => {
@@ -70,14 +69,10 @@ export default {
       const emailData = {
         email: email,
       }
-      // Swal.fire({
-      //     title: '잠시만 기다려주세요',
-      //     text: '가입된 이메일인지 확인하고 있습니다.',
-      //   })
       console.log(typeof(emailData))
       console.log(email)
       axios
-      .post(`${SERVER_URL}/account/searchpwd`, emailData)
+      .post(`http://127.0.0.1:9999/food/api/account/searchpwd`, emailData)
       .then((data) => {
         console.log("성공")
         console.dir(data)
@@ -91,7 +86,7 @@ export default {
           console.log('실패')
           Swal.fire({
           title: '다시 한번 더 확인해주세요',
-          text: '이메일이 틀렸어요',
+          text: '이메일 혹은 휴대폰번호가 틀렸어요',
         })
         }
       })

@@ -21,9 +21,6 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import Swal from 'sweetalert2'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
-
 export default {
   data: () => {
     return {
@@ -66,7 +63,7 @@ export default {
       var threeMin = 60 * 3,
       display = document.querySelector('#times');
       this.countTimer(threeMin, display);
-      axios.post(`${SERVER_URL}/account/researchpwd`, emailData)
+      axios.post('http://127.0.0.1:9999/food/api/account/researchpwd', emailData)
       .then(data => {
         console.log("성공")
         console.dir(data)
@@ -85,7 +82,7 @@ export default {
       if (this.certificationNumber === this.confirm) {
         console.log('ok2')
         axios
-        .post(`${SERVER_URL}/account/findpwd`, emailData)
+        .post('http://127.0.0.1:9999/food/api/account/findpwd', emailData)
         .then((data) => {
           console.log(data.data.data)
           Swal.fire({

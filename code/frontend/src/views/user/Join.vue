@@ -23,19 +23,19 @@
       <div class="input-with-label">
         <label for="password">비밀번호</label>
         <input v-model='signupData.password' :type="passwordType" id="password" placeholder="password" >
-        <p v-if="pwdErrMsg" style="color: red; display: inline;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
+        <p v-if="pwdErrMsg" style="color: red;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
       </div>
 
       <div class="input-with-label">
         <label for="password-confirm">비밀번호 확인</label>
         <input v-model='signupData.passwordConfirm' :type="passwordConfirmType" id="password-confirm" placeholder="password confirm">
-        <p v-if="pwErrMsg" style="color: red; display: inline;">비밀번호가 일치하지 않습니다.</p>
+        <p v-if="pwErrMsg" style="color: red;">비밀번호가 일치하지 않습니다.</p>
       </div>
 
       <div class="input-with-label">
         <label for="nickname">닉네임</label>
         <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
-        <p v-if="nickErrMsg" style="color: red; display: inline;">이미 사용중인 닉네임입니다.</p>
+        <p v-if="nickErrMsg" style="color: red;">이미 사용중인 닉네임입니다.</p>
       </div>
             <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
       @click="addressgo()">주소검색</button>
@@ -212,7 +212,7 @@
             확인
         </button>
     </div>
-    <button  style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
+    <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
   </div>
 </template>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -224,9 +224,6 @@ import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import axios from 'axios'
 import Swal from 'sweetalert2'
-
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 
 export default {
   name: 'App',
@@ -379,7 +376,7 @@ export default {
     },
     checkNickname() {
       axios
-      .post(`${SERVER_URL}/account/nicknameconfirm`, this.signupData)
+      .post('http://127.0.0.1:9999/food/api/account/nicknameconfirm', this.signupData)
       .then(data => {
         console.log(data.data.data)
         if (data.data.data == "1") {
@@ -414,11 +411,7 @@ export default {
     },
     checkEmail() {
       if(this.signupData.email) {
-        Swal.fire({
-            title: '이메일을 확인해주세요.',
-            text: '입력하신 이메일로 인증번호를 전송했습니다.',
-          })
-        axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
+        axios.post('http://127.0.0.1:9999/food/api/account/emailconfirm', this.signupData)
         .then(data => {
           if (data.data.data == "1") {
             console.log('success')
@@ -449,7 +442,7 @@ export default {
           if (this.emailSucMsg) {
             console.log('sucsess1')
             console.log(this.signupData.email)
-            axios.post(`${SERVER_URL}/account/emailconfirm`, signupData)
+            axios.post('http://127.0.0.1:9999/food/api/account/emailconfirm', signupData)
             .then(data => {
               console.log('sucsess2')
               if (data.data.data === "1") {

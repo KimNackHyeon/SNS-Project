@@ -101,6 +101,7 @@ export default {
   },
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
+    console.log(store.state.userInfo)
   },
 };
 </script>

@@ -18,18 +18,25 @@
     >
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
+                <router-link to="/user/mypage">
             <div style="width:100%; height:52%; padding:auto; text-align: center;">
               <div style="position:fixed; width: 25px; height: 25px; margin-left: 214px;
     margin-top: 10px;"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></div>
+                <div style=" height:100%; display: inline-table; overflow: hidden;">
                 <div class="profilePhotobox">
                     <!-- <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  /> -->
                     <img class="circlePhoto" :src="userinfo.profile_image_url" />
                 </div>
-                <router-link to="/user/mypage"><div style=" width:100px; height:100%; display: inline-table; overflow: hidden;">
+                <div style="float: left;
+    margin-top: 20px;
+    margin-left: 12px;
+}">
                     <h3>{{userinfo.nickname}} 님</h3>
                     <h4>안녕하세요.</h4>
-                </div></router-link>
+                </div>
+                </div>
             </div>
+            </router-link>
             <div  style="width:100%; height:48%;">
                 <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
                   <div class="iconBox">
@@ -72,7 +79,7 @@
 
       <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
     margin-top: 110px; width:100%;"> <!-- 하단 -->
-        <router-link to="/user/modifyuser"><v-icon style="margin:8px">mdi-cog</v-icon></router-link>
+        <v-icon style="margin:8px">mdi-cog</v-icon>
         <v-btn @click="$emit('logout')" icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
     </v-navigation-drawer>
@@ -84,7 +91,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import $ from 'jquery'
 import Vuex from 'vuex'
- import store from '../vuex/store.js'
+import store from '../vuex/store.js'
 
 Vue.use(Vuex)
 
@@ -105,9 +112,7 @@ Vue.use(Vuetify, {
       return {
         userinfo:'',
         drawer: null,
-        user:{email:"bu03101@naver.com",nickname:"mamtte",profilePhoto:'mamtte.png',address:'대전광역시 유성구 덕명동'},
-        // user:{email:"nack@naver.com",nickname:"nack",profilePhoto:'nack.png',address:'대전광역시 유성구 궁동'},
-      }
+        }
     },
     methods:{
         showSlides() {
@@ -161,11 +166,14 @@ display: inline-block;
     overflow: hidden;
     display: inline-table;
     margin-top: 15px;
+    float:left;
+
 }
 .circlePhoto{
     width: 100%;
     height:100%;
     object-fit: cover;
+
 }
 .grayLine{
     border: 1px solid #8080802e;
