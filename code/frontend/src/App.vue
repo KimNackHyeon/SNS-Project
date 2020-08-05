@@ -58,7 +58,7 @@ export default {
       axios.post(`${SERVER_URL}/account/signup`, signupData)
         .then((response) => {
           console.log(response);
-          this.$cookies.set("auth-token", response.data.key);
+          // this.$cookies.set("auth-token", response.data.key);
           this.$router.push("/");
           Swal.fire(
           '회원가입 축합니다!',
