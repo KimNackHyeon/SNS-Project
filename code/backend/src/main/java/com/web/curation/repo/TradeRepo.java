@@ -8,4 +8,5 @@ import com.web.curation.model.Trade;
 
 public interface TradeRepo extends JpaRepository<Trade, Long>{
 	ArrayList<Trade> findAll();
+	ArrayList<Trade> findByMyfood(String content);
 }

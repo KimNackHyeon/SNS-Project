@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       userinfo: "",
+      image:'',
       newUserInfo: {
         newImgUrl: "",
         newNickname: "",
@@ -200,10 +201,11 @@ export default {
     },
     changeImg(event) {
       const newImg = event.target.files[0];
+      this.image = event.target.files[0];
       console.log(newImg)
       this.newUserInfo.newImgUrl = URL.createObjectURL(newImg);
       console.log(this.userinfo.profile_image_url)
-      this.createBase64Image(newImg);
+      // this.createImage(newImg);
     },
     addressgo(){
       if(this.dialog==false){

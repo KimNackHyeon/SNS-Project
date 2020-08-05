@@ -11,7 +11,7 @@
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
-          <h4 style="display: inline-block; padding-left: 10px">사용자 이름</h4>
+          <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right;">
           <v-btn icon color="lightgray">
@@ -56,11 +56,11 @@
       <!-- 글 내용 -->
       <div style="">
         <div style="text-align: center; padding: 5px">
-          <h2>레시피 제목</h2>
+          <h2>{{feedData.title}}</h2>
         </div>
         <div>
           <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
-          <p style="padding: 10px">1. 실온 버터는 마요네즈 상태로 풀어준 뒤, 설탕과 소금을 넣고 크림화를 합니다.</p>
+          <p style="padding: 10px">{{feedData.content}}</p>
         </div>
       </div>
       <!-- 댓글 -->
@@ -71,16 +71,16 @@
             <v-icon>mdi-send</v-icon>
           </v-btn>
         </div>
-        <div class="comments" v-for="(comment, i) in comments" :key="i">
+        <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
             <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
           </div>
           <div class="content">
             <div>
-              <p class="commentUser">{{comment.name}}</p>
-              <span>{{comment.content}}</span>
+              <p class="commentUser">{{comment.nickname}}</p>
+              <span>{{comment.comment}}</span>
             </div>
-            <span style="font-size: 12px">{{comment.created_at}}</span>
+            <span style="font-size: 12px">{{comment.create_date}}</span>
           </div>
         </div>
       </div>
@@ -91,11 +91,16 @@
 
 <script>
 import $ from 'jquery'
+import axios from "axios"
+
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 
 export default {
   data() {
     return {
       nowFood : '',
+      feedData: '',
       inFoods: [
         {img: "flour", name: "박력분", amount: "105g"},
       ],
@@ -129,6 +134,39 @@ export default {
         $('.sendBtn').css('color', 'rgba(0, 0, 0, 0.54)')
       }
     },
+  },
+
+  created(){
+    var feedNo = this.$route.params.feedNo;
+    axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+        .then(response => {
+          console.log(response);
+            this.feedData = { // 하나의 피드 데이터
+              no: response.data.no,
+              nickname : response.data.nickname,
+              content: response.data.content,
+              title: response.data.title,
+              items: [],
+              comments:[],
+            }
+        console.log(this.feedData);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+            .then(response => {
+              // console.log(response);
+              response.data.forEach(c =>{
+                var comment = { // 피드에 해당하는 하나의 댓글
+                  img : '',
+                  nickname : c.nickname,
+                  content : c.comment,
+                  created_at : c.create_date,
+                }
+                this.feedData.comments.push(c);
+              })
+            });
   },
   methods: {
     onBuyingBtn(food) {
