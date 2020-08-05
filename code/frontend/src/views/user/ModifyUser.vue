@@ -2,7 +2,7 @@
   <div style="height: 100%;">
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/user/mypage">
-        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%;">
+        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
       </router-link>
@@ -14,7 +14,7 @@
     </div>
     <div class="modifyBody">
       <div class="myphoto">
-        <v-avatar size="120"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
+        <v-avatar size="100"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
         <div class="filebox">
           <v-btn color="#a0d469">
             <label for="changeFile">사진 변경</label>
@@ -25,28 +25,31 @@
       <div class="input-with-label">
         <label for="nickname">닉네임</label>
         <input v-model="newUserInfo.newNickname" type="text" id="nickname" placeholder="닉네임을 입력하세요."  maxlength="128">
-        <p v-if="nickErrMsg" style="color: red;">이미 사용중인 닉네임입니다.</p>
+        <p v-if="nickErrMsg" class="errorMsg">이미 사용중인 닉네임입니다.</p>
       </div>
       <div class="input-with-label">
         <label for="password">비밀번호</label>
         <input v-model="newUserInfo.newPassword" type="password" id="password" placeholder="비밀번호를 입력하세요.">
-        <p v-if="pwdErrMsg" style="color: red;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
+        <p v-if="pwdErrMsg" class="errorMsg">영문, 숫자 포함 8자리 이상이어야 합니다.</p>
       </div>
       <div class="input-with-label">
         <label for="password-confirm">비밀번호 확인</label>
         <input v-model="newUserInfo.newPasswordConfirm" type="password" id="password-confirm" placeholder="비밀번호를 확인해주세요.">
-        <p v-if="pwdCofErrMsg" style="color: red;">비밀번호가 일치하지 않습니다.</p>
+        <p v-if="pwdCofErrMsg" class="errorMsg">비밀번호가 일치하지 않습니다.</p>
       </div>
       <div class="input-with-label">
         <label for="address">주소</label>
         <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+        <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
       </div>
-      <v-dialog v-model="dialog" width="100%">
+      <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
         <v-card>
-          <v-card-title class="headline">주소 검색</v-card-title>
+          <v-card-title >주소 검색</v-card-title>
+          <v-divider></v-divider>
           <v-card-text>
             <DaumPostcode style="height:300px" :on-complete="handleAddress" />
           </v-card-text>
+          <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" text @click="dialog = false">삭제</v-btn>
@@ -54,16 +57,13 @@
         </v-card>
       </v-dialog>
       <div>
-        <router-link to="/user/mypage">
-          <v-btn 
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 18px; margin-top: 35px;" 
-          v-if="newUserInfo.newImgUrl && newUserInfo.newNickname && newUserInfo.newPassword && newUserInfo.newPasswordConfirm && newUserInfo.newAddress && (newUserInfo.newPassword === newUserInfo.newPasswordConfirm)"
-          @click="onModify"
-          >
-          수정하기
-          </v-btn>
-        </router-link>
+        <v-btn 
+        color="rgb(160, 212, 105)" 
+        style="width: 100%; height: 50px; color: white; font-size: 18px; margin-top: 35px;" 
+        @click="onModify()"
+        >
+        수정하기
+        </v-btn>
       </div>
     </div>
   </div>
@@ -76,6 +76,7 @@ import "../../assets/css/components.scss";
 import store from '../../vuex/store.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
+import PasswordValidator from 'password-validator'
 
 // const SERVER_URL = "http://127.0.0.1:9999/food/api";
 const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
@@ -93,16 +94,38 @@ export default {
       },
       nickErrMsg: false,
       pwdErrMsg: false,
+      passwordSchema: new PasswordValidator(),
       pwdCofErrMsg: false,
-      open: false,
+      addErrMsg: false,
       dialog: false,
     }
   },
   components: {
     DaumPostcode
   },
+  watch: {
+    'newUserInfo.newNickname'() {
+      this.checkNickname();
+    },
+    'newUserInfo.newPassword'() {
+      this.checkPasswordValidate();
+      this.checkPassword();
+    },
+    'newUserInfo.newPasswordConfirm'() {
+      this.checkPassword();
+    },
+  },
   created() {
     this.checkUser()
+    this.passwordSchema
+      .is()
+      .min(8)
+      .is()
+      .max(20)
+      .has()
+      .digits()
+      .has()
+      .letters();
   },
   mounted() {
     if(store.state.kakaoUserInfo.email != null){
@@ -132,9 +155,49 @@ export default {
         })
         .catch(error => {
           console.log(error.response);
-          // this.$cookies.remove('auth-token');
+          this.$cookies.remove('auth-token');
           this.$router.push('/');
         })
+    },
+    // 에러 확인(닉네임, 비밀번호, 비밀번호 확인, 주소)
+    checkNickname() {
+      axios.post(`${SERVER_URL}/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
+      .then(data => {
+        console.log(data.data.data)
+        if (data.data.data == "1") {
+          console.log('중복')
+          this.nickErrMsg = true;
+        } else {
+          console.log('가능')
+          this.nickErrMsg = false;
+        }
+      })
+      .catch(error => {
+        console.log(error.response);
+      })
+    },
+    checkPasswordValidate() {
+      if (
+        this.newUserInfo.newPassword.length >= 0 &&
+        !this.passwordSchema.validate(this.newUserInfo.newPassword)
+      )
+        { this.pwdErrMsg= true; }
+      else {
+      this.pwdErrMsg= false;
+      }
+    },
+    checkPassword() {
+      if (this.newUserInfo.newPasswordConfirm !== '') {
+
+        if(this.newUserInfo.newPassword != this.newUserInfo.newPasswordConfirm) {
+          this.pwdCofErrMsg = true
+        } else if (this.newUserInfo.newPassword && this.newUserInfo.newPasswordConfirm && this.newUserInfo.newPassword === this.newUserInfo.newPasswordConfirm) {
+          this.pwdCofErrMsg = false
+        }
+      }
+      else {
+        this.pwdCofErrMsg = true
+      }
     },
     changeImg(event) {
       const newImg = event.target.files[0];
@@ -169,41 +232,43 @@ export default {
       this.inputAddress = true
     },
     onModify() {
-      if(store.state.kakaoUserInfo.email != null) {
-        store.commit('modifyKakaoUserInfo', this.newUserInfo)
-        console.log(store.state.kakaoUserInfo)
+      if (!this.nickErrMsg && !this.pwdErrMsg && !this.pwdCofErrMsg 
+      && this.newUserInfo.newAddress && this.newUserInfo.newNickname && this.newUserInfo.newPassword 
+      && this.newUserInfo.newPasswordConfirm) {
+        if(store.state.kakaoUserInfo.email != null) {
+          store.commit('modifyKakaoUserInfo', this.newUserInfo)
+          this.$router.go(-1)
+          console.log(store.state.kakaoUserInfo)
+        }
+        else {
+          axios.put(`${SERVER_URL}/account/update/`,{
+            email : store.state.userInfo.email,
+            nickname : this.newUserInfo.newNickname,
+            address : this.newUserInfo.newAddress,
+            password : this.newUserInfo.newPassword,
+            image : this.newUserInfo.newImgUrl
+          }).then(response => {
+            console.log(response);
+            store.commit('modifyUserInfo', this.newUserInfo)
+            console.log(this.newUserInfo)
+            this.$router.go(-1)
+          }).catch(error => {
+            console.log(error.response);
+          })
+        }
       }
       else {
-        store.commit('modifyUserInfo', this.newUserInfo)
-        // console.log(store.state.userInfo) 
-        console.log(this.newUserInfo)
-        
-        axios.put(`${SERVER_URL}/account/update/`,{
-          email : store.state.userInfo.email,
-          nickname : this.newUserInfo.newNickname,
-          address : this.newUserInfo.newAddress,
-          password : this.newUserInfo.newPassword,
-          image : this.newUserInfo.newImgUrl
-        }).then(response => {
-          console.log(response);
-        }).catch(error => {
-          console.log(error.response);
-        })
-
-        this.uploadImage();
+        console.log('입력칸이 비어있습니다.')
+        this.checkNickname()
+        this.checkPasswordValidate()
+        this.checkPassword()
       }
     },
-    uploadImage(file) {
-      // var file = this.state.file;
-      var formData = new FormData();
-      formData.append("image", this.image);
-
-      axios.post(`${SERVER_URL}/account/upload/`, formData, { 
-          headers: { 'Content-Type': 'multipart/form-data' } 
-      }).then(response => {
-        console.log(response);
-      });
-    }
+    createBase64Image(filename){
+      const reader = new FileReader();
+      reader.readAsBinaryString(filename);
+      console.log(filename);
+    },
   }
 }
 </script>
@@ -226,7 +291,7 @@ export default {
     align-items: center;
   }
   .filebox {
-    margin: 10px 0;
+    margin: 20px 0;
   }
   .filebox .v-btn { 
     display: inline-block; 
@@ -253,10 +318,19 @@ export default {
   }
   .modifyBody {
     padding: 20px;
-    overflow: hidden;
+    overflow: scroll;
+    height: 540px;
   }
   .myphoto {
-    padding: 10px;
+    /* padding: 0 10px; */
     text-align: center;
+  }
+  .errorMsg {
+    color: red; 
+    display: inline-block; 
+    margin: 5px 0 0 5px;
+  }
+  .adressDialog {
+    /* margin: 18px !important; */
   }
 </style>
