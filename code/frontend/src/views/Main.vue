@@ -18,6 +18,7 @@
       hide-delimiters
       width="360px"
       height="300px"
+      @click="openLink(item.link)"
     ></v-carousel-item>
   </v-carousel>
   </div> 
@@ -51,21 +52,34 @@
       return {
         items: [
           {
-            src: 'http://blogfiles.naver.net/MjAxNzA4MTBfMjU3/MDAxNTAyMjk0NTY0NjM4.PgCFLkJ-2gU3G2Fi8dpxAi4sXgzbq-fWJ5GH3fFRLmEg.wyLGBUA21aGglsiWM8MxChVcjKcvI6lGegMGsr3juLcg.JPEG.shin00512/%B1%CD%C2%FA%C0%BB_%B6%A7_%B5%FC_%C1%C1%C0%BA_%C3%CA%B0%A3%B4%DC_%B7%B9%BD%C3%C7%C7_%B8%F0%C0%BD1.jpg',
+            src:'http://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
+            link:'https://blog.naver.com/woorikangsan/220990801581'
           },
           {
             src:'https://www.gompyo.net:444/upld/bd/2020/04/09/thmb_img_20200409173757_3787.jpg',
-             },
+            link:'https://www.gompyo.net:444/mil_recipe_list.php'
+          },
+          {
+            src: 'http://image.auction.co.kr/itemimage/1d/7e/cf/1d7ecf24d3.jpg',
+            link:'http://itempage3.auction.co.kr/detailview.aspx?ItemNo=B443993038&listqs=catetab%3d4%26class%3dCorner.CategoryBest%26listorder%3d1&listtitle=%ba%a3%bd%ba%c6%ae100&frm2=through'
+          },
           // {
           //   src: 'https://image7.coupangcdn.com/image/bannerunit/bannerunit_2243356c-de84-4983-aa65-695a41d83356.jpg',
           //   link: 'https:'
           // },
           {
-            src:'https://image7.coupangcdn.com/image/bannerunit/bannerunit_a277f0a2-707b-4f7f-9d21-183b9e4a90c1.jpg',
+            src:'https://image9.coupangcdn.com/image/displayitem/displayitem_8ea96a48-bb2e-412e-b9a9-97f5f6e95b5c.png',
+            link:'https://www.coupang.com/np/promotion/77260' 
              }
         ],
       }
     },
+    methods:{
+      openLink(link){
+      var newWindow = window.open("about:blank");
+      newWindow.location.href = link;
+      }
+    }
   }
 </script>
 
@@ -103,5 +117,8 @@ h4{
     background-position-x: -14px;
     background-position-y: -134px;
     float: left;
+}
+.v-image__image--cover{
+  background-size: contain;
 }
 </style>

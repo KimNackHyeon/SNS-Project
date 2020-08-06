@@ -24,7 +24,7 @@
       <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:90;">
         <div @click="changeValue(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
         <div>
-          <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../assets/images/food/${food.name}.png`)"/>
+          <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
         </div>
         <div>
           {{ food.name_kor }}
@@ -50,7 +50,7 @@
                 <h5>개</h5>
             </div>
         </div>
-        <div @click="closeinputForm" style="    width: 50%;
+        <div @click="closeinputForm" style="width: 50%;
     height: 40px;
     background-color: red;
     text-align: center;
@@ -60,7 +60,7 @@
     text-shadow: 1px 1px 5px #0000004f; float:left;">
           취소
         </div>
-        <div @click="addIngradient" style="    width: 50%;
+        <div @click="addIngradient" style="width: 50%;
     height: 40px;
     background-color: rgb(160, 212, 105);
     text-align: center;
