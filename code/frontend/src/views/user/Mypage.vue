@@ -16,23 +16,73 @@
                     <span>레시피 수</span>
                     <h1>5</h1>
                   </v-col>
-                  <v-col class="myprofil-box" cols="4">
-                    <span>팔로워</span>
+                  <!-- 팔로워 -->
+                  <v-col class="myprofil-box" cols="4" @click="onFollower">
+                    <span style="color: black;">팔로워</span>
                     <h1>{{userData.follower}}</h1>
                   </v-col>
-                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray">
+                  <!-- 팔로워 dialog -->
+                  <v-dialog v-model="openFollower" scrollable width= "100%">
+                    <v-card>
+                      <v-card-title >팔로워 {{userData.follower}}명</v-card-title>
+                      <v-divider></v-divider>
+                      <v-card-text>
+                        <div class="follow" v-for="(follower, i) in followers" :key="i">
+                          <div class="userImg">
+                            <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar>
+                          </div>
+                          <div class="content">
+                            <p class="followEmail">{{follower.email}}</p>
+                            <p class="followNick">{{follower.nickname}}</p>
+                          </div>
+                        </div>
+                      </v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="black" text @click="openFollower = false">닫기</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <!-- 팔로잉 -->
+                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
                     <h1>{{userData.following}}</h1>
                   </v-col>
+                  <!-- 팔로잉 dialog -->
+                  <v-dialog v-model="openFollowing" scrollable width= "100%">
+                    <v-card>
+                      <v-card-title >팔로잉 {{userData.following}}명</v-card-title>
+                      <v-divider></v-divider>
+                      <v-card-text>
+                        <div class="follow" v-for="(following, i) in followings" :key="i">
+                          <div class="userImg">
+                            <v-avatar size="35"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                          </div>
+                          <div class="content">
+                            <p class="followEmail">{{following.email}}</p>
+                            <p class="followNick">{{following.nickname}}</p>
+                          </div>
+                          <div class="followbtn" @click="onFollowBtn(following)">
+                            <v-btn color="#a0d469" style="box-shadow: unset; color: white" v-if="!following.isfollow">팔로우</v-btn>
+                            <v-btn color="#eee" style="box-shadow: unset; color: black" v-if="following.isfollow">팔로잉</v-btn>
+                          </div>
+                        </div>
+                      </v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="black" text @click="openFollowing = false">닫기</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </v-row>
               </v-container>
             </div>
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        <div style="margin: 10px;">
-          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;">팔로우</v-btn>
-        </div>
+        
         <div class="myfeed">
           <div class="myprofil-feed">
               <div class="myprofil-text">
@@ -72,12 +122,14 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+
 // const SERVER_URL = 'http://localhost:9999/food/api'
+const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
 
 export default {
   mounted(){
@@ -95,9 +147,50 @@ export default {
         follower:"",
         following:"",
       },
+      openFollower: false,
+      followers: "",
+      openFollowing: false,
+      followings: "",
     }
   },
   methods: {
+    onFollower() {
+      if(this.openFollower==false){
+        this.openFollower = true;
+      }else{
+        this.openFollower = false
+      }
+      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
+        .then(response => {
+          console.log(response)
+
+        })
+        .catch(error =>{
+          console.log(error)
+        })
+    },
+    onFollowing() {
+      if(this.openFollowing==false){
+        this.openFollowing = true;
+      }else{
+        this.openFollowing = false
+      }
+      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
+        .then(response => {
+          console.log(response)
+          this.followings = response.data
+          console.log(this.followings)
+        })
+        .catch(error =>{
+          console.log(error)
+        })
+    },
+    onFollowBtn(following) {
+      following.isfollow = !following.isfollow
+    },
+    onFollow() {
+
+    },
     // fetchUser() {
     //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
     //   )
@@ -130,3 +223,33 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+  .v-dialog {
+    height: 70%;
+  }
+  .follow {
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+  }
+  .userImg {
+    float: left;
+    margin-right: 20px;
+  }
+  .content {
+    float: left;
+  }
+  .followEmail {
+    margin: 0 !important;
+    color: black;
+    font-weight: bold;
+  }
+  .followNick {
+    margin: 0 !important;
+  }
+  .followbtn {
+    float: right;
+    width: 50px;
+  }
+
+</style>

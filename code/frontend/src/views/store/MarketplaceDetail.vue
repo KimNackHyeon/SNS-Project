@@ -2,7 +2,7 @@
   <div style="height: 100%;">
     <!-- 메뉴바 -->
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-      <router-link to="/user/mypage">
+      <router-link to="/store/marketplace">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
@@ -95,7 +95,7 @@
       <router-link :to="{ name: 'PrivateChat', params: { privatechat }}">
       <v-btn @click="registChattingRoom()"
         color="rgb(160, 212, 105)" 
-        style="width: 100%; height: 50px; color: white; font-size: 22px;" 
+        style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
         >
         <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
         </v-btn>
@@ -110,6 +110,7 @@ const SERVER_URL = "http://127.0.0.1:9999/food";
 import store from '../../vuex/store.js'
 import axios from 'axios'
 export default {
+<<<<<<< code/frontend/src/views/store/MarketplaceDetail.vue
   data(){
     return{
       privatechat:`123`, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
@@ -133,7 +134,17 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+      const id = this.$route.params.id
+    if (id === undefined) {
+      // this.$router.push('/store/groupbuying')
+      this.$router.go(-1)
+    }
   }
+  computed: {
+    param: function() {
+      return this.$route.params
+    }
+  },
 }
 </script>
 

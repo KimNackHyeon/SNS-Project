@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Login from "./views/user/Login.vue";
 import Join from "./views/user/Join.vue";
 import Mypage from "./views/user/Mypage.vue";
+import Yourpage from "./views/user/Yourpage.vue";
 import ModifyUser from "./views/user/ModifyUser.vue";
 import SearchPassword from "./views/user/SearchPassword.vue";
 import CheckCertification from "./views/user/CheckCertification";
@@ -19,7 +20,6 @@ import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
 import PrivateChat from "./views/chat/PrivateChat.vue"
-
 
 export default [
   {
@@ -51,6 +51,11 @@ export default [
     component: Mypage,
   },
   {
+    path: "/user/yourpage",
+    name: "Yourpage",
+    component: Yourpage,
+  },
+  {
     path: "/user/modifyuser",
     name: "ModifyUser",
     component: ModifyUser,
@@ -61,7 +66,7 @@ export default [
     component: FeedMain,
   },
   {
-    path: "/feed/detail",
+    path: "/feed/:feedNo",
     name: "FeedDetail",
     component: FeedDetail,
   },
@@ -96,7 +101,7 @@ export default [
     component: PrivateChat,
   },
   {
-    path: "/store/marketplace/detail",
+    path: "/store/marketplace/:id?",
     name: "MarketPlaceDetail",
     component: MarketPlaceDetail,
   },
