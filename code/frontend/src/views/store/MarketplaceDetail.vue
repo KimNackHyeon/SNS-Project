@@ -91,28 +91,58 @@
     </div>
     <!-- 채팅 버튼 -->
     <div>
-      <v-btn 
+      <!-- <router-link to="/chat/privatechat"> -->
+      <router-link :to="{ name: 'PrivateChat', params: { privatechat }}">
+      <v-btn @click="registChattingRoom()"
         color="rgb(160, 212, 105)" 
         style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
         >
         <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
         </v-btn>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
+const SERVER_URL = "http://127.0.0.1:9999/food";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+import store from '../../vuex/store.js'
+import axios from 'axios'
 export default {
-  computed: {
-    param: function() {
-      return this.$route.params
+<<<<<<< code/frontend/src/views/store/MarketplaceDetail.vue
+  data(){
+    return{
+      privatechat:`123`, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
+      userinfo:'',
     }
   },
-  created() {
-    const id = this.$route.params.id
+  methods:{
+    registChattingRoom(){
+      console.log("hihihii")
+      axios.post(`${SERVER_URL}/chatting/`, {chatTitle:`감자교환하실분`, chatNo:this.privatechat ,email:this.userinfo.email})
+        .then(response => {
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    }
+  },
+  created(){
+    if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      const id = this.$route.params.id
     if (id === undefined) {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
+    }
+  }
+  computed: {
+    param: function() {
+      return this.$route.params
     }
   },
 }

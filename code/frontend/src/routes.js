@@ -19,7 +19,7 @@ import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
-import Yourpage from "./views/user/Yourpage.vue";
+import PrivateChat from "./views/chat/PrivateChat.vue"
 
 export default [
   {
@@ -94,6 +94,11 @@ export default [
     path: "/store/marketplace",
     name: "MarketPlace",
     component: MarketPlace,
+  },
+  {
+    path: "/chat/:privatechat",
+    name: "PrivateChat",
+    component: PrivateChat,
   },
   {
     path: "/store/marketplace/:id?",

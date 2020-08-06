@@ -5,7 +5,32 @@ import actions from './actions'
 import mutations from './mutations'
 import { dataStore } from './module'
 import createPersistedState from "vuex-persistedstate";
+import firebase from 'firebase'
 
+// Required for side-effects
+require("firebase/firestore");
+
+var firebaseConfig = {
+  apiKey: "AIzaSyCqBsuQt5GDnZgVKk3_3po64HodjyyuVWw",
+  authDomain: "disco-dispatch-246806.firebaseapp.com",
+  databaseURL: "https://disco-dispatch-246806.firebaseio.com",
+  projectId: "disco-dispatch-246806",
+  storageBucket: "disco-dispatch-246806.appspot.com",
+  messagingSenderId: "853039422287",
+  appId: "1:853039422287:web:d9337f6d9efa36ec5c433a",
+  measurementId: "G-1SFW7LE2TN"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+var db = firebase.firestore();
+
+window.db = db;
+
+db.settings({
+  timestampsInSnapshots: true
+});
 
 Vue.use(Vuex)
 

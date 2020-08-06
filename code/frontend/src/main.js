@@ -6,12 +6,15 @@ import store from "./vuex/store";
 import vuetify from "./plugins/vuetify";
 import VueCookies from "vue-cookies";
 import VueGeolocation from 'vue-browser-geolocation';
+import VueMoment from 'vue-moment'
+
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
-Vue.use(VueGeolocation)
+Vue.use(VueGeolocation);
+Vue.use(VueMoment);
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
