@@ -127,9 +127,7 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-
-// const SERVER_URL = 'http://localhost:9999/food/api'
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   mounted(){
@@ -163,7 +161,7 @@ export default {
       axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
         .then(response => {
           console.log(response)
-
+          this.followers = response.data;
         })
         .catch(error =>{
           console.log(error)
@@ -178,7 +176,16 @@ export default {
       axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
         .then(response => {
           console.log(response)
-          this.followings = response.data
+
+          response.data.forEach(following => {
+            this.followings.push({
+            nickname : following.nickname,
+            email : following.email,
+            image : following.image,
+            isfollow : true,
+          })
+          })
+
           console.log(this.followings)
         })
         .catch(error =>{
@@ -187,9 +194,35 @@ export default {
     },
     onFollowBtn(following) {
       following.isfollow = !following.isfollow
+      console.log(following);
+      // this.isfollow = !this.isfollow;
+      if(following.isfollow){
+        this.addFollow(following.email);
+      } else{
+        this.unFollow(following.email);
+      }
     },
-    onFollow() {
-
+    addFollow(yourEmail){
+      // alert('팔로우');
+      axios.post(`${SERVER_URL}/account/follow/`,
+        {
+          email : store.state.userInfo.email,
+          yourEmail : yourEmail,
+        }
+      ).then(response => {
+        this.updateList();
+      })
+    },
+    unFollow(yourEmail){
+      // alert('언팔로우');
+      axios.post(`${SERVER_URL}/account/unfollow/`,
+        {
+          email : store.state.userInfo.email,
+          yourEmail : yourEmail,
+        }
+      ).then(response => {
+        this.updateList();
+      })
     },
     // fetchUser() {
     //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
@@ -253,3 +286,4 @@ export default {
   }
 
 </style>
+
