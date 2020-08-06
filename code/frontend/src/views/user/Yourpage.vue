@@ -30,9 +30,9 @@
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        <div style="margin: 10px;" @click="onfollow">
-          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px; color: white;" v-if="!isfollow">팔로우</v-btn>
-          <v-btn color="#eee" style="width: 100%; height: 35px; color: black;" v-if="isfollow">팔로잉</v-btn>
+        <div style="margin: 10px;" @click="onFollow">
+          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;" v-if="!isfollow">팔로우</v-btn>
+          <v-btn color="#EEE" style="width: 100%; height: 35px;" v-if="isfollow">팔로잉</v-btn>
         </div>
         
         <div class="myrecipe">
@@ -87,21 +87,51 @@ export default {
     }
   },
   methods: {
-    // fetchUser() {
-    //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
-    //   )
-    //     .then(response => {
-    //       console.log(response)
-    //       this.userData = response.data
-    //     })
-    //     .catch(error => {
-    //       console.log(error.response)
-    //     })
-    // }
-    onfollow() {
-      this.isfollow = !this.isfollow
-      
+    onFollow(){
+      this.isfollow = !this.isfollow;
+      if(this.isfollow){
+        this.addFollow();
+      } else{
+        this.unFollow();
+      }
+    },
+    addFollow(){
+      alert('팔로우');
+      axios.post(`${SERVER_URL}/account/follow/`,
+        {
+          email : store.state.userInfo.email,
+          yourEmail : this.$route.params.email
+        }
+      ).then(response => {
+        this.updateList();
+      })
+    },
+    unFollow(){
+      alert('언팔로우');
+      axios.post(`${SERVER_URL}/account/unfollow/`,
+        {
+          email : store.state.userInfo.email,
+          yourEmail : this.$route.params.email
+        }
+      ).then(response => {
+        this.updateList();
+      })
+    },
+    updateList(){
+      axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+        .then(response => {
+          console.log(response);
+          this.userData.nickname = response.data.nickname;
+          this.userData.image = response.data.image;
+          this.userData.following = response.data.following;
+          this.userData.follower = response.data.follower;
+          console.log(this.userData.follower+" "+this.userData.following);
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
+    
   },
   created() {
       axios.get(`${SERVER_URL}/account/isfollow/`,

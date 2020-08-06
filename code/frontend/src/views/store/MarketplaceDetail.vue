@@ -2,7 +2,7 @@
   <div style="height: 100%;">
     <!-- 메뉴바 -->
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-      <router-link to="/user/mypage">
+      <router-link to="/store/marketplace">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
@@ -103,7 +103,18 @@
 
 <script>
 export default {
-
+  computed: {
+    param: function() {
+      return this.$route.params
+    }
+  },
+  created() {
+    const id = this.$route.params.id
+    if (id === undefined) {
+      // this.$router.push('/store/groupbuying')
+      this.$router.go(-1)
+    }
+  },
 }
 </script>
 

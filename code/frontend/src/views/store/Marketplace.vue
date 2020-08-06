@@ -41,43 +41,31 @@
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <router-link to="/store/marketplace/detail">
-              <v-col cols="12">
+            <v-col v-for="(info, i) in market" :key="i" cols="12">
+              <router-link :to="`/store/marketplace/${ info.id }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                      <v-img height="105" width="105" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">계란</v-card-text>
-                      <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 덕명동</v-card-text>
+                      <v-img height="105" width="105" padding="60" :src="info.picture" style="border-radius: 5px;"></v-img>
+                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.food }}</v-card-text>
+                      <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text>
                     </v-col>
                     <v-col cols="5" class="text-center" style="padding: 0;">
                       <v-row class="pa-0">
                         <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
                       </v-row>
-                      <v-row class="pa-0 ma-1">
+                      <v-row class="pa-0 ma-1" v-for="(infos, j) in info.exchange" :key="j">
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="infos.my_icon"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">2개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 13px;">{{ infos.my_cnt }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/onion.png"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="infos.your_icon"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">3개당</v-card-text>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/potato.png"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 13px;">{{ infos.your_cnt }}개</v-card-text>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -90,158 +78,14 @@
                           <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
                         </v-col>
                         <v-col cols="12" class="pa-1 text-center">
-                          <span class="text-center pa-0" style="font-size: 18px; color: red;">187.3</span>
+                          <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
                           <span class="text-center pa-0" style="font-size: 18px;">원</span>
                         </v-col>
                       </v-row>
                     </v-col>
                   </v-row>
                 </v-card>
-              </v-col>
-            </router-link>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row style="padding: 0; margin: 0;">
-                  <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                    <v-img height="105" width="105" padding="60"  src="../../assets/images/store/potato.png" style="border-radius: 5px;"></v-img>
-                    <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">감자</v-card-text>
-                    <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 덕명동</v-card-text>
-                  </v-col>
-                  <v-col cols="5" class="text-center" style="padding: 0;">
-                    <v-row class="pa-0">
-                      <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
-                    </v-row>
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/potato.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/sweetpotato.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1.5개</v-card-text>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
-                      </v-col>
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="12" class="pa-1 text-center">
-                        <span class="text-center pa-0" style="font-size: 18px; color: red;">980.1</span>
-                        <span class="text-center pa-0" style="font-size: 18px;">원</span>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row style="padding: 0; margin: 0;">
-                  <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                    <v-img height="105" width="105" padding="60"  src="../../assets/images/store/onion.png" style="border-radius: 5px;"></v-img>
-                    <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">양파</v-card-text>
-                    <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 봉명동</v-card-text>
-                  </v-col>
-                  <v-col cols="5" class="text-center" style="padding: 0;">
-                    <v-row class="pa-0">
-                      <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
-                    </v-row>
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/onion.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">2개</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/onion.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/potato.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
-                      </v-col>
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="12" class="pa-1 text-center">
-                        <span class="text-center pa-0" style="font-size: 18px; color: red;">495.0</span>
-                        <span class="text-center pa-0" style="font-size: 18px;">원</span>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row style="padding: 0; margin: 0;">
-                  <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                    <v-img height="105" width="105" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                    <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">계란</v-card-text>
-                    <v-card-text class="text-center" style="padding: 0; font-size: 9px;">대전광역시 유성구 덕명동</v-card-text>
-                  </v-col>
-                  <v-col cols="5" class="text-center" style="padding: 0;">
-                    <v-row class="pa-0">
-                      <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
-                    </v-row>
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/egg.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">5개당</v-card-text>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-img height="30" width="30" class="ma-0 pa-0" src="../../assets/images/store/icons/vanilla.png"></v-img>
-                      </v-col>
-                      <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                        <v-card-text class="pa-0" style="font-size: 13px;">1개</v-card-text>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
-                    <v-row class="pa-0 ma-1">
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
-                      </v-col>
-                      <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                        <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
-                      </v-col>
-                      <v-col cols="12" class="pa-1 text-center">
-                        <span class="text-center pa-0" style="font-size: 18px; color: red;">187.3</span>
-                        <span class="text-center pa-0" style="font-size: 18px;">원</span>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
+              </router-link>
             </v-col>
           </v-row>
         </div>
@@ -266,6 +110,80 @@ export default {
       switched:true,
       userinfo:'',
       show:false,
+      market: [
+        {
+          id: 1,
+          picture: "http://localhost:8080/img/egg.b0f12e35.png",
+          food: '계란',
+          address: '대전광역시 유성구 덕명동',
+          exchange: [
+            {
+              my_icon: 'http://localhost:8080/img/egg.4082cc2d.png',
+              your_icon: 'http://localhost:8080/img/onion.981ae9c7.png',
+              my_cnt: '2',
+              your_cnt: '1'
+            },
+            {
+              my_icon: 'http://localhost:8080/img/egg.4082cc2d.png',
+              your_icon: 'http://localhost:8080/img/potato.32622784.png',
+              my_cnt: '3',
+              your_cnt: '1'
+            },
+          ],
+          price: '187.3'
+        },
+        {
+          id: 2,
+          picture: 'http://localhost:8080/img/potato.717377a0.png',
+          food: '감자',
+          address: '대전광역시 유성구 덕명동',
+          exchange: [
+            {
+              my_icon: 'http://localhost:8080/img/potato.32622784.png',
+              your_icon: 'data:image/png;base64,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',
+              my_cnt: '2',
+              your_cnt: '1'
+            },
+          ],
+          price: '980.1'
+        },
+        {
+          id: 3,
+          picture: 'http://localhost:8080/img/onion.c1585269.png',
+          food: '양파',
+          address: '대전광역시 유성구 봉명동',
+          exchange: [
+            {
+              my_icon: 'http://localhost:8080/img/onion.981ae9c7.png',
+              your_icon: 'http://localhost:8080/img/egg.4082cc2d.png',
+              my_cnt: '1',
+              your_cnt: '2'
+            },
+            {
+              my_icon: 'http://localhost:8080/img/onion.981ae9c7.png',
+              your_icon: 'http://localhost:8080/img/potato.32622784.png',
+              my_cnt: '1',
+              your_cnt: '1'
+            },
+          ],
+          price: '495.0'
+        },
+        {
+          id: 4,
+          picture: 'http://localhost:8080/img/egg.b0f12e35.png',
+          food: '계란',
+          address: '대전광역시 유성구 덕명동',
+          exchange: [
+            {
+              my_icon: 'http://localhost:8080/img/egg.4082cc2d.png',
+              your_icon: 'http://localhost:8080/img/vanilla.d3b9f946.png',
+              my_cnt: '5',
+              your_cnt: '1'
+            },
+          ],
+          price: '187.3'
+        },
+      ]
     }
   },
   methods:{

@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyRef;
 import com.web.curation.repo.FollowRepo;
@@ -216,6 +219,80 @@ public class AccountController {
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
+	@GetMapping("/account/yourpage/{email}")
+	@ApiOperation(value = "상대 페이지 보기")
+	public ResponseEntity<Map> showyourpage(@PathVariable String email) {
+//		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		Member member = memberRepo.getUserByEmail(email);
+		Long following = followRepo.countByEmail(email);
+		Long follower = followRepo.countByYourEmail(email);
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("nickname", member.getNickname());
+		map.put("img", member.getImage());
+		map.put("following", following);
+		map.put("follower", follower);
+		// 게시글 수 추가
+
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/isfollow/")
+	@ApiOperation(value = "팔로우 인지 아닌지 검색")
+	public ResponseEntity<Boolean> isFollow(@RequestParam String email, @RequestParam String yourEmail) {
+		Optional<Follow> fOpt = followRepo.findUserByEmailAndYourEmail(email, yourEmail);
+
+		boolean result = fOpt.isPresent();
+		return new ResponseEntity<Boolean>(fOpt.isPresent(), HttpStatus.OK);
+	}
+
+	@GetMapping("/account/follow/")
+	@ApiOperation(value = "팔로워 탐색")
+	public List<Member> followList(@RequestParam String email) {
+		List<Follow> list = followRepo.findByYourEmail(email);
+		List<Member> followList = new ArrayList<Member>();
+
+		for (Follow f : list) {
+			Member member = memberRepo.getUserByEmail(f.getEmail());
+			followList.add(member);
+		}
+
+		return followList;
+	}
+
+	@GetMapping("/account/following/")
+	@ApiOperation(value = "팔로잉 탐색")
+	public List<Member> followingList(@RequestParam String email) {
+
+		List<Follow> list = followRepo.findByEmail(email);
+		List<Member> followingList = new ArrayList<Member>();
+
+		for (Follow f : list) {
+			Member member = memberRepo.getUserByEmail(f.getEmail());
+			followingList.add(member);
+		}
+
+		return followingList;
+	}
+	
+	@PostMapping("/account/follow/")
+	@ApiOperation(value = "팔로우 추가")
+	public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
+		
+		System.out.println(follow);
+		followRepo.save(follow);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@PostMapping("/account/unfollow/")
+	@ApiOperation(value = "팔로우 삭제")
+	public ResponseEntity<String> unFollow(@RequestBody Follow follow) {
+		Optional<Follow> fOpt = followRepo.findUserByEmailAndYourEmail(follow.getEmail(), follow.getYourEmail());
+		System.out.println(follow);
+		followRepo.delete(fOpt.get());
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
 	@PostMapping("/account/emailconfirm")
 	@ApiOperation(value = "이메일 인증하기")
 	public Object emailconfirm(@RequestBody Member member) {
@@ -265,16 +342,15 @@ public class AccountController {
 
 	@PostMapping("/account/upload")
 	@ApiOperation(value = "프로필사진 업로드")
-	public Object upload(@RequestParam MultipartFile image, @RequestParam String email) throws IllegalStateException, IOException {
+	public Object upload(@RequestParam MultipartFile image, @RequestParam String email)
+			throws IllegalStateException, IOException {
 		System.out.println("UPLOAD =======================");
 		String filename = image.getOriginalFilename(); // 파일 이름
 		System.out.println(filename);
 		Member member = memberRepo.getUserByEmail(email); // 폴더명
 //		String filepath = "/image/" + member.getNo() + "/profile";// 폴더 상대 경로
 		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
-		
-		
-		
+
 		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
 		System.out.println(path); // 상대경로
 		File folder = new File(path);
@@ -290,8 +366,8 @@ public class AccountController {
 		} else {
 			System.out.println("폴더가 이미 존재");
 		}
-		image.transferTo(new File(path+"/"+filename));
-		String result = "/img/"+ member.getNo() +"/profile/"+ filename;
+		image.transferTo(new File(path + "/" + filename));
+		String result = "/img/" + member.getNo() + "/profile/" + filename;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

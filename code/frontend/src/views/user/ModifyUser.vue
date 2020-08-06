@@ -77,8 +77,8 @@ import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 export default {
   data() {
     return {
@@ -164,7 +164,7 @@ export default {
       axios.post(`${SERVER_URL}/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
       .then(data => {
         console.log(data.data.data)
-        if (data.data.data == "1") {
+        if (data.data.data == "1" && this.userinfo.nickname != this.newUserInfo.newNickname) {
           console.log('중복')
           this.nickErrMsg = true;
         } else {

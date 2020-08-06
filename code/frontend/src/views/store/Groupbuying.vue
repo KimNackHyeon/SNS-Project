@@ -38,7 +38,7 @@
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="buy in buying" :key="buy" :buyings="buying" cols="12">
+            <v-col v-for="buy in buying" :key="buy" cols="12">
               <router-link :to="`/store/groupbuying/${ buy.id }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
@@ -129,9 +129,6 @@ export default {
       ]
     }
   },
-  props: {
-
-  }
 }
 </script>
 

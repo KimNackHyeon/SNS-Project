@@ -19,6 +19,7 @@ import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
+import Yourpage from "./views/user/Yourpage.vue";
 
 export default [
   {
@@ -95,7 +96,7 @@ export default [
     component: MarketPlace,
   },
   {
-    path: "/store/marketplace/detail",
+    path: "/store/marketplace/:id?",
     name: "MarketPlaceDetail",
     component: MarketPlaceDetail,
   },

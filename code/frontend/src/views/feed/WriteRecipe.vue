@@ -1,7 +1,7 @@
 <template>
 <div style="height:100%; width:100%;">
-    <div style="width:100%; height:80px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); text-align:center; margin-bottom:-9px; ">
-          <div style="width:100%; height:50%">
+    <div style="width:100%; height:120px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); text-align:center; margin-bottom:-9px; ">
+          <div style="width:100%; height:34%">
             <router-link to="/feed/main">
                 <div style="width:50px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
                     <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
@@ -13,8 +13,33 @@
             <div style="width:40px; height:100%; float:left; ">
             </div>
           </div>
-          <div style="width:100%; height:50%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
+          <div style="width:100%; height:34%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
             <textarea placeholder="제목" style="width:100%; height:100%; paddng:5px; text-align:center; font-size:19px; font-weight:700; resize: none; overflow:hidden;"  v-model="title"></textarea>
+          </div>
+          <div style="width:100%; height:32%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden;">
+          <div style="height: 100%;">
+         <v-container style="max-height:30px;min-height:13px; padding:0px;">
+            <v-combobox
+              v-model="tags"
+              :hide-no-data="!search"
+              :search-input.sync="search"
+              hide-selected
+              label="tags"
+              multiple
+              small-chips
+              deletable-chips
+              solo
+              dense
+              
+            >
+            </v-combobox>
+          </v-container>
+        <div style="overflow: hidden;">
+          <v-btn icon>
+            <v-icon class="right-icon">mdi-magnify</v-icon>
+          </v-btn>
+        </div>
+      </div>  
           </div>
         </div><!-- end of head -->
     
@@ -28,9 +53,9 @@
         <search-food @addfood="addFood"></search-food>
       </div>
     </div>
-    <div class="carousel-container" style="height:480px; width:100%;">
+    <div class="carousel-container" style="height:430px; width:100%;">
     <div class="carousel-slide" style="display: flex; overflow: hidden; margin-left:11px;">
-  <div v-for="(img,index) in items" :key="index" style="width:300px; height:450px; margin:20px; margin-top:20px; box-shadow: #80808066 1px 1px 8px; float:left;">
+  <div v-for="(img,index) in items" :key="index" style="width:300px; height:400px; margin:20px; margin-top:20px; box-shadow: #80808066 1px 1px 8px; float:left;">
     <div style="width:300px; height:300px; margin:auto;">
       <div @click="deleteRecipe(index)" style="position:fixed; width:30px; height:30px; margin-left:270px;"><v-icon size="30px">mdi-close</v-icon></div>
         <div v-if="img.imageUrl == null" style="width:100%; height:100%; background-color:#e0e0e0d9;">
@@ -43,7 +68,7 @@
             <img style="width:300px; height:300px;"  :src="img.imageUrl" />
         </div>
     </div>
-    <div style="width:300px; height:150px; border-top: 1px solid #80808063;">
+    <div style="width:300px; height:100px; border-top: 1px solid #80808063;">
         <textarea style="width:100%; height:100%" v-model="items[index].desc" placeholder="레시피를 적어보세요."></textarea>
     </div>
 </div>
@@ -54,7 +79,7 @@
 
 </div> <!-- end of carousel-slide -->
 </div> <!-- end of carousel-container -->
-<div style="height: 45px;
+<div @click="whiteReciptComplete" style="height: 45px;
     width: 100%;
     background-color: rgb(160,212,105); text-align:center; padding:5px;">
 <h3>레시피 등록</h3>
@@ -80,8 +105,25 @@ export default {
   components:{searchFood},
   name: 'imageUpload',
   userinfo:'',
+  activator: null,
+      attach: null,
+      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+      editing: null,
+      index: -1,
+  items: [
+        { header: 'Select an option or create one' },
+        {
+          text: 'Foo',
+          color: 'blue',
+        },
+        {
+          text: 'Bar',
+          color: 'red',
+        },
+      ],
   data() {
     return {
+      search: null,
       title:'',
       item:{
           //...
@@ -90,8 +132,6 @@ export default {
       },
       foodlist:'',
       tags:[
-        {tag:'한식'},
-        {tag:'베이킹'}
       ],
         items:[
         {    //...작성자, 재료, 글작성 일, items, tag,제목
@@ -102,6 +142,26 @@ export default {
       ],
     }
   },
+   watch: {
+      model (val, prev) {
+        if (val.length === prev.length) return
+
+        this.model = val.map(v => {
+          if (typeof v === 'string') {
+            v = {
+              text: v,
+              color: this.colors[this.nonce - 1],
+            }
+
+            this.items.push(v)
+
+            this.nonce++
+          }
+
+          return v
+        })
+      },
+    },
   methods: {
     addFood(foodlist){
       alert(foodlist);
@@ -156,6 +216,27 @@ export default {
     deleteRecipe(index){
       this.items.splice(index);
     },
+    edit (index, item) {
+        if (!this.editing) {
+          this.editing = item
+          this.index = index
+        } else {
+          this.editing = null
+          this.index = -1
+        }
+      },
+      filter (item, queryText, itemText) {
+        if (item.header) return false
+
+        const hasValue = val => val != null ? val : ''
+
+        const text = hasValue(itemText)
+        const query = hasValue(queryText)
+
+        return text.toString()
+          .toLowerCase()
+          .indexOf(query.toString().toLowerCase()) > -1
+      },
     whiteReciptComplete(){
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
@@ -166,11 +247,12 @@ export default {
       const recipe = {  //...작성자, 재료, 글작성 일, items, tag,제목
         title: this.title,
         author : this.userinfo.email,
-        food : this.ingradient,
+        food : this.foodlist,
         recipes : this.items,
         tags : this.tags,
 
       }
+      console.log(recipe);
       axios
         .post(`${SERVER_URL}/feed/write`,recipe)
         .then((response)=>{
@@ -203,7 +285,7 @@ export default {
     background-color: white;
     position: fixed;
     z-index: 101;
-    margin-top: 12px;
+        margin-top: -29px;
     display:none;
 }
 
@@ -218,7 +300,9 @@ export default {
     /* margin-left: auto; */
     margin-top: -362px;
 }
-
+.v-input__control{
+  min-height: 13px;
+}
 .toRightBtn{
   width: 50px;
     height: 50px;
@@ -257,7 +341,7 @@ export default {
 }
 .plusBtnArea{
     width: 240px;
-    height: 450px;
+    height: 400px;
     margin: 20px;
     margin-right: 149px;
     float: left;

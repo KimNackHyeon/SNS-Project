@@ -82,9 +82,7 @@
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        <!-- <div style="margin: 10px;">
-          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;" @click="onFollow">팔로우</v-btn>
-        </div> -->
+        
         <div class="myfeed">
           <div class="myprofil-feed">
               <div class="myprofil-text">
