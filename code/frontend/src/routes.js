@@ -89,7 +89,7 @@ export default [
     component: MarketPlace,
   },
   {
-    path: "/store/marketplace/detail",
+    path: "/store/marketplace/:id?",
     name: "MarketPlaceDetail",
     component: MarketPlaceDetail,
   },
