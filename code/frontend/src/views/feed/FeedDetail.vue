@@ -93,8 +93,8 @@
 import $ from 'jquery'
 import axios from "axios"
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+// const SERVER_URL = "http://127.0.0.1:9999/food/api";
+const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 
 export default {
   data() {

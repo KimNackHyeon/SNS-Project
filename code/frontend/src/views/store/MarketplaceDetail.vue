@@ -93,7 +93,7 @@
     <div>
       <v-btn 
         color="rgb(160, 212, 105)" 
-        style="width: 100%; height: 50px; color: white; font-size: 22px;" 
+        style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
         >
         <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
         </v-btn>
