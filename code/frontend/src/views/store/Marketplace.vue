@@ -100,7 +100,7 @@ import $ from 'jquery'
 // const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
 const SERVER_URL = 'http://localhost:9999/food'
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 export default {
   data() {
@@ -187,6 +187,7 @@ export default {
     }
   },
   methods:{
+    ...mapMutations(['setMapOtherUserInfo']),
     search(){
       if($('.searchBox').css('display')=='none'){
         $('.searchBox').css('display','unset');
@@ -214,6 +215,10 @@ export default {
         .then(response => {
           this.tradelist = response.data.list
           console.log(this.tradelist)
+          // this.mapOtherUserInfo = store.state.mapOtherUserInfo
+          // this.mapOtherUserInfo.address = this.tradelist[0].address
+          // this.mapOtherUserInfo.food = this.tradelist[0].myfood
+          // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
           console.log(error.response)
@@ -225,6 +230,10 @@ export default {
         .then(response => {
           this.tradelist = response.data.list
           console.log(this.tradelist)
+          // this.mapOtherUserInfo = store.state.mapOtherUserInfo
+          // this.mapOtherUserInfo.address = this.tradelist[0].address
+          // this.mapOtherUserInfo.food = this.tradelist[0].myfood
+          // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
           console.log(error.response)
@@ -234,23 +243,35 @@ export default {
     }
   },
 created() {
-      if(store.state.kakaoUserInfo.email != null){
-        this.userinfo = store.state.kakaoUserInfo;
-      }else{
-        this.userinfo = store.state.userInfo;
+  if(store.state.kakaoUserInfo.email != null){
+    this.userinfo = store.state.kakaoUserInfo;
+  }else{
+    this.userinfo = store.state.userInfo;
+  }
+  axios.get(`${SERVER_URL}/trade/`)
+    .then(response => {
+      this.tradelist = response.data.list
+      console.log(this.tradelist)
+      console.log(this.mapOtherUserInfo.address)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+          store.state.mapOtherUserInfo.food.push(this.tradelist[i].myfood)
+        }
+        console.log('good')
+        console.log(store.state.mapOtherUserInfo)
       }
-      axios.get(`${SERVER_URL}/trade/`)
-        .then(response => {
-          this.tradelist = response.data.list
-          console.log(this.tradelist)
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
   },
   updated(){
     
-  }
+  },
+  computed: {
+    ...mapState(['mapOtherUserInfo']),
+  },
 }
 </script>
 
