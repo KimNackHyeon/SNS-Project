@@ -62,9 +62,23 @@ export default new Vuex.Store({
       nickname: null,
       address: null,
       profile_image_url: '/img/ref_close.748290f9.png',
+    },
+    mapOtherUserInfo: {
+      address: [],
+      food: [],
     }
   },
   mutations: {
+    confirmPwd(state, data){
+      state.confirm = data;
+    },
+    userEmail(state, data) {
+      state.pwd = data;
+    },
+    setMapOtherUserInfo(state, data){
+      state.mapOtherUserInfo.address.push(data);
+      state.mapOtherUserInfo.food.push(data);
+    },
     setUserInfo(state, userinfo) {
       state.userInfo.email = userinfo.email;
       state.userInfo.password = userinfo.password;
@@ -100,7 +114,7 @@ export default new Vuex.Store({
       state.kakaoUserInfo.nickname = kakaoModifyResult.newNickname;
       state.kakaoUserInfo.profile_image_url = kakaoModifyResult.newImgUrl;
       state.kakaoUserInfo.address = kakaoModifyResult.newAddress;
-    }
+    },
   },
   getters,
   actions,
