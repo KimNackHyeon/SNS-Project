@@ -3,7 +3,7 @@
     <div v-for="(feedData, i) in feedDatas" :key="i">
       <div class="feed-profil">
         <div class="feed-user">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
+          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" @click="moveUser(feedData.email)"></v-avatar>
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
@@ -57,7 +57,7 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
+            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content">
             <div>
@@ -116,6 +116,7 @@ export default {
             var data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
+              email : d.email,
               islike: false,
               isscrap: false,
               openComment: false,
@@ -131,6 +132,7 @@ export default {
                 var comment = { // 피드에 해당하는 하나의 댓글
                   img : '',
                   nickname : c.nickname,
+                  email : c.email,
                   content : c.comment,
                   created_at : c.create_date,
                 }
@@ -220,6 +222,13 @@ export default {
       //     console.log(error.response);
       //   });
     },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    }
   },
 };
 </script>

@@ -15,18 +15,47 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "Follow")
 public class Follow {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
-	
+
 	@NotEmpty
 	private String email;
-	
+
 	@NotEmpty
 	private String yourEmail;
-	
+
 	public Follow() {
 	}
-	
+
+	public Long getNo() {
+		return no;
+	}
+
+	public void setNo(Long no) {
+		this.no = no;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getYourEmail() {
+		return yourEmail;
+	}
+
+	public void setYourEmail(String yourEmail) {
+		this.yourEmail = yourEmail;
+	}
+
+	@Override
+	public String toString() {
+		return "Follow [no=" + no + ", email=" + email + ", yourEmail=" + yourEmail + "]";
+	}
+
 }
