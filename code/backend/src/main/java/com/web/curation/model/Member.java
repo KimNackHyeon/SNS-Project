@@ -17,7 +17,6 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 import java.time.LocalDateTime;
 
 @Data
@@ -33,13 +32,13 @@ public class Member {
 
 	@NotEmpty
 	private String password;
-	
+
 	@NotEmpty
 	private String nickname;
-	
+
 	@NotEmpty
 	private String address;
-	
+
 	@Column
 	private String image;
 
@@ -47,10 +46,10 @@ public class Member {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@CreationTimestamp
 	private LocalDateTime create_date;
-	
+
 	public Member() {
 	};
-	
+
 	public Member(@NotEmpty String email, @NotEmpty String password, String nickname, String address) {
 		super();
 		this.email = email;
@@ -107,10 +106,18 @@ public class Member {
 		this.create_date = create_date;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
-				+ ", address=" + address + ", create_date=" + create_date + "]";
+				+ ", address=" + address + ", image=" + image + ", create_date=" + create_date + "]";
 	}
-	
+
 }
