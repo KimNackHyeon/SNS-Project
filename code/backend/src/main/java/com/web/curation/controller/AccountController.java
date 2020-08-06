@@ -268,7 +268,7 @@ public class AccountController {
 		List<Member> followingList = new ArrayList<Member>();
 
 		for (Follow f : list) {
-			Member member = memberRepo.getUserByEmail(f.getEmail());
+			Member member = memberRepo.getUserByEmail(f.getYourEmail());
 			followingList.add(member);
 		}
 
