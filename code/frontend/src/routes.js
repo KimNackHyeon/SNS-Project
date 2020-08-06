@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Login from "./views/user/Login.vue";
 import Join from "./views/user/Join.vue";
 import Mypage from "./views/user/Mypage.vue";
+import Yourpage from "./views/user/Yourpage.vue";
 import ModifyUser from "./views/user/ModifyUser.vue";
 import SearchPassword from "./views/user/SearchPassword.vue";
 import CheckCertification from "./views/user/CheckCertification";
@@ -65,7 +66,7 @@ export default [
     component: FeedMain,
   },
   {
-    path: "/feed/detail",
+    path: "/feed/:feedNo",
     name: "FeedDetail",
     component: FeedDetail,
   },
