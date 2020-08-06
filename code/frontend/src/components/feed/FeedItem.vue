@@ -7,7 +7,7 @@
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
-          <router-link :to="{name : 'FeedDetail',params:{feedNo : feedData.no}}">
+          <router-link :to="{name : 'FeedDetail', params:{feedNo : feedData.no}}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
@@ -60,11 +60,13 @@
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content">
-            <div>
-              <p class="commentUser">{{comment.nickname}}</p>
-              <span>{{comment.comment}}</span>
-            </div>
-            <!-- <span style="font-size: 12px">{{comment.created_at}}</span> -->
+            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;">{{comment.nickname}}</p>
+            <span>{{comment.comment}}</span>
+          </div>
+          <div style="float: right; width: 10%" v-if="comment.email===userInfo.email">
+            <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
+              <v-icon size="18px">mdi-trash-can-outline</v-icon>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -86,6 +88,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data: () => {
     return {
+      userInfo: "",
       feedDatas: [],
       imgNumber: "",
       inputComment: '',
@@ -154,12 +157,28 @@ export default {
               })
             })
 
-            this.feedDatas.push(data); // 피드 데이터 저장
+          axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
+          .then(response => {
+            // console.log(response);
+            response.data.forEach(c =>{
+              var comment = { // 피드에 해당하는 하나의 댓글
+                img : '',
+                nickname : c.nickname,
+                email: c.email,
+                content : c.comment,
+                created_at : c.create_date,
+              }
+              data.comments.push(c);
+            })
           })
+
+          this.feedDatas.push(data); // 피드 데이터 저장
         })
-        .catch((error) => {
-          console.log(error.response);
-        });
+        console.log(this.feedDatas)
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   },
   methods: {
     countItem(i) {
@@ -193,6 +212,14 @@ export default {
           feedData.comments.push(comment);
         }
         // 댓글 input 초기화 해주기
+      })
+    },
+    // 댓글 삭제하기
+    deleteComment(feedData_id, comment) {
+      this.feedDatas.forEach(feedData => {
+        if (feedData.no == feedData_id) {
+          feedData.comments.splice(feedData.comments.indexOf(comment), 1);
+        }
       })
     },
     likedbtn(feedData_id) {
@@ -271,12 +298,11 @@ export default {
 }
 .userImg {
   float: left;
-  margin-right: 10px;
   width: 10%;
 }
 .content {
   float: left;
-  width: 85%;
+  width: 80%;
 }
 .commentUser {
   margin-bottom: 0 !important;

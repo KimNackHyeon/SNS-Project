@@ -96,7 +96,7 @@
 import $ from 'jquery'
 import axios from 'axios'
 import store from '../../vuex/store.js'
-import searchFood from '../searchFood.vue'
+import searchFood from '../Food/searchFood.vue'
 
 const SERVER_URL = store.state.SERVER_URL;
 

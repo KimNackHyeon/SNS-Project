@@ -1,5 +1,8 @@
 <template>
   <div class="rootContainer">
+      <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none;">
+          <get-one-food @addfood="addFood"></get-one-food>
+      </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
         <div id="insideRef">
             <div id="justMove" class="F1" style="display:none; position:fixed;">
@@ -26,7 +29,7 @@
         <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra_kor}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea">
-                <div class="longNameBox">{{Nowgra_kor}}</div> <input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+                <div class="longNameBox">{{Nowgra_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
             </div>
             <div class="textArea" style="height:24px; padding:0px;">
                 <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra_kor}}</div>와 교환할 재료
@@ -42,8 +45,9 @@
             </div>
                 <div class="changeFood">
                     <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
-                <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5> <input type="text" v-model="nowCgradient" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;">
-                <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5>
+                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="font-size:10px;float:left">개당</h5> 
+                    <button type="button" @click="getFood" class="setFood" style="float:left;"></button>
+                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="font-size:10px;float:left">개</h5>
                 
                 </div>
                 <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
@@ -53,8 +57,8 @@
             </div>
             <div class="textArea">
                 <h4>판매가격</h4>
-                <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;">
-                <h5 style="float:left">개당</h5><input type="text" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
+                <input type="text" v-model="nowSellAmount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;">
+                <h5 style="float:left">개당</h5><input type="text" v-model="nowSellPrice" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
             </div>
             
             <div style="width:100%; height:33px;">
@@ -107,13 +111,15 @@
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:scroll;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll;">
            <div class="textArea" v-for="food in changeFoods" :key="food">
-                    <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
+           
            </div>
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
-            <button type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
+            <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
         
         </div>
   </div>
@@ -127,8 +133,10 @@ import store from '../../vuex/store.js'
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
+    components:{getOneFood},
 data() {
     return {
+        totalShareAmount:1, //공유하고싶은 총 량
       userinfo:'',
       Nowgra:'',
         Nowgra_kor : '',
@@ -137,9 +145,11 @@ data() {
       menu: false,
       modal: false,
       menu2: false,
-      nowmyamount:0,
-    nowCgradient:'',
-    nowCamount:0,
+      nowmyamount:1, //교환할 재료 밑의 '개당'전의 숫자
+    nowCgradient:'', //교환하고싶은 재료 '개당'후의 버튼 값
+    nowCamount:1, //교환하고 싶은 재료 양
+    nowSellAmount:1,
+    nowSellPrice:0,
     intoFood:'egg',
       foods:[
             {gradient:"egg",gra_kor:"계란fkfkfkfk"},
@@ -159,6 +169,14 @@ data() {
     }
   },
     methods:{
+        getFood:function(){
+            $('.selectfood').css('display','block');
+        },
+        addFood:function(food){
+            this.nowCgradient = food.name_kor;
+            $('.selectfood').css('display','none');
+            $('.setFood').text(food.name_kor);
+        },
             openregistMater: function () {
                 this.closeShare();
                 $('.registMaterial').css('display','unset');
@@ -173,6 +191,7 @@ data() {
                alert(src);
                 return src;
             },
+            
             openShare:function(nowfood,index){
                 this.closeregistMater();
                 this.Nowgra_kor = nowfood.gra_kor;
@@ -196,23 +215,55 @@ data() {
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
-                this.changeFoodsTemp.push({
-                    Mygradient:this.Nowgra_kor,
-                    myamount:this.nowmyamount,
-                    Cgradient:this.nowCgradient,
-                    Camount:this.nowCamount
-                })
+                var sum = 0;
+                if(this.nowmyamount>=1){
+                    if(this.Nowgra_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                        if(this.nowmyamount>this.totalShareAmount){
+                            alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                        this.nowmyamount = this.totalShareAmount;
+                    }else{
+                        var sellPrice = Number(this.nowSellPrice);
+                        var sellAmount = Number(this.nowSellAmount);
+                        this.changeFoodsTemp.push({
+                            Mygradient:this.Nowgra_kor,
+                            myamount:this.nowmyamount,
+                            Cgradient:this.nowCgradient,
+                            Camount:this.nowCamount,
+                            pricePerOne:(sellPrice/sellAmount),
+                            })
+                            this.nowmyamount = 1;
+                            this.nowCgradient = '';
+                            $('.setFood').text("");
+                            this.nowCamount = 1;
+                    }
+                }else{
+                    alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
+                }
+                }else{
+                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
+                }
             },
             ShareComplete:function(){
-                this.closeShare();
-                var shareMotion = 'share'+(this.NowClassNum+1);
-                $('#justMove').addClass(shareMotion);
-                for(var i=0; i<this.changeFoodsTemp.length;i++){
-                    this.changeFoods.push(this.changeFoodsTemp[i]);
-                    this.changeFoodsTemp = [];
+                if(this.totalShareAmount>0){
+                    if(this.changeFoodsTemp.length==0){
+                        alert("교환하고 싶은 음식이 없습니다.")
+                    }else{
+                        if(this.nowSellAmount>=1 && this.nowSellPrice>0){
+                            this.closeShare();
+                            var shareMotion = 'share'+(this.NowClassNum+1);
+                            $('#justMove').addClass(shareMotion);
+                            for(var i=0; i<this.changeFoodsTemp.length;i++){
+                                this.changeFoods.push(this.changeFoodsTemp[i]);
+                                this.changeFoodsTemp = [];
+                            }
+                        }else{
+                            alert("판매가격을 적어주세요.")
+                        }
+                    }
+                }else{
+                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
                 }
-                },
-                
+            },
             openCheckBasket:function(){
                 if($('.checkBasket').css('display')=='none'){
                     $('.checkBasket').css('display','unset');
@@ -227,6 +278,19 @@ data() {
             },
             deleteShareList:function(index){
                 this.changeFoodsTemp.splice(index,1);
+            },
+            shareFinish:function(){
+                const shareList = this.changeFoods;
+                console.log(shareList);
+                axios
+                .post(`${SERVER_URL}/MyRef/share`,shareList)
+                .then((response)=>{
+                    console.log(response);
+                    this.$router.push("/");
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                })
             }
     },
     created() {
@@ -249,6 +313,17 @@ data() {
 </script>
 
 <style>
+.setFood{
+    background-color: gray;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); 
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color:black;
+    float: left;
+    width: 38px;
+    height: 24px;
+    overflow: hidden;
+}
 .longNameBox{
     width: 67px;
     height: 30px;
