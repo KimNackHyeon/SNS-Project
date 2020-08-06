@@ -13,7 +13,7 @@
       </div>
     </div>
     <div style="text-align: center; border-bottom: 1px solid lightgray; padding: 5px 0;">
-      <h4>♡감자가 좋아♡ {{ param }}</h4>
+      <h4>♡감자가 좋아♡</h4>
     </div>
     <div style="overflow: hidden; border-bottom: 1px solid lightgray">
       <div style="float: left;">

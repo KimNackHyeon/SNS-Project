@@ -62,8 +62,7 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
-const SERVER_URL = 'http://localhost:9999/food/api'
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   // mounted(){
@@ -96,7 +95,7 @@ export default {
       }
     },
     addFollow(){
-      alert('팔로우');
+      // alert('팔로우');
       axios.post(`${SERVER_URL}/account/follow/`,
         {
           email : store.state.userInfo.email,
@@ -107,7 +106,7 @@ export default {
       })
     },
     unFollow(){
-      alert('언팔로우');
+      // alert('언팔로우');
       axios.post(`${SERVER_URL}/account/unfollow/`,
         {
           email : store.state.userInfo.email,
@@ -122,7 +121,7 @@ export default {
         .then(response => {
           console.log(response);
           this.userData.nickname = response.data.nickname;
-          this.userData.image = response.data.image;
+          this.userData.image = response.data.img;
           this.userData.following = response.data.following;
           this.userData.follower = response.data.follower;
           console.log(this.userData.follower+" "+this.userData.following);
@@ -152,7 +151,7 @@ export default {
         .then(response => {
           console.log(response);
           this.userData.nickname = response.data.nickname;
-          this.userData.image = response.data.image;
+          this.userData.image = response.data.img;
           this.userData.following = response.data.following;
           this.userData.follower = response.data.follower;
           console.log(this.userData.follower+" "+this.userData.following);

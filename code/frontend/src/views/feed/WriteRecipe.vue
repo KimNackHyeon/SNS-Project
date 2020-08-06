@@ -98,7 +98,7 @@ import axios from 'axios'
 import store from '../../vuex/store.js'
 import searchFood from '../searchFood.vue'
 
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   thisPage:1,
@@ -244,20 +244,37 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      const recipe = {  //...작성자, 재료, 글작성 일, items, tag,제목
-        title: this.title,
-        author : this.userinfo.email,
-        food : this.foodlist,
-        recipes : this.items,
-        tags : this.tags,
 
+      const feedData = {
+        title : this.title,
+        email : this.userinfo.email,
+        nickname : this.userinfo.nickname,
+        likecount : 0,
       }
-      console.log(recipe);
+
+      const recipe = {  //...작성자, 재료, 글작성 일, items, tag,제목
+        feedData : feedData, // 피드에 대한 정보
+        food : this.foodlist, // 재료 정보
+        recipes : this.items, // 이미지, 내용
+        tags : this.tags, // 태그
+      }
+
+      var formData = new FormData();
+      formData.append("feedData", feedData); // 피드에 대한 정보
+      formData.append("food",this.foodlist); // 재료 정보
+      formData.append("recipes",this.items); // 재료 정보
+      formData.append("tags",this.tags); // 재료 정보
+
+      console.log(formData);
       axios
-        .post(`${SERVER_URL}/feed/write`,recipe)
+        .post(`${SERVER_URL}/feed/write`,formData,{
+          headers:{
+            'Content-Type' : 'multipart/form-data'
+          }
+        })
         .then((response)=>{
           console.log(response);
-          this.$router.push("/feed/view");
+          // this.$router.push("/feed/view");
         })
         .catch((error)=>{
           console.log(error.response);

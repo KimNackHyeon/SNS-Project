@@ -3,7 +3,7 @@
     <div v-for="(feedData, i) in feedDatas" :key="i">
       <div class="feed-profil">
         <div class="feed-user">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" @click="moveUser(feedData.email)"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
@@ -81,8 +81,7 @@ import $ from 'jquery';
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data: () => {
@@ -117,11 +116,26 @@ export default {
               no: d.no,
               nickname : d.nickname,
               email : d.email,
+              profile : d.profile,
               islike: false,
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [],
+              items: [
+            {
+              src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+            },
+            {
+              src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+            },
+            {
+              src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+            },
+            {
+              src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+            },
+          ],
+
               comments:[],
             }
 

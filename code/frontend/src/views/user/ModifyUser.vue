@@ -77,8 +77,8 @@ import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
+
 export default {
   data() {
     return {
