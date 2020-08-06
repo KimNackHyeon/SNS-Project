@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
-import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.repo.CommentRepo;
 import com.web.curation.repo.MyBoardRepo;
@@ -100,15 +100,15 @@ public class FeedController {
 	}
 
 	@ApiOperation(value = "피드 등록")
-	@PostMapping("/feed/registerfeed")
-	public ResponseEntity<String> registerFeed(@RequestBody MyBoard myBoard) {
-		System.out.println(myBoard);
-		if (myBoard.getEmail() != null) {
-			myboardRepo.save(myBoard);
+	@PostMapping("/feed/write")
+	public ResponseEntity<String> registerFeed(@RequestParam Object feedData) {
+		System.out.println(feedData.toString());
+//		if (feeddata != null) {
+//			myboardRepo.save(myBoard);
 			return new ResponseEntity<String>("success", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+//		} else {
+//			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
 	}
 
 }

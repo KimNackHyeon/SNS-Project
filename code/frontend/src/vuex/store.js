@@ -34,6 +34,9 @@ db.settings({
 
 Vue.use(Vuex)
 
+// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api';
+const SERVER_URL = 'http://localhost:9999/food'
+
 const state = {
     isUser: false,
 }
@@ -49,6 +52,8 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
+    SERVER_URL : 'http://i3b301.p.ssafy.io:9999/food/api',
+    // SERVER_URL : 'http://localhost:9999/food/api',
     kakaoUserInfo:{
       email:'',
       nickname:'',

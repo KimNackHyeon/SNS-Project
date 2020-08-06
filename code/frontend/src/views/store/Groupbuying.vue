@@ -43,7 +43,7 @@
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                      <img height="80" width="80" padding="60" :src="'../../assets/images/store/' + buy.picture" style="border-radius: 5px;">
+                      <img height="80" width="80" padding="60" :src="buy.picture" style="border-radius: 5px;">
                     </v-col>
                     <v-col cols="6" class="text-left pl-2" style="padding: 0;">
                       <v-card-text style="padding: 0;">{{ buy.title }}</v-card-text>
@@ -80,7 +80,7 @@ export default {
       buying: [
         {
           id: 1,
-          picture: 'onion.png',
+          picture: '/img/onion.c1585269.png',
           title: '양파 필요하신분',
           food: '양파',
           address: '대전광역시 유성구 덕명동',
@@ -89,7 +89,7 @@ export default {
         },
         {
           id: 2,
-          picture: 'potato.png',
+          picture: '/img/potato.717377a0.png',
           title: '♡감자가 좋아♡',
           food: '감자',
           address: '대전광역시 유성구 덕명동',
@@ -98,7 +98,7 @@ export default {
         },
         {
           id: 3,
-          picture: 'onion.png',
+          picture: '/img/onion.c1585269.png',
           title: '양파 급하게 필요하신 분만!',
           food: '양파',
           address: '대전광역시 유성구 덕명동',
@@ -107,7 +107,7 @@ export default {
         },
         {
           id: 4,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '한밭대 달걀 공구',
           food: '달걀',
           address: '대전광역시 유성구 덕명동',
@@ -116,7 +116,7 @@ export default {
         },
         {
           id: 5,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '달걀 도매 구매',
           food: '달걀',
           address: '대전광역시 유성구 봉명동',
@@ -125,7 +125,7 @@ export default {
         },
         {
           id: 6,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '달걀 도매 구매',
           food: '달걀',
           address: '대전광역시 유성구 봉명동',

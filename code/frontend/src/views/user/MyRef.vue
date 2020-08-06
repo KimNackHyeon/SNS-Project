@@ -126,12 +126,12 @@
 </template>
 
 <script>
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 import $ from 'jquery';
 import axios from "axios";
 import store from '../../vuex/store.js'
-import getOneFood from '../Food/getOneFood.vue'
+
+const SERVER_URL = store.state.SERVER_URL;
+
 export default {
     components:{getOneFood},
 data() {
