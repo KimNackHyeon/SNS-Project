@@ -163,7 +163,7 @@ export default {
       axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
         .then(response => {
           console.log(response)
-
+          this.followers = response.data
         })
         .catch(error =>{
           console.log(error)
