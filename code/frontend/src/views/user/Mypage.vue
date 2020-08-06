@@ -30,9 +30,7 @@
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        <div style="margin: 10px;">
-          <v-btn color="rgb(160, 212, 105)" style="width: 100%; height: 35px;">팔로우</v-btn>
-        </div>
+        
         <div class="myfeed">
           <div class="myprofil-feed">
               <div class="myprofil-text">
@@ -76,8 +74,8 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
-// const SERVER_URL = 'http://localhost:9999/food/api'
+// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = 'http://localhost:9999/food/api'
 
 export default {
   mounted(){
