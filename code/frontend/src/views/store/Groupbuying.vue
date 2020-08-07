@@ -36,14 +36,14 @@
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow: scroll; height: 504px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="buy in buying" :key="buy" cols="12">
               <router-link :to="`/store/groupbuying/${ buy.id }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                      <img height="80" width="80" padding="60" :src="'../../assets/images/store/' + buy.picture" style="border-radius: 5px;">
+                      <img height="80" width="80" padding="60" :src="buy.picture" style="border-radius: 5px;">
                     </v-col>
                     <v-col cols="6" class="text-left pl-2" style="padding: 0;">
                       <v-card-text style="padding: 0;">{{ buy.title }}</v-card-text>
@@ -59,6 +59,12 @@
               </router-link>
             </v-col>
           </v-row>
+          <router-link to="/feed/write">
+            <div class="writeButton">
+              <v-icon color="white">mdi-lead-pencil</v-icon>
+              <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+            </div>
+          </router-link>
         </div>
       </v-container>
     </v-card>
@@ -74,7 +80,7 @@ export default {
       buying: [
         {
           id: 1,
-          picture: 'onion.png',
+          picture: '/img/onion.c1585269.png',
           title: '양파 필요하신분',
           food: '양파',
           address: '대전광역시 유성구 덕명동',
@@ -83,7 +89,7 @@ export default {
         },
         {
           id: 2,
-          picture: 'potato.png',
+          picture: '/img/potato.717377a0.png',
           title: '♡감자가 좋아♡',
           food: '감자',
           address: '대전광역시 유성구 덕명동',
@@ -92,7 +98,7 @@ export default {
         },
         {
           id: 3,
-          picture: 'onion.png',
+          picture: '/img/onion.c1585269.png',
           title: '양파 급하게 필요하신 분만!',
           food: '양파',
           address: '대전광역시 유성구 덕명동',
@@ -101,7 +107,7 @@ export default {
         },
         {
           id: 4,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '한밭대 달걀 공구',
           food: '달걀',
           address: '대전광역시 유성구 덕명동',
@@ -110,7 +116,7 @@ export default {
         },
         {
           id: 5,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '달걀 도매 구매',
           food: '달걀',
           address: '대전광역시 유성구 봉명동',
@@ -119,7 +125,7 @@ export default {
         },
         {
           id: 6,
-          picture: 'egg.png',
+          picture: '/img/egg.b0f12e35.png',
           title: '달걀 도매 구매',
           food: '달걀',
           address: '대전광역시 유성구 봉명동',
@@ -132,6 +138,19 @@ export default {
 }
 </script>
 
-<style>
-  
+<style scoped>
+.writeButton{
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  /* margin-top: 466px; */
+  /* margin-left: 284px; */
+  background-color: rgb(147 203 88);
+  z-index: 90;
+  border-radius: 30px;
+  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+  text-align: center;
+  padding-top: 7px;;
+}
+
 </style>
