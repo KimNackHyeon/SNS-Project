@@ -45,9 +45,9 @@
             </div>
                 <div class="changeFood">
                     <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
-                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="font-size:10px;float:left">개당</h5> 
+                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:18px; height:24px; padding-left:2px;"><h5 style="font-size:10px;float:left">개당</h5> 
                     <button type="button" @click="getFood" class="setFood" style="float:left;"></button>
-                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="font-size:10px;float:left">개</h5>
+                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:18px; height:24px; margin-left:4px;"><h5 style="font-size:10px;float:left">개</h5>
                 
                 </div>
                 <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
@@ -108,11 +108,11 @@
         </div><!-- end of 채우기 -->
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
-            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:scroll;">공유 바구니</div>
+            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll;">
            <div class="textArea" v-for="food in changeFoods" :key="food">
-                <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
-                <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
+                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
            
            </div>
            </div>
@@ -320,7 +320,7 @@ data() {
     border-radius: 4px;
     color:black;
     float: left;
-    width: 38px;
+    width: 33px;
     height: 24px;
     overflow: hidden;
 }
@@ -378,11 +378,11 @@ data() {
     display:none;
 }
 .checkBasket{
-    width: 143px;
+    width: 200px;
     height: 226px;
     background-color: white;
     position: fixed;
-    margin-left: 212px;
+    margin-left: 152px;
     margin-top: 168px;
     box-shadow: 1px 3px 15px #8080806b;
     display: none;
@@ -399,7 +399,7 @@ h5{
     background-color: #f5f5f5;
     border-radius: 4px;
     color:black;
-    width:60px;
+    width:30px;
     height:60px;
     padding:4px;
 
@@ -485,7 +485,7 @@ margin-left: 15px;
     margin-top: 372px;
 }
 .changeFood{
-    height:30px;
+    height:38px;
     border-bottom: 1px solid #8080802e;
     padding: 3px;
 }
