@@ -110,7 +110,6 @@ const SERVER_URL = "http://127.0.0.1:9999/food";
 import store from '../../vuex/store.js'
 import axios from 'axios'
 export default {
-<<<<<<< code/frontend/src/views/store/MarketplaceDetail.vue
   data(){
     return{
       privatechat:`123`, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
@@ -139,7 +138,7 @@ export default {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
-  }
+  },
   computed: {
     param: function() {
       return this.$route.params

@@ -29,7 +29,7 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar>
+                            <v-avatar size="35"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
                             <p class="followEmail">{{follower.email}}</p>
@@ -176,15 +176,18 @@ export default {
       axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
         .then(response => {
           console.log(response)
-
-          response.data.forEach(following => {
-            this.followings.push({
-            nickname : following.nickname,
-            email : following.email,
-            image : following.image,
-            isfollow : true,
+          this.followings = response.data
+          this.followings.forEach(following => {
+            this.$set(following, 'isfollow', true)
           })
-          })
+          // response.data.forEach(following => {
+          //   this.followings.push({
+          //   nickname : following.nickname,
+          //   email : following.email,
+          //   image : following.image,
+          //   isfollow : true,
+          // })
+          // })
 
           console.log(this.followings)
         })
