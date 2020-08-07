@@ -10,7 +10,7 @@
     <div style="overflow: scroll; height: 540px; ">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right;">
@@ -92,9 +92,9 @@
 <script>
 import $ from 'jquery'
 import axios from "axios"
+import store from '../../vuex/store.js'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -144,6 +144,7 @@ export default {
             this.feedData = { // 하나의 피드 데이터
               no: response.data.no,
               nickname : response.data.nickname,
+              profile : response.data.profile,
               content: response.data.content,
               title: response.data.title,
               items: [],

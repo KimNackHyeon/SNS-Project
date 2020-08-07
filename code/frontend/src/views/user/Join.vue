@@ -224,9 +224,9 @@ import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import store from '../../vuex/store.js'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   name: 'App',
