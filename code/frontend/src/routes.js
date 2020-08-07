@@ -64,11 +64,11 @@ export default [
     name: "FeedMain",
     component: FeedMain,
   },
-  {
-    path: "/feed/:feedNo",
-    name: "FeedDetail",
-    component: FeedDetail,
-  },
+  // {
+  //   path: "/feed/:feedNo",
+  //   name: "FeedDetail",
+  //   component: FeedDetail,
+  // },
   {
     path: "/components",
     name: "Components",
@@ -128,5 +128,10 @@ export default [
     path:"/feed/write",
     name : "WriteRecipe",
     component : WriteRecipe
+  },
+  {
+    path: "/feed/detail",
+    name: "FeedDetail",
+    component: FeedDetail,
   },
 ];

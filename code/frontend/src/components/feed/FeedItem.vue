@@ -7,7 +7,7 @@
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
-          <router-link :to="{name : 'FeedDetail', params:{feedNo : feedData.no}}">
+          <router-link to="/feed/detail">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
