@@ -29,7 +29,7 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar>
+                            <v-avatar size="35"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
                             <p class="followEmail">{{follower.email}}</p>
@@ -176,15 +176,18 @@ export default {
       axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
         .then(response => {
           console.log(response)
-
-          response.data.forEach(following => {
-            this.followings.push({
-            nickname : following.nickname,
-            email : following.email,
-            image : following.image,
-            isfollow : true,
+          this.followings = response.data
+          this.followings.forEach(following => {
+            this.$set(following, 'isfollow', true)
           })
-          })
+          // response.data.forEach(following => {
+          //   this.followings.push({
+          //   nickname : following.nickname,
+          //   email : following.email,
+          //   image : following.image,
+          //   isfollow : true,
+          // })
+          // })
 
           console.log(this.followings)
         })
@@ -223,6 +226,21 @@ export default {
       ).then(response => {
         this.updateList();
       })
+    },
+    updateList(){
+      // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      axios.get(`${SERVER_URL}/account/yourpage/`+ this.userinfo.email)
+        .then(response => {
+          console.log(response);
+          this.userData.nickname = response.data.nickname;
+          this.userData.image = response.data.img;
+          this.userData.following = response.data.following;
+          this.userData.follower = response.data.follower;
+          console.log(this.userData.follower+" "+this.userData.following);
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     },
     // fetchUser() {
     //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email

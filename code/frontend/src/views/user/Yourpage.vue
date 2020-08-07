@@ -8,7 +8,6 @@
             <div class="myprofil">
               <div style="margin: 10px">
                 <h2 class="user-name">{{userData.nickname}}</h2>
-                <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
                 <v-row class="myprofil-boxes" no-gutters>
@@ -29,7 +28,8 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar>
+                            <v-avatar size="35"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                            <!-- <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar> -->
                           </div>
                           <div class="content">
                             <p class="followEmail">{{follower.email}}</p>
@@ -117,17 +117,11 @@ import store from '../../vuex/store.js'
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
-  // mounted(){
-  //     if(store.state.kakaoUserInfo.email != null){
-  //       this.userinfo = store.state.kakaoUserInfo;
-  //     }else{
-  //       this.userinfo = store.state.userInfo;
-  //     }
-  //   },
   data() {
     return {
       userinfo:'',
       userData:{
+        email: '',
         nickname:'',
         image:'',
         recipe:"",
@@ -141,6 +135,8 @@ export default {
       followings: "",
     }
   },
+  mounted(){
+    },
   methods: {
     onFollow(){
       this.isfollow = !this.isfollow;
@@ -173,7 +169,8 @@ export default {
       })
     },
     updateList(){
-      axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      axios.get(`${SERVER_URL}/account/yourpage/`+ this.userData.email)
         .then(response => {
           console.log(response);
           this.userData.nickname = response.data.nickname;
@@ -192,13 +189,14 @@ export default {
       }else{
         this.openFollower = false
       }
-      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
+      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userData.email}})
         .then(response => {
           console.log(response)
           this.followers = response.data
         })
         .catch(error =>{
           console.log(error)
+          console.log('에러')
         })
     },
     onFollowing() {
@@ -207,7 +205,7 @@ export default {
       }else{
         this.openFollowing = false
       }
-      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
+      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userData.email}})
         .then(response => {
           console.log(response)
           this.followings = response.data
@@ -237,6 +235,7 @@ export default {
       axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
         .then(response => {
           console.log(response);
+          this.userData.email = this.$route.params.email;
           this.userData.nickname = response.data.nickname;
           this.userData.image = response.data.img;
           this.userData.following = response.data.following;
@@ -249,3 +248,31 @@ export default {
   },
 }
 </script>
+<style scoped>
+  .v-dialog {
+    height: 70%;
+  }
+  .follow {
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+  }
+  .userImg {
+    float: left;
+    margin-right: 20px;
+  }
+  .content {
+    float: left;
+  }
+  .followEmail {
+    margin: 0 !important;
+    color: black;
+    font-weight: bold;
+  }
+  .followNick {
+    margin: 0 !important;
+  }
+  .followbtn {
+    float: right;
+    width: 50px;
+  }
+</style>

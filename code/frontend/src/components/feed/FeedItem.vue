@@ -7,7 +7,7 @@
           <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
-          <router-link to="/feed/detail">
+          <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
@@ -141,21 +141,6 @@ export default {
 
               comments:[],
             }
-
-            axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
-            .then(response => {
-              // console.log(response);
-              response.data.forEach(c =>{
-                var comment = { // 피드에 해당하는 하나의 댓글
-                  img : '',
-                  nickname : c.nickname,
-                  email : c.email,
-                  content : c.comment,
-                  created_at : c.create_date,
-                }
-                data.comments.push(c);
-              })
-            })
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {

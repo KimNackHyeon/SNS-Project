@@ -15,7 +15,7 @@
     "babel-preset-env": "^1.7.0",
     "core-js": "^3.4.3",
     "email-validator": "^2.0.4",
-    "firebase": "^7.17.1",
+    "firebase": "^7.17.2",
     "jquery": "^3.5.1",
     "local-lib": "^0.1.0",
     "moment": "^2.27.0",
