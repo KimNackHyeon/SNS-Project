@@ -34,8 +34,8 @@ db.settings({
 
 Vue.use(Vuex)
 
-// const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api';
-const SERVER_URL = 'http://localhost:9999/food'
+const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api';
+// const SERVER_URL = 'http://localhost:9999/ qfood'
 
 const state = {
     isUser: false,
