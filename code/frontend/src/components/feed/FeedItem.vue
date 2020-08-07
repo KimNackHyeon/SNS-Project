@@ -267,6 +267,7 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
+        console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     }
