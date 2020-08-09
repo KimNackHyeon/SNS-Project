@@ -63,7 +63,7 @@ export default {
             console.log('ok')
             for (var r = 0; r < result.length; r++) {
               var data = result[r];
-              bounds.extend(new kakao.maps.LatLng(data.y, data.x));
+              bounds.extend(new kakao.maps.LatLng(data.y - 50, data.x - 50));
             }
             this.map.setBounds(bounds);
             var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 

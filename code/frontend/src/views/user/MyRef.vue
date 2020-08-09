@@ -134,7 +134,7 @@ import getOneFood from '../Food/getOneFood.vue'
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
-    components:{getOneFood},
+    // components:{getOneFood},
 data() {
     return {
         totalShareAmount:1, //공유하고싶은 총 량
