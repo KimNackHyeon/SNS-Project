@@ -227,6 +227,21 @@ export default {
         this.updateList();
       })
     },
+    updateList(){
+      // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      axios.get(`${SERVER_URL}/account/yourpage/`+ this.userinfo.email)
+        .then(response => {
+          console.log(response);
+          this.userData.nickname = response.data.nickname;
+          this.userData.image = response.data.img;
+          this.userData.following = response.data.following;
+          this.userData.follower = response.data.follower;
+          console.log(this.userData.follower+" "+this.userData.following);
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
     // fetchUser() {
     //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
     //   )

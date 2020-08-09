@@ -179,16 +179,23 @@ export default {
       }
       this.nowFood = food.name;
     },
-    onCommentBtn(feedData_id) {
+    onCommentBtn() {
       // 댓글 추가기능
-      this.comments.push({
-          img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-          name: "Sara12", 
-          content: this.comment,
-          created_at: "2020-07-28 17:59"
-        },)
-      // 댓글 input 초기화 해주기
-      this.comment = ""
+      var comment = {
+        img: store.state.userInfo.profile_image_url, 
+        nickname: store.state.userInfo.nickname,
+        email:store.state.userInfo.email,
+        feedNo: this.$route.params.feedNo,
+        comment: this.comment
+      }
+      console.log(comment);
+      axios.post(`${SERVER_URL}/feed/register`,comment)
+      .then(response=>{
+        console.log(response);
+        this.comment = "";
+      })
+
+      this.feedData.comments.push(comment);
     },
   }
 }
