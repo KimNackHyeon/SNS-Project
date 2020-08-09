@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/trade")
+@RequestMapping("/api/trade")
 public class TradeController {
 	@Autowired
 	private TradeRepo tradeRepo;

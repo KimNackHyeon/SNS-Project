@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiResponses;
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/chatting")
+@RequestMapping("/api/chatting")
 public class ChatController {
 	@Autowired
 	ChatRepo chatRepo;
