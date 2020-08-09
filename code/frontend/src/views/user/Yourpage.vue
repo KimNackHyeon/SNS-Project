@@ -8,7 +8,6 @@
             <div class="myprofil">
               <div style="margin: 10px">
                 <h2 class="user-name">{{userData.nickname}}</h2>
-                <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
                 <v-row class="myprofil-boxes" no-gutters>
