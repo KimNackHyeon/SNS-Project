@@ -14,7 +14,7 @@
       temporary
       absolute
       width=320px
-      style="z-index: 100;"
+      style=" z-index: 300;"
     >
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
@@ -163,8 +163,9 @@ display: inline-block;
     margin-top: 15px;
 }
 .circlePhoto{
-    width: 100%;
-    height:100%;
+    width: 60px;
+    height: 60px;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 .grayLine{
