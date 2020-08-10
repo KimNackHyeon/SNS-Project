@@ -100,7 +100,6 @@ public class AccountController {
 		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
 		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
 		if (!myrefList.isEmpty()) {
-			System.out.println("hihi");
 			map.put("myreflist", myrefList);
 			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {

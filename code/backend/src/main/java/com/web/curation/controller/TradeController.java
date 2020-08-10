@@ -67,7 +67,7 @@ public class TradeController {
 		ArrayList<Trade> resultList = new ArrayList<Trade>();
 		for (Trade trade : tradelist) {
 			for (MyRef myref : mylist) {
-				String myfood = myref.getFood();
+				String myfood = myref.getName();
 				if(trade.getTradefood1().equals(myfood) || trade.getTradefood2().equals(myfood)) {
 					resultList.add(trade);
 				}
