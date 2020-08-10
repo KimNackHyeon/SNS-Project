@@ -84,22 +84,22 @@
         <!-- 팔로우 버튼 -->
         
         <div class="myfeed">
-          <div class="myprofil-feed">
+          <button class="myprofil-feed" @click="scrapOff">
               <div class="myprofil-text">
                 <img src="../../assets/images/pencil.png" alt="my recipe">
                 <!-- <i class="fas fa-pencil-alt fa-lg"></i> -->
                 <h3>내가 쓴 글</h3>
               </div>
-          </div>
-          <div class="myprofil-scrap">
+          </button>
+          <button class="myprofil-scrap" @click="scrapOn">
             <div class="myprofil-text">
               <img src="../../assets/images/bookmark.png" alt="scrap">
               <!-- <i class="far fa-bookmark"></i> -->
               <h3>스크랩한 글</h3>
             </div>
-          </div>
+          </button>
         </div>
-        <div class="myrecipe">
+        <div class="myrecipe" v-if="!myscrap">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
             <div class="myrecipe-img">
@@ -113,6 +113,14 @@
             </div>
             <div class="myrecipe-img">
               <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            </div>
+          </div>
+        </div>
+        <div class="myrecipe" v-if="myscrap">
+          <h3 class="myrecipe-title">내 스크랩</h3>
+          <div class="myrecipe-body">
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
             </div>
           </div>
         </div>
@@ -140,6 +148,7 @@ export default {
   data() {
     return {
       userinfo:'',
+      myscrap: false,
       userData:{
         recipe:"",
         follower:"",
@@ -253,6 +262,12 @@ export default {
     //       console.log(error.response)
     //     })
     // }
+    scrapOn(){
+      this.myscrap = true
+    },
+    scrapOff(){
+      this.myscrap = false
+    },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){
