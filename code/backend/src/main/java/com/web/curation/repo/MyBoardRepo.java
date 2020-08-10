@@ -15,4 +15,6 @@ public interface MyBoardRepo extends JpaRepository<MyBoard, Long> {
 	List<MyBoard> findAll();
 
 	Optional<MyBoard> findMyBoardByNo(Long feedNo);
+
+	MyBoard findTopByOrderByNoDesc();
 }

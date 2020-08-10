@@ -114,8 +114,11 @@ export default {
   mounted(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
-          response.data.forEach(d =>{
-            var data = { // 하나의 피드 데이터
+          console.log(response);
+            var data = {};
+
+          response.data.feedlist.forEach(d =>{
+            data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
               email : d.email,
@@ -144,16 +147,16 @@ export default {
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
-            // console.log(response);
+            console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
-                img : '',
+                img : c.img,
                 nickname : c.nickname,
                 email: c.email,
                 content : c.comment,
                 created_at : c.create_date,
               }
-              data.comments.push(c);
+              data.comments.push(comment);
             })
           })
 

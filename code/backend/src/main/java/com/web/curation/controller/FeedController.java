@@ -1,6 +1,12 @@
 package com.web.curation.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,9 +24,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
+import com.web.curation.model.FeedData;
+import com.web.curation.model.Food;
+import com.web.curation.model.FormWrapper;
+import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
+import com.web.curation.model.Tag;
 import com.web.curation.repo.CommentRepo;
+import com.web.curation.repo.FeedDataRepo;
+import com.web.curation.repo.FoodRepo;
+import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.TagRepo;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -43,20 +59,40 @@ public class FeedController {
 	@Autowired
 	CommentRepo commentRepo;
 
+	@Autowired
+	TagRepo tagRepo;
+
+	@Autowired
+	FoodRepo foodRepo;
+
+	@Autowired
+	MemberRepo memberRepo;
+	
+	@Autowired
+	FeedDataRepo feedDataRepo;
+
 	@ApiOperation(value = "피드 전체 불러오기")
 	@GetMapping("/feed/searchAll")
-	public ResponseEntity<List> searchAll() {
+	public ResponseEntity<Map> searchAll() {
 
-		List<MyBoard> list = myboardRepo.findAll();
+		Map<String,List> map = new HashMap<>();
+		
+		List<MyBoard> feedlist = myboardRepo.findAll();
+		List<Tag> taglist = tagRepo.findAll();
+		List<FeedData> datalist = feedDataRepo.findAll();
+		
+		map.put("feedlist", feedlist);
+		map.put("taglist", taglist);
+		map.put("datalist", datalist);
 
-		for (MyBoard myBoard : list) {
-			System.out.println(myBoard);
-		}
+//		for (MyBoard myBoard : feedlist) {
+//			System.out.println(myBoard);
+//		}
 
-		if (!list.isEmpty()) {
-			return new ResponseEntity<List>(list, HttpStatus.OK);
+		if (!feedlist.isEmpty()) {
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<List>(list, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Map>(map, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -99,17 +135,98 @@ public class FeedController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "피드 등록")
-	@PostMapping("/feed/write")
-	public ResponseEntity<String> registerFeed(@RequestParam Object feedData) {
-		System.out.println(feedData.toString());
+	@ApiOperation(value = "피드 정보 등록")
+	@PutMapping("/feed/write")
+	public ResponseEntity<String> registerFeed(@RequestBody FormWrapper data) {
+//		System.out.println(data);
+		MyBoard feedData = data.getFeedData();
+		Food[] food = data.getFood();
+		String[] tags = data.getTags();
+		String[] contents = data.getContents();
+		String[] images = data.getImages();
+
+		System.out.println(feedData);
+		System.out.println(Arrays.toString(contents));
+		System.out.println(Arrays.toString(images));
+
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
+		if(images.length == 0)
+			return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+		/* 피드 정보 등록 */
+		myboardRepo.save(feedData);
 		
-//		if (feeddata != null) {
-//			myboardRepo.save(myBoard);
-			return new ResponseEntity<String>("success", HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
+		System.out.println(feedNo);
+		/* 피드 재료 등록 */
+		for (Food f : food) {
+			f.setFeedNo(feedNo);
+			foodRepo.save(f);
+		}
+		System.out.println(Arrays.toString(food));
+		/* 피드 태그 등록 */
+		for (int i = 0; i < tags.length; i++) {
+			Tag tag = new Tag(feedNo,tags[i]);
+			tagRepo.save(tag);
+		}
+		System.out.println(Arrays.toString(tags));
+		
+		/* 피드 내용, 이미지 등록 */
+		for (int index = 0; index < contents.length; index++) {
+			String content = contents[index];
+			String imgurl = images[index];
+			FeedData feed = new FeedData();
+			feed.setFeedNo(feedNo);
+			feed.setTindex((long)index);
+			feed.setContent(content);
+			feed.setImg(imgurl); 
+			feedDataRepo.save(feed);
+		}
+
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "피드 이미지 등록")
+	@PostMapping("/feed/img")
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images) throws IllegalStateException, IOException {
+
+		List<String> imgList = new ArrayList<String>();
+		
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
+		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
+
+		for (MultipartFile mfile : images) {
+			String imgurl = upload(mfile, feedNo, email);
+			imgList.add(imgurl);
+		}
+
+		return new ResponseEntity<List>(imgList, HttpStatus.OK);
+	}
+
+	public String upload(MultipartFile image, Long feedNo, String email) throws IllegalStateException, IOException {
+		System.out.println("UPLOAD =======================");
+		System.out.println(image);
+		String filename = image.getOriginalFilename(); // 파일 이름
+		System.out.println(filename);
+		Member member = memberRepo.getUserByEmail(email); // 폴더명
+		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/" + feedNo + "/";// 폴더 상대 경로
+
+		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
+		System.out.println(path); // 상대경로
+		File folder = new File(path);
+
+		if (!folder.exists()) {
+			try {
+				folder.mkdirs(); // 폴더 생성
+				System.out.println("폴더가 생성");
+
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("폴더가 이미 존재");
+		}
+		image.transferTo(new File(path + filename));
+		String result = "/img/" + member.getNo() + "/" + feedNo + "/" + filename;
+		return result;
 	}
 
 }

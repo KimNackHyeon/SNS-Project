@@ -20,10 +20,16 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
 
-	@NotEmpty
+	private Long feedNo;
+
 	private String tagName;
 
 	public Tag() {
+	}
+
+	public Tag(Long feedNo, String tagName) {
+		this.tagName = tagName;
+		this.feedNo = feedNo;
 	}
 
 	public Long getNo() {
@@ -42,9 +48,17 @@ public class Tag {
 		this.tagName = tagName;
 	}
 
+	public Long getFeedNo() {
+		return feedNo;
+	}
+
+	public void setFeedNo(Long feedNo) {
+		this.feedNo = feedNo;
+	}
+
 	@Override
 	public String toString() {
-		return "Tag [no=" + no + ", tagName=" + tagName + "]";
+		return "Tag [no=" + no + ", feedNo=" + feedNo + ", tagName=" + tagName + "]";
 	}
 
 }
