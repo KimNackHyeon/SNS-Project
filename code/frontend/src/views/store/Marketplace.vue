@@ -230,9 +230,9 @@ export default {
         .then(response => {
           this.tradelist = response.data.list
           console.log(this.tradelist)
-          // this.mapOtherUserInfo = store.state.mapOtherUserInfo
-          // this.mapOtherUserInfo.address = this.tradelist[0].address
-          // this.mapOtherUserInfo.food = this.tradelist[0].myfood
+          this.mapOtherUserInfo = store.state.mapOtherUserInfo
+          this.mapOtherUserInfo.address = this.tradelist[0].address
+          this.mapOtherUserInfo.food = this.tradelist[0].myfood
           // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
@@ -245,9 +245,9 @@ export default {
         .then(response => {
           this.tradelist = response.data.list
           console.log(this.tradelist)
-          // this.mapOtherUserInfo = store.state.mapOtherUserInfo
-          // this.mapOtherUserInfo.address = this.tradelist[0].address
-          // this.mapOtherUserInfo.food = this.tradelist[0].myfood
+          this.mapOtherUserInfo = store.state.mapOtherUserInfo
+          this.mapOtherUserInfo.address = this.tradelist[0].address
+          this.mapOtherUserInfo.food = this.tradelist[0].myfood
           // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
@@ -268,14 +268,6 @@ created() {
     .then(response => {
       this.tradelist = response.data.list
       console.log(this.tradelist)
-      // console.log(this.mapOtherUserInfo.address)
-      if (this.mapOtherUserInfo.address.length === 0) {
-        for (var i = 0; i < this.tradelist.length; i++) {
-          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
-          store.state.mapOtherUserInfo.food.push(this.tradelist[i].myfood)
-        }
-        // console.log(store.state.mapOtherUserInfo)
-      }
     })
     .catch(error => {
       console.log(error.response)
