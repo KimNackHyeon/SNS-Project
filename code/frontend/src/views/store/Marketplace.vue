@@ -41,31 +41,45 @@
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="(info, i) in market" :key="i" cols="12">
-              <router-link :to="`/store/marketplace/${ info.id }`">
+            <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
+              <router-link :to="`/store/marketplace/${ info.no }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                      <v-img height="105" width="105" padding="60" :src="info.picture" style="border-radius: 5px;"></v-img>
-                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.food }}</v-card-text>
+                      <v-img height="105" width="105" padding="60" :src="info.imgUrl" style="border-radius: 5px;"></v-img>
+                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.myfood }}</v-card-text>
                       <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text>
                     </v-col>
                     <v-col cols="5" class="text-center" style="padding: 0;">
                       <v-row class="pa-0">
                         <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
                       </v-row>
-                      <v-row class="pa-0 ma-1" v-for="(infos, j) in info.exchange" :key="j">
+                      <v-row class="pa-0 ma-1">
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="infos.my_icon"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.myfood"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ infos.my_cnt }}개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 13px;">1개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="infos.your_icon"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.tradefood1"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ infos.your_cnt }}개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.foodcount1 }}개</v-card-text>
+                        </v-col>
+                      </v-row>
+                      <v-row class="pa-0 ma-1" v-if="info.tradefood2">
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.myfood"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">1개당</v-card-text>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.tradefood2"></v-img>
+                        </v-col>
+                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
+                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.foodcount2 }}개</v-card-text>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -101,7 +115,7 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 
-const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = 'http://localhost:9999/food/api';
 
 export default {
   data() {
@@ -249,18 +263,18 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
+  console.log(`${SERVER_URL}/trade/`)
   axios.get(`${SERVER_URL}/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       console.log(this.tradelist)
-      console.log(this.mapOtherUserInfo.address)
+      // console.log(this.mapOtherUserInfo.address)
       if (this.mapOtherUserInfo.address.length === 0) {
         for (var i = 0; i < this.tradelist.length; i++) {
           store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
           store.state.mapOtherUserInfo.food.push(this.tradelist[i].myfood)
         }
-        console.log('good')
-        console.log(store.state.mapOtherUserInfo)
+        // console.log(store.state.mapOtherUserInfo)
       }
     })
     .catch(error => {
