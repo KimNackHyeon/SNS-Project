@@ -103,6 +103,7 @@ public class FeedController {
 	@PostMapping("/feed/write")
 	public ResponseEntity<String> registerFeed(@RequestParam Object feedData) {
 		System.out.println(feedData.toString());
+		
 //		if (feeddata != null) {
 //			myboardRepo.save(myBoard);
 			return new ResponseEntity<String>("success", HttpStatus.OK);

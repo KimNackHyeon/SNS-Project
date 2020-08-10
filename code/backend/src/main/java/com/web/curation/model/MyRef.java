@@ -23,16 +23,28 @@ public class MyRef {
 	private String email;
 	
 	@NotEmpty
-	private String food;
+	private String name;
+	
+	@NotEmpty
+	private String name_kor;
+	
+	@NotEmpty
+	private String expire_date;
+	
+	private Long amount;
 
 	public MyRef() {
 	}
 
-	public MyRef(Long no, @NotEmpty String email, @NotEmpty String food) {
+	public MyRef(Long no, @NotEmpty String email, @NotEmpty String name, @NotEmpty String name_kor,
+			@NotEmpty String expire_date, @NotEmpty Long amount) {
 		super();
 		this.no = no;
 		this.email = email;
-		this.food = food;
+		this.name = name;
+		this.name_kor = name_kor;
+		this.expire_date = expire_date;
+		this.amount = amount;
 	}
 
 	public Long getNo() {
@@ -51,17 +63,36 @@ public class MyRef {
 		this.email = email;
 	}
 
-	public String getFood() {
-		return food;
+	public String getName() {
+		return name;
 	}
 
-	public void setFood(String food) {
-		this.food = food;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "MyRef [no=" + no + ", email=" + email + ", food=" + food + "]";
+	public String getName_kor() {
+		return name_kor;
+	}
+
+	public void setName_kor(String name_kor) {
+		this.name_kor = name_kor;
+	}
+
+	public String getExpire_date() {
+		return expire_date;
+	}
+
+	public void setExpire_date(String expire_date) {
+		this.expire_date = expire_date;
+	}
+
+	public Long getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Long amount) {
+		this.amount = amount;
 	}
 	
 }
