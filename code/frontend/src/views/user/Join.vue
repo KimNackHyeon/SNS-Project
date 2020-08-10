@@ -37,7 +37,27 @@
         <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
         <p v-if="nickErrMsg" style="color: red; display: inline;">이미 사용중인 닉네임입니다.</p>
       </div>
-            <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
+
+      <div class="input-with-label">
+        <label for="address">주소</label>
+        <input v-model="signupData.address" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+        <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
+      </div>
+      <v-dialog v-model="open" scrollable width= "100%" class="adressDialog">
+        <v-card>
+          <v-card-title >주소 검색</v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            <DaumPostcode style="height:300px" :on-complete="handleAddress" />
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="open = false">닫기</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+            <!-- <button style="border:3px #a0d469 solid; border-radius: 5px; font-size:15px; background-color:#a0d469; color:#fff;"
       @click="addressgo()">주소검색</button>
       <div class="input-address">
       <v-text-field
@@ -54,8 +74,7 @@
           <DaumPostcode style="height:200px"
             :on-complete=handleAddress
           />
-        </div>
-      </div>
+        </div> -->
     </div>
 
     <label>
