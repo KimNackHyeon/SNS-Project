@@ -49,6 +49,10 @@ export default {
         })
         .catch((error) => {
           console.log(error.response);
+          Swal.fire({
+          title: '아이디와 비밀번호를 확인해주세요!',
+          text: '아이디 또는 비밀번호가 틀렸어요!',
+        })
         });
     },
 
