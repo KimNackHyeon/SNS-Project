@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-      <div style="width:100%; height:10%; z-index:101;" v-on:keyup.down="selectValue('down')"
+      <div style="width:100%; height:10%; z-index:23;" v-on:keyup.down="selectValue('down')"
        v-on:keyup.up="selectValue('up')"> <!-- 검색 -->
             <div class="search" >
           <input class="s" placeholder="음식재료 이름 검색" 
@@ -13,7 +13,7 @@
                 v-on:click="changeValue(el.name_kor)"
                 v-on:keyup.enter="selectValue('enter', el.name_kor)"
                 :key="index"
-                style="z-index:102;"
+                style="z-index:24;"
                 >
               <span>{{ el.name_kor }}</span>
             </li>
@@ -21,9 +21,9 @@
         </div>
       </div> <!-- end of 검색 --> 
 
-      <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:90;">
-        <div @click="changeValue(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
-        <div>
+      <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:25;">
+        <div class="card" v-for="(food,index) in filterListImg" :key="index">
+        <div @click="changeValue(food)">
           <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
         </div>
         <div>
@@ -275,6 +275,9 @@ export default {
 </script>
 
 <style scoped>
+.card:hover{
+  cursor: pointer;
+}
 input{
   padding:0px;
   background-color: #ebebeb;
@@ -309,7 +312,7 @@ float: left;
       width: 160px;
     height: 150px;
     background-color: white;
-    z-index: 200;
+    z-index: 30;
     position: fixed;
     display: none;
     margin: 98px 100px;
@@ -336,7 +339,6 @@ float: left;
     overflow: hidden;
     transition: .15s all ease-in-out;
     float:left;
-    z-index: -1;
 }
 
 .card:hover {
@@ -352,7 +354,7 @@ h3{
     text-shadow: 1px 1px 4px #0000004f;
 }
 .search{
-      z-index: 101;
+      z-index: 21;
     position: relative;
     margin: 0 auto;
     width: 100%;
