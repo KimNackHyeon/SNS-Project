@@ -165,7 +165,16 @@ export default {
     },
   methods: {
     addFood(foodlist){
-      // alert(foodlist);
+      var FL = '음식재료 ';
+      for(var i=0; i<foodlist.length;i++){
+        FL = FL+ foodlist[i].name_kor + ' ';
+        FL = FL + foodlist[i].amount + '개 '
+        if(i!=foodlist.length-1){
+          FL+=',';
+        }
+      }
+      FL = FL + '를 재료로 추가하였습니다.';
+      alert(FL);
       this.foodlist = foodlist;
       $('.addFood').css('display','none');
     },

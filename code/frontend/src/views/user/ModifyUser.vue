@@ -42,7 +42,7 @@
         <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
         <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
       </div>
-      <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
+      <v-dialog v-model="dialog"  width= "100%" class="adressDialog">
         <v-card>
           <v-card-title >주소 검색</v-card-title>
           <v-divider></v-divider>
@@ -260,6 +260,7 @@ export default {
       }
       else {
         console.log('입력칸이 비어있습니다.')
+        alert('입력칸이 비어있습니다.')
         this.checkNickname()
         this.checkPasswordValidate()
         this.checkPassword()

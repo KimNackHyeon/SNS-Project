@@ -20,7 +20,7 @@
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
-            :src="item.src"
+            :src="require(`../../assets/images/${item.image}`)"
           ></v-carousel-item>
         </v-carousel>
         <v-chip
@@ -129,16 +129,16 @@ export default {
               comment: "",
               items: [
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+              image: 'food1.jpg',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+              image: 'food2.png',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+              image: 'food3.jpg',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+              image: 'food4.jpg',
             },
           ],
 
@@ -255,6 +255,7 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
+        console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     }

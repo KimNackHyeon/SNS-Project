@@ -17,7 +17,7 @@
                     <h1>5</h1>
                   </v-col>
                   <!-- 팔로워 -->
-                  <v-col class="myprofil-box" cols="4" @click="onFollower">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" @click="onFollower">
                     <span style="color: black;">팔로워</span>
                     <h1>{{userData.follower}}</h1>
                   </v-col>
@@ -45,7 +45,7 @@
                     </v-card>
                   </v-dialog>
                   <!-- 팔로잉 -->
-                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
                     <h1>{{userData.following}}</h1>
                   </v-col>
@@ -84,22 +84,22 @@
         <!-- 팔로우 버튼 -->
         
         <div class="myfeed">
-          <div class="myprofil-feed">
+          <button class="myprofil-feed" @click="scrapOff">
               <div class="myprofil-text">
                 <img src="../../assets/images/pencil.png" alt="my recipe">
                 <!-- <i class="fas fa-pencil-alt fa-lg"></i> -->
                 <h3>내가 쓴 글</h3>
               </div>
-          </div>
-          <div class="myprofil-scrap">
+          </button>
+          <button class="myprofil-scrap" @click="scrapOn">
             <div class="myprofil-text">
               <img src="../../assets/images/bookmark.png" alt="scrap">
               <!-- <i class="far fa-bookmark"></i> -->
               <h3>스크랩한 글</h3>
             </div>
-          </div>
+          </button>
         </div>
-        <div class="myrecipe">
+        <div class="myrecipe" v-if="!myscrap">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
             <div class="myrecipe-img">
@@ -113,6 +113,14 @@
             </div>
             <div class="myrecipe-img">
               <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            </div>
+          </div>
+        </div>
+        <div class="myrecipe" v-if="myscrap">
+          <h3 class="myrecipe-title">내 스크랩</h3>
+          <div class="myrecipe-body">
+            <div class="myrecipe-img">
+              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
             </div>
           </div>
         </div>
@@ -140,6 +148,7 @@ export default {
   data() {
     return {
       userinfo:'',
+      myscrap: false,
       userData:{
         recipe:"",
         follower:"",
@@ -180,15 +189,6 @@ export default {
           this.followings.forEach(following => {
             this.$set(following, 'isfollow', true)
           })
-          // response.data.forEach(following => {
-          //   this.followings.push({
-          //   nickname : following.nickname,
-          //   email : following.email,
-          //   image : following.image,
-          //   isfollow : true,
-          // })
-          // })
-
           console.log(this.followings)
         })
         .catch(error =>{
@@ -209,7 +209,7 @@ export default {
       // alert('팔로우');
       axios.post(`${SERVER_URL}/account/follow/`,
         {
-          email : store.state.userInfo.email,
+          email : this.userinfo.email,
           yourEmail : yourEmail,
         }
       ).then(response => {
@@ -220,7 +220,7 @@ export default {
       // alert('언팔로우');
       axios.post(`${SERVER_URL}/account/unfollow/`,
         {
-          email : store.state.userInfo.email,
+          email : this.userinfo.email,
           yourEmail : yourEmail,
         }
       ).then(response => {
@@ -253,6 +253,12 @@ export default {
     //       console.log(error.response)
     //     })
     // }
+    scrapOn(){
+      this.myscrap = true
+    },
+    scrapOff(){
+      this.myscrap = false
+    },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){

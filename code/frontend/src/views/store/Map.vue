@@ -5,6 +5,9 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import store from '../../vuex/store.js'
+import axios from 'axios'
+
+const SERVER_URL = 'http://localhost:9999/food/api';
 
 export default {
   data() {
@@ -115,6 +118,28 @@ export default {
   },
   computed: {
     ...mapState(['userInfo', 'mapOtherUserInfo']),
+  },
+  created() {
+  if(store.state.kakaoUserInfo.email != null){
+    this.userinfo = store.state.kakaoUserInfo;
+  }else{
+    this.userinfo = store.state.userInfo;
   }
+  console.log(`${SERVER_URL}/trade/`)
+  axios.get(`${SERVER_URL}/trade/`)
+    .then(response => {
+      this.tradelist = response.data.list
+      console.log(this.tradelist)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+          store.state.mapOtherUserInfo.food.push(this.tradelist[i].myfood)
+        }
+      }
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  },
 }
 </script>
