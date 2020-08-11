@@ -1,5 +1,6 @@
 <template>
 <div style="height:100%; width:100%;">
+  
     <div style="width:100%; height:120px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); text-align:center; margin-bottom:-9px; ">
           <div style="width:100%; height:34%">
             <router-link to="/feed/main">
@@ -73,16 +74,28 @@
     </div>
 </div>
 
+      <!-- <v-dialog v-model="loading"> -->
+        <!-- <v-container>
+          <v-layout row justify-center align-center>
+            <v-progress-linear :indeterminate="true"></v-progress-linear>
+          </v-layout>
+        </v-container> -->
+      <!-- </v-dialog> -->
+
 <div class="plusBtnArea">
  <div class="plusBtn" @click="addRecipe"><v-icon size="100px">mdi-plus</v-icon></div>
 </div> <!-- end of 추가버튼 -->
 
 </div> <!-- end of carousel-slide -->
 </div> <!-- end of carousel-container -->
+
 <div @click="whiteReciptComplete" style="height: 45px;
     width: 100%;
     background-color: rgb(160,212,105); text-align:center; padding:5px;">
-<h3>레시피 등록</h3>
+<h3 v-if="!loading">레시피 등록</h3>
+  <div align="center">
+    <v-progress-circular :indeterminate="true" v-if="loading" color="white"></v-progress-circular>
+  </div>
 </div>
 <div>
   <div class="toLeftBtn" @click="clicktoLeftBtn"><v-icon color="white" size="47px">mdi-chevron-left</v-icon></div>
@@ -141,6 +154,7 @@ export default {
       },
       ],
       images:'',
+      loading:false,
     }
   },
    watch: {
@@ -256,6 +270,8 @@ export default {
         this.userinfo = store.state.userInfo;
       }
 
+      this.loading = true;
+
       var formData = new FormData();
       const contents = [];
 
@@ -280,6 +296,8 @@ export default {
         images : this.images
       }
 
+      
+
       axios
       .post(`${SERVER_URL}/feed/img`, formData,{
         headers: { 'Content-Type': 'multipart/form-data' } 
@@ -288,16 +306,14 @@ export default {
         console.log(response.data);
         this.images = response.data;
         console.log(this.images);
+        setTimeout(() => {
+        this.loading = false;
         this.register(data);
+      }, 1000*this.items.length);
       })
       .catch((error)=>{
         console.log(error.response);
       });
-
-      // confirm('Are you ready?')
-      // .then(result => {
-      //   this.register(data);
-      // })
         
     },
     register(data){
@@ -306,7 +322,7 @@ export default {
         .put(`${SERVER_URL}/feed/write`, data)
         .then((response)=>{
           console.log(response);
-          this.$router.push("/feed/view");
+          this.$router.push("/feed/main");
         })
         .catch((error)=>{
           console.log(error.response);
@@ -417,4 +433,5 @@ h3{
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
 </style>

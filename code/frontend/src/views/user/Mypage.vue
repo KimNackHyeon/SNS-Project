@@ -14,7 +14,7 @@
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
-                    <h1>5</h1>
+                    <h1>{{userData.recipe}}</h1>
                   </v-col>
                   <!-- 팔로워 -->
                   <v-col class="myprofil-box" cols="4" @click="onFollower">
@@ -102,17 +102,10 @@
         <div class="myrecipe">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food2.png" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food3.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
+                <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food">
+              </router-link>
             </div>
           </div>
         </div>
@@ -136,6 +129,15 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+
+      axios.get(`${SERVER_URL}/account/myrecipe/`, {params: {email: this.userinfo.email}})
+      .then(response => {
+          console.log(response)
+          this.recipes = response.data;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     },
   data() {
     return {
@@ -145,6 +147,7 @@ export default {
         follower:"",
         following:"",
       },
+      recipes:[],
       openFollower: false,
       followers: "",
       openFollowing: false,
@@ -262,10 +265,11 @@ export default {
       }
       axios.get(`${SERVER_URL}/account/mypage/`+ this.userinfo.email)
         .then(response => {
-          console.log(response)
-          this.userData.following = response.data.following
-          this.userData.follower = response.data.follower
-          console.log(this.userData.follower+" "+this.userData.following)
+          console.log(response);
+          this.userData.recipe = response.data.recipe;
+          this.userData.following = response.data.following;
+          this.userData.follower = response.data.follower;
+          console.log(this.userData.follower+" "+this.userData.following);
         })
         .catch(error => {
           console.log(error.response)
