@@ -3,9 +3,13 @@
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <router-link to="/Main"><v-btn icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
-        <router-link to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
-          <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
-          <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+        <router-link v-if="$route.name!='MyRef'" to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <!-- <img v-if="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png"> -->
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+          </v-btn></router-link> 
+          <router-link v-if="$route.name=='MyRef'" to="/"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
+          <!-- <img v-if="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png"> -->
           </v-btn></router-link> 
     </div>
     

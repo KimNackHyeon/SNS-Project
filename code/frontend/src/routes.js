@@ -21,6 +21,7 @@ import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
 import PrivateChat from "./views/chat/PrivateChat.vue"
+import Error from "./views/error.vue"
 
 export default [
   {
@@ -40,6 +41,11 @@ export default [
     path: "/home",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/error",
+    name: "Error",
+    component: Error,
   },
   {
     path: "/user/join",
