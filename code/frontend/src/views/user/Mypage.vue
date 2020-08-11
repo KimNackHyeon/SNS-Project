@@ -14,7 +14,7 @@
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
-                    <h1>5</h1>
+                    <h1>{{userData.recipe}}</h1>
                   </v-col>
                   <!-- 팔로워 -->
                   <v-col class="myprofil-box" cols="4" @click="onFollower">
@@ -29,11 +29,11 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(follower.email)">{{follower.nickname}}</p>
                             <p class="followEmail">{{follower.email}}</p>
-                            <p class="followNick">{{follower.nickname}}</p>
                           </div>
                         </div>
                       </v-card-text>
@@ -57,11 +57,11 @@
                       <v-card-text>
                         <div class="follow" v-for="(following, i) in followings" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(following.email)">{{following.nickname}}</p>
                             <p class="followEmail">{{following.email}}</p>
-                            <p class="followNick">{{following.nickname}}</p>
                           </div>
                           <div class="followbtn" @click="onFollowBtn(following)">
                             <v-btn color="#a0d469" style="box-shadow: unset; color: white" v-if="!following.isfollow">팔로우</v-btn>
@@ -102,17 +102,10 @@
         <div class="myrecipe">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food2.png" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food3.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
+                <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food">
+              </router-link>
             </div>
           </div>
         </div>
@@ -136,6 +129,15 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+
+      axios.get(`${SERVER_URL}/account/myrecipe/`, {params: {email: this.userinfo.email}})
+      .then(response => {
+          console.log(response)
+          this.recipes = response.data;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     },
   data() {
     return {
@@ -145,6 +147,7 @@ export default {
         follower:"",
         following:"",
       },
+      recipes:[],
       openFollower: false,
       followers: "",
       openFollowing: false,
@@ -242,17 +245,14 @@ export default {
           console.log(error.response)
         })
     },
-    // fetchUser() {
-    //   axios.get(`${SERVER_URL}/account/mypage/`+ this.userInfo.email
-    //   )
-    //     .then(response => {
-    //       console.log(response)
-    //       this.userData = response.data
-    //     })
-    //     .catch(error => {
-    //       console.log(error.response)
-    //     })
-    // }
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){
@@ -262,10 +262,11 @@ export default {
       }
       axios.get(`${SERVER_URL}/account/mypage/`+ this.userinfo.email)
         .then(response => {
-          console.log(response)
-          this.userData.following = response.data.following
-          this.userData.follower = response.data.follower
-          console.log(this.userData.follower+" "+this.userData.following)
+          console.log(response);
+          this.userData.recipe = response.data.recipe;
+          this.userData.following = response.data.following;
+          this.userData.follower = response.data.follower;
+          console.log(this.userData.follower+" "+this.userData.following);
         })
         .catch(error => {
           console.log(error.response)
@@ -290,13 +291,15 @@ export default {
   .content {
     float: left;
   }
-  .followEmail {
+  .followNick {
     margin: 0 !important;
     color: black;
     font-weight: bold;
+    font-size: 15px;
   }
-  .followNick {
+  .followEmail {
     margin: 0 !important;
+    font-size: 10px
   }
   .followbtn {
     float: right;
