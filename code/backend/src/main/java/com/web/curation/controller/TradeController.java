@@ -102,4 +102,6 @@ public class TradeController {
 //	}
 //	List<Trade> tradeList = new ArrayList<Trade>();
 
+	
+	
 }
