@@ -1,0 +1,17 @@
+fieldset {
+  display: none;
+}
+.v-text-field__slot {
+  height: 40px;
+}
+.v-input__slot {
+  min-height: unset !important;
+  height: 40px;
+  border: 1px solid lightgray;
+}
+.v-input__slot:hover {
+  border: 2px solid #a0d469;
+}
+.v-text-field input {
+  text-align: center;
+}
