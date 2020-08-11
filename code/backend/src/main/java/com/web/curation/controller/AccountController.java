@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
@@ -119,6 +120,16 @@ public class AccountController {
 		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@ApiOperation(value = "읽지않은 새소식 반환")
+	@GetMapping("/account/new/{email}")
+	public ResponseEntity<Map> observeNew(@PathVariable String email) {
+		Map<String, Alarm> map = new HashMap<String, Alarm>();
+		//type 1 : 나를 팔로우함
+		//type 2 : 내 게시글에 댓글 달림
+		//type 3 : 내 글에 좋아요 눌림
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "토큰 검증")

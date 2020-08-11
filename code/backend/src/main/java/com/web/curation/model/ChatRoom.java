@@ -29,15 +29,31 @@ public class ChatRoom {
 	
 	@NotEmpty
 	private String chatNo;
+	
+	@NotEmpty
+	private String nickname;
 
 	public ChatRoom() {
 	}
 
-	public ChatRoom(@NotEmpty String email, @NotEmpty String chatTitle, @NotEmpty String chatNo) {
+	public ChatRoom(Long no, @NotEmpty String email, @NotEmpty String chatTitle, @NotEmpty String chatNo,
+			@NotEmpty String nickname) {
 		super();
+		this.no = no;
 		this.email = email;
 		this.chatTitle = chatTitle;
 		this.chatNo = chatNo;
+		this.nickname = nickname;
+	}
+	
+
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public Long getNo() {
@@ -71,6 +87,11 @@ public class ChatRoom {
 	public void setChatNo(String chatNo) {
 		this.chatNo = chatNo;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ChatRoom [no=" + no + ", email=" + email + ", chatTitle=" + chatTitle + ", chatNo=" + chatNo
+				+ ", nickname=" + nickname + "]";
+	}
 	
 }

@@ -2,10 +2,15 @@
   <div style="width:100%; height:100%;">
     <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
-        <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 100%;">
+        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
       </router-link>
+      <div class="titleBox">
+        <div class="pageTitle">
+          <p style="margin: 0;">{{feedData.title}}</p>
+        </div>
+      </div>
     </div>
     <div style="overflow: scroll; height: 540px; ">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
@@ -14,9 +19,23 @@
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right;">
-          <v-btn icon color="lightgray">
+          <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
+          </v-btn> -->
+          <v-btn icon @click="likedbtn">
+              <v-icon v-if="!feedData.islike" size="30px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.islike" size="30px" color="red">mdi-heart</v-icon>
           </v-btn>
+          <v-btn icon @click="scrapedbtn">
+              <v-icon v-if="!feedData.isscrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
+          </v-btn>
+        </div>
+      </div>
+      <!-- 해시태그 -->
+      <div class="hashBox">
+        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
+          <div class="hash">#{{ hashTag }}</div>
         </div>
       </div>
       <!-- 재료 -->
@@ -33,17 +52,17 @@
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: #a0d469; padding: 5px 10px; width: 40%; text-align: center">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center">
           <h5>나에게 없는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
-            <div class="food" v-for="(food, i) in outFoods" :key="i">
+            <div class="food" v-for="(food, i) in feedData.foods" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
                   <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
                 </v-btn>
               </div>
-              <h5 class="food-name">{{food.name}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h5 class="food-name">{{food.name_kor}}</h5>
+              <h6>{{food.amount}}개</h6>
             </div>
             <div  class="balloon">
               <h5 style="color: white">{{nowFood}}</h5>
@@ -59,7 +78,15 @@
           <h2>{{feedData.title}}</h2>
         </div>
         <div>
-          <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
+          <v-carousel>
+            <v-carousel-item
+              v-for="(item,i) in feedData.items"
+              :key="i"
+              :src="require(`../../assets/images${item.img}`)"
+              transition="fade"
+              reverse-transition="fade"
+            ></v-carousel-item>
+          </v-carousel>
           <p style="padding: 10px">{{feedData.content}}</p>
         </div>
       </div>
@@ -113,15 +140,16 @@ export default {
       ],
       // onBuying: false,
       comment: "",
-      comments: [
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Jhon34", 
-        content: "아이들도 담백한 맛에 잘 먹을 것 같아요 한번 만들어보세요!! 감사합니다!",
-        created_at: "2020-07-28 15:59"},
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Sara12", 
-        content: "비주얼도 좋고 영양도 듬뿍~~ 다욧식품으로 좋을것 같아요",
-        created_at: "2020-07-28 17:59"},
+      hashTags: [
+        '빵', 
+        '베이커리',
+        '인생빵',
+        'JMT',
+        '성심당',
+        '대전빵집',
+        '부추빵',
+        '꿀키',
+        '소보로'
       ]
     }
   },
@@ -142,14 +170,26 @@ export default {
         .then(response => {
           console.log(response);
             this.feedData = { // 하나의 피드 데이터
-              no: response.data.no,
-              nickname : response.data.nickname,
-              profile : response.data.profile,
-              content: response.data.content,
-              title: response.data.title,
+              no: response.data.feeddata.no,
+              nickname : response.data.feeddata.nickname,
+              profile : response.data.feeddata.profile,
+              title: response.data.feeddata.title,
               items: [],
               comments:[],
+              hashTags:[],
+              foods:[],
             }
+            response.data.taglist.forEach(tag =>{
+              this.feedData.hashTags.push(tag.tagName);
+            });
+
+            response.data.foodlist.forEach(food =>{
+              this.feedData.foods.push(food);
+            });
+
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
+            });
         console.log(this.feedData);
         })
         .catch((error) => {
@@ -170,6 +210,12 @@ export default {
             });
   },
   methods: {
+    likedbtn() {
+      this.feedData.islike = !this.feedData.islike
+    },
+    scrapedbtn() {
+      this.feedData.isscrap = !this.feedData.isscrap
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -205,12 +251,42 @@ export default {
   .left-icon:hover {
     color: #a0d469;
   }
+  .titleBox {
+    display: inline-block;
+    width: 90%;
+    height: 100%;
+    font-size: 17px;
+    text-align: center;
+  }
+  .pageTitle {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .hashBox {
+    overflow-x: scroll;
+    white-space: nowrap;
+    width: 100%;
+    height: 45px;
+    border-bottom: 1px solid lightgray
+  }
+  .hash {
+    float: left; 
+    margin: 5px; 
+    background: #a0d469; 
+    color: white; 
+    padding: 5px; 
+    border-radius: 12px; 
+    font-size: 12px
+  }
   .food {
     padding-right: 10px;
     text-align: center;
   }
   .food h6 {
     color: gray;
+    font-size: 12px;
   }
   .food-name {
     font-weight: bold;
