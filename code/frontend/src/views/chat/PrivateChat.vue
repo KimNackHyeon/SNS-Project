@@ -3,6 +3,16 @@
             <!-- <v-btn @click="goback" icon style="margin: 5px">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn> -->
+            <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+        <v-btn @click="goback" icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+        </v-btn>
+      <div class="titleBox">
+        <div class="pageTitle">
+          <p style="margin: 11px; margin-left:162px;">채팅방</p>
+        </div>
+      </div>
+    </div>
 <div class="messaging">
       <div class="inbox_msg">
         <div class="inbox_people">

@@ -105,42 +105,50 @@
 </template>
 
 <script>
-// const SERVER_URL = "http://127.0.0.1:9999/food";
+const SERVER_URL = "http://127.0.0.1:9999/food/api";
 // const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 import store from '../../vuex/store.js'
 import axios from 'axios'
 
-const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data(){
     return{
-      privatechat:`123`, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
+      privatechat:``, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
+      chatName:'',
       userinfo:'',
+      detailinfo: [],
     }
   },
   methods:{
     registChattingRoom(){
-      console.log("hihihii")
-      axios.post(`${SERVER_URL}/chatting/`, {chatTitle:`감자교환하실분`, chatNo:this.privatechat ,email:this.userinfo.email})
+      axios.post(`${SERVER_URL}/chatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
         .then(response => {
+          this.chatName = response.data;
         })
         .catch(error => {
-          console.log(error.response)
         })
     }
   },
   created(){
+    this.privatechat = this.$route.params.id
     if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
         this.userinfo = store.state.userInfo;
       }
-      const id = this.$route.params.id
+    const id = this.$route.params.id
     if (id === undefined) {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
+    axios.get(`${SERVER_URL}/trade/article/${id}`)
+    .then(response => {
+      this.detailinfo = response.data
+    })
+    .catch(error => {
+    })
   },
   computed: {
     param: function() {
@@ -181,4 +189,3 @@ export default {
     border-top: 1px solid white;
   }
 </style>>
-

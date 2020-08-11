@@ -86,6 +86,12 @@ public class TradeController {
 		map.put("list", tradelist);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
+	@GetMapping("/article/{no}")
+	@ApiOperation(value = "우리동네 장터 세부 내용")
+	public ResponseEntity<Trade> searchDetail(@PathVariable Long no) {
+		Trade tradeDetail = tradeRepo.getByNo(no);
+		return new ResponseEntity<Trade>(tradeDetail, HttpStatus.OK);
+	}
 	
 //	@PostMapping("/")
 //	@ApiOperation(value = "전체 조회")
