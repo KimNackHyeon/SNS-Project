@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
@@ -38,22 +39,23 @@ public class ChatController {
 	ChatRepo chatRepo;
 	@PostMapping("/")
 	@ApiOperation(value = "나의 채팅방 등록")
-	public ResponseEntity<Map> registmyChattingroom(@RequestBody ChatRoom chatroom) {
+	public ResponseEntity<String> registmyChattingroom(@RequestBody ChatRoom chatroom) {
 		ArrayList<ChatRoom> myChatList = chatRepo.findByEmail(chatroom.getEmail());
 		boolean insert = true;
+		chatroom.setChatTitle(chatroom.getNickname()+"님의 "+chatroom.getChatTitle()+"교환 채팅방");
+//		System.out.println(chatroom.toString());
 		for (ChatRoom chatRoom2 : myChatList) {
 			if(chatRoom2.getChatNo().equals(chatroom.getChatNo()) && chatRoom2.getEmail().equals(chatroom.getEmail())) {
 				insert = false;
 				break;
 			}
 		}
-		Map<String, ArrayList<ChatRoom>> map = new HashMap<String, ArrayList<ChatRoom>>();
 		if(insert) {
 			chatRepo.save(chatroom);
-			return new ResponseEntity<Map>(map, HttpStatus.OK);
+			return new ResponseEntity<>(chatroom.getChatTitle(), HttpStatus.OK);
 		}
 		else {
-			return new ResponseEntity<Map>(null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(chatroom.getChatTitle(), HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	@GetMapping("/search/{email}")

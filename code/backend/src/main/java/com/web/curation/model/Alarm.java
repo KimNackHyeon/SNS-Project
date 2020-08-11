@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="ChatRoom")
-public class ChatRoom {
+@Table(name="Alarm")
+public class Alarm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
@@ -25,35 +25,30 @@ public class ChatRoom {
 	private String email;
 	
 	@NotEmpty
-	private String chatTitle;
+	private String content;
 	
 	@NotEmpty
-	private String chatNo;
+	private String type;
 	
 	@NotEmpty
 	private String nickname;
+	
+	@NotEmpty
+	private Long confirm;
 
-	public ChatRoom() {
-	}
-
-	public ChatRoom(Long no, @NotEmpty String email, @NotEmpty String chatTitle, @NotEmpty String chatNo,
-			@NotEmpty String nickname) {
+	public Alarm(Long no, @NotEmpty String email, @NotEmpty String content, @NotEmpty String type,
+			@NotEmpty String nickname, @NotEmpty Long confirm) {
 		super();
 		this.no = no;
 		this.email = email;
-		this.chatTitle = chatTitle;
-		this.chatNo = chatNo;
+		this.content = content;
+		this.type = type;
 		this.nickname = nickname;
-	}
-	
-
-
-	public String getNickname() {
-		return nickname;
+		this.confirm = confirm;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public Alarm() {
+		super();
 	}
 
 	public Long getNo() {
@@ -72,26 +67,39 @@ public class ChatRoom {
 		this.email = email;
 	}
 
-	public String getChatTitle() {
-		return chatTitle;
+	public String getContent() {
+		return content;
 	}
 
-	public void setChatTitle(String chatTitle) {
-		this.chatTitle = chatTitle;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public String getChatNo() {
-		return chatNo;
+	public String getType() {
+		return type;
 	}
 
-	public void setChatNo(String chatNo) {
-		this.chatNo = chatNo;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	@Override
-	public String toString() {
-		return "ChatRoom [no=" + no + ", email=" + email + ", chatTitle=" + chatTitle + ", chatNo=" + chatNo
-				+ ", nickname=" + nickname + "]";
+	public String getNickname() {
+		return nickname;
 	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public Long getConfirm() {
+		return confirm;
+	}
+
+	public void setConfirm(Long confirm) {
+		this.confirm = confirm;
+	}
+	
+
+	
 	
 }

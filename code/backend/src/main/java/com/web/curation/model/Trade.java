@@ -43,6 +43,11 @@ public class Trade {
 	private String tradefood2;
 	
 	@NotEmpty
+	private String tradefood1_kor;
+	
+	private String tradefood2_kor;
+	
+	@NotEmpty
 	private String foodcount1;
 	
 	private String foodcount2;
@@ -65,8 +70,8 @@ public class Trade {
 
 	public Trade(Long no, @NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
 			@NotEmpty String myfood_kor, @NotEmpty String price, @NotEmpty String tradefood1, String tradefood2,
-			@NotEmpty String foodcount1, String foodcount2, @NotEmpty String content, @NotEmpty String address,
-			String imgUrl, LocalDateTime regist_date) {
+			@NotEmpty String tradefood1_kor, String tradefood2_kor, @NotEmpty String foodcount1, String foodcount2,
+			@NotEmpty String content, @NotEmpty String address, String imgUrl, LocalDateTime regist_date) {
 		super();
 		this.no = no;
 		this.email = email;
@@ -76,12 +81,31 @@ public class Trade {
 		this.price = price;
 		this.tradefood1 = tradefood1;
 		this.tradefood2 = tradefood2;
+		this.tradefood1_kor = tradefood1_kor;
+		this.tradefood2_kor = tradefood2_kor;
 		this.foodcount1 = foodcount1;
 		this.foodcount2 = foodcount2;
 		this.content = content;
 		this.address = address;
 		this.imgUrl = imgUrl;
 		this.regist_date = regist_date;
+	}
+
+
+	public String getTradefood1_kor() {
+		return tradefood1_kor;
+	}
+
+	public void setTradefood1_kor(String tradefood1_kor) {
+		this.tradefood1_kor = tradefood1_kor;
+	}
+
+	public String getTradefood2_kor() {
+		return tradefood2_kor;
+	}
+
+	public void setTradefood2_kor(String tradefood2_kor) {
+		this.tradefood2_kor = tradefood2_kor;
 	}
 
 	public Long getNo() {
