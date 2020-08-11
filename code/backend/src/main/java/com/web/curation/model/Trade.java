@@ -32,6 +32,9 @@ public class Trade {
 	private String myfood;
 	
 	@NotEmpty
+	private String myfood_kor;
+	
+	@NotEmpty
 	private String price;
 	
 	@NotEmpty
@@ -59,23 +62,17 @@ public class Trade {
 
 	public Trade() {
 	}
-	
-	@Override
-	public String toString() {
-		return "Trade [no=" + no + ", email=" + email + ", nickname=" + nickname + ", myfood=" + myfood + ", price="
-				+ price + ", tradefood1=" + tradefood1 + ", tradefood2=" + tradefood2 + ", foodcount1=" + foodcount1
-				+ ", foodcount2=" + foodcount2 + ", content=" + content + ", address=" + address + ", imgUrl=" + imgUrl
-				+ ", regist_date=" + regist_date + "]";
-	}
 
-	public Trade(@NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
-			@NotEmpty String price, @NotEmpty String tradefood1, String tradefood2, @NotEmpty String foodcount1,
-			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl) {
+	public Trade(Long no, @NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
+			@NotEmpty String myfood_kor, @NotEmpty String price, @NotEmpty String tradefood1, String tradefood2,
+			@NotEmpty String foodcount1, String foodcount2, @NotEmpty String content, @NotEmpty String address,
+			String imgUrl, LocalDateTime regist_date) {
 		super();
 		this.no = no;
 		this.email = email;
 		this.nickname = nickname;
 		this.myfood = myfood;
+		this.myfood_kor = myfood_kor;
 		this.price = price;
 		this.tradefood1 = tradefood1;
 		this.tradefood2 = tradefood2;
@@ -85,6 +82,14 @@ public class Trade {
 		this.address = address;
 		this.imgUrl = imgUrl;
 		this.regist_date = regist_date;
+	}
+
+	public Long getNo() {
+		return no;
+	}
+
+	public void setNo(Long no) {
+		this.no = no;
 	}
 
 	public String getEmail() {
@@ -109,6 +114,14 @@ public class Trade {
 
 	public void setMyfood(String myfood) {
 		this.myfood = myfood;
+	}
+
+	public String getMyfood_kor() {
+		return myfood_kor;
+	}
+
+	public void setMyfood_kor(String myfood_kor) {
+		this.myfood_kor = myfood_kor;
 	}
 
 	public String getPrice() {
@@ -182,7 +195,6 @@ public class Trade {
 	public void setRegist_date(LocalDateTime regist_date) {
 		this.regist_date = regist_date;
 	}
-	
 	
 	
 }

@@ -1,7 +1,10 @@
 <template>
   <div class="rootContainer">
-      <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none;">
-          <getOneFood @addfood="addFood"></getOneFood>
+      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none;">
+          <div style="height:50px; width:100%; background-color:white">
+              <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
+          </div>
+          <get-one-food @addfood="addFood"></get-one-food>
       </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
         <div id="insideRef">
@@ -9,7 +12,7 @@
                     <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
                 </div>
                <div v-for="(food,index) in foods" :key="(food,index)">
-                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.img}.png`)">
                 
                 </button>
             </div>
@@ -19,51 +22,56 @@
             <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
-        <div id="FillBtn" style="position:fixed; margin-left: 256px;
-    margin-top: 10px; display:unset;">
+        <div id="FillBtn" style="position:fixed; margin-left: 256px; margin-top: 10px; display:unset;">
             <v-btn  v-on:click="openregistMater" color="rgb(160,212,105)" width="90px" height="50px" >
-                  <v-icon >mdi-cart</v-icon>
-                  <h4>채우기</h4>
-                </v-btn>
+                <v-icon >mdi-cart</v-icon>
+                <h4>채우기</h4>
+            </v-btn>
         </div>
         <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
-            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra_kor}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
-            <div class="textArea">
-                <div class="longNameBox">{{Nowgra_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
-            </div>
-            <div class="textArea" style="height:24px; padding:0px;">
-                <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra_kor}}</div>와 교환할 재료
-            </div>
-            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
-                <div class="changeFood" v-for="(food,index) in changeFoodsTemp" :key="food" style="font-size:13px;">
-                    <div>
-                    <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
-                    <div style="width:20%; float:left;">
-                    <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
-                    </div>
-                    </div>
-            </div>
-                <div class="changeFood">
-                    <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
-                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:18px; height:24px; padding-left:2px;"><h5 style="font-size:10px;float:left">개당</h5> 
-                    <button type="button" @click="getFood" class="setFood" style="float:left;"></button>
-                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:18px; height:24px; margin-left:4px;"><h5 style="font-size:10px;float:left">개</h5>
-                
-                </div>
-                <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
-                    <v-btn v-on:click="addChangeGradient" color="rgb(160,212,105)" width="80px;"><v-icon size="15px">mdi-arrow-up-bold</v-icon><h5>추가하기</h5></v-btn>
-                </div>
-                </button>
-            </div>
-            <div class="textArea">
-                <h4>판매가격</h4>
-                <input type="text" v-model="nowSellAmount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;">
-                <h5 style="float:left">개당</h5><input type="text" v-model="nowSellPrice" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
-            </div>
+            <div style="width: 100%;
+    height: 30px;
+    background-color: rgba(224, 224, 224, 0.51);
+    text-align: center;
+    font-weight: bold;
+    padding: 6px 0px;
+    overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
+            <div class="textArea" style="height: 40px; margin-top: 0px; text-align: center; padding: 5px 2px;">
+                <!-- <div class="longNameBox">{{Nowgra.name_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5> -->
+                <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:24px; height:30px;"><h5>개를</h5>
+                <div class="shareButton" @click="openShareBox" style="height:100%; width:37px; background-color:#80808066; float:left; margin-right:5px;">공유</div>
+                <div class="deleteButton" @click="deleteFoodfromRef" style="height:100%; width:37px; background-color:red; float:left;">삭제</div>
             
-            <div style="width:100%; height:33px;">
-             <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:red; font-weight:bold; color:white; font-size:16px;">삭제</button>
-             <button type="button" v-on:click="ShareComplete" style="width:50%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">담기</button>
+            </div>
+            <div class="sharebox" style="display:none;">
+            <div class="textArea" style="height:24px; padding:0px;">
+                <div class="longNameBox" style="width:58px; height:100%; padding:0px 7px;">{{Nowgra.name_kor}}</div>와 교환할 재료
+               
+            </div>
+            <div style="width:100%; height:33px; padding: 4px 6px;">
+                    <!-- <input type="text" style="width:25px; height:30px; background-color:gray; color:black;"> -->
+                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:24px;"><h5 style="font-size:10px;float:left">개당</h5> 
+                    <button type="button" @click="getFood" class="setFood" style="float:left; margin-right:5px;"></button>
+                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
+            </div>
+                <div style="width:100%; height:21px;">
+                    <button v-on:click="addChangeGradient" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;"><v-icon size="15px">mdi-arrow-down-bold</v-icon>추가하기</button>
+                </div>
+                
+            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
+                <div  v-for="(food,index) in changeFoods" :key="index" >
+                    <div class="changeFood" v-if="food.Mygradient == Nowgra.name_kor" style="font-size:13px;">
+                        <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                        <div style="width:20%; float:left;">
+                        <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
+                        </div>
+                    </div>
+            </div>
+                
+            </div>
+            <div class="textArea">
+                <textarea v-model="sharedesc" style="width:100%; height:100%; resize: none;" placeholder="공유글에 들어갈 글을 적어주세요"></textarea>
+            </div>
             </div>
             <div style="width:100%; height:100px; background-color:black;">
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
@@ -75,26 +83,26 @@
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">채우기<button v-on:click="closeregistMater" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div style="width:100%; height:190px;">
                 <div class="textArea">
-                    <h5>넣을 재료</h5><v-btn style="float:left; width:65px; height:30px;"></v-btn>
+                    <h5>넣을 재료</h5><v-btn @click="getFood" class="fillBtn" style="float:left; width:65px; height:30px;"></v-btn>
                 </div>
                 <div class="textArea">
-                    <h5>넣을 개수</h5><input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+                    <h5>넣을 개수</h5><input v-model="fillFoodNum" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
                 </div>
                 <div class="textArea" style="height:500px">
-                    <h5>구매 날짜</h5>
+                    <h5>유통 기한</h5>
                     <div style="width:60%; float:left; margin-left:27px; height:15px;">
                         <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
                             :return-value.sync="date"  transition="scale-transition" offset-y  min-width="290px" >
                             <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                                v-model="date"
+                                v-model="fillFoodExpireDate"
                                 readonly
                                 v-bind="attrs"
                                 v-on="on"
                                 style="font-size:10px; margin:0px; padding:0px; width:100%; height:30px; background-color:#f5f5f5;"
                                 ></v-text-field>
                             </template>
-                            <v-date-picker v-model="date" no-title scrollable>
+                            <v-date-picker v-model="fillFoodExpireDate" no-title scrollable>
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                             <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -103,14 +111,15 @@
                     </div>
                         <v-icon color="#e0e0e0" style="float:left; padding-top:5px;">mdi-calendar</v-icon>
                 </div>
+                
             </div>
-            <button type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
+            <button @click="fillFoodtoRef" type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
         </div><!-- end of 채우기 -->
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll;">
-           <div class="textArea" v-for="food in changeFoods" :key="food">
+           <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
                 <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
                 <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
            
@@ -137,6 +146,10 @@ export default {
     components:{getOneFood},
 data() {
     return {
+        selectedFood:'',  //냉장고에 채우고싶은 재료 
+        fillFoodNum:1, //냉장고에 채우고 싶은 재료 개수
+        fillFoodDate:'', //냉장고에 채우고 싶은 재료를 산 날짜
+        fillFoodExpireDate:'',//냉장고에 채우고 싶은 재료 유통기한
         totalShareAmount:1, //공유하고싶은 총 량
       userinfo:'',
       Nowgra:'',
@@ -152,31 +165,74 @@ data() {
     nowSellAmount:1,
     nowSellPrice:0,
     intoFood:'egg',
+    sharedesc:'',
       foods:[
-            {gradient:"egg",gra_kor:"계란fkfkfkfk"},
-            {gradient:"flour",gra_kor:"밀가루"},
-            {gradient:"milk",gra_kor:"우유"},
-            {gradient:"olive-oil",gra_kor:"올리브유"},
-            {gradient:"potato",gra_kor:"감자"},
-            {gradient:"vanilla",gra_kor:"바닐라빈"},
-            {gradient:"sugar",gra_kor:"설탕"},
-            {gradient:"sweetpotato",gra_kor:"고구마"}
+            {name:"egg",name_kor:"계란",img:'egg',expire_date:'2020-09-01',amount:3},
+            {name:"flour",name_kor:"밀가루",img:'flour',expire_date:'2020-09-01',amount:4},
+            {name:"milk",name_kor:"우유",img:'milk',expire_date:'2020-09-01',amount:5},
+            {name:"olive-oil",name_kor:"올리브유",img:'olive-oil',expire_date:'2020-09-01',amount:6},
+            {name:"potato",name_kor:"감자",img:'potato',expire_date:'2020-09-01',amount:7},
+            {name:"vanilla",name_kor:"바닐라빈",img:'vanilla',expire_date:'2020-09-01',amount:4},
+            {name:"sugar",name_kor:"설탕",img:'sugar',expire_date:'2020-09-01',amount:3},
+            {name:"sweetpotato",name_kor:"고구마",img:'sweetpotato',expire_date:'2020-09-01',amount:4}
         ],
+        // foods:[],
         changeFoodsTemp:[
               ],
         changeFoods:[  
             ],
+        
         myreflist:[],
     }
   },
     methods:{
+        deleteFoodfromRef(){
+            const deleteFood = {
+                email:store.userinfo.email,
+                food: this.Nowgra
+            };
+            axios
+            .post(`${SERVER_URL}/MyRef/delete`,deleteFood)
+            .then((response)=>{
+                console.log(response);
+                this.$router.push("/");
+            })
+        },
+        fillFoodtoRef(){
+        const registFood = {
+            email:store.userInfo.email,
+            food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
+        };
+        axios
+        .post(`${SERVER_URL}/MyRef/regist`,registFood)
+        .then((response)=>{
+            console.log(response);
+            this.$router.push("/");
+        })
+        .catch((error)=>{
+                    console.log(error.response);
+        })   
+
+        // this.foods.push({name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum})
+        $('.registMaterial').css('display','none');
+        },
+        closeGetOneFood(){
+            $('.selectfood').css('display','none');
+        },
         getFood:function(){
             $('.selectfood').css('display','block');
         },
         addFood:function(food){
+            alert(food.name_kor+'을(를) 선택했습니다.');
             this.nowCgradient = food.name_kor;
             $('.selectfood').css('display','none');
-            $('.setFood').text(food.name_kor);
+            if($('.registMaterial').css('display')!='none'){
+                $('.fillBtn').text(food.name_kor);
+                this.selectedFood = food;
+            }else{
+                $('.setFood').text(food.name_kor);
+                this.selectedFood = food;
+            }
         },
             openregistMater: function () {
                 this.closeShare();
@@ -195,8 +251,8 @@ data() {
             
             openShare:function(nowfood,index){
                 this.closeregistMater();
-                this.Nowgra_kor = nowfood.gra_kor;
-                this.Nowgra = nowfood.gradient;
+                this.Nowgra_kor = nowfood.name_kor;
+                this.Nowgra = nowfood;
                 this.nowmyamount = nowfood.myamount;
                 this.nowCgradient = nowfood.Cgradient;
                 this.nowCamount = nowfood.Camount;
@@ -205,11 +261,20 @@ data() {
                 this.NowClassNum = index;
                 var className = '.F'+(this.NowClassNum+1);
                 var classN = 'F'+(this.NowClassNum+1);
-                this.intoFood =  this.Nowgra;
-                $('#justMoveImg').attr('src',this.intoFood);
+                this.intoFood =  this.Nowgra.name;
+                $('#justMoveImg').attr('src',nowfood.img);
                 $('#justMove').attr('class',classN);
                 $('#justMove').css('display','unset');
-                this.intoFood = this.Nowgra;
+                this.intoFood = this.Nowgra.name;
+            },
+            openShareBox:function(){
+                if($('.sharebox').css('display')=='none'){
+                    $('.sharebox').css('display','block');
+                    $('.shareButton').css('background-color','rgb(160,212,105)');
+                }else{
+                     $('.sharebox').css('display','none');
+                    $('.shareButton').css('background-color','#80808066');
+                }
             },
             closeShare:function(){
                 $('#shareField').css('display','none');
@@ -218,15 +283,15 @@ data() {
             addChangeGradient:function(){
                 var sum = 0;
                 if(this.nowmyamount>=1){
-                    if(this.Nowgra_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                    if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
                         if(this.nowmyamount>this.totalShareAmount){
                             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
                         this.nowmyamount = this.totalShareAmount;
                     }else{
                         var sellPrice = Number(this.nowSellPrice);
                         var sellAmount = Number(this.nowSellAmount);
-                        this.changeFoodsTemp.push({
-                            Mygradient:this.Nowgra_kor,
+                        this.changeFoods.push({
+                            Mygradient:this.Nowgra.name_kor,
                             myamount:this.nowmyamount,
                             Cgradient:this.nowCgradient,
                             Camount:this.nowCamount,
@@ -236,33 +301,15 @@ data() {
                             this.nowCgradient = '';
                             $('.setFood').text("");
                             this.nowCamount = 1;
+                            var shareMotion = 'share'+(this.NowClassNum+1);
+                            $('#justMove').addClass(shareMotion);
+                            
                     }
                 }else{
                     alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
                 }
                 }else{
-                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
-                }
-            },
-            ShareComplete:function(){
-                if(this.totalShareAmount>0){
-                    if(this.changeFoodsTemp.length==0){
-                        alert("교환하고 싶은 음식이 없습니다.")
-                    }else{
-                        if(this.nowSellAmount>=1 && this.nowSellPrice>0){
-                            this.closeShare();
-                            var shareMotion = 'share'+(this.NowClassNum+1);
-                            $('#justMove').addClass(shareMotion);
-                            for(var i=0; i<this.changeFoodsTemp.length;i++){
-                                this.changeFoods.push(this.changeFoodsTemp[i]);
-                                this.changeFoodsTemp = [];
-                            }
-                        }else{
-                            alert("판매가격을 적어주세요.")
-                        }
-                    }
-                }else{
-                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
+                    alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
                 }
             },
             openCheckBasket:function(){
@@ -301,9 +348,10 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`${SERVER_URL}/account/myref/`+this.userinfo.email)
+      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
         .then(response => {
-          this.myreflist = response.data.myreflist
+        //   this.myreflist = response.data.myreflist
+          this.foods = response.data.myreflist;
         })
         .catch(error => {
           console.log(error.response)
@@ -361,7 +409,6 @@ data() {
 }
 .inputFeild{
     width: 143px;
-    height: 362px;
     background-color: white;
     position: fixed;
     margin-left: 212px;
@@ -387,7 +434,7 @@ data() {
     margin-top: 168px;
     box-shadow: 1px 3px 15px #8080806b;
     display: none;
-    z-index: 1000;
+    z-index: 150;
 }
 h5{
     font-size: 13px;
@@ -400,7 +447,7 @@ h5{
     background-color: #f5f5f5;
     border-radius: 4px;
     color:black;
-    width:30px;
+    width:24px;
     height:60px;
     padding:4px;
 
@@ -411,7 +458,7 @@ h5{
     padding: 0 4px;
 }
 .textArea{
-    height: 45px;
+    height: 51px;
     margin-top: 6px;
     padding: 5px 7px;
     border-bottom: 1px solid rgba(224, 224, 224, 0.51);

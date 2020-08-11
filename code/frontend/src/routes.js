@@ -51,7 +51,7 @@ export default [
     component: Mypage,
   },
   {
-    path: "/user/yourpage",
+    path: "/user/yourpage/:email",
     name: "Yourpage",
     component: Yourpage,
   },
@@ -65,11 +65,11 @@ export default [
     name: "FeedMain",
     component: FeedMain,
   },
-  // {
-  //   path: "/feed/:feedNo",
-  //   name: "FeedDetail",
-  //   component: FeedDetail,
-  // },
+  {
+    path: "/feed/detail/:feedNo",
+    name: "FeedDetail",
+    component: FeedDetail,
+  },
   {
     path: "/components",
     name: "Components",
@@ -135,9 +135,9 @@ export default [
     name : "WriteRecipe",
     component : WriteRecipe
   },
-  {
-    path: "/feed/detail",
-    name: "FeedDetail",
-    component: FeedDetail,
-  },
+  // {
+  //   path: "/feed/detail",
+  //   name: "FeedDetail",
+  //   component: FeedDetail,
+  // },
 ];

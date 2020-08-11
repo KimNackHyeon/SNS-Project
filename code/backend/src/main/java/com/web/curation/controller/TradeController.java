@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/trade")
+@RequestMapping("/api/trade")
 public class TradeController {
 	@Autowired
 	private TradeRepo tradeRepo;
@@ -67,7 +67,7 @@ public class TradeController {
 		ArrayList<Trade> resultList = new ArrayList<Trade>();
 		for (Trade trade : tradelist) {
 			for (MyRef myref : mylist) {
-				String myfood = myref.getFood();
+				String myfood = myref.getName();
 				if(trade.getTradefood1().equals(myfood) || trade.getTradefood2().equals(myfood)) {
 					resultList.add(trade);
 				}

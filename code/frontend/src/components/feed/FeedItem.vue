@@ -20,7 +20,7 @@
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
-            :src="item.src"
+            :src="require(`../../assets/images/${item.image}`)"
           ></v-carousel-item>
         </v-carousel>
         <v-chip
@@ -114,8 +114,11 @@ export default {
   mounted(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
-          response.data.forEach(d =>{
-            var data = { // 하나의 피드 데이터
+          console.log(response);
+            var data = {};
+
+          response.data.feedlist.forEach(d =>{
+            data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
               email : d.email,
@@ -126,16 +129,16 @@ export default {
               comment: "",
               items: [
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+              image: 'food1.jpg',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+              image: 'food2.png',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+              image: 'food3.jpg',
             },
             {
-              src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+              image: 'food4.jpg',
             },
           ],
 
@@ -144,16 +147,16 @@ export default {
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
-            // console.log(response);
+            console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
-                img : '',
+                img : c.img,
                 nickname : c.nickname,
                 email: c.email,
                 content : c.comment,
                 created_at : c.create_date,
               }
-              data.comments.push(c);
+              data.comments.push(comment);
             })
           })
 
@@ -252,6 +255,7 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
+        console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     }

@@ -133,13 +133,14 @@ export default {
       foodlist:'',
       tags:[
       ],
-        items:[
-        {    //...작성자, 재료, 글작성 일, items, tag,제목
-          imageUrl: null,
-          desc:null
-        },
-        
+      items:[
+      {    //...작성자, 재료, 글작성 일, items, tag,제목
+        imageUrl: null,
+        desc:null,
+        file:null,
+      },
       ],
+      images:'',
     }
   },
    watch: {
@@ -164,7 +165,16 @@ export default {
     },
   methods: {
     addFood(foodlist){
-      alert(foodlist);
+      var FL = '음식재료 ';
+      for(var i=0; i<foodlist.length;i++){
+        FL = FL+ foodlist[i].name_kor + ' ';
+        FL = FL + foodlist[i].amount + '개 '
+        if(i!=foodlist.length-1){
+          FL+=',';
+        }
+      }
+      FL = FL + '를 재료로 추가하였습니다.';
+      alert(FL);
       this.foodlist = foodlist;
       $('.addFood').css('display','none');
     },
@@ -172,6 +182,7 @@ export default {
       const file = e.target.files[0];
     //   this.item.imageUrl = URL.createObjectURL(file);
     this.$set(this.items[index],'imageUrl',URL.createObjectURL(file));
+    this.$set(this.items[index],'file',file);
       
     },
     addRecipe(){
@@ -245,36 +256,57 @@ export default {
         this.userinfo = store.state.userInfo;
       }
 
+      var formData = new FormData();
+      const contents = [];
+
+      this.items.forEach(item => {
+        contents.push(item.desc);
+        formData.append('images',item.file);
+      });
+
       const feedData = {
         title : this.title,
         email : this.userinfo.email,
         nickname : this.userinfo.nickname,
+        profile : this.userinfo.profile_image_url,
         likecount : 0,
       }
 
-      const recipe = {  //...작성자, 재료, 글작성 일, items, tag,제목
-        feedData : feedData, // 피드에 대한 정보
-        food : this.foodlist, // 재료 정보
-        recipes : this.items, // 이미지, 내용
-        tags : this.tags, // 태그
+      const data = {
+        feedData : feedData,
+        food : this.foodlist,
+        tags : this.tags,
+        contents : contents,
+        images : this.images
       }
 
-      var formData = new FormData();
-      formData.append("feedData", feedData); // 피드에 대한 정보
-      formData.append("food",this.foodlist); // 재료 정보
-      formData.append("recipes",this.items); // 재료 정보
-      formData.append("tags",this.tags); // 재료 정보
-
-      console.log(formData);
       axios
-        .post(`${SERVER_URL}/feed/write`,formData,{
-          headers:{
-            'Content-Type' : 'multipart/form-data'
-          }
-        })
+      .post(`${SERVER_URL}/feed/img`, formData,{
+        headers: { 'Content-Type': 'multipart/form-data' } 
+      })
+      .then((response)=>{
+        console.log(response.data);
+        this.images = response.data;
+        console.log(this.images);
+        this.register(data);
+      })
+      .catch((error)=>{
+        console.log(error.response);
+      });
+
+      // confirm('Are you ready?')
+      // .then(result => {
+      //   this.register(data);
+      // })
+        
+    },
+    register(data){
+      console.log(data);
+      axios
+        .put(`${SERVER_URL}/feed/write`, data)
         .then((response)=>{
           console.log(response);
-          // this.$router.push("/feed/view");
+          this.$router.push("/feed/view");
         })
         .catch((error)=>{
           console.log(error.response);
