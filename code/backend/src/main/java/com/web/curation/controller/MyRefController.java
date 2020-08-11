@@ -52,6 +52,7 @@ public class MyRefController {
 	@GetMapping("/search/{email}")
 	@ApiOperation(value = "나의 음식재료 조회")
 	public ResponseEntity<Map> myRef(@PathVariable String email) {
+		System.out.println(email);
 		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
 		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
 		if (!myrefList.isEmpty()) {
@@ -65,6 +66,7 @@ public class MyRefController {
 	@PostMapping("/delete")
 	@ApiOperation(value = "나의 음식 삭제")
 	public ResponseEntity<String> deleteMyRef(@RequestBody MyRef myref){
+		System.out.println(myref.toString());
 		MyRef food = myrefRepo.findByEmailAndName(myref.getEmail(), myref.getName());
 		if(food == null) {
 			return new ResponseEntity<String>("삭제할 재료가 없습니다.", HttpStatus.NOT_ACCEPTABLE);

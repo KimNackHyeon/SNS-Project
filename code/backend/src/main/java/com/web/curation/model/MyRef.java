@@ -32,12 +32,25 @@ public class MyRef {
 	private String expire_date;
 	
 	private Long amount;
+	
+	private String img;
 
 	public MyRef() {
 	}
 
+
+	public String getImg() {
+		return img;
+	}
+
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+
 	public MyRef(Long no, @NotEmpty String email, @NotEmpty String name, @NotEmpty String name_kor,
-			@NotEmpty String expire_date, @NotEmpty Long amount) {
+			@NotEmpty String expire_date, Long amount, String img) {
 		super();
 		this.no = no;
 		this.email = email;
@@ -45,7 +58,9 @@ public class MyRef {
 		this.name_kor = name_kor;
 		this.expire_date = expire_date;
 		this.amount = amount;
+		this.img = img;
 	}
+
 
 	public Long getNo() {
 		return no;
@@ -94,5 +109,13 @@ public class MyRef {
 	public void setAmount(Long amount) {
 		this.amount = amount;
 	}
+
+
+	@Override
+	public String toString() {
+		return "MyRef [no=" + no + ", email=" + email + ", name=" + name + ", name_kor=" + name_kor + ", expire_date="
+				+ expire_date + ", amount=" + amount + ", img=" + img + "]";
+	}
+	
 	
 }
