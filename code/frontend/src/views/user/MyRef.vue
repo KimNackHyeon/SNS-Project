@@ -201,7 +201,7 @@ data() {
                 img:this.Nowgra.img,
             };
             axios
-            .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
+            .post(`${SERVER_URL}/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
                 window.location.reload();
@@ -218,7 +218,7 @@ data() {
             // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
         };
         axios
-        .post(`http://localhost:9999/food/api/myref/regist`,registFood)
+        .post(`${SERVER_URL}/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
             window.location.reload();
@@ -371,7 +371,7 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`http://localhost:9999/food/api/myref/search/`+this.userinfo.email)
+      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
