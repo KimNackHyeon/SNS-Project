@@ -381,7 +381,7 @@ data() {
           console.log(error.response)
         })
 
-        axios.get('https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=bu03101&p_returntype=json')
+        axios.get('https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json')
         .then((response) => {
             var xml = response.data;
         var json = convert.xml2json(xml, { compact: true });
