@@ -247,9 +247,10 @@ export default {
             nickname : this.newUserInfo.newNickname,
             address : this.newUserInfo.newAddress,
             password : this.newUserInfo.newPassword,
-            image : this.newUserInfo.newImgUrl
+            image : this.image
           }).then(response => {
             console.log(response);
+            this.newUserInfo.newImgUrl = this.image;
             store.commit('modifyUserInfo', this.newUserInfo)
             console.log(this.newUserInfo)
             this.$router.go(-1)
@@ -276,7 +277,7 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' } 
       }).then(response => {
         console.log(response);
-        this.newUserInfo.newImgUrl = response.data;
+        this.image = response.data;
       });
     }
   }

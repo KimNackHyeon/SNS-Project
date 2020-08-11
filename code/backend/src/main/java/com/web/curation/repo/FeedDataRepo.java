@@ -11,7 +11,7 @@ import com.web.curation.model.FeedData;
 @Repository
 public interface FeedDataRepo extends JpaRepository<FeedData, Long>{
 	
-	List<FeedData> findByFeedNoAndTindex(Long feedNo, Long index);
+	FeedData findByFeedNoAndTindex(Long feedNo, Long index);
 
 	List<FeedData> findByFeedNo(Long feedNo);
 	

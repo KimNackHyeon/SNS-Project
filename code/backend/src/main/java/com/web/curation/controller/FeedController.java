@@ -166,11 +166,12 @@ public class FeedController {
 		System.out.println(Arrays.toString(contents));
 		System.out.println(Arrays.toString(images));
 
-		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
 		if (images.length == 0)
 			return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
 		/* 피드 정보 등록 */
 		myboardRepo.save(feedData);
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
+		
 
 		System.out.println(feedNo);
 		/* 피드 재료 등록 */
@@ -208,7 +209,7 @@ public class FeedController {
 
 		List<String> imgList = new ArrayList<String>();
 
-		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo()+1; // 가장 최근 피드 번호
 		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
 
 		for (MultipartFile mfile : images) {
@@ -225,7 +226,7 @@ public class FeedController {
 		String filename = image.getOriginalFilename(); // 파일 이름
 		System.out.println(filename);
 		Member member = memberRepo.getUserByEmail(email); // 폴더명
-		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/" + feedNo + "/";// 폴더 상대 경로
+		String filepath = "/dist/img/" + member.getNo() + "/" + feedNo + "/";// 폴더 상대 경로
 
 		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
 		System.out.println(path); // 상대경로
