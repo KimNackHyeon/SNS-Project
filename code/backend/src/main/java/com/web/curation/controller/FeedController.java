@@ -67,7 +67,7 @@ public class FeedController {
 
 	@Autowired
 	MemberRepo memberRepo;
-	
+
 	@Autowired
 	FeedDataRepo feedDataRepo;
 
@@ -75,12 +75,12 @@ public class FeedController {
 	@GetMapping("/feed/searchAll")
 	public ResponseEntity<Map> searchAll() {
 
-		Map<String,List> map = new HashMap<>();
-		
+		Map<String, List> map = new HashMap<>();
+
 		List<MyBoard> feedlist = myboardRepo.findAll();
 		List<Tag> taglist = tagRepo.findAll();
 		List<FeedData> datalist = feedDataRepo.findAll();
-		
+
 		map.put("feedlist", feedlist);
 		map.put("taglist", taglist);
 		map.put("datalist", datalist);
@@ -98,14 +98,31 @@ public class FeedController {
 
 	@ApiOperation(value = "피드 게시글 상세정보 불러오기")
 	@GetMapping("/feed/search")
-	public ResponseEntity<MyBoard> search(@RequestParam Long feedNo) {
-
+	public ResponseEntity<Map> search(@RequestParam Long feedNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		/* 피드 기본 정보 */
 		Optional<MyBoard> myBoard = myboardRepo.findMyBoardByNo(feedNo);
 		System.out.println(myBoard);
+		map.put("feeddata", myBoard);
+
+		/* 피드 태그 정보 */
+		List<Tag> taglist = tagRepo.findByFeedNo(feedNo);
+		System.out.println(taglist);
+		map.put("taglist", taglist);
+
+		/* 피드 재료 정보 */
+		List<Food> foodlist = foodRepo.findByFeedNo(feedNo);
+		System.out.println(foodlist);
+		map.put("foodlist", foodlist);
+
+		/* 피드 이미지 내용 정보 */
+		List<FeedData> datalist = feedDataRepo.findByFeedNo(feedNo);
+		System.out.println(datalist);
+		map.put("datalist", datalist);
 		if (myBoard.isPresent()) {
-			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.OK);
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Map>(null, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -150,11 +167,11 @@ public class FeedController {
 		System.out.println(Arrays.toString(images));
 
 		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
-		if(images.length == 0)
+		if (images.length == 0)
 			return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
 		/* 피드 정보 등록 */
 		myboardRepo.save(feedData);
-		
+
 		System.out.println(feedNo);
 		/* 피드 재료 등록 */
 		for (Food f : food) {
@@ -164,20 +181,20 @@ public class FeedController {
 		System.out.println(Arrays.toString(food));
 		/* 피드 태그 등록 */
 		for (int i = 0; i < tags.length; i++) {
-			Tag tag = new Tag(feedNo,tags[i]);
+			Tag tag = new Tag(feedNo, tags[i]);
 			tagRepo.save(tag);
 		}
 		System.out.println(Arrays.toString(tags));
-		
+
 		/* 피드 내용, 이미지 등록 */
 		for (int index = 0; index < contents.length; index++) {
 			String content = contents[index];
 			String imgurl = images[index];
 			FeedData feed = new FeedData();
 			feed.setFeedNo(feedNo);
-			feed.setTindex((long)index);
+			feed.setTindex((long) index);
 			feed.setContent(content);
-			feed.setImg(imgurl); 
+			feed.setImg(imgurl);
 			feedDataRepo.save(feed);
 		}
 
@@ -186,10 +203,11 @@ public class FeedController {
 
 	@ApiOperation(value = "피드 이미지 등록")
 	@PostMapping("/feed/img")
-	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images) throws IllegalStateException, IOException {
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images)
+			throws IllegalStateException, IOException {
 
 		List<String> imgList = new ArrayList<String>();
-		
+
 		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
 		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
 
