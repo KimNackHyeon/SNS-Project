@@ -5,6 +5,10 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import store from '../../vuex/store.js'
+import axios from 'axios'
+
+// const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -63,7 +67,7 @@ export default {
             console.log('ok')
             for (var r = 0; r < result.length; r++) {
               var data = result[r];
-              bounds.extend(new kakao.maps.LatLng(data.y - 50, data.x - 50));
+              bounds.extend(new kakao.maps.LatLng(data.y, data.x));
             }
             this.map.setBounds(bounds);
             var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
@@ -115,6 +119,28 @@ export default {
   },
   computed: {
     ...mapState(['userInfo', 'mapOtherUserInfo']),
+  },
+  created() {
+  if(store.state.kakaoUserInfo.email != null){
+    this.userinfo = store.state.kakaoUserInfo;
+  }else{
+    this.userinfo = store.state.userInfo;
   }
+  console.log(`${SERVER_URL}/trade/`)
+  axios.get(`${SERVER_URL}/trade/`)
+    .then(response => {
+      this.tradelist = response.data.list
+      console.log(this.tradelist)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+          store.state.mapOtherUserInfo.food.push(this.tradelist[i].myfood)
+        }
+      }
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  },
 }
 </script>

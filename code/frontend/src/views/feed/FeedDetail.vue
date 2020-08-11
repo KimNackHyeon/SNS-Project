@@ -34,7 +34,7 @@
       </div>
       <!-- 해시태그 -->
       <div class="hashBox">
-        <div v-for="(hashTag, i) in hashTags" :key="i" style="display: inline-block">
+        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
           <div class="hash">#{{ hashTag }}</div>
         </div>
       </div>
@@ -55,14 +55,14 @@
         <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center">
           <h5>나에게 없는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
-            <div class="food" v-for="(food, i) in outFoods" :key="i">
+            <div class="food" v-for="(food, i) in feedData.foods" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
                   <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
                 </v-btn>
               </div>
-              <h5 class="food-name">{{food.name}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h5 class="food-name">{{food.name_kor}}</h5>
+              <h6>{{food.amount}}개</h6>
             </div>
             <div  class="balloon">
               <h5 style="color: white">{{nowFood}}</h5>
@@ -78,7 +78,15 @@
           <h2>{{feedData.title}}</h2>
         </div>
         <div>
-          <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
+          <v-carousel>
+            <v-carousel-item
+              v-for="(item,i) in feedData.items"
+              :key="i"
+              :src="require(`../../assets/images${item.img}`)"
+              transition="fade"
+              reverse-transition="fade"
+            ></v-carousel-item>
+          </v-carousel>
           <p style="padding: 10px">{{feedData.content}}</p>
         </div>
       </div>
@@ -162,14 +170,26 @@ export default {
         .then(response => {
           console.log(response);
             this.feedData = { // 하나의 피드 데이터
-              no: response.data.no,
-              nickname : response.data.nickname,
-              profile : response.data.profile,
-              content: response.data.content,
-              title: response.data.title,
+              no: response.data.feeddata.no,
+              nickname : response.data.feeddata.nickname,
+              profile : response.data.feeddata.profile,
+              title: response.data.feeddata.title,
               items: [],
               comments:[],
+              hashTags:[],
+              foods:[],
             }
+            response.data.taglist.forEach(tag =>{
+              this.feedData.hashTags.push(tag.tagName);
+            });
+
+            response.data.foodlist.forEach(food =>{
+              this.feedData.foods.push(food);
+            });
+
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
+            });
         console.log(this.feedData);
         })
         .catch((error) => {

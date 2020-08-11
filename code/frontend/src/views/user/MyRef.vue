@@ -11,7 +11,7 @@
             <div id="justMove" class="F1" style="display:none; position:fixed;">
                     <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
                 </div>
-               <div v-for="(food,index) in foods" :key="(food,index)">
+               <div v-for="(food,index) in foods" :key="(index)">
                 <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.img}.png`)">
                 
                 </button>
@@ -73,9 +73,9 @@
                 <textarea v-model="sharedesc" style="width:100%; height:100%; resize: none;" placeholder="공유글에 들어갈 글을 적어주세요"></textarea>
             </div>
             </div>
-            <div style="width:100%; height:100px; background-color:black;">
+            <div style="width:100%; height:100px; background-color:black; color:white;">
+             {{apiUnit}} 당 {{apiPrice}}원
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
-            
             </div>
         </div><!-- end of 바구니에 넣기 -->
 
@@ -141,6 +141,7 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 
 const SERVER_URL = store.state.SERVER_URL;
+var convert = require('xml-js')
 
 export default {
     components:{getOneFood},
@@ -166,51 +167,65 @@ data() {
     nowSellPrice:0,
     intoFood:'egg',
     sharedesc:'',
-      foods:[
-            {name:"egg",name_kor:"계란",img:'egg',expire_date:'2020-09-01',amount:3},
-            {name:"flour",name_kor:"밀가루",img:'flour',expire_date:'2020-09-01',amount:4},
-            {name:"milk",name_kor:"우유",img:'milk',expire_date:'2020-09-01',amount:5},
-            {name:"olive-oil",name_kor:"올리브유",img:'olive-oil',expire_date:'2020-09-01',amount:6},
-            {name:"potato",name_kor:"감자",img:'potato',expire_date:'2020-09-01',amount:7},
-            {name:"vanilla",name_kor:"바닐라빈",img:'vanilla',expire_date:'2020-09-01',amount:4},
-            {name:"sugar",name_kor:"설탕",img:'sugar',expire_date:'2020-09-01',amount:3},
-            {name:"sweetpotato",name_kor:"고구마",img:'sweetpotato',expire_date:'2020-09-01',amount:4}
-        ],
-        // foods:[],
+    apiUnit:'',
+    apiPrice:0,
+    //   foods:[
+    //         {name:"egg",name_kor:"계란",img:'egg',expire_date:'2020-09-01',amount:3},
+    //         {name:"flour",name_kor:"밀가루",img:'flour',expire_date:'2020-09-01',amount:4},
+    //         {name:"milk",name_kor:"우유",img:'milk',expire_date:'2020-09-01',amount:5},
+    //         {name:"olive-oil",name_kor:"올리브유",img:'olive-oil',expire_date:'2020-09-01',amount:6},
+    //         {name:"potato",name_kor:"감자",img:'potato',expire_date:'2020-09-01',amount:7},
+    //         {name:"vanilla",name_kor:"바닐라빈",img:'vanilla',expire_date:'2020-09-01',amount:4},
+    //         {name:"sugar",name_kor:"설탕",img:'sugar',expire_date:'2020-09-01',amount:3},
+    //         {name:"sweetpotato",name_kor:"고구마",img:'sweetpotato',expire_date:'2020-09-01',amount:4}
+    //     ],
+        foods:[],
         changeFoodsTemp:[
               ],
         changeFoods:[  
             ],
         
         myreflist:[],
+        xmldata:[],
     }
   },
     methods:{
         deleteFoodfromRef(){
+            var minusAmount = this.totalShareAmount * -1;
             const deleteFood = {
-                email:store.userinfo.email,
-                food: this.Nowgra
+                amount:minusAmount,
+                email:this.userinfo.email,
+                expire_date:'',
+                name:this.Nowgra.name,
+                name_kor:this.Nowgra.name_kor,
+                img:this.Nowgra.img,
             };
             axios
-            .post(`${SERVER_URL}/MyRef/delete`,deleteFood)
+            .post(`${SERVER_URL}/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
-                this.$router.push("/");
+                window.location.reload();
             })
         },
         fillFoodtoRef(){
         const registFood = {
-            email:store.userInfo.email,
-            food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
+            amount:this.fillFoodNum,
+            email:this.userinfo.email,
+            expire_date:this.fillFoodExpireDate,
+            name:this.selectedFood.name,
+            name_kor:this.selectedFood.name_kor,
+            img:this.selectedFood.img
+            // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
         };
         axios
-        .post(`${SERVER_URL}/MyRef/regist`,registFood)
+        .post(`${SERVER_URL}/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
-            this.$router.push("/");
+            window.location.reload();
         })
         .catch((error)=>{
-                    console.log(error.response);
+                console.log(error.response);
+                
         })   
 
         // this.foods.push({name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum})
@@ -266,6 +281,14 @@ data() {
                 $('#justMove').attr('class',classN);
                 $('#justMove').css('display','unset');
                 this.intoFood = this.Nowgra.name;
+                for(var i=0; i<this.xmldata.price.length;i++){
+                    var tF = this.xmldata.price[i];
+                    var tFname = tF.productName.split('/')[0];
+                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
+                        this.apiUnit = tF.unit;
+                        this.apiPrice = tF.dpr1;
+                    }
+                }
             },
             openShareBox:function(){
                 if($('.sharebox').css('display')=='none'){
@@ -331,7 +354,7 @@ data() {
                 const shareList = this.changeFoods;
                 console.log(shareList);
                 axios
-                .post(`${SERVER_URL}/MyRef/share`,shareList)
+                .post(`${SERVER_URL}/myref/share`,shareList)
                 .then((response)=>{
                     console.log(response);
                     this.$router.push("/");
@@ -352,11 +375,24 @@ data() {
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
+          console.log(response.data.myreflist);
         })
         .catch(error => {
           console.log(error.response)
         })
+
+        axios.get('http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=bu03101&p_returntype=json')
+        .then((response) => {
+            var xml = response.data;
+        var json = convert.xml2json(xml, { compact: true });
+        this.xmldata = JSON.parse(json);
+            console.log(this.xmldata);
+        })
+        .catch((error)=>{
+                    console.log(error.response);
+        })
       
+    
   },
 }
 </script>

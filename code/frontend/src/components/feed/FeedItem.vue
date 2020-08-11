@@ -20,7 +20,7 @@
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
-            :src="require(`../../assets/images/${item.image}`)"
+            :src="require(`../../assets/images${item.image}`)"
           ></v-carousel-item>
         </v-carousel>
         <v-chip
@@ -114,7 +114,10 @@ export default {
   mounted(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
-          response.data.forEach(d =>{
+          console.log(response);
+            // var data = {};
+
+          response.data.feedlist.forEach(d =>{
             var data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
@@ -124,40 +127,36 @@ export default {
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [
-            {
-              image: 'food1.jpg',
-            },
-            {
-              image: 'food2.png',
-            },
-            {
-              image: 'food3.jpg',
-            },
-            {
-              image: 'food4.jpg',
-            },
-          ],
+              items: [    
+              ],
 
               comments:[],
             }
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
-            // console.log(response);
+            console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
-                img : '',
+                img : c.img,
                 nickname : c.nickname,
                 email: c.email,
-                content : c.comment,
+                comment : c.comment,
                 created_at : c.create_date,
               }
-              data.comments.push(c);
+              data.comments.push(comment);
             })
           })
 
+          response.data.datalist.forEach(dindex => {
+            if(dindex.feedNo == d.no){
+              var image = {image : dindex.img};
+              data.items.push(image);
+            }
+          })
+
           this.feedDatas.push(data); // 피드 데이터 저장
+          console.log(data);
         })
         console.log(this.feedDatas)
       })

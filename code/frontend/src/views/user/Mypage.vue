@@ -17,7 +17,7 @@
                     <h1>5</h1>
                   </v-col>
                   <!-- 팔로워 -->
-                  <v-col class="myprofil-box onmyprofil-box" cols="4" @click="onFollower">
+                  <v-col class="myprofil-box" cols="4" @click="onFollower">
                     <span style="color: black;">팔로워</span>
                     <h1>{{userData.follower}}</h1>
                   </v-col>
@@ -45,7 +45,7 @@
                     </v-card>
                   </v-dialog>
                   <!-- 팔로잉 -->
-                  <v-col class="myprofil-box onmyprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
+                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
                     <h1>{{userData.following}}</h1>
                   </v-col>
@@ -180,6 +180,15 @@ export default {
           this.followings.forEach(following => {
             this.$set(following, 'isfollow', true)
           })
+          // response.data.forEach(following => {
+          //   this.followings.push({
+          //   nickname : following.nickname,
+          //   email : following.email,
+          //   image : following.image,
+          //   isfollow : true,
+          // })
+          // })
+
           console.log(this.followings)
         })
         .catch(error =>{
@@ -200,7 +209,7 @@ export default {
       // alert('팔로우');
       axios.post(`${SERVER_URL}/account/follow/`,
         {
-          email : this.userinfo.email,
+          email : store.state.userInfo.email,
           yourEmail : yourEmail,
         }
       ).then(response => {
@@ -211,7 +220,7 @@ export default {
       // alert('언팔로우');
       axios.post(`${SERVER_URL}/account/unfollow/`,
         {
-          email : this.userinfo.email,
+          email : store.state.userInfo.email,
           yourEmail : yourEmail,
         }
       ).then(response => {
