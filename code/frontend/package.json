@@ -37,7 +37,8 @@
     "vuejs-daum-postcode": "^1.0.4",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1",
-    "vuex-persistedstate": "^3.0.1"
+    "vuex-persistedstate": "^3.0.1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.7.6",
