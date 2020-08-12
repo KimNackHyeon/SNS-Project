@@ -35,11 +35,13 @@ import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
+import com.web.curation.model.Scrap;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
 import com.web.curation.repo.MyRefRepo;
+import com.web.curation.repo.ScrapRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -80,6 +82,9 @@ public class AccountController {
 	
 	@Autowired
 	FeedDataRepo feedDataRepo;
+	
+	@Autowired
+	ScrapRepo scrapRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -395,6 +400,20 @@ public class AccountController {
 		List<FeedData> datalist = new ArrayList<FeedData>();
 		for (MyBoard myBoard : boardList) {
 			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(myBoard.getNo(), (long)0);
+			datalist.add(feeddata);
+		}
+
+		return datalist;
+	}
+	
+	@GetMapping("/account/myscrap/")
+	@ApiOperation(value = "내 스크랩 글 탐색")
+	public List<FeedData> scrapList(@RequestParam String email) {
+
+		List<Scrap> scrapList = scrapRepo.findByEmail(email);
+		List<FeedData> datalist = new ArrayList<FeedData>();
+		for (Scrap scrap : scrapList) {
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(scrap.getFeedNo(), (long)0);
 			datalist.add(feeddata);
 		}
 

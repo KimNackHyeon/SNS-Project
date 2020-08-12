@@ -27,14 +27,18 @@ import com.web.curation.model.Comment;
 import com.web.curation.model.FeedData;
 import com.web.curation.model.Food;
 import com.web.curation.model.FormWrapper;
+import com.web.curation.model.LikeFeed;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
+import com.web.curation.model.Scrap;
 import com.web.curation.model.Tag;
 import com.web.curation.repo.CommentRepo;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FoodRepo;
+import com.web.curation.repo.LikeRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.ScrapRepo;
 import com.web.curation.repo.TagRepo;
 
 import io.swagger.annotations.ApiOperation;
@@ -71,6 +75,12 @@ public class FeedController {
 	@Autowired
 	FeedDataRepo feedDataRepo;
 
+	@Autowired
+	LikeRepo likeRepo;
+
+	@Autowired
+	ScrapRepo scrapRepo;
+
 	@ApiOperation(value = "피드 전체 불러오기")
 	@GetMapping("/feed/searchAll")
 	public ResponseEntity<Map> searchAll() {
@@ -89,11 +99,7 @@ public class FeedController {
 //			System.out.println(myBoard);
 //		}
 
-		if (!feedlist.isEmpty()) {
-			return new ResponseEntity<Map>(map, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Map>(map, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "피드 게시글 상세정보 불러오기")
@@ -135,12 +141,7 @@ public class FeedController {
 		for (Comment c : list) {
 			System.out.println(c);
 		}
-
-		if (!list.isEmpty()) {
-			return new ResponseEntity<List>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List>(list, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<List>(list, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "피드에 대한 댓글 등록")
@@ -171,7 +172,6 @@ public class FeedController {
 		/* 피드 정보 등록 */
 		myboardRepo.save(feedData);
 		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
-		
 
 		System.out.println(feedNo);
 		/* 피드 재료 등록 */
@@ -209,7 +209,7 @@ public class FeedController {
 
 		List<String> imgList = new ArrayList<String>();
 
-		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo()+1; // 가장 최근 피드 번호
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
 		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
 
 		for (MultipartFile mfile : images) {
@@ -218,6 +218,62 @@ public class FeedController {
 		}
 
 		return new ResponseEntity<List>(imgList, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "피드 좋아요 등록")
+	@GetMapping("/feed/like")
+	public ResponseEntity<String> addLike(@RequestParam String email, @RequestParam Long feedNo) {
+		System.out.println("좋아요 등록 시작============================");
+		System.out.println(email + " " + feedNo);
+		Optional<MyBoard> boardOpt = myboardRepo.findMyBoardByNo(feedNo); // 해당 글 정보
+
+		Optional<LikeFeed> isLike = likeRepo.findByEmailAndFeedNo(email, feedNo);
+		System.out.println(isLike.isPresent());
+		if (!isLike.isPresent()) { // 좋아요 안 눌렀으면
+			LikeFeed like = new LikeFeed(email, feedNo);
+			likeRepo.save(like); // 좋아요 등록하고
+			boardOpt.get().setLikecount(boardOpt.get().getLikecount() + 1L); // 좋아요 수 늘려주고
+			myboardRepo.save(boardOpt.get()); // 업데이트
+			return new ResponseEntity<String>("like", HttpStatus.OK);
+		} else {
+			likeRepo.delete(isLike.get()); // 좋아요 해제하고
+			boardOpt.get().setLikecount(boardOpt.get().getLikecount() - 1L); // 좋아요 수 빼주고
+			myboardRepo.save(boardOpt.get()); // 업데이트
+			return new ResponseEntity<String>("unlike", HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "피드 스크랩 등록")
+	@GetMapping("/feed/scrap")
+	public ResponseEntity<String> addScrap(@RequestParam String email, @RequestParam Long feedNo) {
+		System.out.println("스크랩 등록 시작============================");
+		System.out.println(email + " " + feedNo);
+
+		Optional<Scrap> isScrap = scrapRepo.findByEmailAndFeedNo(email, feedNo);
+		System.out.println(isScrap.isPresent());
+		if (!isScrap.isPresent()) { // 스크랩 안 눌렀으면
+			Scrap scrap = new Scrap(email, feedNo);
+			scrapRepo.save(scrap); // 스크랩 등록하고
+			return new ResponseEntity<String>("scrap", HttpStatus.OK);
+		} else {
+			scrapRepo.delete(isScrap.get()); // 스크랩 해제하고
+			return new ResponseEntity<String>("unscrap", HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "피드 좋아요 스크랩 체크")
+	@GetMapping("/feed/check")
+	public ResponseEntity<Map> check(@RequestParam String email, @RequestParam Long feedNo) {
+
+		Map<String, Boolean> map = new HashMap<>();
+
+		Optional<LikeFeed> like = likeRepo.findByEmailAndFeedNo(email, feedNo);
+		Optional<Scrap> scrap = scrapRepo.findByEmailAndFeedNo(email, feedNo);
+
+		map.put("like", like.isPresent());
+		map.put("scrap", scrap.isPresent());
+
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	public String upload(MultipartFile image, Long feedNo, String email) throws IllegalStateException, IOException {

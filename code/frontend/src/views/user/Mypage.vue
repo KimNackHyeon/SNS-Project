@@ -113,8 +113,10 @@
         <div class="myrecipe" v-if="myscrap">
           <h3 class="myrecipe-title">내 스크랩</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
+            <div class="myrecipe-img" v-for="(scrap, i) in scraps" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : scrap.feedNo }}">
+                <img class="myrecipe-img-size" :src="require(`../../assets/images${scrap.img}`)" alt="food">
+              </router-link>
             </div>
           </div>
         </div>
@@ -148,6 +150,15 @@ export default {
         .catch(error =>{
           console.log(error)
         })
+
+      axios.get(`${SERVER_URL}/account/myscrap/`, {params: {email: this.userinfo.email}})
+      .then(response => {
+          console.log(response)
+          this.scraps = response.data;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     },
   data() {
     return {
@@ -159,6 +170,7 @@ export default {
         following:"",
       },
       recipes:[],
+      scraps:[],
       openFollower: false,
       followers: "",
       openFollowing: false,
