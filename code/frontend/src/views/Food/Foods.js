@@ -8,7 +8,7 @@ export var foods=[
             },
             {name:'milk',
             name_kor:'우유',
-            img:'flour'
+            img:'milk'
             },
             {name:'olive-oil',
             name_kor:'올리브오일',
@@ -82,29 +82,29 @@ export var foods=[
             name_kor:'후추',
             img:'black_pepper'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'ketchup',
+            name_kor:'케찹',
+            img:'season'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'oyster_sauce',
+            name_kor:'굴소스',
+            img:'season'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'carrot',
+            name_kor:'당근',
+            img:'carrot'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'dasida',
+            name_kor:'다시다',
+            img:'season'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'corn',
+            name_kor:'옥수수',
+            img:'corn'               
             },
-            {name:'sausage',
-            name_kor:'소세지',
-            img:'sausage'               
+            {name:'cheese',
+            name_kor:'치즈',
+            img:'cheese'               
             }
 
 ]

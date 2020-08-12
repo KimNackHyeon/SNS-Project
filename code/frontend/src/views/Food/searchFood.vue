@@ -24,7 +24,7 @@
       <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:25;">
         <div class="card" v-for="(food,index) in filterListImg" :key="index">
         <div @click="changeValue(food)">
-          <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
+          <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
         </div>
         <div>
           {{ food.name_kor }}
