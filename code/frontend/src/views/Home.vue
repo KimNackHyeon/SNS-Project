@@ -47,9 +47,11 @@
                   <div class="iconBox"> 
                    <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
                   </div>
-                  <div class="subBox">
-                    <h4>새 소식</h4>
-                  </div>
+                  <router-link to="/alarm">
+                    <div class="subBox">
+                      <h4>새 소식</h4>
+                    </div>
+                  </router-link>
                 </div>
             </div>
         </div>

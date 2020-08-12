@@ -82,7 +82,6 @@
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        
         <div class="myfeed">
           <button class="myprofil-feed" @click="scrapOff">
             <div class="myprofil-text">
@@ -333,6 +332,9 @@ export default {
   .followbtn {
     float: right;
     width: 50px;
+  }
+  .v-card {
+    height: 420px;
   }
 
 </style>
