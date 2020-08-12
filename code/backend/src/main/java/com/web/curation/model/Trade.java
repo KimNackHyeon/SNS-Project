@@ -21,54 +21,56 @@ import lombok.NoArgsConstructor;
 public class Trade {
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
-	   
-	   @NotEmpty
-	   private String email;
-	   
-	   @NotEmpty
-	   private String nickname;
-	   
-	   @NotEmpty
-	   private String myfood;
-	   
-	   @NotEmpty
-	   private String myfood_kor;
-	   
-	   @NotEmpty
-	   private String price;
-	   
-	   @NotEmpty
-	   private String tradefood1;
-	   
-	   private String tradefood2;
-	   
-	   @NotEmpty
-	   private String tradefood1_kor;
-	   
-	   private String tradefood2_kor;
-	   
-	   @NotEmpty
-	   private String myfoodcount1;
-	   @NotEmpty
-	   private String tradefoodcount1;
-	   
-	   @NotEmpty
-	   private String myfoodcount2;
-	   @NotEmpty
-	   private String tradefoodcount2;
-	   
-	   @NotEmpty
-	   private String content;
-	   
-	   @NotEmpty
-	   private String address;
+	
+	@NotEmpty
+	private String email;
+	
+	@NotEmpty
+	private String nickname;
+	
+	@NotEmpty
+	private String myfood;
+	
+	@NotEmpty
+	private String myfood_kor;
+	
+	@NotEmpty
+	private String price;
+	
+	@NotEmpty
+	private String tradefood1;
+	
+	private String tradefood2;
+	
+	@NotEmpty
+	private String tradefood1_kor;
+	
+	private String tradefood2_kor;
+	
+	@NotEmpty
+	private String myfoodcount1;
+	@NotEmpty
+	private String tradefoodcount1;
+	
+	
+	private String myfoodcount2;
+	
+	private String tradefoodcount2;
+	
+	@NotEmpty
+	private String content;
+	
+	@NotEmpty
+	private String address;
 	
 	@Column(name = "regist_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@CreationTimestamp
 	private LocalDateTime regist_date;
-
+	
+	
 	public Trade() {
+		super();
 	}
 
 	
@@ -97,81 +99,6 @@ public class Trade {
 		this.content = content;
 		this.address = address;
 		this.regist_date = regist_date;
-	}
-
-
-
-
-	public String getMyfoodcount1() {
-		return myfoodcount1;
-	}
-
-
-
-
-	public void setMyfoodcount1(String myfoodcount1) {
-		this.myfoodcount1 = myfoodcount1;
-	}
-
-
-
-
-	public String getTradefoodcount1() {
-		return tradefoodcount1;
-	}
-
-
-
-
-	public void setTradefoodcount1(String tradefoodcount1) {
-		this.tradefoodcount1 = tradefoodcount1;
-	}
-
-
-
-
-	public String getMyfoodcount2() {
-		return myfoodcount2;
-	}
-
-
-
-
-	public void setMyfoodcount2(String myfoodcount2) {
-		this.myfoodcount2 = myfoodcount2;
-	}
-
-
-
-
-	public String getTradefoodcount2() {
-		return tradefoodcount2;
-	}
-
-
-
-
-	public void setTradefoodcount2(String tradefoodcount2) {
-		this.tradefoodcount2 = tradefoodcount2;
-	}
-
-
-
-
-	public String getTradefood1_kor() {
-		return tradefood1_kor;
-	}
-
-	public void setTradefood1_kor(String tradefood1_kor) {
-		this.tradefood1_kor = tradefood1_kor;
-	}
-
-	public String getTradefood2_kor() {
-		return tradefood2_kor;
-	}
-
-	public void setTradefood2_kor(String tradefood2_kor) {
-		this.tradefood2_kor = tradefood2_kor;
 	}
 
 	public Long getNo() {
@@ -238,7 +165,53 @@ public class Trade {
 		this.tradefood2 = tradefood2;
 	}
 
-	
+	public String getTradefood1_kor() {
+		return tradefood1_kor;
+	}
+
+	public void setTradefood1_kor(String tradefood1_kor) {
+		this.tradefood1_kor = tradefood1_kor;
+	}
+
+	public String getTradefood2_kor() {
+		return tradefood2_kor;
+	}
+
+	public void setTradefood2_kor(String tradefood2_kor) {
+		this.tradefood2_kor = tradefood2_kor;
+	}
+
+	public String getMyfoodcount1() {
+		return myfoodcount1;
+	}
+
+	public void setMyfoodcount1(String myfoodcount1) {
+		this.myfoodcount1 = myfoodcount1;
+	}
+
+	public String getTradefoodcount1() {
+		return tradefoodcount1;
+	}
+
+	public void setTradefoodcount1(String tradefoodcount1) {
+		this.tradefoodcount1 = tradefoodcount1;
+	}
+
+	public String getMyfoodcount2() {
+		return myfoodcount2;
+	}
+
+	public void setMyfoodcount2(String myfoodcount2) {
+		this.myfoodcount2 = myfoodcount2;
+	}
+
+	public String getTradefoodcount2() {
+		return tradefoodcount2;
+	}
+
+	public void setTradefoodcount2(String tradefoodcount2) {
+		this.tradefoodcount2 = tradefoodcount2;
+	}
 
 	public String getContent() {
 		return content;
@@ -256,7 +229,6 @@ public class Trade {
 		this.address = address;
 	}
 
-	
 	public LocalDateTime getRegist_date() {
 		return regist_date;
 	}
@@ -264,6 +236,16 @@ public class Trade {
 	public void setRegist_date(LocalDateTime regist_date) {
 		this.regist_date = regist_date;
 	}
+
+	@Override
+	public String toString() {
+		return "Trade [no=" + no + ", email=" + email + ", nickname=" + nickname + ", myfood=" + myfood
+				+ ", myfood_kor=" + myfood_kor + ", price=" + price + ", tradefood1=" + tradefood1 + ", tradefood2="
+				+ tradefood2 + ", tradefood1_kor=" + tradefood1_kor + ", tradefood2_kor=" + tradefood2_kor
+				+ ", myfoodcount1=" + myfoodcount1 + ", tradefoodcount1=" + tradefoodcount1 + ", myfoodcount2="
+				+ myfoodcount2 + ", tradefoodcount2=" + tradefoodcount2 + ", content=" + content + ", address="
+				+ address + ", regist_date=" + regist_date + "]";
+	}
 	
-	
+
 }

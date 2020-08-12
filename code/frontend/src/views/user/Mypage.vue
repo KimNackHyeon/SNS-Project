@@ -82,24 +82,23 @@
           </div>
         </div>
         <!-- 팔로우 버튼 -->
-        
         <div class="myfeed">
-          <div class="myprofil-feed">
-              <div class="myprofil-text">
-                <img src="../../assets/images/pencil.png" alt="my recipe">
-                <!-- <i class="fas fa-pencil-alt fa-lg"></i> -->
-                <h3>내가 쓴 글</h3>
-              </div>
-          </div>
-          <div class="myprofil-scrap">
+          <button class="myprofil-feed" @click="scrapOff">
+            <div class="myprofil-text">
+              <img src="../../assets/images/pencil.png" alt="my recipe">
+              <!-- <i class="fas fa-pencil-alt fa-lg"></i> -->
+              <h3>내가 쓴 글</h3>
+            </div>
+          </button>
+          <button class="myprofil-scrap" @click="scrapOn">
             <div class="myprofil-text">
               <img src="../../assets/images/bookmark.png" alt="scrap">
               <!-- <i class="far fa-bookmark"></i> -->
               <h3>스크랩한 글</h3>
             </div>
-          </div>
+          </button>
         </div>
-        <div class="myrecipe">
+        <div class="myrecipe" v-if="!myscrap">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
             <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
@@ -109,6 +108,18 @@
             </div>
           </div>
         </div>
+        
+        <div class="myrecipe" v-if="myscrap">
+          <h3 class="myrecipe-title">내 스크랩</h3>
+          <div class="myrecipe-body">
+            <div class="myrecipe-img" v-for="(scrap, i) in scraps" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : scrap.feedNo }}">
+                <img class="myrecipe-img-size" :src="require(`../../assets/images${scrap.img}`)" alt="food">
+              </router-link>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -138,16 +149,27 @@ export default {
         .catch(error =>{
           console.log(error)
         })
+
+      axios.get(`${SERVER_URL}/account/myscrap/`, {params: {email: this.userinfo.email}})
+      .then(response => {
+          console.log(response)
+          this.scraps = response.data;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     },
   data() {
     return {
       userinfo:'',
+      myscrap: false,
       userData:{
         recipe:"",
         follower:"",
         following:"",
       },
       recipes:[],
+      scraps:[],
       openFollower: false,
       followers: "",
       openFollowing: false,
@@ -253,6 +275,12 @@ export default {
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     },
+    scrapOn(){
+      this.myscrap = true
+    },
+    scrapOff(){
+      this.myscrap = false
+    },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){
@@ -304,6 +332,9 @@ export default {
   .followbtn {
     float: right;
     width: 50px;
+  }
+  .v-card {
+    height: 420px;
   }
 
 </style>
