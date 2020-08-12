@@ -305,11 +305,12 @@ export default {
       .then((response)=>{
         console.log(response.data);
         this.images = response.data;
-        console.log(this.images);
+        data.images = this.images;
+        console.log(data);
         setTimeout(() => {
         this.loading = false;
         this.register(data);
-      }, 1000*this.items.length);
+      }, 1500*this.items.length + 3000);
       })
       .catch((error)=>{
         console.log(error.response);

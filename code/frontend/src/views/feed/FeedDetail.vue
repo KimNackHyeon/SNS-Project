@@ -23,12 +23,12 @@
             <v-icon size="30px">mdi-account-plus</v-icon>
           </v-btn> -->
           <v-btn icon @click="likedbtn">
-              <v-icon v-if="!feedData.islike" size="30px" color="black">mdi-heart-outline</v-icon>
-              <v-icon v-if="feedData.islike" size="30px" color="red">mdi-heart</v-icon>
+              <v-icon v-if="!feedData.isLike" size="30px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="30px" color="red">mdi-heart</v-icon>
           </v-btn>
           <v-btn icon @click="scrapedbtn">
-              <v-icon v-if="!feedData.isscrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
-              <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
+              <v-icon v-if="!feedData.isScrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
         </div>
       </div>
@@ -45,7 +45,8 @@
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
             <div class="food" v-for="(food, i) in inFoods" :key="i">
-              <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+              <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
+              <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
               <h5 class="food-name">{{food.name}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
@@ -58,7 +59,8 @@
             <div class="food" v-for="(food, i) in feedData.foods" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
-                  <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+                  <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
+                  <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
                 </v-btn>
               </div>
               <h5 class="food-name">{{food.name_kor}}</h5>
@@ -82,10 +84,11 @@
             <v-carousel-item
               v-for="(item,i) in feedData.items"
               :key="i"
-              :src="require(`../../assets/images${item.img}`)"
+              :src="item.img"
               transition="fade"
               reverse-transition="fade"
             ></v-carousel-item>
+            <!-- :src="require(`../../assets/images${item.img}`)" -->
           </v-carousel>
           <p style="padding: 10px">{{feedData.content}}</p>
         </div>
@@ -150,7 +153,7 @@ export default {
         '부추빵',
         '꿀키',
         '소보로'
-      ]
+      ],
     }
   },
   watch: {
@@ -178,6 +181,8 @@ export default {
               comments:[],
               hashTags:[],
               foods:[],
+              isLike : '',
+              isScrap : '',
             }
             response.data.taglist.forEach(tag =>{
               this.feedData.hashTags.push(tag.tagName);
@@ -190,31 +195,69 @@ export default {
             response.data.datalist.forEach(d =>{
               this.feedData.items.push(d);
             });
+
+            axios.get(`${SERVER_URL}/feed/check`,{
+              params:
+              {
+                email:store.state.userInfo.email,
+                feedNo : response.data.feeddata.no,
+              }
+              })
+            .then(response =>{
+              console.log(response);
+                this.feedData.isLike = response.data.like;
+                this.feedData.isScrap = response.data.scrap;
+            });
         console.log(this.feedData);
         })
         .catch((error) => {
           console.log(error.response);
         });
-    axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
-            .then(response => {
-              // console.log(response);
-              response.data.forEach(c =>{
-                var comment = { // 피드에 해당하는 하나의 댓글
-                  img : '',
-                  nickname : c.nickname,
-                  content : c.comment,
-                  created_at : c.create_date,
-                }
-                this.feedData.comments.push(c);
-              })
-            });
+        setTimeout(() => {
+          axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+              .then(response => {
+                // console.log(response);
+                response.data.forEach(c =>{
+                  var comment = { // 피드에 해당하는 하나의 댓글
+                    img : '',
+                    nickname : c.nickname,
+                    content : c.comment,
+                    created_at : c.create_date,
+                  }
+                  this.feedData.comments.push(c);
+                })
+          });
+        }, 500);
+        
   },
   methods: {
     likedbtn() {
-      this.feedData.islike = !this.feedData.islike
+      this.feedData.isLike = !this.feedData.isLike;
+      axios.get(`${SERVER_URL}/feed/like`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
     },
     scrapedbtn() {
-      this.feedData.isscrap = !this.feedData.isscrap
+      this.feedData.isScrap = !this.feedData.isScrap;
+      axios.get(`${SERVER_URL}/feed/scrap`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
     },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
