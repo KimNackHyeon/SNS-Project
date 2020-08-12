@@ -37,6 +37,7 @@
 
 <script>
 import $ from 'jquery'
+import {foods} from './Foods.js'
 
 export default {
          
@@ -48,55 +49,7 @@ export default {
             thisSelectedFood:'',
             amount:'',
             amountundernature:'',
-            names : [
-            {name:'egg',
-            name_kor:'계란',
-            img:'egg'},
-            {name:'flour',
-            name_kor:'밀가루',
-            img:'flour'
-            },
-            {name:'milk',
-            name_kor:'우유',
-            img:'flour'
-            },
-            {name:'olive-oil',
-            name_kor:'올리브오일',
-            img:'olive-oil'
-            },
-            {name:'onion',
-            name_kor:'양파',
-            img:'onion'
-            },
-            {name:'potato',
-            name_kor:'감자',
-            img:'potato'
-            },
-            {name:'sugar',
-            name_kor:'설탕',
-            img:'sugar'
-            },
-            {name:'sweetpotato',
-            name_kor:'고구마',
-            img:'sweetpotato'
-            },
-            {name:'vanilla',
-            name_kor:'바닐라빈',
-            img:'vanilla'
-            },
-            {name:'egg',
-            name_kor:'설탕계란',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'계란양',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'계감란',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'가계란',
-            img:'egg'},
-            ],
+            names : foods
     }
   },
   methods: {
