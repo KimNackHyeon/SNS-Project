@@ -147,6 +147,7 @@ import $ from 'jquery';
 import axios from "axios";
 import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
+import Swal from 'sweetalert2'
 
 // const SERVER_URL = store.state.SERVER_URL;
 const SERVER_URL = 'http://localhost:9999/food/api';
@@ -239,7 +240,10 @@ data() {
             $('.selectfood').css('display','block');
         },
         addFood:function(food){
-            alert(food.name_kor+'을(를) 선택했습니다.');
+            // alert(food.name_kor+'을(를) 선택했습니다.');
+            Swal.fire({
+          title: food.name_kor+'을(를) 선택했습니다.',
+        })
             this.nowCgradient = food.name_kor;
             $('.selectfood').css('display','none');
             if($('.registMaterial').css('display')!='none'){
@@ -261,7 +265,6 @@ data() {
             },
             getSrc:function(food) {
                var src = '../../assets/images/food/'+food+'.png';
-               alert(src);
                 return src;
             },
             
@@ -345,7 +348,10 @@ data() {
                 if(this.changeFoodsTemp.length<2){
                     if(this.totalShareAmount<=this.Nowgra.amount){
                         if(this.nowmyamount>this.totalShareAmount){
-                            alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                            // alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                            Swal.fire({
+                                    title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
+                            })
                         this.nowmyamount = this.totalShareAmount;
                     }else{
                         var sellPrice = Number(this.nowSellPrice);
@@ -360,11 +366,17 @@ data() {
                         })
                     }
                 }else{
-                    alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
+                    // alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
+                    Swal.fire({
+                        title: '가지고 있는 감자보다 많은양을 공유할 수 없습니다.',
+                    });
                     this.totalShareAmount=this.Nowgra.amount;
                 }
                 }else{
-                    alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
+                    // alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
+                    Swal.fire({
+                        title: '교환목록에는 최대 2개만 들어갈 수 있습니다.',
+                    })
                 }
             },
             putIntoBasket:function(){
@@ -408,10 +420,14 @@ data() {
                          address : this.userinfo.address,
                      });
                      shareMotion = 'share'+(this.NowClassNum+1);
+                this.sharedesc = '';
                 $('#justMove').addClass(shareMotion);
                 $('.inputFeild').css('display','none');
                 }else{
-                    alert("교환할 물품이 올바르게 들어있지 않습니다.");
+                    // alert("교환할 물품이 올바르게 들어있지 않습니다.");
+                    Swal.fire({
+                        title: '교환할 물품이 올바르게 들어있지 않습니다.',
+                    })
                 }
                 
             },
