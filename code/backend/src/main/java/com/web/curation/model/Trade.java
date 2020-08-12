@@ -73,6 +73,9 @@ public class Trade {
 		super();
 	}
 
+	
+
+
 	public Trade(Long no, @NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
 			@NotEmpty String myfood_kor, @NotEmpty String price, @NotEmpty String tradefood1, String tradefood2,
 			@NotEmpty String tradefood1_kor, String tradefood2_kor, @NotEmpty String myfoodcount1,

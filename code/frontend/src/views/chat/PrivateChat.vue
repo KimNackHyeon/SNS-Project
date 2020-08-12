@@ -106,10 +106,7 @@
             <div v-for="(message, index) in messages" :key="index" class="incoming_msg">
               <!-- <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
                 <div class="received_withd_msg">
-                    <div style="width: 100%;
-    height: 60px;
-    position: relative;
-    margin: 5px 15px;">
+                    <div style="width: 100%; position: relative; ">
               <div :class="[message.author===authUser.name?'sent_msg':'received_msg']">
                   <p>{{message.message}}</p>
                   <span class="time_date">| {{message.createdAt}} | {{message.author}} |</span></div>
@@ -120,7 +117,9 @@
             
           </div>
           <div class="type_msg">
-            <div class="input_msg_write">
+            <div class="input_msg_write" style="width: 80%;
+    z-index: 50;
+    background-color: white;">
               <input @keyup.enter="saveMessage" v-model="message" type="text" class="write_msg" placeholder="Type a message" />
               <button v-on:click="saveMessage" class="msg_send_btn" type="button"><v-icon style="transform:rotate(45)">mdi-send</v-icon></button>
             </div>
@@ -271,36 +270,31 @@ img{ max-width:100%;}
 .inbox_chat { height: 550px; overflow-y: scroll;}
 
 .active_chat{ background:#ebebeb;}
-
+.incoming_msg{
+  width: 100%;
+    min-height: 60px;
+    padding-right: 9px;
+}
 .incoming_msg_img {
   display: inline-block;
   width: 6%;
 }
 .received_msg {
-  display: inline-block;
-    padding: 0 0 0 10px;
-    vertical-align: top;
-    width: 46%;
+  width: 60%;
     position: absolute;
     right: 0;
  }
- .received_msg p{
-  background: #ebebeb none repeat scroll 0 0;
-  border-radius: 3px;
-  color: #646464;
-  font-size: 14px;
-  margin: 0;
-  padding: 5px 10px 5px 12px;
-  width: 100%;
- }
+ 
  .received_msg p {
   background: #ebebeb none repeat scroll 0 0;
-  border-radius: 3px;
-  color: #646464;
-  font-size: 14px;
-  margin: 0;
-  padding: 5px 10px 5px 12px;
-  width: 100%;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    -webkit-box-shadow: 1px 1px 9px #00000057;
+    box-shadow: 1px 1px 9px #00000057;
 }
 .sent_msg p {
   background: #8dc057e8 none repeat scroll 0 0;
@@ -312,6 +306,7 @@ img{ max-width:100%;}
     padding: 5px 10px 5px 12px;
     width: 100%;
     box-shadow: -2px 2px 7px #00000059;
+    word-break: normal;
 }
 .time_date {
   color: #747474;
@@ -330,8 +325,7 @@ img{ max-width:100%;}
  
 .outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
 .sent_msg {
- width: 46%;
-    height: 60px;
+ width:60%;
     padding: 0px;;
 }
 .input_msg_write input {
@@ -347,7 +341,10 @@ img{ max-width:100%;}
 .type_msg {position: absolute;
     bottom: 0;
     width: 100%;
-    margin: 0px;}
+    height: 10%;
+    margin: 0px;
+    box-shadow: 0px -2px 10px #00000038;
+    }
 .msg_send_btn {
   background: rgb(161 219 99) none repeat scroll 0 0;
     border: medium none;
@@ -361,7 +358,7 @@ img{ max-width:100%;}
     position: absolute;
     right: 0;
     /* top: 11px; */
-    width: 62px;
+    width: 20%;
 }
 .messaging {
   width: 100%;
@@ -369,8 +366,9 @@ img{ max-width:100%;}
     position: relative;
     /* padding: 0 0 50px 0;*/}
 .msg_history {
-  height: 100%;
+  height: 90%;
   overflow-y: auto;
   width:100%;
+  overflow-x: hidden;
 }
 </style>

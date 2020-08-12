@@ -1,6 +1,6 @@
 <template>
   <div class="rootContainer">
-      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none;">
+      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none; position:fixed; z-index:80;">
           <div style="height:50px; width:100%; background-color:white">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
@@ -55,13 +55,13 @@
                     <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
             </div>
                 <div style="width:100%; height:21px;">
-                    <button v-on:click="addChangeGradient" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;"><v-icon size="15px">mdi-arrow-down-bold</v-icon>추가하기</button>
+                    <button v-on:click="addChangeGradient" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;"><v-icon size="15px">mdi-arrow-down-bold</v-icon>교환목록에 넣기</button>
                 </div>
                 
             <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
-                <div  v-for="(food,index) in changeFoods" :key="index" >
-                    <div class="changeFood" v-if="food.Mygradient == Nowgra.name_kor" style="font-size:13px;">
-                        <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
+                <div  v-for="(food,index) in changeFoodsTemp" :key="index" >
+                    <div class="changeFood" style="font-size:13px;">
+                        <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient_kor}} {{food.myamount}}개당 {{food.Cgradient_kor}} {{food.Camount}}개</h4>
                         <div style="width:20%; float:left;">
                         <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
                         </div>
@@ -72,8 +72,11 @@
             <div class="textArea">
                 <textarea v-model="sharedesc" style="width:100%; height:100%; resize: none;" placeholder="공유글에 들어갈 글을 적어주세요"></textarea>
             </div>
+            <div style="width:100%; height:21px;">
+                    <button v-on:click="putIntoBasket" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;">바구니에 넣기</button>
+                </div>
             </div>
-            <div style="width:100%; height:100px; background-color:black; color:white;">
+            <div style="width:100%; height:74px; background-color:black; color:white;">
              {{apiUnit}} 당 {{apiPrice}}원
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
             </div>
@@ -120,15 +123,20 @@
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll;">
            <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
-                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
-                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
+               <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left;">(개당 {{food.price}} 원)</h4>
+                <div>
+                    <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
+                </div>
+                <div v-if="food.tradefood2 !=null" >
+                     <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount2}}개당 {{food.tradefood2_kor}} {{food.tradefoodcount2}}개</h4>
+                </div>
            
            </div>
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
-            <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
+            <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
   </div>
@@ -170,16 +178,6 @@ data() {
     sharedesc:'',
     apiUnit:'',
     apiPrice:0,
-    //   foods:[
-    //         {name:"egg",name_kor:"계란",img:'egg',expire_date:'2020-09-01',amount:3},
-    //         {name:"flour",name_kor:"밀가루",img:'flour',expire_date:'2020-09-01',amount:4},
-    //         {name:"milk",name_kor:"우유",img:'milk',expire_date:'2020-09-01',amount:5},
-    //         {name:"olive-oil",name_kor:"올리브유",img:'olive-oil',expire_date:'2020-09-01',amount:6},
-    //         {name:"potato",name_kor:"감자",img:'potato',expire_date:'2020-09-01',amount:7},
-    //         {name:"vanilla",name_kor:"바닐라빈",img:'vanilla',expire_date:'2020-09-01',amount:4},
-    //         {name:"sugar",name_kor:"설탕",img:'sugar',expire_date:'2020-09-01',amount:3},
-    //         {name:"sweetpotato",name_kor:"고구마",img:'sweetpotato',expire_date:'2020-09-01',amount:4}
-    //     ],
         foods:[],
         changeFoodsTemp:[
               ],
@@ -271,9 +269,13 @@ data() {
                 this.closeregistMater();
                 this.Nowgra_kor = nowfood.name_kor;
                 this.Nowgra = nowfood;
-                this.nowmyamount = nowfood.myamount;
-                this.nowCgradient = nowfood.Cgradient;
-                this.nowCamount = nowfood.Camount;
+                this.nowmyamount = 1;
+                this.selectedFood = '';
+                this.nowCamount= 1;
+                $('.setFood').text("");
+                // this.nowmyamount = nowfood.myamount;
+                // this.nowCgradient = nowfood.Cgradient;
+                // this.nowCamount = nowfood.Camount;
                 $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
                 this.NowClassNum = index;
@@ -284,14 +286,15 @@ data() {
                 $('#justMove').attr('class',classN);
                 $('#justMove').css('display','unset');
                 this.intoFood = this.Nowgra.name;
-                for(var i=0; i<this.xmldata.price.length;i++){
-                    var tF = this.xmldata.price[i];
-                    var tFname = tF.productName.split('/')[0];
-                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
-                        this.apiUnit = tF.unit;
-                        this.apiPrice = tF.dpr1;
-                    }
-                }
+                this.changeFoodsTemp = [];
+                // for(var i=0; i<this.xmldata.price.length;i++){
+                //     var tF = this.xmldata.price[i];
+                //     var tFname = tF.productName.split('/')[0];
+                //     if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
+                //         this.apiUnit = tF.unit;
+                //         this.apiPrice = tF.dpr1;
+                //     }
+                // }
             },
             openShareBox:function(){
                 if($('.sharebox').css('display')=='none'){
@@ -307,36 +310,110 @@ data() {
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
+                // var sum = 0;
+                // if(this.nowmyamount>=1){
+                //     if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                //         if(this.nowmyamount>this.totalShareAmount){
+                //             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                //         this.nowmyamount = this.totalShareAmount;
+                //     }else{
+                //         var sellPrice = Number(this.nowSellPrice);
+                //         var sellAmount = Number(this.nowSellAmount);
+                //         this.changeFoodsTemp.push({
+                //             Mygradient:this.Nowgra.name,
+                //             Mygradient_kor:this.Nowgra.name_kor,
+                //             myamount:this.nowmyamount,
+                //             Cgradient:this.nowCgradient,
+                //             Camount:this.nowCamount,
+                //             pricePerOne:(sellPrice/sellAmount),
+                //             })
+                //             this.nowmyamount = 1;
+                //             this.nowCgradient = '';
+                //             $('.setFood').text("");
+                //             this.nowCamount = 1;
+                //             var shareMotion = 'share'+(this.NowClassNum+1);
+                //             $('#justMove').addClass(shareMotion);
+                            
+                //     }
+                // }else{
+                //     alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
+                // }
+                // }else{
+                //     alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
+                // }
                 var sum = 0;
-                if(this.nowmyamount>=1){
-                    if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                if(this.changeFoodsTemp.length<2){
+                    if(this.totalShareAmount<=this.Nowgra.amount){
                         if(this.nowmyamount>this.totalShareAmount){
                             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
                         this.nowmyamount = this.totalShareAmount;
                     }else{
                         var sellPrice = Number(this.nowSellPrice);
                         var sellAmount = Number(this.nowSellAmount);
-                        this.changeFoods.push({
-                            Mygradient:this.Nowgra.name_kor,
+                        this.changeFoodsTemp.push({
+                            Mygradient:this.Nowgra.name,
+                            Mygradient_kor:this.Nowgra.name_kor,
                             myamount:this.nowmyamount,
-                            Cgradient:this.nowCgradient,
+                            Cgradient:this.selectedFood.name,
+                            Cgradient_kor:this.selectedFood.name_kor,
                             Camount:this.nowCamount,
-                            pricePerOne:(sellPrice/sellAmount),
-                            })
-                            this.nowmyamount = 1;
-                            this.nowCgradient = '';
-                            $('.setFood').text("");
-                            this.nowCamount = 1;
-                            var shareMotion = 'share'+(this.NowClassNum+1);
-                            $('#justMove').addClass(shareMotion);
-                            
+                        })
                     }
                 }else{
-                    alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
+                    alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
+                    this.totalShareAmount=this.Nowgra.amount;
                 }
                 }else{
-                    alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
+                    alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
                 }
+            },
+            putIntoBasket:function(){
+                if(this.changeFoodsTemp.length==2){
+                    this.changeFoods.push({
+                         email : this.userinfo.email,
+                         nickname : this.userinfo.nickname,
+                         myfood: this.changeFoodsTemp[0].Mygradient,
+                         myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
+                         price: 300,
+                         myfoodcount1 : this.changeFoodsTemp[0].myamount,
+                         tradefood1 : this.changeFoodsTemp[0].Cgradient,
+                         tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
+                         tradefoodcount1 : this.changeFoodsTemp[0].Camount,
+                         myfoodcount2 : this.changeFoodsTemp[1].myamount,
+                         tradefood2 : this.changeFoodsTemp[1].Cgradient,
+                         tradefood2_kor : this.changeFoodsTemp[1].Cgradient_kor,
+                         tradefoodcount2 : this.changeFoodsTemp[1].Camount,
+                         content : this.sharedesc,
+                         address : this.userinfo.address,
+                     });
+                     var shareMotion = 'share'+(this.NowClassNum+1);
+                        $('#justMove').addClass(shareMotion);
+                        $('.inputFeild').css('display','none');
+                }else if(this.changeFoodsTemp.length==1){
+                     this.changeFoods.push({
+                         email : this.userinfo.email,
+                         nickname : this.userinfo.nickname,
+                         myfood: this.changeFoodsTemp[0].Mygradient,
+                         myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
+                         price: 300,
+                         myfoodcount1 : this.changeFoodsTemp[0].myamount,
+                         tradefood1 : this.changeFoodsTemp[0].Cgradient,
+                         tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
+                         tradefoodcount1 : this.changeFoodsTemp[0].Camount,
+                         myfoodcount2 : null,
+                         tradefood2 : null,
+                         tradefood2_kor : null,
+                         tradefoodcount2 : null,
+                         content : this.sharedesc,
+                         address : this.userinfo.address,
+                     });
+                     shareMotion = 'share'+(this.NowClassNum+1);
+                $('#justMove').addClass(shareMotion);
+                $('.inputFeild').css('display','none');
+                }else{
+                    alert("교환할 물품이 올바르게 들어있지 않습니다.");
+                }
+                
             },
             openCheckBasket:function(){
                 if($('.checkBasket').css('display')=='none'){
@@ -354,10 +431,11 @@ data() {
                 this.changeFoodsTemp.splice(index,1);
             },
             shareFinish:function(){
-                const shareList = this.changeFoods;
-                console.log(shareList);
+                // const shareList = this.changeFoods;
+                
+                console.log(this.changeFoods);
                 axios
-                .post(`${SERVER_URL}/myref/share`,shareList)
+                .post(`${SERVER_URL}/myref/share`,this.changeFoods)
                 .then((response)=>{
                     console.log(response);
                     this.$router.push("/");
