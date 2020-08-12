@@ -24,6 +24,20 @@
           <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
           <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
         </div>
+      </div>
+    </div>
+    <div class="user join wrapC">
+      <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
+      <div class="form-wrap">
+        <h1 class="text-left">인증번호를 보냈습니다.</h1>
+        <h1 class="text-left">메일을 확인해주세요.<br><br></h1>
+        <div class="input-with-label">
+          <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
+          <span id="times">03:00</span>
+          <label for="certificationNumber">인증번호</label>
+          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
+          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+        </div>
     </div>
   </div>
   </div>
@@ -136,4 +150,3 @@ export default {
     align-items: center;
   }
 </style>
-

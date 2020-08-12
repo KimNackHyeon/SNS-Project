@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+    <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
@@ -8,11 +8,14 @@
       </router-link>
       <div class="titleBox">
         <div class="pageTitle">
-          <p style="margin: 0;">{{feedData.title}}</p>
+          <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
         </div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 540px; ">
+    <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+          <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+        </div>
+    <div style="overflow: scroll; ">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
@@ -32,16 +35,11 @@
           </v-btn>
         </div>
       </div>
-      <!-- 해시태그 -->
-      <div class="hashBox">
-        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
-          <div class="hash">#{{ hashTag }}</div>
-        </div>
-      </div>
+      
       <!-- 재료 -->
-      <div style="overflow: hidden; border-bottom: 1px solid lightgray">
+      <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
         <!-- 나에게 있는 재료 -->
-        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center">
+        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
             <div class="food" v-for="(food, i) in inFoods" :key="i">
@@ -53,10 +51,10 @@
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center;    height: 110px;">
           <h5>나에게 없는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
-            <div class="food" v-for="(food, i) in feedData.foods" :key="i">
+            <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
                   <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
@@ -76,21 +74,21 @@
       </div>
       <!-- 글 내용 -->
       <div style="">
-        <div style="text-align: center; padding: 5px">
-          <h2>{{feedData.title}}</h2>
-        </div>
         <div>
-          <v-carousel>
-            <v-carousel-item
-              v-for="(item,i) in feedData.items"
-              :key="i"
-              :src="item.img"
-              transition="fade"
-              reverse-transition="fade"
-            ></v-carousel-item>
-            <!-- :src="require(`../../assets/images${item.img}`)" -->
-          </v-carousel>
-          <p style="padding: 10px">{{feedData.content}}</p>
+          <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
+            <div>
+              <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;">
+            </div>
+            <div>
+              {{item.content}}
+            </div>
+          </div>
+          </div>
+      </div>
+      <!-- 해시태그 -->
+      <div class="hashBox">
+        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
+          <div class="hash">#{{ hashTag }}</div>
         </div>
       </div>
       <!-- 댓글 -->
@@ -129,10 +127,13 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+      userinfo:'',
       nowFood : '',
       feedData: '',
+      myrefFood:[],
+      havingFood:[],
+      otherFood:[],
       inFoods: [
-        {img: "flour", name: "박력분", amount: "105g"},
       ],
       outFoods: [
         {img: "egg", name: "달걀", amount: "1개"},
@@ -168,6 +169,22 @@ export default {
   },
 
   created(){
+     if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+        console.log(this.userinfo);
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
+    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+        .then(response => {
+        //   this.myreflist = response.data.myreflist
+          this.myrefFood = response.data.myreflist
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+    
     var feedNo = this.$route.params.feedNo;
     axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
@@ -196,19 +213,26 @@ export default {
               this.feedData.items.push(d);
             });
 
-            axios.get(`${SERVER_URL}/feed/check`,{
-              params:
-              {
-                email:store.state.userInfo.email,
-                feedNo : response.data.feeddata.no,
-              }
-              })
-            .then(response =>{
-              console.log(response);
-                this.feedData.isLike = response.data.like;
-                this.feedData.isScrap = response.data.scrap;
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
             });
-        console.log(this.feedData);
+          
+          var myrefFoodName = [];
+          var feedFoodlist = this.feedData.foods;
+          this.myrefFood.forEach(reffood=>{
+            myrefFoodName.push(reffood.name_kor);
+          });
+          console.log(this.myrefFood);
+          feedFoodlist.forEach(recipefood => {
+          // console.log(recipefood.name);
+          if(myrefFoodName.includes(recipefood.name_kor)){
+            this.havingFood.push(recipefood);
+            // console.log(recipefood.name);
+          }else{
+            this.otherFood.push(recipefood);
+          }
+            });
+        // console.log(this.feedData.foods);
         })
         .catch((error) => {
           console.log(error.response);
@@ -271,9 +295,9 @@ export default {
     onCommentBtn() {
       // 댓글 추가기능
       var comment = {
-        img: store.state.userInfo.profile_image_url, 
-        nickname: store.state.userInfo.nickname,
-        email:store.state.userInfo.email,
+        img: this.userinfo.profile_image_url, 
+        nickname: this.userinfo.nickname,
+        email:this.userinfo.email,
         feedNo: this.$route.params.feedNo,
         comment: this.comment
       }
@@ -286,7 +310,7 @@ export default {
 
       this.feedData.comments.push(comment);
     },
-  }
+  },
 }
 </script>
 
@@ -303,16 +327,22 @@ export default {
   }
   .pageTitle {
     height: 100%;
+    width:100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0px 10px;
+    
   }
   .hashBox {
     overflow-x: scroll;
     white-space: nowrap;
     width: 100%;
     height: 45px;
-    border-bottom: 1px solid lightgray
+    border-top: 1px solid lightgray;
+    background-color: #80808021;
+    padding: 3px 0px;
+    overflow-y: hidden;
   }
   .hash {
     float: left; 
@@ -379,7 +409,8 @@ export default {
   }
   .comments {
     padding: 5px 10px 5px 10px;
-    overflow: hidden;
+    width:100%;
+    min-height: 60px;
   }
   .userImg {
     float: left;

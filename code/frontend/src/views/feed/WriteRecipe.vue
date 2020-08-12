@@ -276,7 +276,11 @@ export default {
       const contents = [];
 
       this.items.forEach(item => {
-        contents.push(item.desc);
+        if(item.desc != '' && item.desc!=null){
+          contents.push(item.desc);
+        }else{
+          contents.push(' ');
+        }
         formData.append('images',item.file);
       });
 
