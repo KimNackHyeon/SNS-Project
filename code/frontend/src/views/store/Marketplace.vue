@@ -43,7 +43,7 @@
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                      <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/store/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
+                      <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
                       <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.myfood_kor }}</v-card-text>
                       <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text>
                     </v-col>
@@ -65,7 +65,7 @@
                           <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
                         </v-col>
                       </v-row>
-                      <v-row class="pa-0 ma-1" v-if="info.tradefood2">
+                      <v-row class="pa-0 ma-1" v-if="info.tradefood2!=null">
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
                         </v-col>

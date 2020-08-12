@@ -110,8 +110,7 @@ public class TradeController {
 	@PostMapping("/updatetrade")
 	@ApiOperation(value="우리동네 장터 글 수정")
 	public ResponseEntity<String> updateTrade(@RequestBody Trade trade) {
-		System.out.println(trade.toString());
-//		tradeRepo.update(tar);
+		tradeRepo.update(trade.getNo(), trade.getTradefood1(), trade.getTradefood2(), trade.getTradefood1_kor(), trade.getTradefood2_kor(), trade.getMyfoodcount1(), trade.getMyfoodcount2(), trade.getContent(), trade.getAddress(), trade.getTradefoodcount1(), trade.getTradefoodcount2());
 		return new ResponseEntity<String>("삭제 성공", HttpStatus.OK);
 	}
 	
