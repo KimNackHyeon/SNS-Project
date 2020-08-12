@@ -52,8 +52,8 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
-    SERVER_URL : SERVER_URL,
-    // SERVER_URL : 'http://localhost:9999/food/api',
+    // SERVER_URL : SERVER_URL,
+    SERVER_URL : 'http://localhost:9999/food/api',
     kakaoUserInfo:{
       email:'',
       nickname:'',

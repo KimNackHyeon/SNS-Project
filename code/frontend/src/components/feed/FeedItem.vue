@@ -20,8 +20,9 @@
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
-            :src="require(`../../assets/images${item.image}`)"
+            :src="item.image"
           ></v-carousel-item>
+            <!-- :src="require(`../../assets/images${item.image}`)" -->
         </v-carousel>
         <v-chip
             class="ma-2 imgCount"
@@ -146,23 +147,37 @@ export default {
               }
               data.comments.push(comment);
             })
-          })
+          });
+
+          axios.get(`${SERVER_URL}/feed/check`,{
+            params:
+            {
+              email:store.state.userInfo.email,
+              feedNo : d.no,
+            }
+            })
+          .then(response =>{
+            console.log(response);
+              data.islike = response.data.like;
+              data.isscrap = response.data.scrap;
+          });
 
           response.data.datalist.forEach(dindex => {
             if(dindex.feedNo == d.no){
               var image = {image : dindex.img};
               data.items.push(image);
             }
-          })
+          });
 
           this.feedDatas.push(data); // 피드 데이터 저장
           console.log(data);
-        })
-        console.log(this.feedDatas)
+        });
+        console.log(this.feedDatas);
       })
       .catch((error) => {
         console.log(error.response);
       });
+      
   },
   methods: {
     countItem(i) {
@@ -207,45 +222,42 @@ export default {
       })
     },
     likedbtn(feedData_id) {
+      console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
-        console.log(feedData_id);
         if (feedData.no == feedData_id) {
           feedData.islike = !feedData.islike
         }
       })
-      // axios.get(`${SERVER_URL}/like`)
-      //   .then(response => {
-      //     const liked = response.data
-      //     if ( liked ) {
-      //       this.islike = liked
-      //     }
-      //     else {
-      //       this.islike = liked
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.response);
-      //   });
+      axios.get(`${SERVER_URL}/feed/like`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : feedData_id,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
     },
     scrapedbtn(feedData_id) {
+      console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
           feedData.isscrap = !feedData.isscrap
         }
       })
-      // axios.get(`${SERVER_URL}/scrap`)
-      //   .then(response => {
-      //     const scrapped = response.data
-      //     if ( scrapped ) {
-      //       this.isscrap = scrapped
-      //     }
-      //     else {
-      //       this.isscrap = scrapped
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.response);
-      //   });
+      axios.get(`${SERVER_URL}/feed/scrap`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : feedData_id,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
