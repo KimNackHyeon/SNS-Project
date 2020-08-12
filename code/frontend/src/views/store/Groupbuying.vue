@@ -38,21 +38,25 @@
         </v-layout>
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 504px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="buy in buying" :key="buy" cols="12">
-              <router-link :to="`/store/groupbuying/${ buy.id }`">
+            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
+              <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                      <img height="80" width="80" padding="60" :src="buy.picture" style="border-radius: 5px;">
+                      <img height="80" width="80" padding="60" :src="require(`../../assets/images/food/${groupBuying.food}.png`)" style="border-radius: 5px;">
                     </v-col>
                     <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                      <v-card-text style="padding: 0;">{{ buy.title }}</v-card-text>
-                      <v-card-text style="padding: 0; font-size: 10px;">품목 : {{ buy.food }}</v-card-text>
-                      <v-card-text style="padding: 0; font-size: 10px;">동네 : {{ buy.address }}</v-card-text>
-                      <v-card-text style="padding: 0; font-size: 10px;">마감일 : {{ buy.date }}</v-card-text>
+                      <v-card-text style="padding: 0;">{{ groupBuying.title }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">품목 : {{ groupBuying.food_kor }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">동네 : {{ groupBuying.address }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">마감일 : {{ groupBuying.end_date }}</v-card-text>
                     </v-col>
                     <v-col cols="3" style="padding: 0;">
-                      <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">{{ buy.members }}</v-card-text>
+                      <div v-if="userinfo.email == groupBuying.email">
+                        <v-btn style="margin-right: 5px">수정</v-btn>
+                        <v-btn>삭제</v-btn>
+                      </div>
+                      <v-card-text class="text-right" style="font-size: 29px; height: 0px">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</v-card-text>
                     </v-col>
                   </v-row>
                 </v-card>
@@ -73,68 +77,33 @@
 </template>
 
 <script>
+const SERVER_URL = store.state.SERVER_URL;
+
+import axios from "axios"
+import store from '../../vuex/store.js'
 export default {
   name: 'Groupbuying',
   data() {
     return {
-      buying: [
-        {
-          id: 1,
-          picture: '/img/onion.c1585269.png',
-          title: '양파 필요하신분',
-          food: '양파',
-          address: '대전광역시 유성구 덕명동',
-          date: '2020/08/01',
-          members: '9/10'
-        },
-        {
-          id: 2,
-          picture: '/img/potato.717377a0.png',
-          title: '♡감자가 좋아♡',
-          food: '감자',
-          address: '대전광역시 유성구 덕명동',
-          date: '2020/08/01',
-          members: '4/5'
-        },
-        {
-          id: 3,
-          picture: '/img/onion.c1585269.png',
-          title: '양파 급하게 필요하신 분만!',
-          food: '양파',
-          address: '대전광역시 유성구 덕명동',
-          date: '2020/07/16',
-          members: '1/3'
-        },
-        {
-          id: 4,
-          picture: '/img/egg.b0f12e35.png',
-          title: '한밭대 달걀 공구',
-          food: '달걀',
-          address: '대전광역시 유성구 덕명동',
-          date: '2020/08/20',
-          members: '2/5'
-        },
-        {
-          id: 5,
-          picture: '/img/egg.b0f12e35.png',
-          title: '달걀 도매 구매',
-          food: '달걀',
-          address: '대전광역시 유성구 봉명동',
-          date: '2020/08/31',
-          members: '11/30'
-        },
-        {
-          id: 6,
-          picture: '/img/egg.b0f12e35.png',
-          title: '달걀 도매 구매',
-          food: '달걀',
-          address: '대전광역시 유성구 봉명동',
-          date: '2020/08/31',
-          members: '11/30'
-        }
-      ]
+      groupBuyings: '',
     }
   },
+  created(){
+    if(store.state.kakaoUserInfo.email != null){
+      this.userinfo = store.state.kakaoUserInfo;
+    }else{
+      this.userinfo = store.state.userInfo;
+    }
+    // if(userinfo.email == )
+    axios.get(`${SERVER_URL}/groupbuying/read`)
+      .then(response => {
+        console.log(response)
+        this.groupBuyings = response.data
+        console.log(this.groupBuyings)
+      })
+      .catch(error => {
+      })
+  }
 }
 </script>
 
