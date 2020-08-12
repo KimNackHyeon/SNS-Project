@@ -140,7 +140,8 @@ import axios from "axios";
 import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 
-const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = 'http://localhost:9999/food/api';
 var convert = require('xml-js')
 
 export default {
@@ -201,6 +202,7 @@ data() {
                 img:this.Nowgra.img,
             };
             axios
+            // .post(`${SERVER_URL}/myref/delete`,deleteFood)
             .post(`${SERVER_URL}/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
@@ -218,6 +220,7 @@ data() {
             // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
         };
         axios
+        // .post(`${SERVER_URL}/myref/regist`,registFood)
         .post(`${SERVER_URL}/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
@@ -371,11 +374,12 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
+      
       axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
+    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
-          console.log(response.data.myreflist);
         })
         .catch(error => {
           console.log(error.response)

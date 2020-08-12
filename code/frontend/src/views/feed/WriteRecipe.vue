@@ -276,7 +276,11 @@ export default {
       const contents = [];
 
       this.items.forEach(item => {
-        contents.push(item.desc);
+        if(item.desc != '' && item.desc!=null){
+          contents.push(item.desc);
+        }else{
+          contents.push(' ');
+        }
         formData.append('images',item.file);
       });
 
@@ -305,11 +309,12 @@ export default {
       .then((response)=>{
         console.log(response.data);
         this.images = response.data;
-        console.log(this.images);
+        data.images = this.images;
+        console.log(data);
         setTimeout(() => {
         this.loading = false;
         this.register(data);
-      }, 1000*this.items.length);
+      }, 1500*this.items.length + 3000);
       })
       .catch((error)=>{
         console.log(error.response);
