@@ -77,7 +77,8 @@ import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
 
-const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -142,7 +143,7 @@ export default {
       this.newUserInfo.newNickname = this.userinfo.nickname;
       this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
       this.newUserInfo.newAddress = this.userinfo.address;
-      this.newUserInfo.newPassword = this.userinfo.password
+      this.newUserInfo.newPassword = ''
     }
     // console.log(this.userinfo)
   },
@@ -341,7 +342,7 @@ export default {
     display: inline-block; 
     margin: 5px 0 0 5px;
   }
-  .adressDialog {
-    /* margin: 18px !important; */
-  }
+  /* .adressDialog {
+    margin: 18px !important;
+  } */
 </style>

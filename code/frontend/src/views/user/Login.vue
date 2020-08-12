@@ -51,6 +51,9 @@
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; float: right">
           <!-- <kakaoLogin :component="component" /> -->
+          <v-dialog v-model="dialog" scrollable width="100%">
+
+          </v-dialog>
           <KakaoLogin
             api-key="4c86227162ae9066234fa38d59d75010"
             image="kakao_login_btn_small"
