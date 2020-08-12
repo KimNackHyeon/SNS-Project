@@ -14,6 +14,8 @@ import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
 const SERVER_URL = store.state.SERVER_URL;
+const cors = require('cors');
+
 
 export default {
   components:{Home},
@@ -105,5 +107,6 @@ export default {
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
   },
+  
 };
 </script>
