@@ -16,7 +16,7 @@
                     <h1>5</h1>
                   </v-col>
                   <!-- 팔로워 -->
-                  <v-col class="myprofil-box" cols="4" @click="onFollower">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" @click="onFollower">
                     <span>팔로워</span>
                     <h1>{{yourData.follower}}</h1>
                   </v-col>
@@ -28,12 +28,12 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                             <!-- <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar> -->
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(follower.email)">{{follower.nickname}}</p>
                             <p class="followEmail">{{follower.email}}</p>
-                            <p class="followNick">{{follower.nickname}}</p>
                           </div>
                         </div>
                       </v-card-text>
@@ -45,7 +45,7 @@
                     </v-card>
                   </v-dialog>
                   <!-- 팔로잉 -->
-                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
                     <h1>{{yourData.following}}</h1>
                   </v-col>
@@ -57,11 +57,11 @@
                       <v-card-text>
                         <div class="follow" v-for="(following, i) in followings" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(following.email)">{{following.nickname}}</p>
                             <p class="followEmail">{{following.email}}</p>
-                            <p class="followNick">{{following.nickname}}</p>
                           </div>
                           <div class="followbtn" @click="onFollowBtn(following)">
                             <v-btn color="#a0d469" style="box-shadow: unset; color: white" v-if="!following.isfollow">팔로우</v-btn>
@@ -255,6 +255,14 @@ export default {
         this.unFollow(following.email);
       }
     },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){
@@ -307,13 +315,15 @@ export default {
   .content {
     float: left;
   }
-  .followEmail {
+  .followNick {
     margin: 0 !important;
     color: black;
     font-weight: bold;
+    font-size: 15px;
   }
-  .followNick {
+  .followEmail {
     margin: 0 !important;
+    font-size: 10px;
   }
   .followbtn {
     float: right;

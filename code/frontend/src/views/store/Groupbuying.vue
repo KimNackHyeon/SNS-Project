@@ -1,6 +1,5 @@
 <template>
   <div>
-  <v-app>
     <v-card flat>
       <v-container fluid style="padding: 0; margin: 0;">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
@@ -36,7 +35,7 @@
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 504px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow: scroll; height: 480px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="buy in buying" :key="buy" cols="12">
               <router-link :to="`/store/groupbuying/${ buy.id }`">
@@ -59,7 +58,7 @@
               </router-link>
             </v-col>
           </v-row>
-          <router-link to="/feed/write">
+          <router-link to="/store/writegroupbuying">
             <div class="writeButton">
               <v-icon color="white">mdi-lead-pencil</v-icon>
               <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
@@ -68,8 +67,7 @@
         </div>
       </v-container>
     </v-card>
-  </v-app>
-</div>
+  </div>
 </template>
 
 <script>
@@ -139,12 +137,18 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  min-height: unset !important;
+}
+.v-application--wrap {
+  min-height: unset !important;
+}
 .writeButton{
   width: 60px;
   height: 60px;
   position: fixed;
-  /* margin-top: 466px; */
-  /* margin-left: 284px; */
+  margin-top: -225px;
+  margin-left: 284px;
   background-color: rgb(147 203 88);
   z-index: 90;
   border-radius: 30px;

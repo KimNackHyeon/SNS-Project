@@ -29,7 +29,7 @@
           <div>
             {{ food.name_kor }}
           </div>
-      </div>
+        </div>
       </div>
       
   </div>

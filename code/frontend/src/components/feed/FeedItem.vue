@@ -4,7 +4,7 @@
       <div class="feed-profil">
         <div class="feed-user">
           <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
@@ -60,7 +60,7 @@
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content">
-            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;">{{comment.nickname}}</p>
+            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</p>
             <span>{{comment.comment}}</span>
           </div>
           <div style="float: right; width: 10%" v-if="comment.email===userInfo.email">
