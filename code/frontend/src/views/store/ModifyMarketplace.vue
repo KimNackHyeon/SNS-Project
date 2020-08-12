@@ -19,10 +19,10 @@
         </div>
         <div>
           <!-- <input type="text" v-model="myFood" class="myFood" style="float: left; width: 40%; height: 40px; text-align: center; font-size: 15px;"> -->
-          <div class="myFood" style="float: left; width: 40%; height: 40px; text-align: center; font-size: 15px; line-height: 40px">{{ myFood }}</div>
+          <div class="myFood" style="float: left; width: 40%; height: 40px; text-align: center; font-size: 15px; line-height: 40px">{{ beforedata.myfood_kor }}</div>
         </div>
         <div>
-          <input type="text" v-model="cntMyFood" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
+          <input type="text" v-model="beforedata.myfoodcount1" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
         </div>
       </div>
       <!-- 교환 물품 1 -->
@@ -74,7 +74,20 @@
         </v-dialog>
         <!-- 교환 물품 수량 -->
         <div>
-          <input type="text" v-model="cntFood1" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
+          <input type="text" v-model="beforedata.tradefoodcount1" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
+        </div>
+      </div>
+      <!-- 내 식재료 -->
+      <div style="margin: 10px 0; overflow: hidden;">
+        <div style="float: left; width: 30%; margin-right: 10px">
+          <span style="line-height: 40px">내 식재료 / 개당</span>
+        </div>
+        <div>
+          <!-- <input type="text" v-model="myFood" class="myFood" style="float: left; width: 40%; height: 40px; text-align: center; font-size: 15px;"> -->
+          <div class="myFood" style="float: left; width: 40%; height: 40px; text-align: center; font-size: 15px; line-height: 40px">{{ beforedata.myfood_kor }}</div>
+        </div>
+        <div>
+          <input type="text" v-model="beforedata.myfoodcount2" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
         </div>
       </div>
       <!-- 교환 물품 2 -->
@@ -126,7 +139,7 @@
         </v-dialog>
         <!-- 교환 물품 수량 -->
         <div>
-          <input type="text" v-model="cntFood2" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
+          <input type="text" v-model="beforedata.tradefoodcount2" class="cntfood" style="float: left; width: 15%; height: 40px; text-align: center; font-size: 15px;">
         </div>
       </div>
       <!-- 주소 -->
@@ -158,38 +171,43 @@
           <span style="line-height: 40px">내용</span>
         </div>
         <div style="overflow: hidden;">
-          <textarea v-model="content" class="contentinput"></textarea>
+          <textarea v-model="beforedata.content" class="contentinput"></textarea>
         </div>
       </div>
     </div>
     <!-- 글 작성 버튼 -->
     <div>
-      <v-btn 
-      color="rgb(160, 212, 105)" 
-      style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
-      @click="onModify()"
-      >
-      수정하기
-      </v-btn>
+      <router-link to="/store/marketplace">
+        <v-btn 
+        color="rgb(160, 212, 105)" 
+        style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+        @click="onModify()"
+        >
+        수정하기
+        </v-btn>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
 import DaumPostcode from "vuejs-daum-postcode";
-
-
+import axios from 'axios'
+const SERVER_URL = 'http://localhost:9999/food/api';
 export default {
   components: {
     DaumPostcode
   },
   data() {
     return {
+      beforedata: [],
       myFood: '달걀',
       cntMyFood: '',
       food1: '',
+      food1_en: '',
       cntFood1: '',
       food2: '',
+      food2_en: '',
       cntFood2: '',
       dialog1: false,
       dialog2: false,
@@ -250,7 +268,19 @@ export default {
     }
   },
   created() {
-    // axios
+    axios.post(`${SERVER_URL}/trade/beforeupdate` , {no:this.$route.params.pagenumber})
+      .then(response => {
+        this.beforedata = response.data
+        this.food1 = this.beforedata.tradefood1_kor
+        this.food1_en = this.beforedata.tradefood1
+        this.food2 = this.beforedata.tradefood2_kor
+        this.food2_en = this.beforedata.tradefood2
+        this.address = this.beforedata.address
+        console.log(this.beforedata)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   },
   methods: {
     getFood1(){
@@ -280,6 +310,7 @@ export default {
       this.dialog1 = false
       // $('.setFood').text(food.name_kor);
       this.food1 = food.name_kor
+      this.food1_en = food.name
       this.searchQuery1 = ''
       document.querySelector('.s').value = '';
     },
@@ -288,6 +319,7 @@ export default {
       this.dialog2 = false
       // $('.setFood').text(food.name_kor);
       this.food2 = food.name_kor
+      this.food2_en = food.name
       this.searchQuery2 = ''
       document.querySelector('.s').value = '';
     },
@@ -314,6 +346,20 @@ export default {
       this.address = fullAddress
       this.addressDialog = false;
       this.inputAddress = true
+    },
+    onModify() {
+      this.beforedata.tradefood1_kor = this.food1
+      this.beforedata.tradefood1 = this.food1_en
+      this.beforedata.tradefood2_kor = this.food2
+      this.beforedata.tradefood2 = this.food2_en
+      this.beforedata.address = this.address
+      axios.post(`${SERVER_URL}/trade/updatetrade`, {address: this.beforedata.address, content: this.beforedata.content, email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, price: this.beforedata.price, tradefood1: this.beforedata.tradefood1, tradefood1_kor: this.beforedata.tradefood1_kor, tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, tradefoodcount2: this.beforedata.tradefoodcount2})
+        .then(response => {
+          console.log(this.beforedata)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     },
   },
   computed: {

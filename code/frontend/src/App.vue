@@ -1,7 +1,7 @@
 <template>
 <div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
-    <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'"/>
+    <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
     <router-view @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
@@ -14,6 +14,8 @@ import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
 const SERVER_URL = store.state.SERVER_URL;
+const cors = require('cors');
+
 
 export default {
   components:{Home},
@@ -105,5 +107,6 @@ export default {
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
   },
+  
 };
 </script>
