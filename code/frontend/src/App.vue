@@ -13,7 +13,8 @@ import axios from "axios";
 import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
-const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = 'http://localhost:9999/food/api';
 
 export default {
   components:{Home},
