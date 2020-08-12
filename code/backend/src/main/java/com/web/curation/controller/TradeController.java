@@ -78,7 +78,7 @@ public class TradeController {
 	}
 	
 	@GetMapping("/search/{content}")
-	@ApiOperation(value = "교환 가능한 물품만 조회")
+	@ApiOperation(value = "검색")
 	public ResponseEntity<Map> searchByContent(@PathVariable String content) {
 		Map<String, ArrayList<Trade>> map = new HashMap<String, ArrayList<Trade>>();
 		ArrayList<Trade> tradelist = new ArrayList<Trade>();
@@ -91,6 +91,28 @@ public class TradeController {
 	public ResponseEntity<Trade> searchDetail(@PathVariable Long no) {
 		Trade tradeDetail = tradeRepo.getByNo(no);
 		return new ResponseEntity<Trade>(tradeDetail, HttpStatus.OK);
+	}
+	
+	@PostMapping("/beforeupdate")
+	@ApiOperation(value ="우리동네 장터 글 내용 수정 조회")
+	public ResponseEntity<Trade> readUpdate(@RequestBody Trade trade) {
+		Trade tradeDetail = tradeRepo.getByNo(trade.getNo());
+		return new ResponseEntity<Trade>(tradeDetail, HttpStatus.OK);
+	}
+	
+	@PostMapping("/deletetrade")
+	@ApiOperation(value="우리동네 장터 글 삭제")
+	public ResponseEntity<String> deleteTrade(@RequestBody Trade trade) {
+		tradeRepo.deleteByNo(trade.getNo());
+		return new ResponseEntity<String>("삭제 성공", HttpStatus.OK);
+	}
+//	{address: this.beforedata.address, content: this.beforedata.content, email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, price: this.beforedata.price, tradefood1: this.beforedata.tradefood1, tradefood1_kor: this.beforedata.tradefood1_kor, tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, tradefoodcount2: this.beforedata.tradefoodcount2}
+	@PostMapping("/updatetrade")
+	@ApiOperation(value="우리동네 장터 글 수정")
+	public ResponseEntity<String> updateTrade(@RequestBody Trade trade) {
+		System.out.println(trade.toString());
+//		tradeRepo.update(tar);
+		return new ResponseEntity<String>("삭제 성공", HttpStatus.OK);
 	}
 	
 //	@PostMapping("/")
