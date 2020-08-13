@@ -35,7 +35,7 @@
       </v-layout>
     </div>
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;">
+      <v-container fluid style="padding: 0; margin: 0; width:360px;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">

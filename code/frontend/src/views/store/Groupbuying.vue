@@ -1,8 +1,8 @@
 <template>
-  <div>
-  <v-app>
+  <div style="overflow-x:hidden; width:100%; height:100%;">
+  <v-app style="overflow-x:hidden;  width:100%; height:100%;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;">
+      <v-container fluid style="padding: 0; margin: 0; width:360px;">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -20,23 +20,23 @@
           </v-flex>
         </v-layout>
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
-          <v-flex>
+          <v-flex style="width:90%; float:left;">
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px;"></v-switch>
           </v-toolbar>
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="call" label="마감임박순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+            <v-switch @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
           </v-toolbar>
             </v-toolbar>
           </v-flex>
-          <div style="border: solid 1px lightgrey">
+          <div style="border: solid 1px lightgrey; width:10%; float:left;">
             <v-btn icon style="margin: 5px">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 490px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden; height: 490px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">

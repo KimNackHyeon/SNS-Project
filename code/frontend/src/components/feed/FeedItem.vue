@@ -1,7 +1,7 @@
 <template>
   <div class="feed-item">
-    <div v-for="(feedData, i) in feedDatas" :key="i" style="position: relative">
-      <div class="feed-profil">
+    <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
+      <div class="feed-profil"  >
         <div class="feed-user">
           <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
           <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
@@ -14,7 +14,7 @@
           </router-link>
         </div>
       </div>
-      <div style="position: relative;">
+      <div  style=" width:360px;">
         <v-carousel v-model="feedData.pictureNum">
         <!-- <v-carousel show-arrows-on-hover> -->
           <v-carousel-item
@@ -26,7 +26,10 @@
         </v-carousel>
         <v-chip
             class="ma-2 imgCount"
-            color="#2c2c2c">
+            color="#2c2c2c"
+            style="
+    top: 49px;
+    width: 46px;">
             {{feedData.pictureNum + 1}}/{{feedData.items.length}} 
           </v-chip>
       </div>
@@ -355,6 +358,15 @@ export default {
   box-shadow: unset;
   -webkit-box-shadow: unset;
 }
+.feed-item {
+    padding:0px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+    border-top: 1px solid #eee;
+    left:auto;
+}
 .btn span {
     height: 30px;
   }
@@ -392,5 +404,11 @@ export default {
   margin-bottom: 0 !important;
   font-weight: bold; 
   margin-right: 5px;
+}
+.imgCount {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -50px;
 }
 </style>

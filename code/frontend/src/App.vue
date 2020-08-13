@@ -1,5 +1,5 @@
 <template>
-<div style="width:360px; height:640px; margin:auto;">
+<div style="width:360px; height:640px; margin:auto; overflow-y:hidden; overflow-x:hidden;">
   <v-app id="app">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
     <router-view @login="onLogin" @signup="onSignup"></router-view>

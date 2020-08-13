@@ -6,7 +6,7 @@
           </div>
           <get-one-food @addfood="addFood" ></get-one-food>
       </div>
-      <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
+      <div id="dark" @click="closeCheckBasket()" style="width:360px; height:640px; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
     
         <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef">
             
@@ -23,51 +23,56 @@
         </div>
         <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
             <div style="width: 100%;
-    height: 30px;
+    height: 38px;
     background-color: rgba(224, 224, 224, 0.51);
     text-align: center;
     font-weight: bold;
-    padding: 6px 0px;
-    overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
-            <div class="textArea" style="height: 40px; margin-top: 0px; text-align: center; padding: 5px 2px;">
-                <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:24px; height:30px;"><h5>개를</h5>
-                <div class="shareButton" @click="openShareBox" style="height:100%; width:37px; background-color:#80808066; float:left; margin-right:5px;">공유</div>
-                <div class="deleteButton" @click="deleteFoodfromRef" style="height:100%; width:37px; background-color:red; float:left;">삭제</div>
+    padding: 9px 0px;
+    overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="30px" style="    margin-top: -5px;
+">mdi-close</v-icon></button></div>
+            <div class="textArea" style="height: 50px; margin-top: 0px; text-align: center; padding: 5px 36px;;">
+                <input v-model="totalShareAmount" type="text" class="inputText" style="float: left; width: 40px; height: 35px; text-align: center;"><h5 style="font-size:15px">개를</h5>
+                <div class="shareButton" @click="openShareBox">공유</div>
+                <div class="deleteButton" @click="deleteFoodfromRef" >삭제</div>
             
             </div>
             <div class="sharebox" style="display:none;">
-            <div class="textArea" style="height:24px; padding:0px;">
-                <div class="longNameBox" style="width:58px; height:100%; padding:0px 7px;">{{Nowgra.name_kor}}</div>와 교환할 재료
+            <div class="textArea" style="height:35px; padding:0px;">
+                <h5 class="longNameBox" style="width:30%; padding:0px 7px; font-size:15px; font-weight:600;">{{Nowgra.name_kor}}</h5><h5 style="float:left; font-size:15px"> 와(과) 교환할 재료를 담아주세요</h5>
                
             </div>
-            <div style="width:100%; height:33px; padding: 4px 6px;">
-                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:24px;"><h5 style="font-size:10px;float:left">개당</h5> 
+            <div style="width:100%; height:50px; padding: 4px 58px; font-size:15px;">
+                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:30px;text-align:center;"><h5 style="float:left">개당</h5> 
                     <button type="button" @click="getFood" class="setFood" style="float:left; margin-right:5px;"></button>
-                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
+                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; height:30px;text-align:center;"><h5 style="float:left">개</h5>
             </div>
-                <div style="width:100%; height:21px;">
-                    <button v-on:click="addChangeGradient" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;"><v-icon size="15px">mdi-arrow-down-bold</v-icon>교환목록에 넣기</button>
+                <div style="width:100%; height:40px;">
+                    <button v-on:click="addChangeGradient" class="tempInputButton"><v-icon size="15px">mdi-arrow-down-bold</v-icon>교환목록에 넣기</button>
                 </div>
                 
-            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
+            <div style="width: 100%; height: 111px;  background-color: rgba(128, 128, 128, 0.2); overflow: scroll; box-shadow: 0px 1px 9px inset #00000042;">
                 <div  v-for="(food,index) in changeFoodsTemp" :key="index" >
-                    <div class="changeFood" style="font-size:13px;">
-                        <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient_kor}} {{food.myamount}}개당 {{food.Cgradient_kor}} {{food.Camount}}개</h4>
-                        <div style="width:20%; float:left;">
-                        <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
+                    <div class="changeFood" style="font-size:15px;">
+                        <h4 style="float:left; width:90%; float:left;">{{food.Mygradient_kor}} {{food.myamount}}개당 {{food.Cgradient_kor}} {{food.Camount}}개</h4>
+                        <div style="width:10%; float:left;">
+                        <button v-on:click="deleteShareList(index)" style="border-radius: 5px;
+    background-color: #cc2b2b;
+    width: 32px;
+    height: 31px;
+    margin-top: -7px;"><v-icon color="white" size="20px">mdi-trash-can-outline</v-icon></button>
                         </div>
                     </div>
             </div>
                 
             </div>
-            <div class="textArea">
+            <div class="textArea" style="height:130px">
                 <textarea v-model="sharedesc" style="width:100%; height:100%; resize: none;" placeholder="공유글에 들어갈 글을 적어주세요"></textarea>
             </div>
-            <div style="width:100%; height:21px;">
-                    <button v-on:click="putIntoBasket" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;">바구니에 넣기</button>
+            <div style="width:100%; height:40px;">
+                    <button v-on:click="putIntoBasket" class="tempInputButton" style="background-color:rgb(160,212,105);font-size:18px; font-weight:700;">바구니에 넣기</button>
                 </div>
             </div>
-            <div style="width:100%; height:74px; background-color:black; color:white; font-size: 9px; padding: 5px;">
+            <div style="width:100%; height:74px; background-color:black; color:white; font-size: 15px; padding: 5px; overflow-y:scroll;">
              <div v-if="myapi.name!=''">{{myapi.name}} {{myapi.unit}} 당 {{myapi.price}}원</div>
              <div v-if="trade1api.name!=''">{{trade1api.name}} {{trade1api.unit}} 당 {{trade1api.price}}원</div>
              <div v-if="trade2api.name!=''">{{trade2api.name}} {{trade2api.unit}} 당 {{trade2api.price}}원</div>
@@ -115,21 +120,21 @@
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
-           <div style="width:100%; height:196px; overflow:scroll;">
+           <div style="width:100%; height:196px; overflow:scroll; text-align: center;">
            <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
-               <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left;">(개당 {{food.price}} 원)</h4>
-                <div>
-                    <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
+               <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left; font-size:12px;">(개당 {{food.price}} 원)</h4>
+                <div style=" height: 20px; font-size: 15px;">
+                    <h4 style="float:left; width:100%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
                 </div>
-                <div v-if="food.tradefood2 !=null" >
-                     <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount2}}개당 {{food.tradefood2_kor}} {{food.tradefoodcount2}}개</h4>
+                <div v-if="food.tradefood2 !=null" style=" height: 20px; font-size: 15px;">
+                     <h4 style="float:left; width:100%; float:left;">{{food.myfoodcount2}}개당 {{food.tradefood2_kor}} {{food.tradefoodcount2}}개</h4>
                 </div>
            
            </div>
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
-        <div style="position:fixed; bottom:0; width:360px;">
+        <div style="position:fixed; margin-top: 590px; width:360px;">
             <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
@@ -569,19 +574,19 @@ data() {
     border-radius: 4px;
     color:black;
     float: left;
-    width: 33px;
-    height: 24px;
+    width: 60px;
+    height: 30px;
     overflow: hidden;
 }
 .longNameBox{
     width: 67px;
-    height: 30px;
     float: left;
     white-space: break-spaces;
     text-overflow: ellipsis;
     overflow: hidden;
     display: block;
     padding: 4px 4px;
+    text-align: center;
 }
 .rootContainer{
     width:360px;
@@ -589,6 +594,7 @@ data() {
     background-image: url(../../assets/images/myref.png);
     background-size: contain;
     position:relative;
+    overflow-x: hidden;
 }
 #insideRef{
     width: 183px;
@@ -608,13 +614,14 @@ data() {
     margin-top: 408px;
 }
 .inputFeild{
-    width: 143px;
+    width: 315px;
     background-color: white;
     position: fixed;
-    margin-left: 212px;
+    margin-left: 26px;
     margin-top: 25px;
-    display:none;
-    
+    display: none;
+    box-shadow: 0px 0px 26px #00000052;
+    z-index:25;
 }
 .registMaterial{
     width: 143px;
@@ -647,7 +654,7 @@ h5{
     background-color: #f5f5f5;
     border-radius: 4px;
     color:black;
-    width:24px;
+    width:40px;
     height:60px;
     padding:4px;
 
@@ -662,6 +669,47 @@ h5{
     margin-top: 6px;
     padding: 5px 7px;
     border-bottom: 1px solid rgba(224, 224, 224, 0.51);
+}
+.tempInputButton{
+    background-color: rgb(199 230 166);
+    width: 100%;
+    height: 100%;
+    border-radius: 9px;
+    box-shadow: 2px 2px 1px #70b526;
+    margin-left: -2px;
+    font-size: 16px;
+}
+.tempInputButton:active{
+margin-left: 2px;
+box-shadow: -2px -2px 1px #70b526;
+}
+.shareButton{
+    height: 36px;
+    width: 78px;
+    background-color: rgb(160, 212, 105);
+    float: left;
+    margin-right: 5px;
+    padding: 4px 0px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    text-shadow: 1px 1px 3px #0000002e;
+    box-shadow: 2px 2px 1px #77a942;
+}
+.deleteButton{
+    height: 36px;
+    width: 78px;
+    background-color: red(160, 212, 105);
+    float: left;
+    margin-right: 5px;
+    padding: 4px 0px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    color: white;
+    background-color: red;
+    text-shadow: 1px 1px 3px #0000002e;
+    box-shadow: 2px 2px 1px #ab1b29;
 }
 .F1{
 width: 60px;
@@ -733,52 +781,52 @@ margin-left: 15px;
     margin-top: 372px;
 }
 .changeFood{
-    height:38px;
+    height: 50px;
     border-bottom: 1px solid #8080802e;
-    padding: 3px;
+    padding: 16px 17px;
 }
 
 .share1{
     z-index: 100;
     /* animation-name: move;
     animation-duration: 0.9s; */
-    transform: translate(220px,360px) scale(0,0);
-    transition:all ease 0.9s;
+    transform: translate(220px,360px);
+    transition:all ease 1.4s;
 }
 .share2{
     z-index: 100;
-     transform: translate(108px,360px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(108px,360px);
+    transition:all ease 1.4s;
 }
 .share3{
     z-index: 100;
-     transform: translate(250px,300px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(250px,300px);
+    transition:all ease 1.4s;
 }
 .share4{
     z-index: 100;
-     transform: translate(108px,300px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(108px,300px);
+    transition:all ease 1.4s;
 }
 .share5{
     z-index: 100;
-     transform: translate(250px,250px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(250px,250px);
+    transition:all ease 1.4s;
 }
 .share6{
     z-index: 100;
-     transform: translate(108px,250px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(108px,250px);
+    transition:all ease 1.4s;
 }
 .share7{
     z-index: 100;
-     transform: translate(250px,100px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(250px,100px);
+    transition:all ease 1.4s;
 }
 .share8{
     z-index: 100;
-     transform: translate(108px,0px) scale(0,0);
-    transition:all ease 0.8s;
+     transform: translate(108px,0px);
+    transition:all ease 1.4s;
 }
 
 .comback1{
