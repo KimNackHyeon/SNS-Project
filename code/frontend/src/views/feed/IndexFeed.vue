@@ -15,7 +15,7 @@
           solo
           dense
           deletable-chips
-          @keyup.enter="searchTag"
+          @keyup.enter="change"
           class="searchBarBtn"
         ></v-combobox>
         <div style="overflow: hidden;">

@@ -150,6 +150,7 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
+import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 const SERVER_URL = store.state.SERVER_URL;
