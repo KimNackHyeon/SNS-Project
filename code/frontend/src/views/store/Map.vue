@@ -39,11 +39,12 @@ export default {
   methods : {
     ...mapMutations(['setUserInfo', 'setMapOtherUserInfo']),
     initMap() {
-      var container = document.getElementById('map');
-      var options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 8
-      };
+      var container = document.getElementById('map'),
+        mapcenter = new kakao.maps.LatLng(33.450701, 126.570667),
+        options = {
+          center: mapcenter,
+          level: 3
+        };
       var map = new kakao.maps.Map(container, options);
       this.map = map;
       //마커추가하려면 객체를 아래와 같이 하나 만든다.
@@ -67,6 +68,7 @@ export default {
             console.log('ok')
             for (var r = 0; r < result.length; r++) {
               var data = result[r];
+              console.log(data)
               bounds.extend(new kakao.maps.LatLng(data.y, data.x));
             }
             this.map.setBounds(bounds);

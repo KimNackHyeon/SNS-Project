@@ -97,6 +97,9 @@ export default {
   data() {
     return {
       groupBuyings: '',
+      mapdata: [],
+      mydata: [],
+      otherdata: [],
     }
   },
   created(){
@@ -111,6 +114,46 @@ export default {
         console.log(response)
         this.groupBuyings = response.data
         console.log(this.groupBuyings)
+        for (var i = 0; i < this.groupBuyings.length; i++) {
+          this.mapdata.push(this.groupBuyings[i].address)
+        }
+        console.log(this.userinfo.address)
+        console.log(this.mapdata)
+        const script = document.createElement('script');
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
+        document.head.appendChild(script);
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(this.userinfo.address, (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            this.mydata.push([result[0].y, result[0].x])
+          }
+        })
+        for (var m = 0; m < this.mapdata.length; m++) {
+          geocoder.addressSearch(this.mapdata[m], (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              for (var d = 0; d < result.length; d++) {
+                // var redata = [result[d].y, result[d].x];
+                // console.log(result[d].x)
+                var distancedata = [
+                  new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
+                  new kakao.maps.LatLng(result[d].y, result[d].x)]
+                console.log(distancedata)
+                var polyline = new kakao.maps.Polyline({
+                  path: distancedata,
+                  strokeWeight: 5,
+                  strokeColor: '#FFAE00',
+                  strokeOpacity: 0.7,
+                  strokeStyle: 'solid'
+                })
+                var distance = polyline.getLength();
+                console.log(distance)
+                // this.otherdata.push(redata);
+              }
+            }
+          })
+        }
       })
       .catch(error => {
       })
