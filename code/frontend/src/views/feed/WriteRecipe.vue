@@ -74,6 +74,14 @@
     </div>
 </div>
 
+      <!-- <v-dialog v-model="loading"> -->
+        <!-- <v-container>
+          <v-layout row justify-center align-center>
+            <v-progress-linear :indeterminate="true"></v-progress-linear>
+          </v-layout>
+        </v-container> -->
+      <!-- </v-dialog> -->
+
 <div class="plusBtnArea">
  <div class="plusBtn" @click="addRecipe"><v-icon size="100px">mdi-plus</v-icon></div>
 </div> <!-- end of 추가버튼 -->
