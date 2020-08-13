@@ -1,7 +1,7 @@
 <template>
   <div class="rootContainer">
       <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none;">
-          <get-one-food @addfood="addFood"></get-one-food>
+          <getOneFood @addfood="addFood"></getOneFood>
       </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
         <div id="insideRef">

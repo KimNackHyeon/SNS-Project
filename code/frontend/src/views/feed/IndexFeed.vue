@@ -119,5 +119,7 @@ export default {
     text-align: center;
     padding-top: 7px;;
 }
-
+.v-image__image--cover{
+  background-size:cover;
+}
 </style>
