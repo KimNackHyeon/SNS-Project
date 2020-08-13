@@ -117,14 +117,14 @@ export default {
     // if(userinfo.email == )
     axios.get(`${SERVER_URL}/groupbuying/read`)
       .then(response => {
-        console.log(response)
+        // console.log(response)
         this.groupBuyings = response.data
-        console.log(this.groupBuyings)
+        // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
         }
-        console.log(this.userinfo.address)
-        console.log(this.mapdata)
+        // console.log(this.userinfo.address)
+        // console.log(this.mapdata)
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -141,11 +141,11 @@ export default {
             if (status === kakao.maps.services.Status.OK) {
               for (var d = 0; d < result.length; d++) {
                 // var redata = [result[d].y, result[d].x];
-                // console.log(result[d].x)
+                // // console.log(result[d].x)
                 var distancedata = [
                   new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
                   new kakao.maps.LatLng(result[d].y, result[d].x)]
-                console.log(distancedata)
+                // console.log(distancedata)
                 var polyline = new kakao.maps.Polyline({
                   path: distancedata,
                   strokeWeight: 5,
@@ -154,7 +154,7 @@ export default {
                   strokeStyle: 'solid'
                 })
                 var distance = polyline.getLength();
-                console.log(distance)
+                // console.log(distance)
                 // this.otherdata.push(redata);
               }
             }

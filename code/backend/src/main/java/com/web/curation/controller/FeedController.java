@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -177,6 +178,7 @@ public class FeedController {
 		/* 피드 재료 등록 */
 		for (Food f : food) {
 			f.setFeedNo(feedNo);
+			System.out.println(f);
 			foodRepo.save(f);
 		}
 		System.out.println(Arrays.toString(food));
@@ -274,6 +276,20 @@ public class FeedController {
 		map.put("scrap", scrap.isPresent());
 
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "피드 삭제")
+	@DeleteMapping("/feed/delete")
+	public ResponseEntity<String> deleteFeed(@RequestParam Long feedNo) {
+
+		Optional<MyBoard> myBoardOpt = myboardRepo.findMyBoardByNo(feedNo);
+		String result = "fail";
+		if(myBoardOpt.isPresent()) {
+			myboardRepo.delete(myBoardOpt.get());
+			result = "success";
+		}
+
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
 	public String upload(MultipartFile image, Long feedNo, String email) throws IllegalStateException, IOException {

@@ -37,7 +37,7 @@
             </v-btn>
             <div class="btns">
               <!-- <v-btn class="btn" >수정</v-btn> -->
-              <v-btn class="btn" >삭제</v-btn>
+              <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default {
   created(){
      if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-        console.log(this.userinfo);
+        // console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
       }
@@ -197,13 +197,13 @@ export default {
           this.myrefFood = response.data.myreflist
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         });
     
     var feedNo = this.$route.params.feedNo;
     axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
-          console.log(response);
+          // console.log(response);
             this.feedData = { // 하나의 피드 데이터
               no: response.data.feeddata.no,
               nickname : response.data.feeddata.nickname,
@@ -237,7 +237,7 @@ export default {
               }
               })
             .then(response =>{
-              console.log(response);
+              // console.log(response);
                 this.feedData.isLike = response.data.like;
                 this.feedData.isScrap = response.data.scrap;
             });
@@ -247,7 +247,7 @@ export default {
           this.myrefFood.forEach(reffood=>{
             myrefFoodName.push(reffood.name_kor);
           });
-          console.log(this.myrefFood);
+          // console.log(this.myrefFood);
           feedFoodlist.forEach(recipefood => {
           // console.log(recipefood.name);
           if(myrefFoodName.includes(recipefood.name_kor)){
@@ -260,7 +260,7 @@ export default {
         // console.log(this.feedData.foods);
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
         setTimeout(() => {
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
@@ -291,7 +291,7 @@ export default {
         .then(response => {
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
       });
     },
     scrapedbtn() {
@@ -305,7 +305,7 @@ export default {
         .then(response => {
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
       });
     },
     openBtn() {
@@ -336,10 +336,10 @@ export default {
         // create_date: `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
         create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
-      console.log(comment);
+      // console.log(comment);
       axios.post(`${SERVER_URL}/feed/register`,comment)
       .then(response=>{
-        console.log(response);
+        // console.log(response);
         this.comment = "";
       })
 
@@ -349,9 +349,15 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        console.log(user_email)
+        // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
+    },
+    deleteNo(feed_no){
+      axios.delete(`${SERVER_URL}/feed/delete`,{params:{feedNo : feed_no}})
+      .then(response => {
+        this.$router.push('/feed/main');
+      })
     }
   },
 }

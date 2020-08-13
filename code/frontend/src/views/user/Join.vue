@@ -370,9 +370,9 @@ export default {
         this.confirm = true
         this.isConfirm = true
         this.checkJoinForm()
-        console.log('good')
+        // console.log('good')
       } else {
-        console.log('실패')
+        // console.log('실패')
         
         Swal.fire({
           title: '다시 한번 더 확인해주세요',
@@ -384,14 +384,14 @@ export default {
       axios
       .post(`${SERVER_URL}/account/nicknameconfirm`, this.signupData)
       .then(data => {
-        console.log(data.data.data)
+        // console.log(data.data.data)
         if (data.data.data == "1") {
-          console.log('중복')
+          // console.log('중복')
           this.nickErrMsg = true;
           this.nickSucMsg = false;
           this.checkJoinForm()
         } else {
-          console.log('가능')
+          // console.log('가능')
           this.nickSucMsg = true;
           this.nickErrMsg = false;
           this.checkJoinForm()        
@@ -424,17 +424,17 @@ export default {
         axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
         .then(data => {
           if (data.data.data == "1") {
-            console.log('success')
+            // console.log('success')
             this.completeMail = true;
             Swal.fire({
             title: '다시 한번 더 확인해주세요',
             text: '이미 가입된 이메일입니다.',
           })
           } else {
-            console.log('no')
+            // console.log('no')
             this.confirm = !confirm
             this.checkCert = data.data.data
-            console.log(data.data.data)
+            // console.log(data.data.data)
             this.completeMail = false;
           }
             })
@@ -450,15 +450,15 @@ export default {
         this.emailErrMsg = false;
         this.completeMail = false;
           if (this.emailSucMsg) {
-            console.log('sucsess1')
-            console.log(this.signupData.email)
+            // console.log('sucsess1')
+            // console.log(this.signupData.email)
             axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
             .then(data => {
-              console.log('sucsess2')
+              // console.log('sucsess2')
               if (data.data.data === "1") {
                 this.completeMail = true;
               } else {
-                console.log('no')
+                // console.log('no')
                 this.checkCert == data.data.data
                 this.completeMail = false;
                 certif

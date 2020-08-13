@@ -111,7 +111,7 @@ export default {
   watch: {
     // feedDatas: function(v) {
     //   this.feedDatas.forEach(feedData => {
-    //     console.log(feedData)
+    //     // console.log(feedData)
     //     if (feedData.comment.length > 0) {
     //       $('.sendBtn').css('color', '#a0d469')
     //     }
@@ -134,7 +134,7 @@ export default {
     callList(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
-          console.log(response);
+          // console.log(response);
             // var data = {};
 
           response.data.feedlist.forEach(d =>{
@@ -155,7 +155,7 @@ export default {
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
-            console.log(response);
+            // console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
                 img : c.img,
@@ -176,7 +176,7 @@ export default {
             }
             })
           .then(response =>{
-            console.log(response);
+            // console.log(response);
               data.islike = response.data.like;
               data.isscrap = response.data.scrap;
           });
@@ -196,13 +196,13 @@ export default {
           });
 
           this.feedDatas.push(data); // 피드 데이터 저장
-          console.log(data);
+          // console.log(data);
         });
-        console.log(this.feedDatas);
+        // console.log(this.feedDatas);
         this.originalDatas = this.feedDatas;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     countItem(i) {
@@ -224,10 +224,10 @@ export default {
         feedNo: feedData_id,
         comment: this.inputComment
       }
-      console.log(comment);
+      // console.log(comment);
       axios.post(`${SERVER_URL}/feed/register`,comment)
       .then(response=>{
-        console.log(response);
+        // console.log(response);
         this.inputComment = "";
       })
 
@@ -247,7 +247,7 @@ export default {
       })
     },
     likedbtn(feedData_id) {
-      console.log(feedData_id + " " + store.state.userInfo.email);
+      // console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
           feedData.islike = !feedData.islike
@@ -262,11 +262,11 @@ export default {
         .then(response => {
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
       });
     },
     scrapedbtn(feedData_id) {
-      console.log(feedData_id + " " + store.state.userInfo.email);
+      // console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
           feedData.isscrap = !feedData.isscrap
@@ -281,7 +281,7 @@ export default {
         .then(response => {
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     openBtn() {
@@ -295,20 +295,20 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        console.log(user_email)
+        // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     },
     searchTag(tags){
-      console.log(tags);
+      // console.log(tags);
       this.feedDatas = this.originalDatas;
       if(tags.length != 0){
         this.feedDatas = this.feedDatas.filter(function (item) {
           var isTag = false;
           item.tags.forEach(tag => {
             if(tags.indexOf("#"+tag.tagName) != -1){
-              console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
-              console.log(item);
+              // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+              // console.log(item);
               isTag = true;
               return;
             }
@@ -316,7 +316,7 @@ export default {
           return isTag;
         })
       }
-      console.log(this.feedDatas);
+      // console.log(this.feedDatas);
     }
   },
 };
