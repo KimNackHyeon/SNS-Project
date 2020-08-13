@@ -29,4 +29,6 @@ public interface TradeRepo extends JpaRepository<Trade, Long>{
 			String myfoodcount1, String myfoodcount2, String content, String address, String tradefoodcount1,
 			String tradefoodcount2);
 	
+	
+	
 }
