@@ -92,7 +92,8 @@
           <div class="myrecipe-body">
             <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
               <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
-                <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food">
+                <img class="myrecipe-img-size" :src="recipe.img" alt="food">
+                <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food"> -->
               </router-link>
             </div>
           </div>
