@@ -56,7 +56,7 @@
             <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
-                  <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
+                  <img :src="`/img/food/${food.img}.png`" alt="flour" style="width: 30px; height: 30px;">
                   <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
                 </v-btn>
               </div>

@@ -2,8 +2,12 @@ package com.web.curation.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -432,6 +436,38 @@ public class AccountController {
 		}
 
 		return datalist;
+	}
+	
+	@GetMapping("/account/apitest")
+	@ApiOperation(value = "외부 api 호출")
+	public String callapi() {
+		StringBuffer result = new StringBuffer();
+		System.out.println("외부 api 호출 ======================");
+		try {
+			String urlstr = "http://www.kamis.or.kr/service/price/xml.do?"
+					+ "action=dailySalesList"
+					+ "&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac"
+					+ "&p_cert_id=1137"
+					+ "&p_returntype=json";
+			
+			URL url = new URL(urlstr);
+			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
+			urlconnection.setRequestMethod("GET");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(),"UTF-8"));
+			
+			String returnLine;
+			
+			while((returnLine = br.readLine()) != null) {
+				result.append(returnLine);
+			}
+			urlconnection.disconnect();
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		System.out.println(result.toString());
+		return result.toString();
 	}
 	
 

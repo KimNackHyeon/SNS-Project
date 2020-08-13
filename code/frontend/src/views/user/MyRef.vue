@@ -76,8 +76,9 @@
                     <button v-on:click="putIntoBasket" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;">바구니에 넣기</button>
                 </div>
             </div>
-            <div style="width:100%; height:74px; background-color:black; color:white;">
-             {{apiUnit}} 당 {{apiPrice}}원
+            <div style="width:100%; height:74px; background-color:black; color:white; font-size: 9px; padding: 5px;">
+             <div v-if="apiUnit!=''">{{apiUnit}} 당 {{apiPrice}}원</div>
+            <div v-if="apiUnit ==''">가격 데이터가 존재하지 않습니다.</div>
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
             </div>
         </div><!-- end of 바구니에 넣기 -->
@@ -149,15 +150,24 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
-       
+// import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
-// const SERVER_URL = store.state.SERVER_URL;
-const SERVER_URL = 'http://localhost:9999/food/api';
-var convert = require('xml-js')
+const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = 'http://localhost:9999/food/api';
+var convert = require('xml-js');
+const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
+
+
+
+
+
 const config = {
     headers: {
-      'content-type': 'application/json',
-      'Accept': 'application/json'
+      'Access-Control-Allow-Origin':'*',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Methods':'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':'Origin,Access-Control-Request-Headers, Authorization'
     }
 }
 
@@ -287,9 +297,6 @@ data() {
                 this.selectedFood = '';
                 this.nowCamount= 1;
                 $('.setFood').text("");
-                // this.nowmyamount = nowfood.myamount;
-                // this.nowCgradient = nowfood.Cgradient;
-                // this.nowCamount = nowfood.Camount;
                 $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
                 this.NowClassNum = index;
@@ -301,14 +308,17 @@ data() {
                 $('#justMove').css('display','unset');
                 this.intoFood = this.Nowgra.name;
                 this.changeFoodsTemp = [];
-                // for(var i=0; i<this.xmldata.price.length;i++){
-                //     var tF = this.xmldata.price[i];
-                //     var tFname = tF.productName.split('/')[0];
-                //     if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
-                //         this.apiUnit = tF.unit;
-                //         this.apiPrice = tF.dpr1;
-                //     }
-                // }
+                this.apiUnit = '';
+                    this.apiPrice = '';
+                for(var i=0; i<this.xmldata.price.length;i++){
+                    var tF = this.xmldata.price[i];
+                    var tFname = tF.productName.split('/')[0];
+                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
+                        this.apiUnit = tF.unit;
+                        this.apiPrice = tF.dpr1;
+                        break;
+                    }
+                }
             },
             openShareBox:function(){
                 if($('.sharebox').css('display')=='none'){
@@ -482,9 +492,7 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      
       axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
-    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
@@ -493,18 +501,13 @@ data() {
           console.log(error.response)
         })
 
-        axios.get('https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json')
-        .then((response) => {
-            var xml = response.data;
-        var json = convert.xml2json(xml, { compact: true });
-        this.xmldata = JSON.parse(json);
+        axios
+        .get(`${SERVER_URL}/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
             console.log(this.xmldata);
-        })
-        .catch((error)=>{
-                    console.log(error.response);
-        })
-      
-    
+            }
+        )
   },
 }
 </script>

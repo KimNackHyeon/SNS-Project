@@ -37,18 +37,18 @@
             <td colspan="2">제가 가진</td><td></td><td colspan="2">당신이 가진</td><td></td>
           </tr>
           <tr class="tableBody">
-            <td><img :src="'../../assets/images/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
+            <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.myfood_kor }} 1개</h4></td>
             <td style="padding-left: 5px;">를</td>
-            <td><img :src="'../../assets/images/food/' + detailinfo.tradefood1 + '.png'" :alt="detailinfo.tradefood1" style="width: 30px; height: 30px; margin: 0 10px;"></td>
+            <td><img :src="'/img/food/' + detailinfo.tradefood1 + '.png'" :alt="detailinfo.tradefood1" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.tradefood1_kor }} {{ detailinfo.foodcount1 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
           </tr>
           <tr class="tableBody">
-            <td><img :src="'../../assets/images/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
+            <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.myfood_kor }} 1개</h4></td>
             <td style="padding-left: 5px;">를</td>
-            <td><img :src="'../../assets/images/food/' + detailinfo.tradefood2 + '.png'" :alt="detailinfo.tradefood2" style="width: 30px; height: 30px; margin: 0 10px;"></td>
+            <td><img :src="'/img/food/' + detailinfo.tradefood2 + '.png'" :alt="detailinfo.tradefood2" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.tradefood2_kor }} {{ detailinfo.foodcount2 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
           </tr>
@@ -103,12 +103,12 @@
 </template>
 
 <script>
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
+// const SERVER_URL = "http://127.0.0.1:9999/food/api";
 // const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 import store from '../../vuex/store.js'
 import axios from 'axios'
 
-// const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data(){
