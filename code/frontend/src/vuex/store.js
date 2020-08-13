@@ -85,7 +85,6 @@ export default new Vuex.Store({
     },
     setMapOtherUserInfo(state, data){
       state.mapOtherUserInfo.address.push(data);
-      state.mapOtherUserInfo.food.push(data);
     },
     setUserInfo(state, userinfo) {
       state.userInfo.email = userinfo.email;
