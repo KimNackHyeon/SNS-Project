@@ -222,6 +222,14 @@ created() {
     .then(response => {
       this.tradelist = response.data.list
       console.log(this.tradelist)
+      console.log(this.mapOtherUserInfo.address)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+        }
+        console.log('good')
+        console.log(store.state.mapOtherUserInfo)
+      }
     })
     .catch(error => {
       console.log(error.response)
