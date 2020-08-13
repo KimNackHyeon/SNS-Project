@@ -104,6 +104,20 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@ApiOperation(value = "카카오 로그인 처리")
+	@PostMapping("/account/kakaologin")
+	public ResponseEntity<Object> kakaologin(@RequestBody Member member) {
+		System.out.println(member);
+		Member userOpt = memberRepo.getUserByEmail(member.getEmail());
+		if (userOpt == null) { // 중복된 이메일이 없으면
+			System.out.println("로그인된 아이디 정보");
+			memberRepo.save(member);
+			return new ResponseEntity<Object>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(userOpt, HttpStatus.OK);
+		}
+	}
 
 	@ApiOperation(value = "내 냉장고")
 	@GetMapping("/account/myref/{email}")
