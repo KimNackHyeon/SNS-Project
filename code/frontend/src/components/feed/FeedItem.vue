@@ -46,6 +46,26 @@
               <v-icon v-if="!feedData.isscrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
               <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
+          <!-- 수정 삭제 -->
+          <v-menu botoom offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon style="width: 25px; height: 25px">
+                <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <!-- <router-link to="/"> -->
+                <v-list-item @mouseover="overModifyBtn" @mouseout="outModifyBtn"  style="min-height: unset; height: 30px">
+                  <v-list-item-title class="modifybtn">수정</v-list-item-title>
+                </v-list-item>
+              <!-- </router-link> -->
+              <button>
+                <v-list-item @mouseover="overDeleteBtn" @mouseout="outDeleteBtn" style="min-height: unset; height: 30px">
+                  <v-list-item-title class="deletebtn">삭제</v-list-item-title>
+                </v-list-item>
+              </button>
+            </v-list>
+          </v-menu>
         </div>
       </div>
       <!-- 댓글 -->
@@ -72,7 +92,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 

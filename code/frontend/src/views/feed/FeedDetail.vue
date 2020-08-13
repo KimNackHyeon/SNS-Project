@@ -21,18 +21,38 @@
           <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
-        <div style="float: right;">
+        <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
           </v-btn> -->
-          <v-btn icon @click="likedbtn">
-              <v-icon v-if="!feedData.isLike" size="30px" color="black">mdi-heart-outline</v-icon>
-              <v-icon v-if="feedData.isLike" size="30px" color="red">mdi-heart</v-icon>
+          <v-btn icon @click="likedbtn" style="width: 25px; height: 25px; margin: 5px">
+              <v-icon v-if="!feedData.isLike" size="25px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="25px" color="red">mdi-heart</v-icon>
           </v-btn>
-          <v-btn icon @click="scrapedbtn">
-              <v-icon v-if="!feedData.isScrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
-              <v-icon v-if="feedData.isScrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
+          <v-btn icon @click="scrapedbtn" style="width: 25px; height: 25px">
+              <v-icon v-if="!feedData.isScrap" size="25px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="25px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
+          <!-- 수정 삭제 -->
+          <v-menu botoom offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon style="width: 25px; height: 25px">
+                <v-icon color="black" size="25px">mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <!-- <router-link to="/"> -->
+                <v-list-item @mouseover="overModifyBtn" @mouseout="outModifyBtn"  style="min-height: unset; height: 30px">
+                  <v-list-item-title class="modifybtn">수정</v-list-item-title>
+                </v-list-item>
+              <!-- </router-link> -->
+              <button>
+                <v-list-item @mouseover="overDeleteBtn" @mouseout="outDeleteBtn" style="min-height: unset; height: 30px">
+                  <v-list-item-title class="deletebtn">삭제</v-list-item-title>
+                </v-list-item>
+              </button>
+            </v-list>
+          </v-menu>
         </div>
       </div>
       
@@ -104,10 +124,10 @@
           </div>
           <div class="content">
             <div>
-              <p class="commentUser">{{comment.nickname}}</p>
-              <span>{{comment.comment}}</span>
+              <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
+              <p style="margin: 0 5px 0 0; display: inline-block;">{{comment.comment}}</p>
+              <p style="margin: 0; display: inline-block; font-size: 12px">{{comment.create_date}}</p>
             </div>
-            <span style="font-size: 12px">{{comment.create_date}}</span>
           </div>
         </div>
       </div>
@@ -154,6 +174,7 @@ export default {
         '꿀키',
         '소보로'
       ],
+      offset: true,
     }
   },
   watch: {
@@ -282,6 +303,18 @@ export default {
           console.log(error.response);
       });
     },
+    overModifyBtn() {
+      $('.modifybtn').css('color', '#a0d469')
+    },
+    outModifyBtn() {
+      $('.modifybtn').css('color', 'unset')
+    },
+     overDeleteBtn() {
+      $('.deletebtn').css('color', '#a0d469')
+    },
+    outDeleteBtn() {
+      $('.deletebtn').css('color', 'unset')
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -332,6 +365,12 @@ export default {
     align-items: center;
     padding: 0px 10px;
     
+  }
+  .v-btn {
+    background-color: unset;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+    color: unset;
   }
   .hashBox {
     overflow-x: scroll;
@@ -409,19 +448,21 @@ export default {
   .comments {
     padding: 5px 10px 5px 10px;
     width:100%;
-    min-height: 60px;
+    height: 60px;
+    overflow: hidden;
+    line-height: 60px;
   }
   .userImg {
     float: left;
-    margin-right: 10px;
     width: 10%;
   }
   .content {
     float: left;
     width: 85%;
+    height: 60px;
   }
   .commentUser {
-    margin-bottom: 0 !important;
+    /* margin-bottom: 0 !important; */
     font-weight: bold; 
     margin-right: 5px;
   }
