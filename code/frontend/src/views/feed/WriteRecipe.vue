@@ -74,14 +74,6 @@
     </div>
 </div>
 
-      <!-- <v-dialog v-model="loading"> -->
-        <!-- <v-container>
-          <v-layout row justify-center align-center>
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-          </v-layout>
-        </v-container> -->
-      <!-- </v-dialog> -->
-
 <div class="plusBtnArea">
  <div class="plusBtn" @click="addRecipe"><v-icon size="100px">mdi-plus</v-icon></div>
 </div> <!-- end of 추가버튼 -->
@@ -277,7 +269,7 @@ export default {
 
       this.items.forEach(item => {
         if(item.desc != '' && item.desc!=null){
-          contents.push(item.desc);
+          contents.push(item.desc.replace(/(?:\r\n|\r|\n)/g, '<br />'));
         }else{
           contents.push(' ');
         }
@@ -300,7 +292,7 @@ export default {
         images : this.images
       }
 
-      
+      console.log(data);
 
       axios
       .post(`${SERVER_URL}/feed/img`, formData,{
@@ -314,7 +306,7 @@ export default {
         setTimeout(() => {
         this.loading = false;
         this.register(data);
-      }, 1500*this.items.length + 3000);
+      }, 1000*this.items.length + 3000);
       })
       .catch((error)=>{
         console.log(error.response);

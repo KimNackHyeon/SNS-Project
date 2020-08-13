@@ -18,7 +18,7 @@
     <div style="overflow: scroll; ">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right; height: 35px; line-height: 35px">
@@ -96,9 +96,11 @@
         <div>
           <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
             <div>
-              <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;">
+              <img :src="item.img" style="width:360px; height:auto;">
+              <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
+              
             </div>
-            <div>
+            <div class="feedContents" v-html="item.content">
               {{item.content}}
             </div>
           </div>
@@ -120,7 +122,7 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
+            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content">
             <div>
@@ -214,6 +216,7 @@ export default {
               nickname : response.data.feeddata.nickname,
               profile : response.data.feeddata.profile,
               title: response.data.feeddata.title,
+              email: response.data.feeddata.email,
               items: [],
               comments:[],
               hashTags:[],
@@ -233,8 +236,17 @@ export default {
               this.feedData.items.push(d);
             });
 
-            response.data.datalist.forEach(d =>{
-              this.feedData.items.push(d);
+            axios.get(`${SERVER_URL}/feed/check`,{
+              params:
+              {
+                email:store.state.userInfo.email,
+                feedNo : response.data.feeddata.no,
+              }
+              })
+            .then(response =>{
+              console.log(response);
+                this.feedData.isLike = response.data.like;
+                this.feedData.isScrap = response.data.scrap;
             });
           
           var myrefFoodName = [];
@@ -342,6 +354,14 @@ export default {
 
       this.feedData.comments.push(comment);
     },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    }
   },
 }
 </script>
@@ -465,5 +485,9 @@ export default {
     /* margin-bottom: 0 !important; */
     font-weight: bold; 
     margin-right: 5px;
+  }
+
+  .feedContents{
+    text-align: center;
   }
 </style>

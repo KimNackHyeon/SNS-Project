@@ -113,6 +113,7 @@ export default {
       imgNumber: "",
       inputComment: '',
       commentData: [],
+      originalDatas: [],
     };
   },
   computed: {
@@ -132,6 +133,11 @@ export default {
   },
 
   mounted(){
+      this.callList();
+      
+  },
+  methods: {
+    callList(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
           console.log(response);
@@ -149,7 +155,7 @@ export default {
               comment: "",
               items: [    
               ],
-
+              tags:[],
               comments:[],
             }
 
@@ -188,17 +194,23 @@ export default {
             }
           });
 
+          response.data.taglist.forEach(t => {
+            if(t.feedNo == d.no){
+              var tag = {tagName : t.tagName};
+              data.tags.push(tag);
+            }
+          });
+
           this.feedDatas.push(data); // 피드 데이터 저장
           console.log(data);
         });
         console.log(this.feedDatas);
+        this.originalDatas = this.feedDatas;
       })
       .catch((error) => {
         console.log(error.response);
       });
-      
-  },
-  methods: {
+    },
     countItem(i) {
       this.imgNumber = i
     },
@@ -285,6 +297,25 @@ export default {
         console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
+    },
+    searchTag(tags){
+      console.log(tags);
+      this.feedDatas = this.originalDatas;
+      if(tags.length != 0){
+        this.feedDatas = this.feedDatas.filter(function (item) {
+          var isTag = false;
+          item.tags.forEach(tag => {
+            if(tags.indexOf("#"+tag.tagName) != -1){
+              console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+              console.log(item);
+              isTag = true;
+              return;
+            }
+          })
+          return isTag;
+        })
+      }
+      console.log(this.feedDatas);
     }
   },
 };
