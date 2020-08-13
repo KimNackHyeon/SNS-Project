@@ -43,8 +43,8 @@ const dataState = createPersistedState({
   })
 
 
-// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
-const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
+// const SERVER_URL = 'http://localhost:9999/food/api';
 export default new Vuex.Store({
   modules: {
     dataStore

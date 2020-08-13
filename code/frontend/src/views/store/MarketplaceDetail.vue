@@ -44,7 +44,7 @@
             <td><h4>{{ detailinfo.tradefood1_kor }} {{ detailinfo.foodcount1 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
           </tr>
-          <tr class="tableBody">
+          <tr class="tableBody" v-if="detailinfo.tradefood2">
             <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.myfood_kor }} 1개</h4></td>
             <td style="padding-left: 5px;">를</td>
