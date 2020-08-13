@@ -148,10 +148,18 @@ import axios from "axios";
 import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
+import qs from 'query-string';
+       
 
 // const SERVER_URL = store.state.SERVER_URL;
 const SERVER_URL = 'http://localhost:9999/food/api';
 var convert = require('xml-js')
+const config = {
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json'
+    }
+}
 
 export default {
     components:{getOneFood},
@@ -223,6 +231,9 @@ data() {
         .post(`${SERVER_URL}/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
+             Swal.fire({
+            title: registFood.name_kor+"(이)가 냉장고에 들어갔습니다!",
+          })
             window.location.reload();
         })
         .catch((error)=>{
@@ -449,9 +460,12 @@ data() {
             shareFinish:function(){
                 // const shareList = this.changeFoods;
                 
-                console.log(this.changeFoods);
-                axios
-                .post(`${SERVER_URL}/myref/share`,this.changeFoods)
+                console.log(typeof(this.changeFoods));
+                axios({
+                    url:`${SERVER_URL}/myref/share`,
+                    method:'post',
+                    data: JSON.stringify(this.changeFoods),
+                    headers: config.headers})
                 .then((response)=>{
                     console.log(response);
                     this.$router.push("/");
