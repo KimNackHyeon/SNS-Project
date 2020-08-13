@@ -7,7 +7,7 @@
         </div>
       </router-link>
       <div style="height:100%; text-align:center; padding-top:8px;">
-        <h4>공동구매 글쓰기</h4>
+        <h4>공동구매 글 수정하기</h4>
       </div>
     </div>
     <!-- 제목 -->
@@ -22,7 +22,7 @@
           <span style="line-height: 40px">품목</span>
         </div>
         <div style="overflow: hidden;">
-          <input type="text" v-model="food.name_kor" @click="getFood" class="setFood" placeholder="ex) 양파" style="float:left; width: 100%; height: 40px; text-align: center; font-size: 15px;">
+          <input type="text" v-model="food_kor" @click="getFood" class="setFood" placeholder="ex) 양파" style="float:left; width: 100%; height: 40px; text-align: center; font-size: 15px;">
         </div>
         <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
           <v-card>
@@ -127,14 +127,14 @@
         </div>
       </div>
     </div>
-    <!-- 글 작성 버튼 -->
+    <!-- 글 수정 버튼 -->
     <div>
       <v-btn 
       color="rgb(160, 212, 105)" 
       style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
-      작성하기
+      수정하기
       </v-btn>
     </div>
   </div>
@@ -150,13 +150,19 @@ import store from '../../vuex/store.js'
 
 
 const SERVER_URL = store.state.SERVER_URL;
-
+const config = {
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json'
+    }
+}
 export default {
   data() {
     return {
       userinfo:'',
       title: '',
       food: '',
+      food_kor:'',
       numberPeople: '',
       fileLink: '',
       content: '',
@@ -240,7 +246,9 @@ export default {
       // alert(food.name_kor+'을(를) 선택했습니다.');
       this.dialog = false
       // $('.setFood').text(food.name_kor);
-      this.food = food
+      this.food = food.name
+      this.food_kor = food.name_kor
+      console.log(this.food.food_kor)
       this.searchQuery = ''
       document.querySelector('.s').value = '';
     },
@@ -259,12 +267,12 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content) {
+      if (this.title && this.food && this.dateFormatted && this.numberPeople && this.fileLink && this.content) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`${SERVER_URL}/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`${SERVER_URL}/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
-            title: '등록이 완료되었습니다.',
+            title: '수정이 완료되었습니다.',
           })
             this.$router.go(-1);
           })
@@ -308,17 +316,37 @@ export default {
         return '';
       }
     },
-    // computedDateFormatted () {
-    //   return this.formatDate(this.date)
-    // },
   },
+ 
+        
   created(){
     if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
         this.userinfo = store.state.userInfo;
       }
-      
+    console.log(typeof(this.$route.params.id))
+    axios({
+                    url:`${SERVER_URL}/groupbuying/beforeupdate`,
+                    method:'post',
+                    data:{no:this.$route.params.id},
+                    headers: config.headers})
+                .then((response)=>{
+                    console.log(response);
+                    this.title = response.data.title
+                    this.food = response.data.food
+                    this.food_kor = response.data.food_kor
+                    // 주소 형식변환
+                    this.dateFormatted = response.data.end_date
+                    const [year, month, day] = this.dateFormatted.split('-')
+                    this.dateFormatted = `${year}/${month}/${day}`
+                    this.numberPeople = response.data.max_people
+                    this.fileLink = response.data.link
+                    this.content = response.data.content 
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                })      
   },
 }
 </script>
@@ -339,8 +367,8 @@ export default {
 .setFood:hover {
   border: 2px solid #a0d469;
 }
-.v-dialog {
-  height: 80% !important;
+.v-sheet {
+  height: 450px;
 }
 input{
   padding:0px;

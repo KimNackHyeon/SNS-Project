@@ -23,6 +23,7 @@ import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
 import PrivateChat from "./views/chat/PrivateChat.vue"
 import Error from "./views/error.vue"
+import ModifyGroupBuying from "./views/store/ModifyGroupbuying.vue";
 
 export default [
   {
@@ -104,11 +105,6 @@ export default [
     component: MarketPlace,
   },
   {
-    path: "/store/modify/marketplace",
-    name: "ModifyMarketPlace",
-    component: ModifyMarketPlace,
-  },
-  {
     path: "/chat/:privatechat",
     name: "PrivateChat",
     component: PrivateChat,
@@ -158,6 +154,11 @@ export default [
     name: "ModifyMarketPlace",
     component: ModifyMarketPlace,
   },
+  {
+    path:"/store/modify/groupbuying/:id?",
+    name: "ModifyGroupBuying",
+    component:ModifyGroupBuying,
+  }
   // {
   //   path: "/feed/detail",
   //   name: "FeedDetail",
