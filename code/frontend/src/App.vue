@@ -2,7 +2,7 @@
 <div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
-    <router-view style="width:360px; height:590px;" @login="onLogin" @signup="onSignup"></router-view>
+    <router-view @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
 </template>
@@ -33,36 +33,36 @@ export default {
         email: email,
         password: password,
       };
-      console.log(typeof(loginData));
+      // console.log(typeof(loginData));
       axios
         .post(`${SERVER_URL}/account/login`, loginData)
         .then((response) => {
-          console.log(response);
-          console.log(this)
+          // console.log(response);
+          // console.log(this)
           this.$cookies.set("auth-token", response.data.token);
           this.isLoggedIn = true;
           this.$router.push("/main");
           // store에 회원정보 저장
           const userInfo = response.data.userinfo;
-          console.log(userInfo);
+          // console.log(userInfo);
           store.commit('setUserInfo', userInfo);
           store.commit('delKakaouserInfo');
-          console.log(store.state.userInfo);
+          // console.log(store.state.userInfo);
         })
         .catch((error) => {
           Swal.fire({
             title: '아이디와 비밀번호를 확인해주세요!',
             text: '아이디 또는 비밀번호가 틀렸어요!',
           })
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
 
     onSignup(signupData) {
-      console.log(signupData);
+      // console.log(signupData);
       axios.post(`${SERVER_URL}/account/signup`, signupData)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           // this.$cookies.set("auth-token", response.data.key);
           this.$router.push("/");
           Swal.fire(
@@ -71,7 +71,7 @@ export default {
         )
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
 
@@ -80,19 +80,19 @@ export default {
       if (store.state.userInfo) {
         axios.get(`${SERVER_URL}/account/logout`, {params: { token : token}})
         .then(() => {
-          console.log(this.$cookies.keys());
+          // console.log(this.$cookies.keys());
           var cookies = document.cookie.split(";");
-          console.log(cookies);
+          // console.log(cookies);
           this.$cookies.remove('auth-token');
           // this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
           this.isLoggedIn = false;
           // store에 저장한 사용자 정보 지우기
           store.commit('deluserInfo');
-          console.log(store.state.userInfo);
+          // console.log(store.state.userInfo);
           this.$router.push('/');
         })
         .catch(error => {
-          console.log(error.response);
+          // console.log(error.response);
         })
       }
       else {
@@ -101,7 +101,7 @@ export default {
         this.isLoggedIn = false;
         // store에 저장한 사용자 정보 지우기
           store.commit('delKakaouserInfo');
-          console.log(store.state.KaKaoUserInfo);
+          // console.log(store.state.KaKaoUserInfo);
         this.$router.push('/');
       }
       

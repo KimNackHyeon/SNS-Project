@@ -4,21 +4,14 @@
           <div style="height:50px; width:100%; background-color:white">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
-          <get-one-food @addfood="addFood"></get-one-food>
+          <get-one-food @addfood="addFood" ></get-one-food>
       </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
-        <div id="insideRef">
-            <div id="justMove" class="F1" style="display:none; position:fixed;">
-                    <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
-                </div>
-               <div v-for="(food,index) in foods" :key="(index)">
-                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.img}.png`)">
-                
-                </button>
-            </div>
-        </div>
+    
+        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef">
+            
+        </ref-paging>
         <div id="basket">
-            <!-- <v-btn @click="openCheckBasket()" @mouseleave="closeCheckBasket()"  @mouseup="closeCheckBasket()"  @touchstart="openCheckBasket()"  @touchend="closeCheckBasket()"  @touchcancel="closeCheckBasket()" flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn> -->
             <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
@@ -37,7 +30,6 @@
     padding: 6px 0px;
     overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea" style="height: 40px; margin-top: 0px; text-align: center; padding: 5px 2px;">
-                <!-- <div class="longNameBox">{{Nowgra.name_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5> -->
                 <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:24px; height:30px;"><h5>개를</h5>
                 <div class="shareButton" @click="openShareBox" style="height:100%; width:37px; background-color:#80808066; float:left; margin-right:5px;">공유</div>
                 <div class="deleteButton" @click="deleteFoodfromRef" style="height:100%; width:37px; background-color:red; float:left;">삭제</div>
@@ -49,7 +41,6 @@
                
             </div>
             <div style="width:100%; height:33px; padding: 4px 6px;">
-                    <!-- <input type="text" style="width:25px; height:30px; background-color:gray; color:black;"> -->
                     <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:24px;"><h5 style="font-size:10px;float:left">개당</h5> 
                     <button type="button" @click="getFood" class="setFood" style="float:left; margin-right:5px;"></button>
                     <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
@@ -77,8 +68,10 @@
                 </div>
             </div>
             <div style="width:100%; height:74px; background-color:black; color:white; font-size: 9px; padding: 5px;">
-             <div v-if="apiUnit!=''">{{apiUnit}} 당 {{apiPrice}}원</div>
-            <div v-if="apiUnit ==''">가격 데이터가 존재하지 않습니다.</div>
+             <div v-if="myapi.name!=''">{{myapi.name}} {{myapi.unit}} 당 {{myapi.price}}원</div>
+             <div v-if="trade1api.name!=''">{{trade1api.name}} {{trade1api.unit}} 당 {{trade1api.price}}원</div>
+             <div v-if="trade2api.name!=''">{{trade2api.name}} {{trade2api.unit}} 당 {{trade2api.price}}원</div>
+            <div v-if="myapi.name =='' && trade1api.name==''&&trade2api.name==''">가격 데이터가 존재하지 않습니다.</div>
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
             </div>
         </div><!-- end of 바구니에 넣기 -->
@@ -150,16 +143,13 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
+import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 const SERVER_URL = store.state.SERVER_URL;
 // const SERVER_URL = 'http://localhost:9999/food/api';
 var convert = require('xml-js');
 const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
-
-
-
-
 
 const config = {
     headers: {
@@ -172,7 +162,7 @@ const config = {
 }
 
 export default {
-    components:{getOneFood},
+    components:{getOneFood,RefPaging},
 data() {
     return {
         selectedFood:'',  //냉장고에 채우고싶은 재료 
@@ -197,6 +187,21 @@ data() {
     sharedesc:'',
     apiUnit:'',
     apiPrice:0,
+    myapi : {
+        name : '',
+        unit : '',
+        price : '',
+    },
+    trade1api : {
+        name : '',
+        unit : '',
+        price : '',
+    },
+    trade2api : {
+        name : '',
+        unit : '',
+        price : '',
+    },
         foods:[],
         changeFoodsTemp:[
               ],
@@ -261,10 +266,7 @@ data() {
             $('.selectfood').css('display','block');
         },
         addFood:function(food){
-            // alert(food.name_kor+'을(를) 선택했습니다.');
-            Swal.fire({
-          title: food.name_kor+'을(를) 선택했습니다.',
-        })
+            alert(food.name_kor+'을(를) 선택했습니다.');
             this.nowCgradient = food.name_kor;
             $('.selectfood').css('display','none');
             if($('.registMaterial').css('display')!='none'){
@@ -286,11 +288,14 @@ data() {
             },
             getSrc:function(food) {
                var src = '../../assets/images/food/'+food+'.png';
+               alert(src);
                 return src;
             },
             
-            openShare:function(nowfood,index){
+            openShare:function(sendData){
                 this.closeregistMater();
+                var nowfood = sendData.nowfood;
+                var index = sendData.index;
                 this.Nowgra_kor = nowfood.name_kor;
                 this.Nowgra = nowfood;
                 this.nowmyamount = 1;
@@ -308,15 +313,31 @@ data() {
                 $('#justMove').css('display','unset');
                 this.intoFood = this.Nowgra.name;
                 this.changeFoodsTemp = [];
-                this.apiUnit = '';
+                this.myapi = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade1api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade2api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
                     this.apiPrice = '';
                 for(var i=0; i<this.xmldata.price.length;i++){
                     var tF = this.xmldata.price[i];
                     var tFname = tF.productName.split('/')[0];
-                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
-                        this.apiUnit = tF.unit;
-                        this.apiPrice = tF.dpr1;
-                        break;
+                    if(tF.product_cls_code == '01' ){
+                        if(tFname==this.Nowgra.name_kor){
+                            this.myapi.name = tFname;
+                            this.myapi.unit = tF.unit;
+                            this.myapi.price = tF.dpr1;
+                        }
                     }
                 }
             },
@@ -334,45 +355,12 @@ data() {
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
-                // var sum = 0;
-                // if(this.nowmyamount>=1){
-                //     if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
-                //         if(this.nowmyamount>this.totalShareAmount){
-                //             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
-                //         this.nowmyamount = this.totalShareAmount;
-                //     }else{
-                //         var sellPrice = Number(this.nowSellPrice);
-                //         var sellAmount = Number(this.nowSellAmount);
-                //         this.changeFoodsTemp.push({
-                //             Mygradient:this.Nowgra.name,
-                //             Mygradient_kor:this.Nowgra.name_kor,
-                //             myamount:this.nowmyamount,
-                //             Cgradient:this.nowCgradient,
-                //             Camount:this.nowCamount,
-                //             pricePerOne:(sellPrice/sellAmount),
-                //             })
-                //             this.nowmyamount = 1;
-                //             this.nowCgradient = '';
-                //             $('.setFood').text("");
-                //             this.nowCamount = 1;
-                //             var shareMotion = 'share'+(this.NowClassNum+1);
-                //             $('#justMove').addClass(shareMotion);
-                            
-                //     }
-                // }else{
-                //     alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
-                // }
-                // }else{
-                //     alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
-                // }
+               
                 var sum = 0;
                 if(this.changeFoodsTemp.length<2){
                     if(this.totalShareAmount<=this.Nowgra.amount){
                         if(this.nowmyamount>this.totalShareAmount){
-                            // alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
-                            Swal.fire({
-                                    title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
-                            })
+                            alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
                         this.nowmyamount = this.totalShareAmount;
                     }else{
                         var sellPrice = Number(this.nowSellPrice);
@@ -384,20 +372,32 @@ data() {
                             Cgradient:this.selectedFood.name,
                             Cgradient_kor:this.selectedFood.name_kor,
                             Camount:this.nowCamount,
-                        })
+                        });
+
+                        for(var i=0; i<this.xmldata.price.length;i++){
+                            var tF = this.xmldata.price[i];
+                            var tFname = tF.productName.split('/')[0];
+                            if(tF.product_cls_code == '01' ){
+                                if(tFname==this.selectedFood.name_kor){
+                                    if(this.trade1api.name==''){
+                                        this.trade1api.name = tFname;
+                                        this.trade1api.unit = tF.unit;
+                                        this.trade1api.price = tF.dpr1;
+                                    }else{
+                                        this.trade2api.name = tFname;
+                                        this.trade2api.unit = tF.unit;
+                                        this.trade2api.price = tF.dpr1;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }else{
-                    // alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
-                    Swal.fire({
-                        title: '가지고 있는 감자보다 많은양을 공유할 수 없습니다.',
-                    });
+                    alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
                     this.totalShareAmount=this.Nowgra.amount;
                 }
                 }else{
-                    // alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
-                    Swal.fire({
-                        title: '교환목록에는 최대 2개만 들어갈 수 있습니다.',
-                    })
+                    alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
                 }
             },
             putIntoBasket:function(){
@@ -441,14 +441,10 @@ data() {
                          address : this.userinfo.address,
                      });
                      shareMotion = 'share'+(this.NowClassNum+1);
-                this.sharedesc = '';
                 $('#justMove').addClass(shareMotion);
                 $('.inputFeild').css('display','none');
                 }else{
-                    // alert("교환할 물품이 올바르게 들어있지 않습니다.");
-                    Swal.fire({
-                        title: '교환할 물품이 올바르게 들어있지 않습니다.',
-                    })
+                    alert("교환할 물품이 올바르게 들어있지 않습니다.");
                 }
                 
             },
@@ -469,8 +465,9 @@ data() {
             },
             shareFinish:function(){
                 // const shareList = this.changeFoods;
-                
-                console.log(typeof(this.changeFoods));
+                if(this.changeFoods.lenth>0){
+
+                    console.log(typeof(this.changeFoods));
                 axios({
                     url:`${SERVER_URL}/myref/share`,
                     method:'post',
@@ -483,7 +480,34 @@ data() {
                 .catch((error)=>{
                     console.log(error.response);
                 })
+                }else{
+                    Swal.fire({
+                        title: '장터에 올릴 재료를 바구니에 넣어주세요.',
+                    })
+                }
             }
+    },
+    computed:{
+
+    pageCount () {
+      let listLeng = this.listArray.length,
+          listSize = this.pageSize,
+          page = Math.floor(listLeng / listSize);
+      if (listLeng % listSize > 0) page += 1;
+      
+      /*
+      아니면 page = Math.floor((listLeng - 1) / listSize) + 1;
+      이런식으로 if 문 없이 고칠 수도 있다!
+      */
+      return page;
+    },
+    paginatedData () {
+      const start = this.pageNum * this.pageSize,
+            end = start + this.pageSize;
+      return this.listArray.slice(start, end);
+    }
+  
+
     },
     created() {
         if(store.state.kakaoUserInfo.email != null){
@@ -535,8 +559,8 @@ data() {
     padding: 4px 4px;
 }
 .rootContainer{
-    width:100%;
-    height:100%;
+    width:360px;
+    height:590px;
     background-image: url(../../assets/images/myref.png);
     background-size: contain;
     position:relative;

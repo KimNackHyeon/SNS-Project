@@ -22,12 +22,12 @@
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <v-flex>
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-checkbox label="거리순 정렬" style="margin-top:18px; margin-right: 18px;">
-
-              </v-checkbox>
-              <v-checkbox label="마감임박" style="margin-top:18px">
-
-              </v-checkbox>
+              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+          </v-toolbar>
+              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-switch @change="call" label="마감임박순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+          </v-toolbar>
             </v-toolbar>
           </v-flex>
           <div style="border: solid 1px lightgrey">
@@ -53,10 +53,12 @@
                     </v-col>
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
                       <div>
-                        <router-link :to="`/store/modifygroupbuying/${groupBuying.no}`">
+                        <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
                           <v-btn color="rgba(160, 212, 105, 0.5)" style="margin-right: 5px; width: 35px; height: 25px;">수정</v-btn>
                         </router-link>
-                        <v-btn color="rgba(160, 212, 105, 0.5)" style="width: 35px; height: 25px;">삭제</v-btn>
+                        <router-link :to="`/store/groupbuying`">
+                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="rgba(160, 212, 105, 0.5)" style="width: 35px; height: 25px;">삭제</v-btn>
+                        </router-link>
                       </div>
                       <div>
                         <p style="height: 60px; line-height: 60px; text-align: center; font-size: 30px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
@@ -90,17 +92,105 @@ const SERVER_URL = store.state.SERVER_URL;
 
 import axios from "axios"
 import store from '../../vuex/store.js'
-import '../../components/css/store/groupbuying.scss'
+import Swal from 'sweetalert2'
 
+// import '../../components/css/store/groupbuying.scss'
+const config = {
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json'
+    }
+}
 export default {
   name: 'Groupbuying',
   data() {
     return {
       groupBuyings: '',
+      switched:true,
+      switched2:true,
       mapdata: [],
       mydata: [],
       otherdata: [],
+      distancedata2:[],
     }
+  },
+  methods:{
+    deleteGroupbuying(data) {
+      Swal.fire({
+  title: '정말 삭제하시겠습니까?',
+  text: "되돌릴 수 없습니다!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '네 삭제할게요!'
+}).then((result) => {
+  if (result.value) {
+    axios.post(`${SERVER_URL}/groupbuying/delete` , {no:data})
+      .then(response => {
+        Swal.fire({
+            // position: 'top-end',
+            icon: 'success',
+            title: '삭제가 완료되었습니다.',
+            showConfirmButton: false,
+            timer: 1500
+})
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  }
+})
+    },
+    callwithaddress(){
+      if(this.switched2 == true){
+        axios({
+                    url:`${SERVER_URL}/groupbuying/orderbyaddress`,
+                    method:'post',
+                    data: JSON.stringify(this.distancedata2),
+                    headers: config.headers})
+                .then((response)=>{
+                    this.groupBuyings = response.data
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                })
+        this.switched2 = false;
+    }
+    else{
+      axios.get(`${SERVER_URL}/groupbuying/read`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched2 = true;
+      }
+    },
+    call(){
+      if(this.switched == true){
+        axios.get(`${SERVER_URL}/groupbuying/orderbyenddate`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = false;
+    }
+    else{
+      axios.get(`${SERVER_URL}/groupbuying/read`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = true;
+      }
+    },
   },
   created(){
     if(store.state.kakaoUserInfo.email != null){
@@ -111,7 +201,7 @@ export default {
     // if(userinfo.email == )
     axios.get(`${SERVER_URL}/groupbuying/read`)
       .then(response => {
-        console.log(response)
+        // console.log(response)
         this.groupBuyings = response.data
         console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
@@ -133,29 +223,24 @@ export default {
         for (var m = 0; m < this.mapdata.length; m++) {
           geocoder.addressSearch(this.mapdata[m], (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              for (var d = 0; d < result.length; d++) {
-                // var redata = [result[d].y, result[d].x];
-                // console.log(result[d].x)
-                var distancedata = [
-                  new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                  new kakao.maps.LatLng(result[d].y, result[d].x)]
-                console.log(distancedata)
-                var polyline = new kakao.maps.Polyline({
-                  path: distancedata,
-                  strokeWeight: 5,
-                  strokeColor: '#FFAE00',
-                  strokeOpacity: 0.7,
-                  strokeStyle: 'solid'
-                })
-                var distance = polyline.getLength();
-                console.log(distance)
-                // this.otherdata.push(redata);
-              }
+              console.log(result[0])
+              var distancedata = [
+                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
+                new kakao.maps.LatLng(result[0].y, result[0].x)]
+              console.log(distancedata)
+              var polyline = new kakao.maps.Polyline({
+                path: distancedata,
+              })
+              var distance = polyline.getLength();
+              console.log(distance)
+              this.distancedata2.push(distance)
+              // this.otherdata.push(redata);
             }
           })
         }
       })
       .catch(error => {
+        console.log(error)
       })
   }
 }

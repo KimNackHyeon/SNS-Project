@@ -115,6 +115,8 @@ const SERVER_URL = store.state.SERVER_URL;
 
 import axios from "axios"
 import store from '../../vuex/store.js'
+import Swal from 'sweetalert2'
+
 
 export default {
   data() {
@@ -145,7 +147,7 @@ export default {
     else {
       axios.get(`${SERVER_URL}/groupbuying/readdetail/`+id)
         .then(response => {
-          console.log(response)
+          // console.log(response)
           this.groupbuying = response.data
           // 작성일, 마감일 형식변환
           const [year1, month1, day1] = this.groupbuying.end_date.split('-')
@@ -157,7 +159,7 @@ export default {
           this.groupbuying.content = this.groupbuying.content.split('^').join('<br />');
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     }
   },
@@ -171,13 +173,21 @@ export default {
   },
   methods: {
     onParticipate() {
-      axios.post(`${SERVER_URL}/groupbuying/participate/`, 
-      {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+      axios.post(`${SERVER_URL}/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
-          console.log(response)
+          if(response.data == "Fail"){
+            Swal.fire({
+            text: "이미 참가하신 공동구매 방입니다.",
+          })
+          }else{
+            Swal.fire({
+              text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
+            })
+          }
+          window.location.reload();
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     },
     member() {
@@ -189,11 +199,11 @@ export default {
       }
       axios.post(`${SERVER_URL}/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           this.memberList = response.data
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     }
   },

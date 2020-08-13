@@ -118,9 +118,9 @@ import $ from 'jquery'
 import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
-
-// const SERVER_URL = 'http://localhost:9999/food/api';
-const SERVER_URL = store.state.SERVER_URL;
+import Swal from 'sweetalert2'
+const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -143,10 +143,10 @@ export default {
           axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          console.log(this.tradelist)
+          // console.log(this.tradelist)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -158,17 +158,13 @@ export default {
     call(){
       if(this.switched == true){
         console.log(this.userinfo.email)
-        axios.post(`${SERVER_URL}/trade/` , {email:this.userinfo.email})
+        axios.get(`${SERVER_URL}/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
-          console.log(this.tradelist)
-          this.mapOtherUserInfo = store.state.mapOtherUserInfo
-          this.mapOtherUserInfo.address = this.tradelist[0].address
-          this.mapOtherUserInfo.food = this.tradelist[0].myfood
           // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          console.log(error.response)
+          console.log(error)
         })
         this.switched = false;
     }
@@ -176,14 +172,14 @@ export default {
       axios.get(`${SERVER_URL}/trade/`)
         .then(response => {
           this.tradelist = response.data.list
-          console.log(this.tradelist)
+          // console.log(this.tradelist)
           this.mapOtherUserInfo = store.state.mapOtherUserInfo
           this.mapOtherUserInfo.address = this.tradelist[0].address
           this.mapOtherUserInfo.food = this.tradelist[0].myfood
-          // console.log(this.mapOtherUserInfo)
+          // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.switched = true;
       }
@@ -192,22 +188,40 @@ export default {
       axios.post(`${SERVER_URL}/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          console.log(this.pagenumber)
+          // console.log(this.pagenumber)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
     del(pageno) {
-      axios.post(`${SERVER_URL}/trade/deletetrade`, {no:pageno})
-        .then(response => {
-          this.pagenumber = pageno;
-          window.location.reload();
-          console.log(this.pagenumber)
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
+      Swal.fire({
+  title: '정말 삭제하시겠습니까?',
+  text: "되돌릴 수 없습니다!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '네 삭제할게요!'
+}).then((result) => {
+  if (result.value) {
+    axios.post(`${SERVER_URL}/trade/deletetrade`, {no:pageno})
+      .then(response => {
+        this.pagenumber = pageno;
+        Swal.fire({
+            // position: 'top-end',
+            icon: 'success',
+            title: '삭제가 완료되었습니다.',
+            showConfirmButton: false,
+            timer: 1500
+})
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  }
+})
     },
   },
 created() {
@@ -216,23 +230,21 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  console.log(this.userinfo.email)
-  console.log(`${SERVER_URL}/trade/`)
   axios.get(`${SERVER_URL}/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      console.log(this.tradelist)
-      console.log(this.mapOtherUserInfo.address)
+      // console.log(this.tradelist)
+      // console.log(this.mapOtherUserInfo.address)
       if (this.mapOtherUserInfo.address.length === 0) {
         for (var i = 0; i < this.tradelist.length; i++) {
           store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
         }
-        console.log('good')
-        console.log(store.state.mapOtherUserInfo)
+        // console.log('good')
+        // console.log(store.state.mapOtherUserInfo)
       }
     })
     .catch(error => {
-      console.log(error.response)
+      // console.log(error.response)
     })
   },
   updated(){

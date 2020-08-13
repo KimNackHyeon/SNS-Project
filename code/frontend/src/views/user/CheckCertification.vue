@@ -26,20 +26,6 @@
         </div>
       </div>
     </div>
-    <div class="user join wrapC">
-      <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
-      <div class="form-wrap">
-        <h1 class="text-left">인증번호를 보냈습니다.</h1>
-        <h1 class="text-left">메일을 확인해주세요.<br><br></h1>
-        <div class="input-with-label">
-          <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
-          <span id="times">03:00</span>
-          <label for="certificationNumber">인증번호</label>
-          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
-          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
-        </div>
-    </div>
-  </div>
   </div>
 </template>
 
@@ -88,7 +74,7 @@ export default {
       const emailData = {
         email: this.pwd,
       }
-      console.log(emailData)
+      // console.log(emailData)
       clearInterval(this.resetTime);
       var threeMin = 60 * 3,
       display = document.querySelector('#times');
@@ -96,25 +82,25 @@ export default {
       axios.post(`${SERVER_URL}/account/researchpwd`, emailData)
       .then(data => {
         console.log("성공")
-        console.dir(data)
+        // console.dir(data)
         this.confirmPwd(data.data.data)
         this.userEmail(data.data.email)
       })
       .catch(data => {
-        console.log(data)
+        // console.log(data)
       });
     },
     sendPwd() {
       const emailData = {
         email: this.pwd,
       }
-      console.log('ok')
+      // console.log('ok')
       if (this.certificationNumber === this.confirm) {
-        console.log('ok2')
+        // console.log('ok2')
         axios
         .post(`${SERVER_URL}/account/findpwd`, emailData)
         .then((data) => {
-          console.log(data.data.data)
+          // console.log(data.data.data)
           Swal.fire({
             title: '인증에 성공했습니다.',
             text: '이메일로 비밀번호를 전송하였습니다.',
@@ -122,7 +108,7 @@ export default {
           this.$router.push("/")
         })
         .catch((data) => {
-          console.log(data)
+          // console.log(data)
         })
       } else {
         Swal.fire({

@@ -15,7 +15,7 @@
           solo
           dense
           deletable-chips
-          @keyup.enter="searchTag"
+          @keyup.enter="change"
           class="searchBarBtn"
         ></v-combobox>
         <div style="overflow: hidden; height: 38px">
@@ -84,10 +84,10 @@ export default {
 
     methods: {
       searchTag(){
-        console.log(this.items);
+        // console.log(this.items);
       },
       change(){
-        console.log(this.model);
+        // console.log(this.model);
         const tags = [];
         this.model.forEach(tag =>{
           tags.push(tag.text);

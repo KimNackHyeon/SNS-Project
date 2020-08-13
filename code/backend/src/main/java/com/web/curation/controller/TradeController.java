@@ -55,20 +55,24 @@ public class TradeController {
 		map.put("list", list);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
-	@PostMapping("/")
+	@GetMapping("/filter/{email}")
 	@ApiOperation(value = "교환 가능한 물품만 조회")
-	public ResponseEntity<Map> searchByMyRef(@RequestBody Member member) {
-		System.out.println(member.toString());
+	public ResponseEntity<Map> searchByMyRef(@PathVariable String email){
 		Map<String, ArrayList<Trade>> map = new HashMap<String, ArrayList<Trade>>();
 		ArrayList<MyRef> mylist = new ArrayList<MyRef>();
-		mylist = myrefRepo.findByEmail(member.getEmail());
+		mylist = myrefRepo.findByEmail(email);
 		ArrayList<Trade> tradelist = new ArrayList<Trade>();
 		tradelist = tradeRepo.findAll();
 		ArrayList<Trade> resultList = new ArrayList<Trade>();
 		for (Trade trade : tradelist) {
 			for (MyRef myref : mylist) {
 				String myfood = myref.getName();
-				if(trade.getTradefood1().equals(myfood) || trade.getTradefood2().equals(myfood)) {
+				if(trade.getTradefood2() == null){
+					if(trade.getTradefood1().equals(myfood)) {
+						resultList.add(trade);
+					}
+				}
+				else if(trade.getTradefood1().equals(myfood) || trade.getTradefood2().equals(myfood)) {
 					resultList.add(trade);
 				}
 			}
@@ -77,15 +81,17 @@ public class TradeController {
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 	
-	@GetMapping("/search/{content}")
-	@ApiOperation(value = "검색")
-	public ResponseEntity<Map> searchByContent(@PathVariable String content) {
-		Map<String, ArrayList<Trade>> map = new HashMap<String, ArrayList<Trade>>();
-		ArrayList<Trade> tradelist = new ArrayList<Trade>();
-		tradelist = tradeRepo.findByMyfood(content);
-		map.put("list", tradelist);
-		return new ResponseEntity<Map>(map, HttpStatus.OK);
-	}
+//	@GetMapping("/search/{content}")
+//	@ApiOperation(value = "검색")
+//	public ResponseEntity<Map> searchByContent(@PathVariable String myfood_kor) {
+//		Map<String, ArrayList<Trade>> map = new HashMap<String, ArrayList<Trade>>();
+//		ArrayList<Trade> tradelist = new ArrayList<Trade>();
+////		tradelist = tradeRepo.findAll();
+//		System.out.println(tradelist.toString());
+////		ArrayList<Trade> resultlist = new ArrayList<Trade>();
+//		map.put("list", tradelist);
+//		return new ResponseEntity<Map>(map, HttpStatus.OK);
+//	}
 	@GetMapping("/article/{no}")
 	@ApiOperation(value = "우리동네 장터 세부 내용")
 	public ResponseEntity<Trade> searchDetail(@PathVariable Long no) {

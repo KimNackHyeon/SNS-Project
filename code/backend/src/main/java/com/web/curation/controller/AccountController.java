@@ -455,7 +455,7 @@ public class AccountController {
 			urlconnection.setRequestMethod("GET");
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(),"UTF-8"));
-			
+			 
 			String returnLine;
 			
 			while((returnLine = br.readLine()) != null) {
@@ -469,7 +469,6 @@ public class AccountController {
 		System.out.println(result.toString());
 		return result.toString();
 	}
-	
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
