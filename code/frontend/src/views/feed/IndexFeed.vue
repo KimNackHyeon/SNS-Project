@@ -18,7 +18,7 @@
           @keyup.enter="change"
           class="searchBarBtn"
         ></v-combobox>
-        <div style="overflow: hidden;">
+        <div style="overflow: hidden; height: 38px">
           <v-btn icon @click="change">
             <v-icon class="right-icon">mdi-magnify</v-icon>
           </v-btn>
@@ -43,7 +43,7 @@
 
 <script>
 
-
+import $ from 'jquery';
 import { mapState } from "vuex";
 import "../../components/css/feed/feed-item.scss";
 import "../../components/css/feed/newsfeed.scss";
@@ -77,6 +77,9 @@ export default {
           return v
         })
       },
+      search() {
+        $('.mdi-magnify').css('color', '#a0d469')
+      }
     },
 
     methods: {
@@ -130,7 +133,7 @@ export default {
     text-align: center;
     padding-top: 7px;;
 }
-.v-image__image--cover{
-  background-size:cover;
+.v-input__control {
+  height: 38px;
 }
 </style>
