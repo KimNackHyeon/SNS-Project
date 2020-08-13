@@ -1,21 +1,18 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-      <router-link to="/feed/main">
-        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
-          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
-        </v-btn>
-      </router-link>
-      <div class="titleBox">
-        <div class="pageTitle">
-          <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+    <div>
+      <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+        <router-link to="/feed/main">
+          <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+            <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+          </v-btn>
+        </router-link>
+        <div class="titleBox">
+          <div class="pageTitle">
+            <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+          </div>
         </div>
-      </div>
-    </div>
-    <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-      <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
-    </div>
-    <div style="overflow: scroll; height: 519px">
+      </div>      
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
@@ -34,28 +31,23 @@
               <v-icon v-if="feedData.isScrap" size="25px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
           <!-- 수정 삭제 -->
-          <v-menu botoom offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn v-bind="attrs" v-on="on" icon style="width: 25px; height: 25px">
-                <v-icon color="black" size="25px">mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <!-- <router-link to="/"> -->
-                <v-list-item @mouseover="overModifyBtn" @mouseout="outModifyBtn"  style="min-height: unset; height: 30px">
-                  <v-list-item-title class="modifybtn">수정</v-list-item-title>
-                </v-list-item>
-              <!-- </router-link> -->
-              <button>
-                <v-list-item @mouseover="overDeleteBtn" @mouseout="outDeleteBtn" style="min-height: unset; height: 30px">
-                  <v-list-item-title class="deletebtn">삭제</v-list-item-title>
-                </v-list-item>
-              </button>
-            </v-list>
-          </v-menu>
+          <div style="display: inline-block" v-if="feedData.email==userinfo.email">
+            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+              <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+            </v-btn>
+            <div class="btns">
+              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <v-btn class="btn" >삭제</v-btn>
+            </div>
+          </div>
         </div>
       </div>
-      
+    </div>
+    <div style="overflow: scroll; height: 490px; position: relative">
+      <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
+      </div>
       <!-- 재료 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
         <!-- 나에게 있는 재료 -->
@@ -316,17 +308,12 @@ export default {
           console.log(error.response);
       });
     },
-    overModifyBtn() {
-      $('.modifybtn').css('color', '#a0d469')
-    },
-    outModifyBtn() {
-      $('.modifybtn').css('color', 'unset')
-    },
-     overDeleteBtn() {
-      $('.deletebtn').css('color', '#a0d469')
-    },
-    outDeleteBtn() {
-      $('.deletebtn').css('color', 'unset')
+    openBtn() {
+      if($('.btns').css('display')=='block'){
+        $('.btns').css('display','none');  
+      }else{
+        $('.btns').css('display','block');
+      }
     },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
@@ -339,12 +326,15 @@ export default {
     },
     onCommentBtn() {
       // 댓글 추가기능
+      let today = new Date()
       var comment = {
         img: this.userinfo.profile_image_url, 
         nickname: this.userinfo.nickname,
         email:this.userinfo.email,
         feedNo: this.$route.params.feedNo,
-        comment: this.comment
+        comment: this.comment,
+        // create_date: `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+        create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
       console.log(comment);
       axios.post(`${SERVER_URL}/feed/register`,comment)
@@ -392,6 +382,29 @@ export default {
     -webkit-box-shadow: unset;
     box-shadow: unset;
     color: unset;
+  }
+  .btns {
+    display: none;
+    position: absolute;
+    width: 50px;
+    /* height: 60px; */
+    z-index: 99;
+    left: 300px;
+    top: 60px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background-color: white;
+  }
+  .btn {
+    width: 100%;
+    background-color: unset !important;
+    border-radius: unset;
+    box-shadow: unset;
+    -webkit-box-shadow: unset;
+    height: 100%;
+  }
+  .btn span {
+    height: 30px;
   }
   .hashBox {
     overflow-x: scroll;
@@ -444,7 +457,7 @@ export default {
     margin: 0 5px 5px 5px;
   }
   .balloon {  
-    position: fixed; 
+    position: absolute; 
     width: 120px; 
     background:rgba(44, 44, 44, 0.8);
     border-radius: 5px;

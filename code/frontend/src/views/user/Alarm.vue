@@ -61,7 +61,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* 공통 박스 axios에서 오는 type에 따라 배경색 다르게 */
 .alarmbox {
   height: 80px;
