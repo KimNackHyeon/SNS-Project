@@ -438,8 +438,6 @@ public class AccountController {
 		return datalist;
 	}
 	
-<<<<<<< HEAD
-=======
 	@GetMapping("/account/apitest")
 	@ApiOperation(value = "외부 api 호출")
 	public String callapi() {
@@ -471,8 +469,6 @@ public class AccountController {
 		System.out.println(result.toString());
 		return result.toString();
 	}
-	
->>>>>>> 6276f7e2849a7aa6e95cd9b6e4d19e3f9a075886
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
