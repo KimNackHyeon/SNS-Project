@@ -35,7 +35,6 @@ public class Member {
 	@NotEmpty
 	private String nickname;
 
-	@NotEmpty
 	private String address;
 
 	@Column
