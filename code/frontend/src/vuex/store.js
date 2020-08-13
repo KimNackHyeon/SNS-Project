@@ -58,7 +58,6 @@ export default new Vuex.Store({
       email:'',
       nickname:'',
       profile_image_url:'',
-      thumbnail_image_url:'',
       address:'',
     },
     userInfo: {
@@ -96,9 +95,8 @@ export default new Vuex.Store({
     },
     setKakaoUserInfo(state,kakaoLoginResult) {
       state.kakaoUserInfo.email = kakaoLoginResult.email;
-      state.kakaoUserInfo.nickname = kakaoLoginResult.profile.nickname;
-      state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile.profile_image_url;
-      state.kakaoUserInfo.thumbnail_image_url = kakaoLoginResult.profile.thumbnail_image_url;
+      state.kakaoUserInfo.nickname = kakaoLoginResult.nickname;
+      state.kakaoUserInfo.profile_image_url = kakaoLoginResult.profile_image_url;
     },
     deluserInfo(state) {
       state.userInfo.email = null;
@@ -110,7 +108,6 @@ export default new Vuex.Store({
       state.kakaoUserInfo.email = null;
       state.kakaoUserInfo.profile_image_url = null;
       state.kakaoUserInfo.nickname = null;
-      state.kakaoUserInfo.thumbnail_image_url = null;
       state.kakaoUserInfo.address = null;
     },
     modifyUserInfo(state, modifyResult) {
@@ -119,8 +116,6 @@ export default new Vuex.Store({
       state.userInfo.address = modifyResult.newAddress;
     },
     modifyKakaoUserInfo(state, kakaoModifyResult) {
-      state.kakaoUserInfo.nickname = kakaoModifyResult.newNickname;
-      state.kakaoUserInfo.profile_image_url = kakaoModifyResult.newImgUrl;
       state.kakaoUserInfo.address = kakaoModifyResult.newAddress;
     },
     setMyRefFood(state,refList){

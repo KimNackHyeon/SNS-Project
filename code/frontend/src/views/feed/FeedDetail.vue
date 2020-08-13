@@ -13,26 +13,46 @@
       </div>
     </div>
     <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-          <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
-        </div>
-    <div style="overflow: scroll; ">
+      <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+    </div>
+    <div style="overflow: scroll; height: 519px">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
-        <div style="float: right;">
+        <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
           </v-btn> -->
-          <v-btn icon @click="likedbtn">
-              <v-icon v-if="!feedData.isLike" size="30px" color="black">mdi-heart-outline</v-icon>
-              <v-icon v-if="feedData.isLike" size="30px" color="red">mdi-heart</v-icon>
+          <v-btn icon @click="likedbtn" style="width: 25px; height: 25px; margin: 5px">
+              <v-icon v-if="!feedData.isLike" size="25px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="25px" color="red">mdi-heart</v-icon>
           </v-btn>
-          <v-btn icon @click="scrapedbtn">
-              <v-icon v-if="!feedData.isScrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
-              <v-icon v-if="feedData.isScrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
+          <v-btn icon @click="scrapedbtn" style="width: 25px; height: 25px">
+              <v-icon v-if="!feedData.isScrap" size="25px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="25px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
+          <!-- 수정 삭제 -->
+          <v-menu botoom offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon style="width: 25px; height: 25px">
+                <v-icon color="black" size="25px">mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <!-- <router-link to="/"> -->
+                <v-list-item @mouseover="overModifyBtn" @mouseout="outModifyBtn"  style="min-height: unset; height: 30px">
+                  <v-list-item-title class="modifybtn">수정</v-list-item-title>
+                </v-list-item>
+              <!-- </router-link> -->
+              <button>
+                <v-list-item @mouseover="overDeleteBtn" @mouseout="outDeleteBtn" style="min-height: unset; height: 30px">
+                  <v-list-item-title class="deletebtn">삭제</v-list-item-title>
+                </v-list-item>
+              </button>
+            </v-list>
+          </v-menu>
         </div>
       </div>
       
@@ -76,9 +96,11 @@
         <div>
           <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
             <div>
-              <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;">
+              <img :src="item.img" style="width:360px; height:auto;">
+              <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
+              
             </div>
-            <div>
+            <div class="feedContents" v-html="item.content">
               {{item.content}}
             </div>
           </div>
@@ -100,14 +122,15 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
+            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content">
-            <div>
-              <p class="commentUser">{{comment.nickname}}</p>
-              <span>{{comment.comment}}</span>
+          <div class="content" style="display: table;">
+            <div style="display: table-cell; vertical-align: middle;">
+              <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
+              <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
+              <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
+              <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
-            <span style="font-size: 12px">{{comment.create_date}}</span>
           </div>
         </div>
       </div>
@@ -154,6 +177,7 @@ export default {
         '꿀키',
         '소보로'
       ],
+      offset: true,
     }
   },
   watch: {
@@ -193,6 +217,7 @@ export default {
               nickname : response.data.feeddata.nickname,
               profile : response.data.feeddata.profile,
               title: response.data.feeddata.title,
+              email: response.data.feeddata.email,
               items: [],
               comments:[],
               hashTags:[],
@@ -212,8 +237,17 @@ export default {
               this.feedData.items.push(d);
             });
 
-            response.data.datalist.forEach(d =>{
-              this.feedData.items.push(d);
+            axios.get(`${SERVER_URL}/feed/check`,{
+              params:
+              {
+                email:store.state.userInfo.email,
+                feedNo : response.data.feeddata.no,
+              }
+              })
+            .then(response =>{
+              console.log(response);
+                this.feedData.isLike = response.data.like;
+                this.feedData.isScrap = response.data.scrap;
             });
           
           var myrefFoodName = [];
@@ -282,6 +316,18 @@ export default {
           console.log(error.response);
       });
     },
+    overModifyBtn() {
+      $('.modifybtn').css('color', '#a0d469')
+    },
+    outModifyBtn() {
+      $('.modifybtn').css('color', 'unset')
+    },
+     overDeleteBtn() {
+      $('.deletebtn').css('color', '#a0d469')
+    },
+    outDeleteBtn() {
+      $('.deletebtn').css('color', 'unset')
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -309,6 +355,14 @@ export default {
 
       this.feedData.comments.push(comment);
     },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    }
   },
 }
 </script>
@@ -332,6 +386,12 @@ export default {
     align-items: center;
     padding: 0px 10px;
     
+  }
+  .v-btn {
+    background-color: unset;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+    color: unset;
   }
   .hashBox {
     overflow-x: scroll;
@@ -409,20 +469,26 @@ export default {
   .comments {
     padding: 5px 10px 5px 10px;
     width:100%;
-    min-height: 60px;
+    height: 60px;
+    overflow: hidden;
+    line-height: 60px;
   }
   .userImg {
     float: left;
-    margin-right: 10px;
     width: 10%;
   }
   .content {
     float: left;
     width: 85%;
+    height: 60px;
   }
   .commentUser {
-    margin-bottom: 0 !important;
+    /* margin-bottom: 0 !important; */
     font-weight: bold; 
     margin-right: 5px;
+  }
+
+  .feedContents{
+    text-align: center;
   }
 </style>

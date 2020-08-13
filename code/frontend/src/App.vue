@@ -80,7 +80,11 @@ export default {
       if (store.state.userInfo) {
         axios.get(`${SERVER_URL}/account/logout`, {params: { token : token}})
         .then(() => {
+          console.log(this.$cookies.keys());
+          var cookies = document.cookie.split(";");
+          console.log(cookies);
           this.$cookies.remove('auth-token');
+          // this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
           this.isLoggedIn = false;
           // store에 저장한 사용자 정보 지우기
           store.commit('deluserInfo');
