@@ -20,14 +20,19 @@ public class Food {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
+
 	@Column
 	private Long feedNo;
+
 	@NotEmpty
 	private String amount;
+	
 	@NotEmpty
 	private String img;
+	
 	@NotEmpty
 	private String name;
+	
 	@NotEmpty
 	private String name_kor;
 

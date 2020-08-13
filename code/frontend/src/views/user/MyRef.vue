@@ -151,10 +151,6 @@ const SERVER_URL = store.state.SERVER_URL;
 var convert = require('xml-js');
 const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
-
-
-
-
 const config = {
     headers: {
       'Access-Control-Allow-Origin':'*',

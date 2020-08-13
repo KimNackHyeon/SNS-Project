@@ -226,14 +226,14 @@ export default {
   },
   methods: {
     getFood(){
-      console.log('getFood 실행')
+      // console.log('getFood 실행')
       if (this.dialog === false) {
         this.dialog = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog = false
-        console.log('true')
+        // console.log('true')
       }
     },
     chooseComplete:function(food){
@@ -282,7 +282,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -295,7 +295,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -317,14 +317,14 @@ export default {
       }
     // axios.get(`${SERVER_URL}/`+this.$route.params.id)
     //   .then(response => {
-    //     console.log(response)
+    //     // console.log(response)
     //     this.title = response.data.title
     //     this.food = response.data.food
     //     this.fileLink = response.data.link
     //     this.content = response.data.content 
     //   })
     //   .catch(error => {
-    //     console.log(error)
+    //     // console.log(error)
     //   })
       
   },

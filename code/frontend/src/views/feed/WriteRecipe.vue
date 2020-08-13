@@ -209,8 +209,8 @@ export default {
         if(this.items.length <=9){
           $('.plusBtnArea').css('display','unset');
         }
-        console.log(this.item);
-        console.log(this.items);
+        // console.log(this.item);
+        // console.log(this.items);
     },
     clicktoLeftBtn(){
       var thisMarginStr = $('.carousel-slide').css('margin-left');
@@ -221,16 +221,16 @@ export default {
       }
       $('.carousel-slide').css('margin-left',afterMargin);
       // transform:translateX(10px); 
-      console.log(this.item);
-        console.log(this.items);
+      // console.log(this.item);
+        // console.log(this.items);
     },
     clicktoRightBtn(){
       var thisMarginStr = $('.carousel-slide').css('margin-left');
       var thisMargin = Number(thisMarginStr.split('p')[0]);
       var afterMargin = (thisMargin - 340)+'px';
       $('.carousel-slide').css('margin-left',afterMargin);
-      console.log(this.item);
-        console.log(this.items);
+      // console.log(this.item);
+        // console.log(this.items);
     },
     closeAddFood(){
       $('.addFood').css('display','none');
@@ -265,7 +265,7 @@ export default {
     whiteReciptComplete(){
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-        console.log(this.userinfo);
+        // console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
       }
@@ -300,37 +300,37 @@ export default {
         images : this.images
       }
 
-      console.log(data);
+      // console.log(data);
 
       axios
       .post(`${SERVER_URL}/feed/img`, formData,{
         headers: { 'Content-Type': 'multipart/form-data' } 
       })
       .then((response)=>{
-        console.log(response.data);
+        // console.log(response.data);
         this.images = response.data;
         data.images = this.images;
-        console.log(data);
+        // console.log(data);
         setTimeout(() => {
         this.loading = false;
         this.register(data);
       }, 1000*this.items.length + 3000);
       })
       .catch((error)=>{
-        console.log(error.response);
+        // console.log(error.response);
       });
         
     },
     register(data){
-      console.log(data);
+      // console.log(data);
       axios
         .put(`${SERVER_URL}/feed/write`, data)
         .then((response)=>{
-          console.log(response);
+          // console.log(response);
           this.$router.push("/feed/main");
         })
         .catch((error)=>{
-          console.log(error.response);
+          // console.log(error.response);
         });
     }
   }
