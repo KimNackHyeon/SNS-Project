@@ -23,13 +23,14 @@
     </div>
   </div>
   <div>
-    <div @click="opentutorial" class="introduce">
+   <!-- <div @click="opentutorial" class="introduce"> -->
+      <div class="introduce">
       <div class="introduceIMG"></div>
       <div style="height:112px; width:186px; float:left; text-align:right;
     padding: 28px 16px; font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;;  ">
         <h4>남는 식재료</h4>
         <h4>더이상 버리지 마세요</h4>
-        <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span>
+        <!-- <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span> -->
       </div>
     </div>
     <div style=" box-shadow: 0px 0px 10px #00000078 ;">
@@ -104,8 +105,7 @@
     },
     methods:{
       openLink(link){
-      var newWindow = window.open("about:blank");
-      newWindow.location.href = link;
+      window.location.href = link;
       },
       opentutorial(){
         $('.tutorialBox').css('display','unset'); 
@@ -265,7 +265,7 @@ h4{
 .blinking{
   margin-right: -18px;
   font-size: 11px;
-	-webkit-animation:blink 0.5s ease-in-out infinite alternate;
+   -webkit-animation:blink 0.5s ease-in-out infinite alternate;
     -moz-animation:blink 0.5s ease-in-out infinite alternate;
     animation:blink 0.5s ease-in-out infinite alternate;
 }

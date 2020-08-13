@@ -21,7 +21,7 @@
       <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
         <v-flex>
           <div class="searchBox">
-            <textarea placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" value=""></textarea>
+            <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
@@ -59,7 +59,7 @@
                           <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount1 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.tradefood1"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood1}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
@@ -131,6 +131,8 @@ export default {
       switched:true,
       userinfo:'',
       show:false,
+      inputKeyword:'',
+      originalList:[],
     }
   },
   methods:{
@@ -223,6 +225,13 @@ export default {
   }
 })
     },
+    searchKeyword(){
+      var keyword = this.inputKeyword;
+      this.tradelist = this.originalList;
+      this.tradelist = this.tradelist.filter(function (item) {
+          return item.myfood_kor.indexOf(keyword)!=-1;
+        });
+    }
   },
 created() {
   if(store.state.kakaoUserInfo.email != null){
@@ -242,6 +251,7 @@ created() {
         // console.log('good')
         // console.log(store.state.mapOtherUserInfo)
       }
+      this.originalList = this.tradelist;
     })
     .catch(error => {
       // console.log(error.response)

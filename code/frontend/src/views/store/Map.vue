@@ -6,6 +6,7 @@
 import { mapState, mapMutations } from 'vuex';
 import store from '../../vuex/store.js'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 // const SERVER_URL = 'http://localhost:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
@@ -115,7 +116,10 @@ export default {
           timeout: Infinity
         });
       } else {
-        alert('GPS를 지원하지 않습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: 'GPS를 지원하지 않습니다.',
+        })
       }
     }
   },

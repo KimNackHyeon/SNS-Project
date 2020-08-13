@@ -91,7 +91,7 @@ public class FeedController {
 		List<MyBoard> feedlist = myboardRepo.findAll();
 		List<Tag> taglist = tagRepo.findAll();
 		List<FeedData> datalist = feedDataRepo.findAll();
-
+ 
 		map.put("feedlist", feedlist);
 		map.put("taglist", taglist);
 		map.put("datalist", datalist);
@@ -206,13 +206,13 @@ public class FeedController {
 
 	@ApiOperation(value = "피드 이미지 등록")
 	@PostMapping("/feed/img")
-	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images)
-			throws IllegalStateException, IOException {
-
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images, @RequestParam String email) throws IllegalStateException, IOException {
+		System.out.println(email);
 		List<String> imgList = new ArrayList<String>();
-
-		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
-		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
+		Long feedNo = 0L;
+		if(myboardRepo.findAll().size() != 0) {
+			feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
+		}
 
 		for (MultipartFile mfile : images) {
 			String imgurl = upload(mfile, feedNo, email);

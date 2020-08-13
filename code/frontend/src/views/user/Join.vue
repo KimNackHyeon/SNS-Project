@@ -51,7 +51,7 @@
         </div>
         <div class="input-with-label">
           <label for="address">주소</label>
-          <input v-model="signupData.address" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+          <input tabindex="-1" v-model="signupData.address" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
         </div>
         <v-dialog v-model="open" scrollable width= "100%">
           <v-card>
@@ -371,6 +371,12 @@ export default {
         this.isConfirm = true
         this.checkJoinForm()
         // console.log('good')
+        Swal.fire({
+            icon: 'success',
+            title: '인증이 완료되었습니다.',
+            showConfirmButton: false,
+            timer: 1500
+        })
       } else {
         // console.log('실패')
         
@@ -417,10 +423,39 @@ export default {
     },
     checkEmail() {
       if(this.signupData.email) {
-        Swal.fire({
-            title: '이메일을 확인해주세요.',
-            text: '입력하신 이메일로 인증번호를 전송했습니다.',
-          })
+//         Swal.fire({
+//             icon: 'success',
+//             title: '인증번호를 전송했습니다.',
+//             showConfirmButton: false,
+//             timer: 1500
+// })
+let timerInterval
+Swal.fire({
+  title: '인증번호 전송중',
+  html: '전송까지 <b></b> 초 남았습니다.',
+  timer: 2000,
+  timerProgressBar: true,
+  onBeforeOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getContent()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  onClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+  }
+})
         axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
         .then(data => {
           if (data.data.data == "1") {
@@ -452,7 +487,7 @@ export default {
           if (this.emailSucMsg) {
             // console.log('sucsess1')
             // console.log(this.signupData.email)
-            axios.post(`${SERVER_URL}/account/emailconfirm`, this.signupData)
+            axios.post(`${SERVER_URL}/account/checkemail`, this.signupData)
             .then(data => {
               // console.log('sucsess2')
               if (data.data.data === "1") {
@@ -461,7 +496,6 @@ export default {
                 // console.log('no')
                 this.checkCert == data.data.data
                 this.completeMail = false;
-                certif
               }
             })
             .catch(function(){

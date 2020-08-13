@@ -2,7 +2,7 @@
 <div style="height:100%; width:100%;">
   
     <div style="width:100%; height:120px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); text-align:center; margin-bottom:-9px; ">
-          <div style="width:100%; height:34%">
+          <div style="width:100%; height:34%; border-bottom: 1px solid rgba(128, 128, 128, 0.15);">
             <router-link to="/feed/main">
                 <div style="width:50px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
                     <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
@@ -14,8 +14,16 @@
             <div style="width:40px; height:100%; float:left; ">
             </div>
           </div>
-          <div style="width:100%; height:34%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
+          <!-- <div style="width:100%; height:34%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
             <textarea placeholder="제목" style="width:100%; height:100%; paddng:5px; text-align:center; font-size:19px; font-weight:700; resize: none; overflow:hidden;"  v-model="title"></textarea>
+          </div> -->
+          <div>
+            <div style="float: left; width: 50px; border-right: 1px solid rgba(128, 128, 128, 0.15);">
+              <span style="line-height: 40px; font-size: 15px;">제목</span>
+            </div>
+            <div style="overflow: hidden;">
+              <input v-model="title" class="titleinput" type="text" placeholder="제목을 입력해주세요." style="float:left; width: 100%; height: 40px;">
+            </div>
           </div>
           <div style="width:100%; height:32%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden;">
           <div style="height: 100%;">
@@ -31,7 +39,6 @@
               deletable-chips
               solo
               dense
-              
             >
             </v-combobox>
           </v-container>
@@ -110,6 +117,7 @@ import $ from 'jquery'
 import axios from 'axios'
 import store from '../../vuex/store.js'
 import searchFood from '../Food/searchFood.vue'
+import Swal from 'sweetalert2'
 
 const SERVER_URL = store.state.SERVER_URL;
 
@@ -188,7 +196,10 @@ export default {
         }
       }
       FL = FL + '를 재료로 추가하였습니다.';
-      alert(FL);
+      Swal.fire({
+        icon: 'success',
+        title: FL,
+      })
       this.foodlist = foodlist;
       $('.addFood').css('display','none');
     },
@@ -273,6 +284,7 @@ export default {
       this.loading = true;
 
       var formData = new FormData();
+      formData.append('email',this.userinfo.email);
       const contents = [];
 
       this.items.forEach(item => {
@@ -314,7 +326,7 @@ export default {
         setTimeout(() => {
         this.loading = false;
         this.register(data);
-      }, 1000*this.items.length + 3000);
+      }, 1000*this.items.length + 2000);
       })
       .catch((error)=>{
         // console.log(error.response);
@@ -437,6 +449,13 @@ h3{
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+.titleinput {
+  background-color: unset;
+  text-align: left;
+  padding: 0 10px;
+  font-size: 15px;
 }
 
 </style>

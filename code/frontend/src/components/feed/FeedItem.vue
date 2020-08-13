@@ -40,6 +40,7 @@
           <v-btn icon color="black" @click="onComment(feedData.no)">
               <v-icon size="30px">mdi-chat-outline</v-icon>
           </v-btn>
+          <b>좋아요 {{feedData.likecount}} 개</b>
         </div>
         <div style="float: right;">
           <v-btn icon @click="scrapedbtn(feedData.no)">
@@ -53,7 +54,7 @@
             </v-btn>
             <div class="btns">
               <!-- <v-btn class="btn" >수정</v-btn> -->
-              <v-btn class="btn" >삭제</v-btn>
+              <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
         </div>
@@ -153,6 +154,7 @@ export default {
               ],
               tags:[],
               comments:[],
+              likecount: d.likecount,
             }
 
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
@@ -252,6 +254,11 @@ export default {
       // console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
+          if(feedData.islike == false){
+            feedData.likecount += 1;
+          }else{
+            feedData.likecount -= 1;
+          }
           feedData.islike = !feedData.islike
         }
       })
@@ -319,6 +326,12 @@ export default {
         })
       }
       // console.log(this.feedDatas);
+    },
+    deleteNo(feed_no){
+      axios.delete(`${SERVER_URL}/feed/delete`,{params:{feedNo : feed_no}})
+      .then(response => {
+        this.$router.push('/feed/main');
+      })
     }
   },
 };

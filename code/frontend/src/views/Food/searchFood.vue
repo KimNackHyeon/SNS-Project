@@ -88,6 +88,7 @@
 <script>
 import $ from 'jquery'
 import {foods} from './Foods.js'
+import Swal from 'sweetalert2'
 
 export default {
          
@@ -117,7 +118,10 @@ export default {
     addIngradient(){
       var resultamount ='';
       if(this.amount==''){
-        alert("필요한 갯수를 적어주세요.");
+        Swal.fire({
+          icon: 'info',
+          title: '필요한 갯수를 적어주세요.',
+        })
       }else{
         if(this.amountundernature !=''){
           resultamount = this.amount + '/'+this.amountundernature;
