@@ -72,6 +72,12 @@
               </router-link>
             </v-col>
           </v-row>
+          <router-link to="/feed/write">
+            <div class="writeButton">
+              <v-icon color="white">mdi-lead-pencil</v-icon>
+              <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+            </div>
+          </router-link>
         </div>
         <router-link to="/store/writegroupbuying">
           <div class="writeButton">

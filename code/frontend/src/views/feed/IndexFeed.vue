@@ -31,7 +31,7 @@
       </div>
       </router-link>
     </div>
-    <div class="feed-body">
+    <div class="feed-body" style="padding-bottom: 100px">
         <FeedItem ref="feeditem"/>
         <!-- <FeedItem />
         <FeedItem />
@@ -130,5 +130,7 @@ export default {
     text-align: center;
     padding-top: 7px;;
 }
-
+.v-image__image--cover{
+  background-size:cover;
+}
 </style>

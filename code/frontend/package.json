@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "babel-eslint": "^10.0.3",
     "babel-preset-env": "^1.7.0",
+    "cheerio": "^1.0.0-rc.3",
     "core-js": "^3.4.3",
     "cors": "^2.8.5",
     "email-validator": "^2.0.4",
