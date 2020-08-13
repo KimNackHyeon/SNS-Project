@@ -68,8 +68,10 @@
                 </div>
             </div>
             <div style="width:100%; height:74px; background-color:black; color:white; font-size: 9px; padding: 5px;">
-             <div v-if="apiUnit!=''">{{apiUnit}} 당 {{apiPrice}}원</div>
-            <div v-if="apiUnit ==''">가격 데이터가 존재하지 않습니다.</div>
+             <div v-if="myapi.name!=''">{{myapi.name}} {{myapi.unit}} 당 {{myapi.price}}원</div>
+             <div v-if="trade1api.name!=''">{{trade1api.name}} {{trade1api.unit}} 당 {{trade1api.price}}원</div>
+             <div v-if="trade2api.name!=''">{{trade2api.name}} {{trade2api.unit}} 당 {{trade2api.price}}원</div>
+            <div v-if="myapi.name =='' && trade1api.name==''&&trade2api.name==''">가격 데이터가 존재하지 않습니다.</div>
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
             </div>
         </div><!-- end of 바구니에 넣기 -->
@@ -141,6 +143,7 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
+import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 const SERVER_URL = store.state.SERVER_URL;
@@ -188,6 +191,21 @@ data() {
     sharedesc:'',
     apiUnit:'',
     apiPrice:0,
+    myapi : {
+        name : '',
+        unit : '',
+        price : '',
+    },
+    trade1api : {
+        name : '',
+        unit : '',
+        price : '',
+    },
+    trade2api : {
+        name : '',
+        unit : '',
+        price : '',
+    },
         foods:[],
         changeFoodsTemp:[
               ],
@@ -301,15 +319,31 @@ data() {
                 $('#justMove').css('display','unset');
                 this.intoFood = this.Nowgra.name;
                 this.changeFoodsTemp = [];
-                this.apiUnit = '';
+                this.myapi = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade1api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade2api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
                     this.apiPrice = '';
                 for(var i=0; i<this.xmldata.price.length;i++){
                     var tF = this.xmldata.price[i];
                     var tFname = tF.productName.split('/')[0];
-                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
-                        this.apiUnit = tF.unit;
-                        this.apiPrice = tF.dpr1;
-                        break;
+                    if(tF.product_cls_code == '01' ){
+                        if(tFname==this.Nowgra.name_kor){
+                            this.myapi.name = tFname;
+                            this.myapi.unit = tF.unit;
+                            this.myapi.price = tF.dpr1;
+                        }
                     }
                 }
             },
@@ -347,7 +381,25 @@ data() {
                             Cgradient:this.selectedFood.name,
                             Cgradient_kor:this.selectedFood.name_kor,
                             Camount:this.nowCamount,
-                        })
+                        });
+
+                        for(var i=0; i<this.xmldata.price.length;i++){
+                            var tF = this.xmldata.price[i];
+                            var tFname = tF.productName.split('/')[0];
+                            if(tF.product_cls_code == '01' ){
+                                if(tFname==this.selectedFood.name_kor){
+                                    if(this.trade1api.name==''){
+                                        this.trade1api.name = tFname;
+                                        this.trade1api.unit = tF.unit;
+                                        this.trade1api.price = tF.dpr1;
+                                    }else{
+                                        this.trade2api.name = tFname;
+                                        this.trade2api.unit = tF.unit;
+                                        this.trade2api.price = tF.dpr1;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }else{
                     // alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
@@ -432,8 +484,9 @@ data() {
             },
             shareFinish:function(){
                 // const shareList = this.changeFoods;
-                
-                console.log(typeof(this.changeFoods));
+                if(this.changeFoods.lenth>0){
+
+                    console.log(typeof(this.changeFoods));
                 axios({
                     url:`${SERVER_URL}/myref/share`,
                     method:'post',
@@ -446,6 +499,11 @@ data() {
                 .catch((error)=>{
                     console.log(error.response);
                 })
+                }else{
+                    Swal.fire({
+                        title: '장터에 올릴 재료를 바구니에 넣어주세요.',
+                    })
+                }
             }
     },
     computed:{
@@ -520,8 +578,8 @@ data() {
     padding: 4px 4px;
 }
 .rootContainer{
-    width:100%;
-    height:100%;
+    width:360px;
+    height:590px;
     background-image: url(../../assets/images/myref.png);
     background-size: contain;
     position:relative;
