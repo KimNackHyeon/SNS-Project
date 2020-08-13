@@ -119,8 +119,8 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 
-const SERVER_URL = 'http://localhost:9999/food/api';
-// const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -222,6 +222,14 @@ created() {
     .then(response => {
       this.tradelist = response.data.list
       console.log(this.tradelist)
+      console.log(this.mapOtherUserInfo.address)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+        }
+        console.log('good')
+        console.log(store.state.mapOtherUserInfo)
+      }
     })
     .catch(error => {
       console.log(error.response)

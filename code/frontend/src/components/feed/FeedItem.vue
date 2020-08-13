@@ -1,6 +1,6 @@
 <template>
   <div class="feed-item">
-    <div v-for="(feedData, i) in feedDatas" :key="i">
+    <div v-for="(feedData, i) in feedDatas" :key="i" style="position: relative">
       <div class="feed-profil">
         <div class="feed-user">
           <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
@@ -46,6 +46,16 @@
               <v-icon v-if="!feedData.isscrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
               <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
+          <!-- 수정 삭제 -->
+          <div style="display: inline-block" v-if="feedData.email==userInfo.email">
+            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+              <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+            </v-btn>
+            <div class="btns">
+              <v-btn class="btn" >수정</v-btn>
+              <v-btn class="btn" >삭제</v-btn>
+            </div>
+          </div>
         </div>
       </div>
       <!-- 댓글 -->
@@ -64,15 +74,14 @@
             <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</p>
             <span>{{comment.comment}}</span>
           </div>
-          <div style="float: right; width: 10%" v-if="comment.email===userInfo.email">
+          <!-- <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
             <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
               <v-icon size="18px">mdi-trash-can-outline</v-icon>
             </v-btn>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -94,6 +103,7 @@ export default {
       imgNumber: "",
       inputComment: '',
       commentData: [],
+      originalDatas: [],
     };
   },
   computed: {
@@ -113,6 +123,15 @@ export default {
   },
 
   mounted(){
+    this.callList();
+    if(store.state.kakaoUserInfo.email != null){
+      this.userInfo = store.state.kakaoUserInfo;
+    }else{
+      this.userInfo = store.state.userInfo;
+    }  
+  },
+  methods: {
+    callList(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
           console.log(response);
@@ -130,7 +149,7 @@ export default {
               comment: "",
               items: [    
               ],
-
+              tags:[],
               comments:[],
             }
 
@@ -169,17 +188,23 @@ export default {
             }
           });
 
+          response.data.taglist.forEach(t => {
+            if(t.feedNo == d.no){
+              var tag = {tagName : t.tagName};
+              data.tags.push(tag);
+            }
+          });
+
           this.feedDatas.push(data); // 피드 데이터 저장
           console.log(data);
         });
         console.log(this.feedDatas);
+        this.originalDatas = this.feedDatas;
       })
       .catch((error) => {
         console.log(error.response);
       });
-      
-  },
-  methods: {
+    },
     countItem(i) {
       this.imgNumber = i
     },
@@ -259,6 +284,13 @@ export default {
           console.log(error.response);
         });
     },
+    openBtn() {
+      if($('.btns').css('display')=='block'){
+        $('.btns').css('display','none');  
+      }else{
+        $('.btns').css('display','block');
+      }
+    },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
@@ -266,11 +298,51 @@ export default {
         console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
+    },
+    searchTag(tags){
+      console.log(tags);
+      this.feedDatas = this.originalDatas;
+      if(tags.length != 0){
+        this.feedDatas = this.feedDatas.filter(function (item) {
+          var isTag = false;
+          item.tags.forEach(tag => {
+            if(tags.indexOf("#"+tag.tagName) != -1){
+              console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+              console.log(item);
+              isTag = true;
+              return;
+            }
+          })
+          return isTag;
+        })
+      }
+      console.log(this.feedDatas);
     }
   },
 };
 </script>
 <style scoped>
+.btns {
+  display: none;
+  position: absolute;
+  width: 50px;
+  /* height: 60px; */
+  z-index: 80;
+  left: 300px;
+  top: 345px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+.btn {
+  width: 100%;
+  background-color: white !important;
+  border-radius: unset;
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.btn span {
+    height: 30px;
+  }
 .commentbody {
   border-bottom: 1px solid lightgray;
 }

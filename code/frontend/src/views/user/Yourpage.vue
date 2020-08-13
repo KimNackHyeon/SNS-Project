@@ -90,17 +90,11 @@
         <div class="myrecipe">
           <h3 class="myrecipe-title">{{yourData.nickname}}님의 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food2.png" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food3.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
+                <img class="myrecipe-img-size" :src="recipe.img" alt="food">
+                <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food"> -->
+              </router-link>
             </div>
           </div>
         </div>
@@ -128,6 +122,7 @@ export default {
         follower:"",
         following:"",
       },
+      recipes:[],
       isfollow : false,
       openFollower: false,
       followers: "",
@@ -146,6 +141,15 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+
+      axios.get(`${SERVER_URL}/account/myrecipe/`, {params: {email: this.$route.params.email}})
+      .then(response => {
+          console.log(response)
+          this.recipes = response.data;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     },
   methods: {
     onFollow(){

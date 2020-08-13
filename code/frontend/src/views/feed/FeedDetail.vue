@@ -1,41 +1,53 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-      <router-link to="/feed/main">
-        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
-          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
-        </v-btn>
-      </router-link>
-      <div class="titleBox">
-        <div class="pageTitle">
-          <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+    <div>
+      <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+        <router-link to="/feed/main">
+          <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+            <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+          </v-btn>
+        </router-link>
+        <div class="titleBox">
+          <div class="pageTitle">
+            <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+          </div>
         </div>
-      </div>
-    </div>
-    <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-          <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
-        </div>
-    <div style="overflow: scroll; ">
+      </div>      
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
-        <div style="float: right;">
+        <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
           </v-btn> -->
-          <v-btn icon @click="likedbtn">
-              <v-icon v-if="!feedData.isLike" size="30px" color="black">mdi-heart-outline</v-icon>
-              <v-icon v-if="feedData.isLike" size="30px" color="red">mdi-heart</v-icon>
+          <v-btn icon @click="likedbtn" style="width: 25px; height: 25px; margin: 5px">
+              <v-icon v-if="!feedData.isLike" size="25px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="25px" color="red">mdi-heart</v-icon>
           </v-btn>
-          <v-btn icon @click="scrapedbtn">
-              <v-icon v-if="!feedData.isScrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
-              <v-icon v-if="feedData.isScrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
+          <v-btn icon @click="scrapedbtn" style="width: 25px; height: 25px">
+              <v-icon v-if="!feedData.isScrap" size="25px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="25px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
+          <!-- 수정 삭제 -->
+          <div style="display: inline-block" v-if="feedData.email==userinfo.email">
+            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+              <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+            </v-btn>
+            <div class="btns">
+              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <v-btn class="btn" >삭제</v-btn>
+            </div>
+          </div>
         </div>
       </div>
-      
+    </div>
+    <div style="overflow: scroll; height: 490px; position: relative">
+      <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
+      </div>
       <!-- 재료 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
         <!-- 나에게 있는 재료 -->
@@ -56,7 +68,7 @@
             <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
-                  <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
+                  <img :src="`/img/food/${food.img}.png`" alt="flour" style="width: 30px; height: 30px;">
                   <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
                 </v-btn>
               </div>
@@ -76,9 +88,11 @@
         <div>
           <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
             <div>
-              <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;">
+              <img :src="item.img" style="width:360px; height:auto;">
+              <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
+              
             </div>
-            <div>
+            <div class="feedContents" v-html="item.content">
               {{item.content}}
             </div>
           </div>
@@ -100,14 +114,15 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
+            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content">
-            <div>
-              <p class="commentUser">{{comment.nickname}}</p>
-              <span>{{comment.comment}}</span>
+          <div class="content" style="display: table;">
+            <div style="display: table-cell; vertical-align: middle;">
+              <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
+              <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
+              <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
+              <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
-            <span style="font-size: 12px">{{comment.create_date}}</span>
           </div>
         </div>
       </div>
@@ -154,6 +169,7 @@ export default {
         '꿀키',
         '소보로'
       ],
+      offset: true,
     }
   },
   watch: {
@@ -193,6 +209,7 @@ export default {
               nickname : response.data.feeddata.nickname,
               profile : response.data.feeddata.profile,
               title: response.data.feeddata.title,
+              email: response.data.feeddata.email,
               items: [],
               comments:[],
               hashTags:[],
@@ -212,8 +229,17 @@ export default {
               this.feedData.items.push(d);
             });
 
-            response.data.datalist.forEach(d =>{
-              this.feedData.items.push(d);
+            axios.get(`${SERVER_URL}/feed/check`,{
+              params:
+              {
+                email:store.state.userInfo.email,
+                feedNo : response.data.feeddata.no,
+              }
+              })
+            .then(response =>{
+              console.log(response);
+                this.feedData.isLike = response.data.like;
+                this.feedData.isScrap = response.data.scrap;
             });
           
           var myrefFoodName = [];
@@ -282,6 +308,13 @@ export default {
           console.log(error.response);
       });
     },
+    openBtn() {
+      if($('.btns').css('display')=='block'){
+        $('.btns').css('display','none');  
+      }else{
+        $('.btns').css('display','block');
+      }
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -293,12 +326,15 @@ export default {
     },
     onCommentBtn() {
       // 댓글 추가기능
+      let today = new Date()
       var comment = {
         img: this.userinfo.profile_image_url, 
         nickname: this.userinfo.nickname,
         email:this.userinfo.email,
         feedNo: this.$route.params.feedNo,
-        comment: this.comment
+        comment: this.comment,
+        // create_date: `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+        create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
       console.log(comment);
       axios.post(`${SERVER_URL}/feed/register`,comment)
@@ -309,6 +345,14 @@ export default {
 
       this.feedData.comments.push(comment);
     },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    }
   },
 }
 </script>
@@ -332,6 +376,35 @@ export default {
     align-items: center;
     padding: 0px 10px;
     
+  }
+  .v-btn {
+    background-color: unset;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+    color: unset;
+  }
+  .btns {
+    display: none;
+    position: absolute;
+    width: 50px;
+    /* height: 60px; */
+    z-index: 99;
+    left: 300px;
+    top: 60px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background-color: white;
+  }
+  .btn {
+    width: 100%;
+    background-color: unset !important;
+    border-radius: unset;
+    box-shadow: unset;
+    -webkit-box-shadow: unset;
+    height: 100%;
+  }
+  .btn span {
+    height: 30px;
   }
   .hashBox {
     overflow-x: scroll;
@@ -384,7 +457,7 @@ export default {
     margin: 0 5px 5px 5px;
   }
   .balloon {  
-    position: fixed; 
+    position: absolute; 
     width: 120px; 
     background:rgba(44, 44, 44, 0.8);
     border-radius: 5px;
@@ -409,20 +482,26 @@ export default {
   .comments {
     padding: 5px 10px 5px 10px;
     width:100%;
-    min-height: 60px;
+    height: 60px;
+    overflow: hidden;
+    line-height: 60px;
   }
   .userImg {
     float: left;
-    margin-right: 10px;
     width: 10%;
   }
   .content {
     float: left;
     width: 85%;
+    height: 60px;
   }
   .commentUser {
-    margin-bottom: 0 !important;
+    /* margin-bottom: 0 !important; */
     font-weight: bold; 
     margin-right: 5px;
+  }
+
+  .feedContents{
+    text-align: center;
   }
 </style>

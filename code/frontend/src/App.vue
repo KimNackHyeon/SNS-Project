@@ -17,8 +17,6 @@ const SERVER_URL = store.state.SERVER_URL;
 const cors = require('cors');
 
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 export default {
   components:{Home},
   name: "app",
@@ -82,7 +80,11 @@ export default {
       if (store.state.userInfo) {
         axios.get(`${SERVER_URL}/account/logout`, {params: { token : token}})
         .then(() => {
+          console.log(this.$cookies.keys());
+          var cookies = document.cookie.split(";");
+          console.log(cookies);
           this.$cookies.remove('auth-token');
+          // this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
           this.isLoggedIn = false;
           // store에 저장한 사용자 정보 지우기
           store.commit('deluserInfo');

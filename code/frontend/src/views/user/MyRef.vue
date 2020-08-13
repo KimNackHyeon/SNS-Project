@@ -141,15 +141,13 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
-import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
-// const SERVER_URL = store.state.SERVER_URL;
-const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = 'http://localhost:9999/food/api';
 var convert = require('xml-js');
-const $api_url = 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
-let request = require('request');
-let cheerio = require('cheerio');
+const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
+
 
 
 
@@ -157,7 +155,7 @@ let cheerio = require('cheerio');
 const config = {
     headers: {
       'Access-Control-Allow-Origin':'*',
-      'content-type': 'application/json',
+      'Content-type': 'application/json',
       'Accept': 'application/json',
       'Access-Control-Allow-Methods':'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers':'Origin,Access-Control-Request-Headers, Authorization'
@@ -488,7 +486,13 @@ data() {
           console.log(error.response)
         })
 
-        
+        axios
+        .get(`${SERVER_URL}/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            console.log(this.xmldata);
+            }
+        )
   },
 }
 </script>

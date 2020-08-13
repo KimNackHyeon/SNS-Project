@@ -2,8 +2,12 @@ package com.web.curation.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -102,6 +106,20 @@ public class AccountController {
 			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "카카오 로그인 처리")
+	@PostMapping("/account/kakaologin")
+	public ResponseEntity<Object> kakaologin(@RequestBody Member member) {
+		System.out.println(member);
+		Member userOpt = memberRepo.getUserByEmail(member.getEmail());
+		if (userOpt == null) { // 중복된 이메일이 없으면
+			System.out.println("로그인된 아이디 정보");
+			memberRepo.save(member);
+			return new ResponseEntity<Object>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(userOpt, HttpStatus.OK);
 		}
 	}
 
@@ -420,6 +438,41 @@ public class AccountController {
 		return datalist;
 	}
 	
+<<<<<<< HEAD
+=======
+	@GetMapping("/account/apitest")
+	@ApiOperation(value = "외부 api 호출")
+	public String callapi() {
+		StringBuffer result = new StringBuffer();
+		System.out.println("외부 api 호출 ======================");
+		try {
+			String urlstr = "http://www.kamis.or.kr/service/price/xml.do?"
+					+ "action=dailySalesList"
+					+ "&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac"
+					+ "&p_cert_id=1137"
+					+ "&p_returntype=json";
+			
+			URL url = new URL(urlstr);
+			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
+			urlconnection.setRequestMethod("GET");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(),"UTF-8"));
+			
+			String returnLine;
+			
+			while((returnLine = br.readLine()) != null) {
+				result.append(returnLine);
+			}
+			urlconnection.disconnect();
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		System.out.println(result.toString());
+		return result.toString();
+	}
+	
+>>>>>>> 6276f7e2849a7aa6e95cd9b6e4d19e3f9a075886
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
