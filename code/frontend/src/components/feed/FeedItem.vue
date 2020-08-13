@@ -1,6 +1,6 @@
 <template>
   <div class="feed-item">
-    <div v-for="(feedData, i) in feedDatas" :key="i">
+    <div v-for="(feedData, i) in feedDatas" :key="i" style="position: relative">
       <div class="feed-profil">
         <div class="feed-user">
           <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
@@ -47,25 +47,15 @@
               <v-icon v-if="feedData.isscrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
           <!-- 수정 삭제 -->
-          <v-menu botoom offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn v-bind="attrs" v-on="on" icon style="width: 25px; height: 25px">
-                <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <!-- <router-link to="/"> -->
-                <v-list-item @mouseover="overModifyBtn" @mouseout="outModifyBtn"  style="min-height: unset; height: 30px">
-                  <v-list-item-title class="modifybtn">수정</v-list-item-title>
-                </v-list-item>
-              <!-- </router-link> -->
-              <button>
-                <v-list-item @mouseover="overDeleteBtn" @mouseout="outDeleteBtn" style="min-height: unset; height: 30px">
-                  <v-list-item-title class="deletebtn">삭제</v-list-item-title>
-                </v-list-item>
-              </button>
-            </v-list>
-          </v-menu>
+          <div style="display: inline-block" v-if="feedData.email==userInfo.email">
+            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+              <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+            </v-btn>
+            <div class="btns">
+              <v-btn class="btn" >수정</v-btn>
+              <v-btn class="btn" >삭제</v-btn>
+            </div>
+          </div>
         </div>
       </div>
       <!-- 댓글 -->
@@ -84,11 +74,11 @@
             <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</p>
             <span>{{comment.comment}}</span>
           </div>
-          <div style="float: right; width: 10%" v-if="comment.email===userInfo.email">
+          <!-- <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
             <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
               <v-icon size="18px">mdi-trash-can-outline</v-icon>
             </v-btn>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -133,8 +123,12 @@ export default {
   },
 
   mounted(){
-      this.callList();
-      
+    this.callList();
+    if(store.state.kakaoUserInfo.email != null){
+      this.userInfo = store.state.kakaoUserInfo;
+    }else{
+      this.userInfo = store.state.userInfo;
+    }  
   },
   methods: {
     callList(){
@@ -290,6 +284,13 @@ export default {
           console.log(error.response);
         });
     },
+    openBtn() {
+      if($('.btns').css('display')=='block'){
+        $('.btns').css('display','none');  
+      }else{
+        $('.btns').css('display','block');
+      }
+    },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
@@ -321,6 +322,27 @@ export default {
 };
 </script>
 <style scoped>
+.btns {
+  display: none;
+  position: absolute;
+  width: 50px;
+  /* height: 60px; */
+  z-index: 80;
+  left: 300px;
+  top: 345px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+.btn {
+  width: 100%;
+  background-color: white !important;
+  border-radius: unset;
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.btn span {
+    height: 30px;
+  }
 .commentbody {
   border-bottom: 1px solid lightgray;
 }
