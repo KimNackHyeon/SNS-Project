@@ -4,21 +4,14 @@
           <div style="height:50px; width:100%; background-color:white">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
-          <get-one-food @addfood="addFood"></get-one-food>
+          <get-one-food @addfood="addFood" ></get-one-food>
       </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
-        <div id="insideRef">
-            <div id="justMove" class="F1" style="display:none; position:fixed;">
-                    <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
-                </div>
-               <div v-for="(food,index) in foods" :key="(index)">
-                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.img}.png`)">
-                
-                </button>
-            </div>
-        </div>
+    
+        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef">
+            
+        </ref-paging>
         <div id="basket">
-            <!-- <v-btn @click="openCheckBasket()" @mouseleave="closeCheckBasket()"  @mouseup="closeCheckBasket()"  @touchstart="openCheckBasket()"  @touchend="closeCheckBasket()"  @touchcancel="closeCheckBasket()" flat icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn> -->
             <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
@@ -37,7 +30,6 @@
     padding: 6px 0px;
     overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div class="textArea" style="height: 40px; margin-top: 0px; text-align: center; padding: 5px 2px;">
-                <!-- <div class="longNameBox">{{Nowgra.name_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5> -->
                 <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:24px; height:30px;"><h5>개를</h5>
                 <div class="shareButton" @click="openShareBox" style="height:100%; width:37px; background-color:#80808066; float:left; margin-right:5px;">공유</div>
                 <div class="deleteButton" @click="deleteFoodfromRef" style="height:100%; width:37px; background-color:red; float:left;">삭제</div>
@@ -49,7 +41,6 @@
                
             </div>
             <div style="width:100%; height:33px; padding: 4px 6px;">
-                    <!-- <input type="text" style="width:25px; height:30px; background-color:gray; color:black;"> -->
                     <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:24px;"><h5 style="font-size:10px;float:left">개당</h5> 
                     <button type="button" @click="getFood" class="setFood" style="float:left; margin-right:5px;"></button>
                     <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
@@ -150,6 +141,7 @@ import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
 import Swal from 'sweetalert2'
 import qs from 'query-string';
+import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 // const SERVER_URL = store.state.SERVER_URL;
@@ -173,7 +165,7 @@ const config = {
 }
 
 export default {
-    components:{getOneFood},
+    components:{getOneFood,RefPaging},
 data() {
     return {
         selectedFood:'',  //냉장고에 채우고싶은 재료 
@@ -290,8 +282,10 @@ data() {
                 return src;
             },
             
-            openShare:function(nowfood,index){
+            openShare:function(sendData){
                 this.closeregistMater();
+                var nowfood = sendData.nowfood;
+                var index = sendData.index;
                 this.Nowgra_kor = nowfood.name_kor;
                 this.Nowgra = nowfood;
                 this.nowmyamount = 1;
@@ -335,37 +329,7 @@ data() {
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
-                // var sum = 0;
-                // if(this.nowmyamount>=1){
-                //     if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
-                //         if(this.nowmyamount>this.totalShareAmount){
-                //             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
-                //         this.nowmyamount = this.totalShareAmount;
-                //     }else{
-                //         var sellPrice = Number(this.nowSellPrice);
-                //         var sellAmount = Number(this.nowSellAmount);
-                //         this.changeFoodsTemp.push({
-                //             Mygradient:this.Nowgra.name,
-                //             Mygradient_kor:this.Nowgra.name_kor,
-                //             myamount:this.nowmyamount,
-                //             Cgradient:this.nowCgradient,
-                //             Camount:this.nowCamount,
-                //             pricePerOne:(sellPrice/sellAmount),
-                //             })
-                //             this.nowmyamount = 1;
-                //             this.nowCgradient = '';
-                //             $('.setFood').text("");
-                //             this.nowCamount = 1;
-                //             var shareMotion = 'share'+(this.NowClassNum+1);
-                //             $('#justMove').addClass(shareMotion);
-                            
-                //     }
-                // }else{
-                //     alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
-                // }
-                // }else{
-                //     alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
-                // }
+               
                 var sum = 0;
                 if(this.changeFoodsTemp.length<2){
                     if(this.totalShareAmount<=this.Nowgra.amount){
@@ -486,6 +450,28 @@ data() {
                 })
             }
     },
+    computed:{
+
+    pageCount () {
+      let listLeng = this.listArray.length,
+          listSize = this.pageSize,
+          page = Math.floor(listLeng / listSize);
+      if (listLeng % listSize > 0) page += 1;
+      
+      /*
+      아니면 page = Math.floor((listLeng - 1) / listSize) + 1;
+      이런식으로 if 문 없이 고칠 수도 있다!
+      */
+      return page;
+    },
+    paginatedData () {
+      const start = this.pageNum * this.pageSize,
+            end = start + this.pageSize;
+      return this.listArray.slice(start, end);
+    }
+  
+
+    },
     created() {
         if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
@@ -502,18 +488,7 @@ data() {
           console.log(error.response)
         })
 
-        axios.get('http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json')
-        .then((response) => {
-            this.xmldata = response.data;
-        })
-        .catch((error)=>{
-                    console.log(error.response);
-        })
         
-    //    var kamisjson = {"condition":[["20200812"]],"error_code":"000","price":[{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"272","lastest_day":"2020-08-12","productName":"쌀/일반계","item_name":"쌀/일반계","unit":"20kg","day1":"당일","dpr1":"52,358","day2":"1일전","dpr2":"52,282","day3":"1개월전","dpr3":"51,691","day4":"1년전","dpr4":"52,038","direction":"1","value":"0.2"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"274","lastest_day":"2020-08-12","productName":"쌀/일반계","item_name":"쌀/일반계","unit":"1kg","day1":"당일","dpr1":"4,347","day2":"1일전","dpr2":"4,347","day3":"1개월전","dpr3":"4,368","day4":"1년전","dpr4":"4,773","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"275","lastest_day":"2020-08-12","productName":"콩/흰 콩(국산)","item_name":"콩/흰 콩(국산)","unit":"500g","day1":"당일","dpr1":"4,740","day2":"1일전","dpr2":"4,734","day3":"1개월전","dpr3":"4,793","day4":"1년전","dpr4":"4,727","direction":"1","value":"0.1"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"277","lastest_day":"2020-08-12","productName":"팥/붉은 팥(국산)","item_name":"팥/붉은 팥(국산)","unit":"500g","day1":"당일","dpr1":"7,148","day2":"1일전","dpr2":"7,148","day3":"1개월전","dpr3":"7,134","day4":"1년전","dpr4":"7,920","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"279","lastest_day":"2020-08-12","productName":"녹두/국산","item_name":"녹두/국산","unit":"500g","day1":"당일","dpr1":"7,306","day2":"1일전","dpr2":"7,306","day3":"1개월전","dpr3":"7,222","day4":"1년전","dpr4":"6,927","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"281","lastest_day":"2020-08-12","productName":"고구마/밤","item_name":"고구마/밤","unit":"1kg","day1":"당일","dpr1":"8,235","day2":"1일전","dpr2":"8,235","day3":"1개월전","dpr3":"6,874","day4":"1년전","dpr4":"5,230","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"285","lastest_day":"2020-08-12","productName":"감자/수미","item_name":"감자/수미","unit":"100g","day1":"당일","dpr1":"261","day2":"1일전","dpr2":"260","day3":"1개월전","dpr3":"300","day4":"1년전","dpr4":"212","direction":"1","value":"0.4"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"291","lastest_day":"2020-08-12","productName":"배추/고랭지","item_name":"배추/고랭지","unit":"1포기","day1":"당일","dpr1":"6,534","day2":"1일전","dpr2":"6,286","day3":"1개월전","dpr3":[],"day4":"1년전","dpr4":"3,425","direction":"1","value":"4.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"297","lastest_day":"2020-08-12","productName":"양배추/양배추","item_name":"양배추/양배추","unit":"1포기","day1":"당일","dpr1":"3,679","day2":"1일전","dpr2":"3,642","day3":"1개월전","dpr3":"3,045","day4":"1년전","dpr4":"2,875","direction":"1","value":"1.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"299","lastest_day":"2020-08-12","productName":"시금치/시금치","item_name":"시금치/시금치","unit":"1kg","day1":"당일","dpr1":"13,737","day2":"1일전","dpr2":"13,762","day3":"1개월전","dpr3":"9,536","day4":"1년전","dpr4":"15,130","direction":"0","value":"0.2"}]};
-        // this.xmldata = kamisjson;
-        // console.log(kamisjson.price);
-
   },
 }
 </script>
