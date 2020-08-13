@@ -60,7 +60,7 @@ export default {
     openShare:function(nowfood,index){
       $('#justMove').css('display','block');
           this.Nowgra = nowfood;
-              this.intoFood =  this.Nowgra.name;
+              this.intoFood =  this.Nowgra.img;
                 var sendData = {nowfood : nowfood, index : index};
                 this.$emit('openShare',sendData);
             },
