@@ -13,7 +13,7 @@
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
-                    <h1>5</h1>
+                    <h1>{{yourData.recipe}}</h1>
                   </v-col>
                   <!-- 팔로워 -->
                   <v-col class="myprofil-box onmyprofil-box" cols="4" @click="onFollower">
@@ -107,7 +107,7 @@
 import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
-
+import Swal from 'sweetalert2'
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -146,6 +146,7 @@ export default {
       .then(response => {
           // console.log(response)
           this.recipes = response.data;
+          this.yourData.recipe = this.recipes.length;
         })
         .catch(error =>{
           // console.log(error)
@@ -265,6 +266,14 @@ export default {
       }else{
         // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
+        this.openFollowing = false;
+        this.openFollower = false;
+        Swal.fire({
+  icon: 'success',
+  showConfirmButton: false,
+  timer: 1500
+})
+        window.location.reload();
       }
     },
   },

@@ -61,12 +61,12 @@
                         </router-link>
                       </div>
                       <div>
-                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 30px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
                       <div>
-                        <p style="height: 100px; line-height: 100px; text-align: center; font-size: 40px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                        <p style="height: 100px; line-height: 100px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                   </v-row>

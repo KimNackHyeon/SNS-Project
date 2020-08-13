@@ -69,6 +69,33 @@ export default {
       const emailData = {
         email: email,
       }
+      let timerInterval
+Swal.fire({
+  title: '인증번호 전송중',
+  html: '전송까지 <b></b> 초 남았습니다.',
+  timer: 3000,
+  timerProgressBar: true,
+  onBeforeOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getContent()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  onClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+  }
+})
       // Swal.fire({
       //     title: '잠시만 기다려주세요',
       //     text: '가입된 이메일인지 확인하고 있습니다.',

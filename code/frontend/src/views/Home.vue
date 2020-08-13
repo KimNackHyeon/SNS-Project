@@ -78,7 +78,7 @@
 
       <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
     margin-top: 110px; width:100%;"> <!-- 하단 -->
-        <router-link to="/user/modifyuser"><v-icon style="margin:8px">mdi-cog</v-icon></router-link>
+        <!-- <router-link to="/user/modifyuser"><v-icon style="margin:8px">mdi-cog</v-icon></router-link> -->
         <v-btn @click="$emit('logout')" icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
     </v-navigation-drawer>

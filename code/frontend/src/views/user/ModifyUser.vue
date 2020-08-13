@@ -39,7 +39,7 @@
       </div>
       <div class="input-with-label">
         <label for="address">주소</label>
-        <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+        <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()" tabindex="-1">
         <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
       </div>
       <v-dialog v-model="dialog"  width= "100%" class="adressDialog">
@@ -76,9 +76,10 @@ import store from '../../vuex/store.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
+import Swal from 'sweetalert2'
 
-const SERVER_URL = 'http://localhost:9999/food/api';
-// const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -262,7 +263,10 @@ export default {
       }
       else {
         // console.log('입력칸이 비어있습니다.')
-        alert('입력칸이 비어있습니다.')
+        Swal.fire({
+          icon: 'warning',
+          title: '입력칸이 비어있습니다.',
+        })
         this.checkNickname()
         this.checkPasswordValidate()
         this.checkPassword()
