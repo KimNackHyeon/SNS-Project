@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,14 +28,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.FeedData;
 import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
+import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
+import com.web.curation.model.Scrap;
+import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
 import com.web.curation.repo.MyRefRepo;
+import com.web.curation.repo.ScrapRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -74,6 +79,12 @@ public class AccountController {
 
 	@Autowired
 	MyRefRepo myrefRepo;
+	
+	@Autowired
+	FeedDataRepo feedDataRepo;
+	
+	@Autowired
+	ScrapRepo scrapRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -100,7 +111,6 @@ public class AccountController {
 		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
 		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
 		if (!myrefList.isEmpty()) {
-			System.out.println("hihi");
 			map.put("myreflist", myrefList);
 			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
@@ -120,6 +130,16 @@ public class AccountController {
 		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@ApiOperation(value = "읽지않은 새소식 반환")
+	@GetMapping("/account/new/{email}")
+	public ResponseEntity<Map> observeNew(@PathVariable String email) {
+		Map<String, Alarm> map = new HashMap<String, Alarm>();
+		//type 1 : 나를 팔로우함
+		//type 2 : 내 게시글에 댓글 달림
+		//type 3 : 내 글에 좋아요 눌림
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "토큰 검증")
@@ -208,12 +228,13 @@ public class AccountController {
 	@GetMapping("/account/mypage/{email}")
 	@ApiOperation(value = "내 페이지 보기")
 	public ResponseEntity<Map> showmypage(@PathVariable String email) {
-//		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		Long recipe = myboardRepo.countByEmail(email);
 		Long following = followRepo.countByEmail(email);
 		Long follower = followRepo.countByYourEmail(email);
 		Map<String, Long> map = new HashMap<String, Long>();
 //		final BasicResponse result = new BasicResponse();
 //		result.status = true;
+		map.put("recipe", recipe);
 		map.put("following", following);
 		map.put("follower", follower);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
@@ -268,7 +289,7 @@ public class AccountController {
 		List<Member> followingList = new ArrayList<Member>();
 
 		for (Follow f : list) {
-			Member member = memberRepo.getUserByEmail(f.getEmail());
+			Member member = memberRepo.getUserByEmail(f.getYourEmail());
 			followingList.add(member);
 		}
 
@@ -349,7 +370,7 @@ public class AccountController {
 		System.out.println(filename);
 		Member member = memberRepo.getUserByEmail(email); // 폴더명
 //		String filepath = "/image/" + member.getNo() + "/profile";// 폴더 상대 경로
-		String filepath = "/demo/s03p12b301/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
+		String filepath = "/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
 
 		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
 		System.out.println(path); // 상대경로
@@ -370,6 +391,35 @@ public class AccountController {
 		String result = "/img/" + member.getNo() + "/profile/" + filename;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/account/myrecipe/")
+	@ApiOperation(value = "내 레시피 탐색")
+	public List<FeedData> recipeList(@RequestParam String email) {
+
+		List<MyBoard> boardList = myboardRepo.findByEmail(email);
+		List<FeedData> datalist = new ArrayList<FeedData>();
+		for (MyBoard myBoard : boardList) {
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(myBoard.getNo(), (long)0);
+			datalist.add(feeddata);
+		}
+
+		return datalist;
+	}
+	
+	@GetMapping("/account/myscrap/")
+	@ApiOperation(value = "내 스크랩 글 탐색")
+	public List<FeedData> scrapList(@RequestParam String email) {
+
+		List<Scrap> scrapList = scrapRepo.findByEmail(email);
+		List<FeedData> datalist = new ArrayList<FeedData>();
+		for (Scrap scrap : scrapList) {
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(scrap.getFeedNo(), (long)0);
+			datalist.add(feeddata);
+		}
+
+		return datalist;
+	}
+	
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 

@@ -4,11 +4,10 @@
       <div class="mypage-body">
         <div class="profil">
           <div style="overflow: hidden; margin: 20px 0;">
-            <div class="myphoto"><v-avatar size="100"><img :src="userData.image" alt="John"></v-avatar></div>
+            <div class="myphoto"><v-avatar size="100"><img :src="yourData.image" alt="John"></v-avatar></div>
             <div class="myprofil">
               <div style="margin: 10px">
-                <h2 class="user-name">{{userData.nickname}}</h2>
-                <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
+                <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
               <v-container style="min-height: 0; padding: 10px" >
                 <v-row class="myprofil-boxes" no-gutters>
@@ -17,23 +16,24 @@
                     <h1>5</h1>
                   </v-col>
                   <!-- 팔로워 -->
-                  <v-col class="myprofil-box" cols="4" @click="onFollower">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" @click="onFollower">
                     <span>팔로워</span>
-                    <h1>{{userData.follower}}</h1>
+                    <h1>{{yourData.follower}}</h1>
                   </v-col>
                   <!-- 팔로워 dialog -->
                   <v-dialog v-model="openFollower" scrollable width= "100%">
                     <v-card>
-                      <v-card-title >팔로워 {{userData.follower}}명</v-card-title>
+                      <v-card-title >팔로워 {{yourData.follower}}명</v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                            <!-- <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar> -->
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(follower.email)">{{follower.nickname}}</p>
                             <p class="followEmail">{{follower.email}}</p>
-                            <p class="followNick">{{follower.nickname}}</p>
                           </div>
                         </div>
                       </v-card-text>
@@ -45,23 +45,23 @@
                     </v-card>
                   </v-dialog>
                   <!-- 팔로잉 -->
-                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
+                  <v-col class="myprofil-box onmyprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
-                    <h1>{{userData.following}}</h1>
+                    <h1>{{yourData.following}}</h1>
                   </v-col>
                   <!-- 팔로잉 dialog -->
                   <v-dialog v-model="openFollowing" scrollable width= "100%">
                     <v-card>
-                      <v-card-title >팔로잉 {{userData.following}}명</v-card-title>
+                      <v-card-title >팔로잉 {{yourData.following}}명</v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
                         <div class="follow" v-for="(following, i) in followings" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
+                            <p class="followNick" @click="moveUser(following.email)">{{following.nickname}}</p>
                             <p class="followEmail">{{following.email}}</p>
-                            <p class="followNick">{{following.nickname}}</p>
                           </div>
                           <div class="followbtn" @click="onFollowBtn(following)">
                             <v-btn color="#a0d469" style="box-shadow: unset; color: white" v-if="!following.isfollow">팔로우</v-btn>
@@ -88,7 +88,7 @@
         </div>
         
         <div class="myrecipe">
-          <h3 class="myrecipe-title">{{userData.nickname}}님의 레시피</h3>
+          <h3 class="myrecipe-title">{{yourData.nickname}}님의 레시피</h3>
           <div class="myrecipe-body">
             <div class="myrecipe-img">
               <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
@@ -114,21 +114,14 @@ import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
 
-// const SERVER_URL = store.state.SERVER_URL;
-const SERVER_URL = 'http://i3b301.p.ssafy.io:9999/food/api'
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
-  // mounted(){
-  //     if(store.state.kakaoUserInfo.email != null){
-  //       this.userinfo = store.state.kakaoUserInfo;
-  //     }else{
-  //       this.userinfo = store.state.userInfo;
-  //     }
-  //   },
   data() {
     return {
       userinfo:'',
-      userData:{
+      yourData:{
+        email: '',
         nickname:'',
         image:'',
         recipe:"",
@@ -142,46 +135,59 @@ export default {
       followings: "",
     }
   },
+  watch: {
+    followings: function(v) {
+      this.updateFollowBtn();
+    },
+  },
+  mounted(){
+      if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+    },
   methods: {
     onFollow(){
       this.isfollow = !this.isfollow;
       if(this.isfollow){
-        this.addFollow();
+        this.addFollow(this.$route.params.email);
       } else{
-        this.unFollow();
+        this.unFollow(this.$route.params.email);
       }
     },
-    addFollow(){
+    addFollow(yourEmail){
       // alert('팔로우');
       axios.post(`${SERVER_URL}/account/follow/`,
         {
-          email : store.state.userInfo.email,
-          yourEmail : this.$route.params.email
+          email : this.userinfo.email,
+          yourEmail : yourEmail
         }
       ).then(response => {
         this.updateList();
       })
     },
-    unFollow(){
+    unFollow(yourEmail){
       // alert('언팔로우');
       axios.post(`${SERVER_URL}/account/unfollow/`,
         {
-          email : store.state.userInfo.email,
-          yourEmail : this.$route.params.email
+          email : this.userinfo.email,
+          yourEmail : yourEmail
         }
       ).then(response => {
         this.updateList();
       })
     },
     updateList(){
-      axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
+      axios.get(`${SERVER_URL}/account/yourpage/`+ this.yourData.email)
         .then(response => {
           console.log(response);
-          this.userData.nickname = response.data.nickname;
-          this.userData.image = response.data.img;
-          this.userData.following = response.data.following;
-          this.userData.follower = response.data.follower;
-          console.log(this.userData.follower+" "+this.userData.following);
+          this.yourData.nickname = response.data.nickname;
+          this.yourData.image = response.data.img;
+          this.yourData.following = response.data.following;
+          this.yourData.follower = response.data.follower;
+          console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
           console.log(error.response)
@@ -193,13 +199,14 @@ export default {
       }else{
         this.openFollower = false
       }
-      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
+      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.yourData.email}})
         .then(response => {
           console.log(response)
           this.followers = response.data
         })
         .catch(error =>{
           console.log(error)
+          console.log('에러')
         })
     },
     onFollowing() {
@@ -208,7 +215,7 @@ export default {
       }else{
         this.openFollowing = false
       }
-      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
+      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.yourData.email}})
         .then(response => {
           console.log(response)
           this.followings = response.data
@@ -216,16 +223,58 @@ export default {
         })
         .catch(error =>{
           console.log(error)
-        })
+        })      
     },
-    
+    updateFollowBtn() {
+      // yourpage의 following 리스트가 뜨고 내가 그 사람을 팔로우 했는지 안했는지 검사
+      this.followings.forEach(following => {
+        axios.get(`${SERVER_URL}/account/isfollow/`,
+        {
+          params:
+          {
+            email : this.userinfo.email,
+            yourEmail : following.email
+          }
+        })
+        .then(response => {
+          console.log('성공')
+          this.$set(following, 'isfollow', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      })
+    },
+    onFollowBtn(following) {
+      following.isfollow = !following.isfollow
+      console.log(following);
+      // this.isfollow = !this.isfollow;
+      if(following.isfollow){
+        this.addFollow(following.email);
+      } else{
+        this.unFollow(following.email);
+      }
+    },
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    },
   },
   created() {
+    if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
       axios.get(`${SERVER_URL}/account/isfollow/`,
       {
         params:
         {
-          email : store.state.userInfo.email,
+          email : this.userinfo.email,
           yourEmail : this.$route.params.email
         }
       })
@@ -234,15 +283,16 @@ export default {
         this.isfollow = response.data;
       })
 
-      console.log(this.$route.params.email)
+
       axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
         .then(response => {
           console.log(response);
-          this.userData.nickname = response.data.nickname;
-          this.userData.image = response.data.img;
-          this.userData.following = response.data.following;
-          this.userData.follower = response.data.follower;
-          console.log(this.userData.follower+" "+this.userData.following);
+          this.yourData.email = this.$route.params.email;
+          this.yourData.nickname = response.data.nickname;
+          this.yourData.image = response.data.img;
+          this.yourData.following = response.data.following;
+          this.yourData.follower = response.data.follower;
+          console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
           console.log(error.response)
@@ -250,3 +300,33 @@ export default {
   },
 }
 </script>
+<style scoped>
+  .v-dialog {
+    height: 70%;
+  }
+  .follow {
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+  }
+  .userImg {
+    float: left;
+    margin-right: 20px;
+  }
+  .content {
+    float: left;
+  }
+  .followNick {
+    margin: 0 !important;
+    color: black;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  .followEmail {
+    margin: 0 !important;
+    font-size: 10px;
+  }
+  .followbtn {
+    float: right;
+    width: 50px;
+  }
+</style>

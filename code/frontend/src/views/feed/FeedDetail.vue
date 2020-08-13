@@ -1,49 +1,67 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+    <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/feed/main">
-        <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 100%;">
+        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
           <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
         </v-btn>
       </router-link>
+      <div class="titleBox">
+        <div class="pageTitle">
+          <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+        </div>
+      </div>
     </div>
-    <div style="overflow: scroll; height: 540px; ">
+    <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+          <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+        </div>
+    <div style="overflow: scroll; ">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
+          <v-avatar size="35"><img :src="feedData.profile" alt="John"></v-avatar>
           <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right;">
-          <v-btn icon color="lightgray">
+          <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
+          </v-btn> -->
+          <v-btn icon @click="likedbtn">
+              <v-icon v-if="!feedData.isLike" size="30px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="30px" color="red">mdi-heart</v-icon>
+          </v-btn>
+          <v-btn icon @click="scrapedbtn">
+              <v-icon v-if="!feedData.isScrap" size="30px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="30px" color="#a0d469">mdi-bookmark</v-icon>
           </v-btn>
         </div>
       </div>
+      
       <!-- 재료 -->
-      <div style="overflow: hidden; border-bottom: 1px solid lightgray">
+      <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
         <!-- 나에게 있는 재료 -->
-        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center">
+        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
-            <div class="food" v-for="(food, i) in inFoods" :key="i">
+            <div class="food" v-for="(food, i) in havingFood" :key="i">
               <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
-              <h5 class="food-name">{{food.name}}</h5>
+              <h5 class="food-name">{{food.name_kor}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: #a0d469; padding: 5px 10px; width: 40%; text-align: center">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center;    height: 110px;">
           <h5>나에게 없는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
-            <div class="food" v-for="(food, i) in outFoods" :key="i">
+            <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
-                  <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+                  <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
+                  <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
                 </v-btn>
               </div>
-              <h5 class="food-name">{{food.name}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h5 class="food-name">{{food.name_kor}}</h5>
+              <h6>{{food.amount}}개</h6>
             </div>
             <div  class="balloon">
               <h5 style="color: white">{{nowFood}}</h5>
@@ -55,12 +73,21 @@
       </div>
       <!-- 글 내용 -->
       <div style="">
-        <div style="text-align: center; padding: 5px">
-          <h2>{{feedData.title}}</h2>
-        </div>
         <div>
-          <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
-          <p style="padding: 10px">{{feedData.content}}</p>
+          <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
+            <div>
+              <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;">
+            </div>
+            <div>
+              {{item.content}}
+            </div>
+          </div>
+          </div>
+      </div>
+      <!-- 해시태그 -->
+      <div class="hashBox">
+        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
+          <div class="hash">#{{ hashTag }}</div>
         </div>
       </div>
       <!-- 댓글 -->
@@ -92,17 +119,20 @@
 <script>
 import $ from 'jquery'
 import axios from "axios"
+import store from '../../vuex/store.js'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
     return {
+      userinfo:'',
       nowFood : '',
       feedData: '',
+      myrefFood:[],
+      havingFood:[],
+      otherFood:[],
       inFoods: [
-        {img: "flour", name: "박력분", amount: "105g"},
       ],
       outFoods: [
         {img: "egg", name: "달걀", amount: "1개"},
@@ -113,16 +143,17 @@ export default {
       ],
       // onBuying: false,
       comment: "",
-      comments: [
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Jhon34", 
-        content: "아이들도 담백한 맛에 잘 먹을 것 같아요 한번 만들어보세요!! 감사합니다!",
-        created_at: "2020-07-28 15:59"},
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Sara12", 
-        content: "비주얼도 좋고 영양도 듬뿍~~ 다욧식품으로 좋을것 같아요",
-        created_at: "2020-07-28 17:59"},
-      ]
+      hashTags: [
+        '빵', 
+        '베이커리',
+        '인생빵',
+        'JMT',
+        '성심당',
+        '대전빵집',
+        '부추빵',
+        '꿀키',
+        '소보로'
+      ],
     }
   },
   watch: {
@@ -137,38 +168,120 @@ export default {
   },
 
   created(){
+     if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+        console.log(this.userinfo);
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
+    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+        .then(response => {
+        //   this.myreflist = response.data.myreflist
+          this.myrefFood = response.data.myreflist
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+    
     var feedNo = this.$route.params.feedNo;
     axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
           console.log(response);
             this.feedData = { // 하나의 피드 데이터
-              no: response.data.no,
-              nickname : response.data.nickname,
-              content: response.data.content,
-              title: response.data.title,
+              no: response.data.feeddata.no,
+              nickname : response.data.feeddata.nickname,
+              profile : response.data.feeddata.profile,
+              title: response.data.feeddata.title,
               items: [],
               comments:[],
+              hashTags:[],
+              foods:[],
+              isLike : '',
+              isScrap : '',
             }
-        console.log(this.feedData);
+            response.data.taglist.forEach(tag =>{
+              this.feedData.hashTags.push(tag.tagName);
+            });
+
+            response.data.foodlist.forEach(food =>{
+              this.feedData.foods.push(food);
+            });
+
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
+            });
+
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
+            });
+          
+          var myrefFoodName = [];
+          var feedFoodlist = this.feedData.foods;
+          this.myrefFood.forEach(reffood=>{
+            myrefFoodName.push(reffood.name_kor);
+          });
+          console.log(this.myrefFood);
+          feedFoodlist.forEach(recipefood => {
+          // console.log(recipefood.name);
+          if(myrefFoodName.includes(recipefood.name_kor)){
+            this.havingFood.push(recipefood);
+            // console.log(recipefood.name);
+          }else{
+            this.otherFood.push(recipefood);
+          }
+            });
+        // console.log(this.feedData.foods);
         })
         .catch((error) => {
           console.log(error.response);
         });
-    axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
-            .then(response => {
-              // console.log(response);
-              response.data.forEach(c =>{
-                var comment = { // 피드에 해당하는 하나의 댓글
-                  img : '',
-                  nickname : c.nickname,
-                  content : c.comment,
-                  created_at : c.create_date,
-                }
-                this.feedData.comments.push(c);
-              })
-            });
+        setTimeout(() => {
+          axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+              .then(response => {
+                // console.log(response);
+                response.data.forEach(c =>{
+                  var comment = { // 피드에 해당하는 하나의 댓글
+                    img : '',
+                    nickname : c.nickname,
+                    content : c.comment,
+                    created_at : c.create_date,
+                  }
+                  this.feedData.comments.push(c);
+                })
+          });
+        }, 500);
+        
   },
   methods: {
+    likedbtn() {
+      this.feedData.isLike = !this.feedData.isLike;
+      axios.get(`${SERVER_URL}/feed/like`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
+    },
+    scrapedbtn() {
+      this.feedData.isScrap = !this.feedData.isScrap;
+      axios.get(`${SERVER_URL}/feed/scrap`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -178,18 +291,25 @@ export default {
       }
       this.nowFood = food.name;
     },
-    onCommentBtn(feedData_id) {
+    onCommentBtn() {
       // 댓글 추가기능
-      this.comments.push({
-          img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-          name: "Sara12", 
-          content: this.comment,
-          created_at: "2020-07-28 17:59"
-        },)
-      // 댓글 input 초기화 해주기
-      this.comment = ""
+      var comment = {
+        img: this.userinfo.profile_image_url, 
+        nickname: this.userinfo.nickname,
+        email:this.userinfo.email,
+        feedNo: this.$route.params.feedNo,
+        comment: this.comment
+      }
+      console.log(comment);
+      axios.post(`${SERVER_URL}/feed/register`,comment)
+      .then(response=>{
+        console.log(response);
+        this.comment = "";
+      })
+
+      this.feedData.comments.push(comment);
     },
-  }
+  },
 }
 </script>
 
@@ -197,12 +317,48 @@ export default {
   .left-icon:hover {
     color: #a0d469;
   }
+  .titleBox {
+    display: inline-block;
+    width: 90%;
+    height: 100%;
+    font-size: 17px;
+    text-align: center;
+  }
+  .pageTitle {
+    height: 100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px;
+    
+  }
+  .hashBox {
+    overflow-x: scroll;
+    white-space: nowrap;
+    width: 100%;
+    height: 45px;
+    border-top: 1px solid lightgray;
+    background-color: #80808021;
+    padding: 3px 0px;
+    overflow-y: hidden;
+  }
+  .hash {
+    float: left; 
+    margin: 5px; 
+    background: #a0d469; 
+    color: white; 
+    padding: 5px; 
+    border-radius: 12px; 
+    font-size: 12px
+  }
   .food {
     padding-right: 10px;
     text-align: center;
   }
   .food h6 {
     color: gray;
+    font-size: 12px;
   }
   .food-name {
     font-weight: bold;
@@ -252,7 +408,8 @@ export default {
   }
   .comments {
     padding: 5px 10px 5px 10px;
-    overflow: hidden;
+    width:100%;
+    min-height: 60px;
   }
   .userImg {
     float: left;

@@ -1,5 +1,6 @@
 <template>
 <div style="height:100%; width:100%;">
+  
     <div style="width:100%; height:120px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); text-align:center; margin-bottom:-9px; ">
           <div style="width:100%; height:34%">
             <router-link to="/feed/main">
@@ -73,16 +74,28 @@
     </div>
 </div>
 
+      <!-- <v-dialog v-model="loading"> -->
+        <!-- <v-container>
+          <v-layout row justify-center align-center>
+            <v-progress-linear :indeterminate="true"></v-progress-linear>
+          </v-layout>
+        </v-container> -->
+      <!-- </v-dialog> -->
+
 <div class="plusBtnArea">
  <div class="plusBtn" @click="addRecipe"><v-icon size="100px">mdi-plus</v-icon></div>
 </div> <!-- end of 추가버튼 -->
 
 </div> <!-- end of carousel-slide -->
 </div> <!-- end of carousel-container -->
+
 <div @click="whiteReciptComplete" style="height: 45px;
     width: 100%;
     background-color: rgb(160,212,105); text-align:center; padding:5px;">
-<h3>레시피 등록</h3>
+<h3 v-if="!loading">레시피 등록</h3>
+  <div align="center">
+    <v-progress-circular :indeterminate="true" v-if="loading" color="white"></v-progress-circular>
+  </div>
 </div>
 <div>
   <div class="toLeftBtn" @click="clicktoLeftBtn"><v-icon color="white" size="47px">mdi-chevron-left</v-icon></div>
@@ -98,7 +111,7 @@ import axios from 'axios'
 import store from '../../vuex/store.js'
 import searchFood from '../Food/searchFood.vue'
 
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   thisPage:1,
@@ -133,13 +146,15 @@ export default {
       foodlist:'',
       tags:[
       ],
-        items:[
-        {    //...작성자, 재료, 글작성 일, items, tag,제목
-          imageUrl: null,
-          desc:null
-        },
-        
+      items:[
+      {    //...작성자, 재료, 글작성 일, items, tag,제목
+        imageUrl: null,
+        desc:null,
+        file:null,
+      },
       ],
+      images:'',
+      loading:false,
     }
   },
    watch: {
@@ -164,7 +179,16 @@ export default {
     },
   methods: {
     addFood(foodlist){
-      alert(foodlist);
+      var FL = '음식재료 ';
+      for(var i=0; i<foodlist.length;i++){
+        FL = FL+ foodlist[i].name_kor + ' ';
+        FL = FL + foodlist[i].amount + '개 '
+        if(i!=foodlist.length-1){
+          FL+=',';
+        }
+      }
+      FL = FL + '를 재료로 추가하였습니다.';
+      alert(FL);
       this.foodlist = foodlist;
       $('.addFood').css('display','none');
     },
@@ -172,6 +196,7 @@ export default {
       const file = e.target.files[0];
     //   this.item.imageUrl = URL.createObjectURL(file);
     this.$set(this.items[index],'imageUrl',URL.createObjectURL(file));
+    this.$set(this.items[index],'file',file);
       
     },
     addRecipe(){
@@ -244,20 +269,65 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      const recipe = {  //...작성자, 재료, 글작성 일, items, tag,제목
-        title: this.title,
-        author : this.userinfo.email,
-        food : this.foodlist,
-        recipes : this.items,
-        tags : this.tags,
 
+      this.loading = true;
+
+      var formData = new FormData();
+      const contents = [];
+
+      this.items.forEach(item => {
+        if(item.desc != '' && item.desc!=null){
+          contents.push(item.desc);
+        }else{
+          contents.push(' ');
+        }
+        formData.append('images',item.file);
+      });
+
+      const feedData = {
+        title : this.title,
+        email : this.userinfo.email,
+        nickname : this.userinfo.nickname,
+        profile : this.userinfo.profile_image_url,
+        likecount : 0,
       }
-      console.log(recipe);
+
+      const data = {
+        feedData : feedData,
+        food : this.foodlist,
+        tags : this.tags,
+        contents : contents,
+        images : this.images
+      }
+
+      
+
       axios
-        .post(`${SERVER_URL}/feed/write`,recipe)
+      .post(`${SERVER_URL}/feed/img`, formData,{
+        headers: { 'Content-Type': 'multipart/form-data' } 
+      })
+      .then((response)=>{
+        console.log(response.data);
+        this.images = response.data;
+        data.images = this.images;
+        console.log(data);
+        setTimeout(() => {
+        this.loading = false;
+        this.register(data);
+      }, 1500*this.items.length + 3000);
+      })
+      .catch((error)=>{
+        console.log(error.response);
+      });
+        
+    },
+    register(data){
+      console.log(data);
+      axios
+        .put(`${SERVER_URL}/feed/write`, data)
         .then((response)=>{
           console.log(response);
-          this.$router.push("/feed/view");
+          this.$router.push("/feed/main");
         })
         .catch((error)=>{
           console.log(error.response);
@@ -368,4 +438,5 @@ h3{
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
 </style>

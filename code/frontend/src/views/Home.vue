@@ -3,9 +3,13 @@
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <router-link to="/Main"><v-btn icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
-        <router-link to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
-          <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
-          <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+        <router-link v-if="$route.name!='MyRef'" to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <!-- <img v-if="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png"> -->
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+          </v-btn></router-link> 
+          <router-link v-if="$route.name=='MyRef'" to="/"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
+          <!-- <img v-if="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png"> -->
           </v-btn></router-link> 
     </div>
     
@@ -14,7 +18,7 @@
       temporary
       absolute
       width=320px
-      style="z-index: 100;"
+      style=" z-index: 300;"
     >
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
@@ -43,9 +47,11 @@
                   <div class="iconBox"> 
                    <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
                   </div>
-                  <div class="subBox">
-                    <h4>새 소식</h4>
-                  </div>
+                  <router-link to="/alarm">
+                    <div class="subBox">
+                      <h4>새 소식</h4>
+                    </div>
+                  </router-link>
                 </div>
             </div>
         </div>
@@ -163,8 +169,9 @@ display: inline-block;
     margin-top: 15px;
 }
 .circlePhoto{
-    width: 100%;
-    height:100%;
+    width: 60px;
+    height: 60px;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 .grayLine{

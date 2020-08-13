@@ -5,7 +5,32 @@ import actions from './actions'
 import mutations from './mutations'
 import { dataStore } from './module'
 import createPersistedState from "vuex-persistedstate";
+import firebase from 'firebase'
 
+// Required for side-effects
+require("firebase/firestore");
+
+var firebaseConfig = {
+  apiKey: "AIzaSyCqBsuQt5GDnZgVKk3_3po64HodjyyuVWw",
+  authDomain: "disco-dispatch-246806.firebaseapp.com",
+  databaseURL: "https://disco-dispatch-246806.firebaseio.com",
+  projectId: "disco-dispatch-246806",
+  storageBucket: "disco-dispatch-246806.appspot.com",
+  messagingSenderId: "853039422287",
+  appId: "1:853039422287:web:d9337f6d9efa36ec5c433a",
+  measurementId: "G-1SFW7LE2TN"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+var db = firebase.firestore();
+
+window.db = db;
+
+db.settings({
+  timestampsInSnapshots: true
+});
 
 Vue.use(Vuex)
 
@@ -17,6 +42,9 @@ const dataState = createPersistedState({
     paths: ['data']
   })
 
+
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
+const SERVER_URL = 'http://localhost:9999/food/api';
 export default new Vuex.Store({
   modules: {
     dataStore
@@ -24,6 +52,8 @@ export default new Vuex.Store({
   plugins: [dataState, createPersistedState()],
 
   state: {
+    SERVER_URL : SERVER_URL,
+    // SERVER_URL : 'http://localhost:9999/food/api',
     kakaoUserInfo:{
       email:'',
       nickname:'',
@@ -37,9 +67,27 @@ export default new Vuex.Store({
       nickname: null,
       address: null,
       profile_image_url: '/img/ref_close.748290f9.png',
+    },
+    mapOtherUserInfo: {
+      address: [],
+      food: [],
+    },
+    myRefFood: {
+      email:null,
+      food: [],
     }
   },
   mutations: {
+    confirmPwd(state, data){
+      state.confirm = data;
+    },
+    userEmail(state, data) {
+      state.pwd = data;
+    },
+    setMapOtherUserInfo(state, data){
+      state.mapOtherUserInfo.address.push(data);
+      state.mapOtherUserInfo.food.push(data);
+    },
     setUserInfo(state, userinfo) {
       state.userInfo.email = userinfo.email;
       state.userInfo.password = userinfo.password;
@@ -75,6 +123,10 @@ export default new Vuex.Store({
       state.kakaoUserInfo.nickname = kakaoModifyResult.newNickname;
       state.kakaoUserInfo.profile_image_url = kakaoModifyResult.newImgUrl;
       state.kakaoUserInfo.address = kakaoModifyResult.newAddress;
+    },
+    setMyRefFood(state,refList){
+      state.myRefFood.email = refList.email;
+      state.myRefFood.food = refList.foodList;
     }
   },
   getters,

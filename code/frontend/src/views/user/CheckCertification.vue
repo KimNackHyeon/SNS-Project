@@ -1,18 +1,45 @@
 <template>
-  <div class="user join wrapC" style="position: relative;">
-    <h1>비밀번호 찾기</h1>
-    <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
-    <div class="form-wrap">
-      <h1 class="text-left">인증번호를 보냈습니다.</h1>
-      <h1 class="text-left">메일을 확인해주세요.<br><br></h1>
-      <div class="input-with-label">
-        <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
-        <span id="times">03:00</span>
-        <label for="certificationNumber">인증번호</label>
-        <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
-        <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+  <div style="width:100%; height:100%;">
+    <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+      <router-link to="/user/searchpassword">
+        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+        </v-btn>
+      </router-link>
+      <div class="titleBox">
+        <div class="pageTitle">
+          <h3>비밀번호 찾기</h3>
+        </div>
       </div>
     </div>
+    <div class="user join wrapC">
+      <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
+      <div class="form-wrap">
+        <h1 class="text-left">인증번호를 보냈습니다.</h1>
+        <h1 class="text-left">메일을 확인해주세요.<br><br></h1>
+        <div class="input-with-label">
+          <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
+          <span id="times">03:00</span>
+          <label for="certificationNumber">인증번호</label>
+          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
+          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+        </div>
+      </div>
+    </div>
+    <div class="user join wrapC">
+      <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
+      <div class="form-wrap">
+        <h1 class="text-left">인증번호를 보냈습니다.</h1>
+        <h1 class="text-left">메일을 확인해주세요.<br><br></h1>
+        <div class="input-with-label">
+          <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
+          <span id="times">03:00</span>
+          <label for="certificationNumber">인증번호</label>
+          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
+          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+        </div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -20,9 +47,9 @@
 import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import Swal from 'sweetalert2'
+import store from '../../vuex/store.js'
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data: () => {
@@ -108,5 +135,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+  .titleBox {
+    display: inline-block;
+    width: 90%;
+    height: 100%;
+    font-size: 17px;
+    text-align: center;
+  }
+  .pageTitle {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

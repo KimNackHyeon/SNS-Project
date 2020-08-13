@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-      <div style="width:100%; height:10%; z-index:101;" v-on:keyup.down="selectValue('down')"
+      <div style="width:100%; height:10%; z-index:23;" v-on:keyup.down="selectValue('down')"
        v-on:keyup.up="selectValue('up')"> <!-- 검색 -->
             <div class="search" >
           <input class="s" placeholder="음식재료 이름 검색" 
@@ -8,12 +8,12 @@
           <ul style="display:none;" tabindex="3" 
               
               v-on:mouseover="removeValue">
-            <li tabindex="-1" 
+            <li tabindex="24" 
                 v-for="(el, index) in filterList" 
                 v-on:click="changeValue(el.name_kor)"
                 v-on:keyup.enter="selectValue('enter', el.name_kor)"
                 :key="index"
-                style="z-index:102;"
+                style="z-index:22;"
                 >
               <span>{{ el.name_kor }}</span>
             </li>
@@ -21,15 +21,15 @@
         </div>
       </div> <!-- end of 검색 --> 
 
-      <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:90;">
+      <div style="height:74%; border-top:1px solid #9e9e9e6b;overflow-y: scroll; z-index:20;">
         <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
-        <div>
-          <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
+          <div>
+            <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
+          </div>
+          <div>
+            {{ food.name_kor }}
+          </div>
         </div>
-        <div>
-          {{ food.name_kor }}
-        </div>
-      </div>
       </div>
       
   </div>
@@ -37,6 +37,7 @@
 
 <script>
 import $ from 'jquery'
+import {foods} from './Foods.js'
 
 export default {
          
@@ -48,56 +49,7 @@ export default {
             thisSelectedFood:'',
             amount:'',
             amountundernature:'',
-            names : [
-            {name:'egg',
-            name_kor:'계란',
-            img:'egg'},
-            {name:'flour',
-            name_kor:'밀가루',
-            img:'flour'
-            },
-            {name:'milk',
-            name_kor:'우유',
-            img:'flour'
-            },
-            {name:'olive-oil',
-            name_kor:'올리브오일',
-            img:'olive-oil'
-            },
-            {name:'onion',
-            name_kor:'양파',
-            img:'onion'
-            },
-            {name:'potato',
-            name_kor:'감자',
-            img:'potato'
-            },
-            {name:'sugar',
-            name_kor:'설탕',
-            img:'sugar'
-            },
-            {name:'sweetpotato',
-            name_kor:'고구마',
-            img:'sweetpotato'
-            },
-            {name:'vanilla',
-            name_kor:'바닐라빈',
-            img:'vanilla'
-            },
-            {name:'egg',
-            name_kor:'설탕계란',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'계란양',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'계감란',
-            img:'egg'},
-            {name:'egg',
-            name_kor:'가계란',
-            img:'egg'},
-            ],
-      
+            names : foods
     }
   },
   methods: {
@@ -259,7 +211,7 @@ float: left;
       width: 160px;
     height: 150px;
     background-color: white;
-    z-index: 200;
+    z-index: 23;
     position: fixed;
     display: none;
     margin: 98px 100px;
@@ -286,7 +238,7 @@ float: left;
     overflow: hidden;
     transition: .15s all ease-in-out;
     float:left;
-    z-index: -1;
+    z-index: 24;
 }
 
 .card:hover {
@@ -302,7 +254,7 @@ h3{
     text-shadow: 1px 1px 4px #0000004f;
 }
 .search{
-      z-index: 101;
+      z-index: 25;
     position: relative;
     margin: 0 auto;
     width: 100%;

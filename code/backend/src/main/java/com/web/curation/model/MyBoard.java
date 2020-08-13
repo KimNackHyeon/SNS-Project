@@ -35,7 +35,7 @@ public class MyBoard {
 	private String email; // 작성자 이메일
 
 	@NotEmpty
-	private String content; // 글내용
+	private String profile; // 작성자 프로필 사진
 
 	private Long likecount; // 좋아요 수
 
@@ -50,14 +50,6 @@ public class MyBoard {
 
 	public void setNo(Long no) {
 		this.no = no;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public Long getLikecount() {
@@ -100,10 +92,18 @@ public class MyBoard {
 		this.title = title;
 	}
 
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
 	@Override
 	public String toString() {
-		return "MyBoard [no=" + no + ", nickname=" + nickname + ", title=" + title + ", email=" + email + ", content="
-				+ content + ", likecount=" + likecount + ", create_date=" + create_date + "]";
+		return "MyBoard [no=" + no + ", nickname=" + nickname + ", title=" + title + ", email=" + email + ", profile="
+				+ profile + ", likecount=" + likecount + ", create_date=" + create_date + "]";
 	}
 
 }

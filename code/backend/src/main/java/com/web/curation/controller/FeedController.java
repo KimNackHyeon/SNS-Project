@@ -1,6 +1,12 @@
 package com.web.curation.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +15,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
+import com.web.curation.model.FeedData;
+import com.web.curation.model.Food;
+import com.web.curation.model.FormWrapper;
+import com.web.curation.model.LikeFeed;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
+import com.web.curation.model.Scrap;
+import com.web.curation.model.Tag;
 import com.web.curation.repo.CommentRepo;
+import com.web.curation.repo.FeedDataRepo;
+import com.web.curation.repo.FoodRepo;
+import com.web.curation.repo.LikeRepo;
+import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.ScrapRepo;
+import com.web.curation.repo.TagRepo;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -43,33 +63,72 @@ public class FeedController {
 	@Autowired
 	CommentRepo commentRepo;
 
+	@Autowired
+	TagRepo tagRepo;
+
+	@Autowired
+	FoodRepo foodRepo;
+
+	@Autowired
+	MemberRepo memberRepo;
+
+	@Autowired
+	FeedDataRepo feedDataRepo;
+
+	@Autowired
+	LikeRepo likeRepo;
+
+	@Autowired
+	ScrapRepo scrapRepo;
+
 	@ApiOperation(value = "피드 전체 불러오기")
 	@GetMapping("/feed/searchAll")
-	public ResponseEntity<List> searchAll() {
+	public ResponseEntity<Map> searchAll() {
 
-		List<MyBoard> list = myboardRepo.findAll();
+		Map<String, List> map = new HashMap<>();
 
-		for (MyBoard myBoard : list) {
-			System.out.println(myBoard);
-		}
+		List<MyBoard> feedlist = myboardRepo.findAll();
+		List<Tag> taglist = tagRepo.findAll();
+		List<FeedData> datalist = feedDataRepo.findAll();
 
-		if (!list.isEmpty()) {
-			return new ResponseEntity<List>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List>(list, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		map.put("feedlist", feedlist);
+		map.put("taglist", taglist);
+		map.put("datalist", datalist);
+
+//		for (MyBoard myBoard : feedlist) {
+//			System.out.println(myBoard);
+//		}
+
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "피드 게시글 상세정보 불러오기")
 	@GetMapping("/feed/search")
-	public ResponseEntity<MyBoard> search(@RequestParam Long feedNo) {
-
+	public ResponseEntity<Map> search(@RequestParam Long feedNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		/* 피드 기본 정보 */
 		Optional<MyBoard> myBoard = myboardRepo.findMyBoardByNo(feedNo);
 		System.out.println(myBoard);
+		map.put("feeddata", myBoard);
+
+		/* 피드 태그 정보 */
+		List<Tag> taglist = tagRepo.findByFeedNo(feedNo);
+		System.out.println(taglist);
+		map.put("taglist", taglist);
+
+		/* 피드 재료 정보 */
+		List<Food> foodlist = foodRepo.findByFeedNo(feedNo);
+		System.out.println(foodlist);
+		map.put("foodlist", foodlist);
+
+		/* 피드 이미지 내용 정보 */
+		List<FeedData> datalist = feedDataRepo.findByFeedNo(feedNo);
+		System.out.println(datalist);
+		map.put("datalist", datalist);
 		if (myBoard.isPresent()) {
-			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.OK);
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<MyBoard>(myBoard.get(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Map>(null, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -82,12 +141,7 @@ public class FeedController {
 		for (Comment c : list) {
 			System.out.println(c);
 		}
-
-		if (!list.isEmpty()) {
-			return new ResponseEntity<List>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List>(list, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<List>(list, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "피드에 대한 댓글 등록")
@@ -99,16 +153,155 @@ public class FeedController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "피드 등록")
-	@PostMapping("/feed/registerfeed")
-	public ResponseEntity<String> registerFeed(@RequestBody MyBoard myBoard) {
-		System.out.println(myBoard);
-		if (myBoard.getEmail() != null) {
-			myboardRepo.save(myBoard);
-			return new ResponseEntity<String>("success", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	@ApiOperation(value = "피드 정보 등록")
+	@PutMapping("/feed/write")
+	public ResponseEntity<String> registerFeed(@RequestBody FormWrapper data) {
+//		System.out.println(data);
+		MyBoard feedData = data.getFeedData();
+		Food[] food = data.getFood();
+		String[] tags = data.getTags();
+		String[] contents = data.getContents();
+		String[] images = data.getImages();
+
+		System.out.println(feedData);
+		System.out.println(Arrays.toString(contents));
+		System.out.println(Arrays.toString(images));
+
+		if (images.length == 0)
+			return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+		/* 피드 정보 등록 */
+		myboardRepo.save(feedData);
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo(); // 가장 최근 피드 번호
+
+		System.out.println(feedNo);
+		/* 피드 재료 등록 */
+		for (Food f : food) {
+			f.setFeedNo(feedNo);
+			foodRepo.save(f);
 		}
+		System.out.println(Arrays.toString(food));
+		/* 피드 태그 등록 */
+		for (int i = 0; i < tags.length; i++) {
+			Tag tag = new Tag(feedNo, tags[i]);
+			tagRepo.save(tag);
+		}
+		System.out.println(Arrays.toString(tags));
+
+		/* 피드 내용, 이미지 등록 */
+		for (int index = 0; index < contents.length; index++) {
+			String content = contents[index];
+			String imgurl = images[index];
+			FeedData feed = new FeedData();
+			feed.setFeedNo(feedNo);
+			feed.setTindex((long) index);
+			feed.setContent(content);
+			feed.setImg(imgurl);
+			feedDataRepo.save(feed);
+		}
+
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "피드 이미지 등록")
+	@PostMapping("/feed/img")
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images)
+			throws IllegalStateException, IOException {
+
+		List<String> imgList = new ArrayList<String>();
+
+		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
+		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
+
+		for (MultipartFile mfile : images) {
+			String imgurl = upload(mfile, feedNo, email);
+			imgList.add(imgurl);
+		}
+
+		return new ResponseEntity<List>(imgList, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "피드 좋아요 등록")
+	@GetMapping("/feed/like")
+	public ResponseEntity<String> addLike(@RequestParam String email, @RequestParam Long feedNo) {
+		System.out.println("좋아요 등록 시작============================");
+		System.out.println(email + " " + feedNo);
+		Optional<MyBoard> boardOpt = myboardRepo.findMyBoardByNo(feedNo); // 해당 글 정보
+
+		Optional<LikeFeed> isLike = likeRepo.findByEmailAndFeedNo(email, feedNo);
+		System.out.println(isLike.isPresent());
+		if (!isLike.isPresent()) { // 좋아요 안 눌렀으면
+			LikeFeed like = new LikeFeed(email, feedNo);
+			likeRepo.save(like); // 좋아요 등록하고
+			boardOpt.get().setLikecount(boardOpt.get().getLikecount() + 1L); // 좋아요 수 늘려주고
+			myboardRepo.save(boardOpt.get()); // 업데이트
+			return new ResponseEntity<String>("like", HttpStatus.OK);
+		} else {
+			likeRepo.delete(isLike.get()); // 좋아요 해제하고
+			boardOpt.get().setLikecount(boardOpt.get().getLikecount() - 1L); // 좋아요 수 빼주고
+			myboardRepo.save(boardOpt.get()); // 업데이트
+			return new ResponseEntity<String>("unlike", HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "피드 스크랩 등록")
+	@GetMapping("/feed/scrap")
+	public ResponseEntity<String> addScrap(@RequestParam String email, @RequestParam Long feedNo) {
+		System.out.println("스크랩 등록 시작============================");
+		System.out.println(email + " " + feedNo);
+
+		Optional<Scrap> isScrap = scrapRepo.findByEmailAndFeedNo(email, feedNo);
+		System.out.println(isScrap.isPresent());
+		if (!isScrap.isPresent()) { // 스크랩 안 눌렀으면
+			Scrap scrap = new Scrap(email, feedNo);
+			scrapRepo.save(scrap); // 스크랩 등록하고
+			return new ResponseEntity<String>("scrap", HttpStatus.OK);
+		} else {
+			scrapRepo.delete(isScrap.get()); // 스크랩 해제하고
+			return new ResponseEntity<String>("unscrap", HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "피드 좋아요 스크랩 체크")
+	@GetMapping("/feed/check")
+	public ResponseEntity<Map> check(@RequestParam String email, @RequestParam Long feedNo) {
+
+		Map<String, Boolean> map = new HashMap<>();
+
+		Optional<LikeFeed> like = likeRepo.findByEmailAndFeedNo(email, feedNo);
+		Optional<Scrap> scrap = scrapRepo.findByEmailAndFeedNo(email, feedNo);
+
+		map.put("like", like.isPresent());
+		map.put("scrap", scrap.isPresent());
+
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+
+	public String upload(MultipartFile image, Long feedNo, String email) throws IllegalStateException, IOException {
+		System.out.println("UPLOAD =======================");
+		System.out.println(image);
+		String filename = image.getOriginalFilename(); // 파일 이름
+		System.out.println(filename);
+		Member member = memberRepo.getUserByEmail(email); // 폴더명
+		String filepath = "/dist/img/" + member.getNo() + "/" + feedNo + "/";// 폴더 상대 경로
+
+		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
+		System.out.println(path); // 상대경로
+		File folder = new File(path);
+
+		if (!folder.exists()) {
+			try {
+				folder.mkdirs(); // 폴더 생성
+				System.out.println("폴더가 생성");
+
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("폴더가 이미 존재");
+		}
+		image.transferTo(new File(path + filename));
+		String result = "/img/" + member.getNo() + "/" + feedNo + "/" + filename;
+		return result;
 	}
 
 }

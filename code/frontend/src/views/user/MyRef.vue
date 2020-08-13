@@ -1,15 +1,18 @@
 <template>
   <div class="rootContainer">
-      <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none;">
-          <getOneFood @addfood="addFood"></getOneFood>
+      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none; position:fixed; z-index:80;">
+          <div style="height:50px; width:100%; background-color:white">
+              <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
+          </div>
+          <get-one-food @addfood="addFood"></get-one-food>
       </div>
       <div id="dark" @click="closeCheckBasket()" style="width:100%; height:100%; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
         <div id="insideRef">
             <div id="justMove" class="F1" style="display:none; position:fixed;">
                     <img :src="require(`../../assets/images/food/${intoFood}.png`)" id="justMoveImg" style="width:100%; height:100%">
                 </div>
-               <div v-for="(food,index) in foods" :key="(food,index)">
-                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.gradient}.png`)">
+               <div v-for="(food,index) in foods" :key="(index)">
+                <button id="ingradient" type="button" :class="'F'+((index%8)+1)" v-on:click="openShare(food,index)" style="float:left"><img style="width:100%; height:auto;" :src="require(`../../assets/images/food/${food.img}.png`)">
                 
                 </button>
             </div>
@@ -19,55 +22,64 @@
             <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
-        <div id="FillBtn" style="position:fixed; margin-left: 256px;
-    margin-top: 10px; display:unset;">
+        <div id="FillBtn" style="position:fixed; margin-left: 256px; margin-top: 10px; display:unset;">
             <v-btn  v-on:click="openregistMater" color="rgb(160,212,105)" width="90px" height="50px" >
-                  <v-icon >mdi-cart</v-icon>
-                  <h4>채우기</h4>
-                </v-btn>
+                <v-icon >mdi-cart</v-icon>
+                <h4>채우기</h4>
+            </v-btn>
         </div>
         <div id="shareField" class="inputFeild"> <!-- 바구니에 넣기 -->
-            <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">{{Nowgra_kor}}<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
-            <div class="textArea">
-                <div class="longNameBox">{{Nowgra_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+            <div style="width: 100%;
+    height: 30px;
+    background-color: rgba(224, 224, 224, 0.51);
+    text-align: center;
+    font-weight: bold;
+    padding: 6px 0px;
+    overflow: hidden;">{{Nowgra.name_kor}} (재고: {{Nowgra.amount}} )<button v-on:click="closeShare" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
+            <div class="textArea" style="height: 40px; margin-top: 0px; text-align: center; padding: 5px 2px;">
+                <!-- <div class="longNameBox">{{Nowgra.name_kor}}</div> <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5> -->
+                <input v-model="totalShareAmount" type="text" class="inputText" style="float:left; width:24px; height:30px;"><h5>개를</h5>
+                <div class="shareButton" @click="openShareBox" style="height:100%; width:37px; background-color:#80808066; float:left; margin-right:5px;">공유</div>
+                <div class="deleteButton" @click="deleteFoodfromRef" style="height:100%; width:37px; background-color:red; float:left;">삭제</div>
+            
             </div>
+            <div class="sharebox" style="display:none;">
             <div class="textArea" style="height:24px; padding:0px;">
-                <div class="longNameBox" style="width:58px; padding:0px 7px;">{{Nowgra_kor}}</div>와 교환할 재료
+                <div class="longNameBox" style="width:58px; height:100%; padding:0px 7px;">{{Nowgra.name_kor}}</div>와 교환할 재료
+               
             </div>
-            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
-                <div class="changeFood" v-for="(food,index) in changeFoodsTemp" :key="food" style="font-size:13px;">
-                    <div>
-                    <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
-                    <div style="width:20%; float:left;">
-                    <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
-                    </div>
-                    </div>
+            <div style="width:100%; height:33px; padding: 4px 6px;">
+                    <!-- <input type="text" style="width:25px; height:30px; background-color:gray; color:black;"> -->
+                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left;height:24px;"><h5 style="font-size:10px;float:left">개당</h5> 
+                    <button type="button" @click="getFood" class="setFood" style="float:left; margin-right:5px;"></button>
+                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:24px; height:24px;"><h5 style="font-size:10px;float:left">개</h5>
             </div>
-                <div class="changeFood">
-                    <!-- <input type="text" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;"><h5 style="float:left">개당</h5><v-btn style="float:left; width:32px; height:24px;"></v-btn> <input type="text" class="inputText" style="float:left; width:24px; height:24px; margin-left:4px;"><h5 style="float:left">개</h5> -->
-                    <input type="text" v-model="nowmyamount" class="inputText" style="float:left; width:18px; height:24px; padding-left:2px;"><h5 style="font-size:10px;float:left">개당</h5> 
-                    <button type="button" @click="getFood" class="setFood" style="float:left;"></button>
-                    <input type="text" v-model="nowCamount" class="inputText" style="float:left; width:18px; height:24px; margin-left:4px;"><h5 style="font-size:10px;float:left">개</h5>
+                <div style="width:100%; height:21px;">
+                    <button v-on:click="addChangeGradient" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;"><v-icon size="15px">mdi-arrow-down-bold</v-icon>교환목록에 넣기</button>
+                </div>
                 
-                </div>
-                <button><div class="changeFood" style="color:#808080c7; margin:0px 23px 10px 23px;">
-                    <v-btn v-on:click="addChangeGradient" color="rgb(160,212,105)" width="80px;"><v-icon size="15px">mdi-arrow-up-bold</v-icon><h5>추가하기</h5></v-btn>
-                </div>
-                </button>
+            <div style="width:100%; height:67px; background-color:#80808033; overflow:scroll;">
+                <div  v-for="(food,index) in changeFoodsTemp" :key="index" >
+                    <div class="changeFood" style="font-size:13px;">
+                        <h4 style="float:left;font-size:11px; width:80%; float:left;">{{food.Mygradient_kor}} {{food.myamount}}개당 {{food.Cgradient_kor}} {{food.Camount}}개</h4>
+                        <div style="width:20%; float:left;">
+                        <button v-on:click="deleteShareList(index)" style="border-radius:5px; background-color:red; width:20px; height:20px;"><v-icon color="white" size="11px">mdi-trash-can-outline</v-icon></button>
+                        </div>
+                    </div>
+            </div>
+                
             </div>
             <div class="textArea">
-                <h4>판매가격</h4>
-                <input type="text" v-model="nowSellAmount" class="inputText" style="float:left; width:24px; height:24px; padding-left:2px;">
-                <h5 style="float:left">개당</h5><input type="text" v-model="nowSellPrice" class="inputText" style="float:left; width:48px; height:24px; margin-left:4px;"><h5 style="float:left">원</h5>
+                <textarea v-model="sharedesc" style="width:100%; height:100%; resize: none;" placeholder="공유글에 들어갈 글을 적어주세요"></textarea>
             </div>
-            
-            <div style="width:100%; height:33px;">
-             <button type="button" v-on:click="closeregistMater" style="width:50%; height:33px;background-color:red; font-weight:bold; color:white; font-size:16px;">삭제</button>
-             <button type="button" v-on:click="ShareComplete" style="width:50%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">담기</button>
+            <div style="width:100%; height:21px;">
+                    <button v-on:click="putIntoBasket" style="background-color: rgb(160,212,105); width: 100%; height:100% text-align: center;">바구니에 넣기</button>
+                </div>
             </div>
-            <div style="width:100%; height:100px; background-color:black;">
+            <div style="width:100%; height:74px; background-color:black; color:white; font-size: 9px; padding: 5px;">
+             <div v-if="apiUnit!=''">{{apiUnit}} 당 {{apiPrice}}원</div>
+            <div v-if="apiUnit ==''">가격 데이터가 존재하지 않습니다.</div>
                 <div style="color:white; font-size:8px; position:absolute; bottom:0; right:0; ">출처 : 농산물 유통정보 KAMIS</div>
-            
             </div>
         </div><!-- end of 바구니에 넣기 -->
 
@@ -75,26 +87,26 @@
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold;text">채우기<button v-on:click="closeregistMater" type="button" height="15px" width="15px"  style="float:right;"> <v-icon size="15px">mdi-close</v-icon></button></div>
             <div style="width:100%; height:190px;">
                 <div class="textArea">
-                    <h5>넣을 재료</h5><v-btn style="float:left; width:65px; height:30px;"></v-btn>
+                    <h5>넣을 재료</h5><v-btn @click="getFood" class="fillBtn" style="float:left; width:65px; height:30px;"></v-btn>
                 </div>
                 <div class="textArea">
-                    <h5>넣을 개수</h5><input type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
+                    <h5>넣을 개수</h5><input v-model="fillFoodNum" type="text" class="inputText" style="float:left; width:40px; height:30px;"><h5>개</h5>
                 </div>
                 <div class="textArea" style="height:500px">
-                    <h5>구매 날짜</h5>
+                    <h5>유통 기한</h5>
                     <div style="width:60%; float:left; margin-left:27px; height:15px;">
                         <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
                             :return-value.sync="date"  transition="scale-transition" offset-y  min-width="290px" >
                             <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                                v-model="date"
+                                v-model="fillFoodExpireDate"
                                 readonly
                                 v-bind="attrs"
                                 v-on="on"
                                 style="font-size:10px; margin:0px; padding:0px; width:100%; height:30px; background-color:#f5f5f5;"
                                 ></v-text-field>
                             </template>
-                            <v-date-picker v-model="date" no-title scrollable>
+                            <v-date-picker v-model="fillFoodExpireDate" no-title scrollable>
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                             <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -103,39 +115,71 @@
                     </div>
                         <v-icon color="#e0e0e0" style="float:left; padding-top:5px;">mdi-calendar</v-icon>
                 </div>
+                
             </div>
-            <button type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
+            <button @click="fillFoodtoRef" type="button" v-on:click="closeregistMater" style="width:100%; height:33px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:16px;">냉장고에 넣기</button>
         </div><!-- end of 채우기 -->
 
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll;">
-           <div class="textArea" v-for="food in changeFoods" :key="food">
-                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} {{food.myamount}}개당 {{food.Cgradient}} {{food.Camount}}개</h4>
-                <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.Mygradient}} 1개당 {{food.pricePerOne}}원</h4>
+           <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
+               <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left;">(개당 {{food.price}} 원)</h4>
+                <div>
+                    <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
+                </div>
+                <div v-if="food.tradefood2 !=null" >
+                     <h4 style="float:left;font-size:10px; width:80%; float:left;">{{food.myfoodcount2}}개당 {{food.tradefood2_kor}} {{food.tradefoodcount2}}개</h4>
+                </div>
            
            </div>
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
         <div style="position:fixed; bottom:0; width:360px;">
-            <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">공유하기</button>
+            <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
   </div>
 </template>
 
 <script>
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 import $ from 'jquery';
 import axios from "axios";
 import store from '../../vuex/store.js'
 import getOneFood from '../Food/getOneFood.vue'
+import Swal from 'sweetalert2'
+import qs from 'query-string';
+// import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
+
+// const SERVER_URL = store.state.SERVER_URL;
+const SERVER_URL = 'http://localhost:9999/food/api';
+var convert = require('xml-js');
+const $api_url = 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
+let request = require('request');
+let cheerio = require('cheerio');
+
+
+
+
+const config = {
+    headers: {
+      'Access-Control-Allow-Origin':'*',
+      'content-type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Methods':'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':'Origin,Access-Control-Request-Headers, Authorization'
+    }
+}
+
 export default {
     components:{getOneFood},
 data() {
     return {
+        selectedFood:'',  //냉장고에 채우고싶은 재료 
+        fillFoodNum:1, //냉장고에 채우고 싶은 재료 개수
+        fillFoodDate:'', //냉장고에 채우고 싶은 재료를 산 날짜
+        fillFoodExpireDate:'',//냉장고에 채우고 싶은 재료 유통기한
         totalShareAmount:1, //공유하고싶은 총 량
       userinfo:'',
       Nowgra:'',
@@ -151,31 +195,86 @@ data() {
     nowSellAmount:1,
     nowSellPrice:0,
     intoFood:'egg',
-      foods:[
-            {gradient:"egg",gra_kor:"계란fkfkfkfk"},
-            {gradient:"flour",gra_kor:"밀가루"},
-            {gradient:"milk",gra_kor:"우유"},
-            {gradient:"olive-oil",gra_kor:"올리브유"},
-            {gradient:"potato",gra_kor:"감자"},
-            {gradient:"vanilla",gra_kor:"바닐라빈"},
-            {gradient:"sugar",gra_kor:"설탕"},
-            {gradient:"sweetpotato",gra_kor:"고구마"}
-        ],
+    sharedesc:'',
+    apiUnit:'',
+    apiPrice:0,
+        foods:[],
         changeFoodsTemp:[
               ],
         changeFoods:[  
             ],
+        
         myreflist:[],
+        xmldata:[],
     }
   },
     methods:{
+        deleteFoodfromRef(){
+            var minusAmount = this.totalShareAmount * -1;
+            const deleteFood = {
+                amount:minusAmount,
+                email:this.userinfo.email,
+                expire_date:'',
+                name:this.Nowgra.name,
+                name_kor:this.Nowgra.name_kor,
+                img:this.Nowgra.img,
+            };
+            axios
+            // .post(`${SERVER_URL}/myref/delete`,deleteFood)
+            .post(`${SERVER_URL}/myref/delete`,deleteFood)
+            .then((response)=>{
+                console.log(response);
+                window.location.reload();
+            })
+        },
+        fillFoodtoRef(){
+        const registFood = {
+            amount:this.fillFoodNum,
+            email:this.userinfo.email,
+            expire_date:this.fillFoodExpireDate,
+            name:this.selectedFood.name,
+            name_kor:this.selectedFood.name_kor,
+            img:this.selectedFood.img
+            // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
+        };
+        axios
+        // .post(`${SERVER_URL}/myref/regist`,registFood)
+        .post(`${SERVER_URL}/myref/regist`,registFood)
+        .then((response)=>{
+            console.log(response);
+             Swal.fire({
+            title: registFood.name_kor+"(이)가 냉장고에 들어갔습니다!",
+          })
+            window.location.reload();
+        })
+        .catch((error)=>{
+                console.log(error.response);
+                
+        })   
+
+        // this.foods.push({name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum})
+        $('.registMaterial').css('display','none');
+        },
+        closeGetOneFood(){
+            $('.selectfood').css('display','none');
+        },
         getFood:function(){
             $('.selectfood').css('display','block');
         },
         addFood:function(food){
+            // alert(food.name_kor+'을(를) 선택했습니다.');
+            Swal.fire({
+          title: food.name_kor+'을(를) 선택했습니다.',
+        })
             this.nowCgradient = food.name_kor;
             $('.selectfood').css('display','none');
-            $('.setFood').text(food.name_kor);
+            if($('.registMaterial').css('display')!='none'){
+                $('.fillBtn').text(food.name_kor);
+                this.selectedFood = food;
+            }else{
+                $('.setFood').text(food.name_kor);
+                this.selectedFood = food;
+            }
         },
             openregistMater: function () {
                 this.closeShare();
@@ -188,81 +287,171 @@ data() {
             },
             getSrc:function(food) {
                var src = '../../assets/images/food/'+food+'.png';
-               alert(src);
                 return src;
             },
             
             openShare:function(nowfood,index){
                 this.closeregistMater();
-                this.Nowgra_kor = nowfood.gra_kor;
-                this.Nowgra = nowfood.gradient;
-                this.nowmyamount = nowfood.myamount;
-                this.nowCgradient = nowfood.Cgradient;
-                this.nowCamount = nowfood.Camount;
+                this.Nowgra_kor = nowfood.name_kor;
+                this.Nowgra = nowfood;
+                this.nowmyamount = 1;
+                this.selectedFood = '';
+                this.nowCamount= 1;
+                $('.setFood').text("");
                 $('#shareField').css('display','unset');
                 $('#FillBtn').css('display','none');
                 this.NowClassNum = index;
                 var className = '.F'+(this.NowClassNum+1);
                 var classN = 'F'+(this.NowClassNum+1);
-                this.intoFood =  this.Nowgra;
-                $('#justMoveImg').attr('src',this.intoFood);
+                this.intoFood =  this.Nowgra.name;
+                $('#justMoveImg').attr('src',nowfood.img);
                 $('#justMove').attr('class',classN);
                 $('#justMove').css('display','unset');
-                this.intoFood = this.Nowgra;
+                this.intoFood = this.Nowgra.name;
+                this.changeFoodsTemp = [];
+                this.apiUnit = '';
+                    this.apiPrice = '';
+                for(var i=0; i<this.xmldata.price.length;i++){
+                    var tF = this.xmldata.price[i];
+                    var tFname = tF.productName.split('/')[0];
+                    if(tF.product_cls_code == '01' && tFname==this.Nowgra.name_kor){
+                        this.apiUnit = tF.unit;
+                        this.apiPrice = tF.dpr1;
+                        break;
+                    }
+                }
+            },
+            openShareBox:function(){
+                if($('.sharebox').css('display')=='none'){
+                    $('.sharebox').css('display','block');
+                    $('.shareButton').css('background-color','rgb(160,212,105)');
+                }else{
+                     $('.sharebox').css('display','none');
+                    $('.shareButton').css('background-color','#80808066');
+                }
             },
             closeShare:function(){
                 $('#shareField').css('display','none');
                 $('#FillBtn').css('display','unset');
             },
             addChangeGradient:function(){
+                // var sum = 0;
+                // if(this.nowmyamount>=1){
+                //     if(this.Nowgra.name_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                //         if(this.nowmyamount>this.totalShareAmount){
+                //             alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                //         this.nowmyamount = this.totalShareAmount;
+                //     }else{
+                //         var sellPrice = Number(this.nowSellPrice);
+                //         var sellAmount = Number(this.nowSellAmount);
+                //         this.changeFoodsTemp.push({
+                //             Mygradient:this.Nowgra.name,
+                //             Mygradient_kor:this.Nowgra.name_kor,
+                //             myamount:this.nowmyamount,
+                //             Cgradient:this.nowCgradient,
+                //             Camount:this.nowCamount,
+                //             pricePerOne:(sellPrice/sellAmount),
+                //             })
+                //             this.nowmyamount = 1;
+                //             this.nowCgradient = '';
+                //             $('.setFood').text("");
+                //             this.nowCamount = 1;
+                //             var shareMotion = 'share'+(this.NowClassNum+1);
+                //             $('#justMove').addClass(shareMotion);
+                            
+                //     }
+                // }else{
+                //     alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
+                // }
+                // }else{
+                //     alert('공유하려는 '+this.Nowgra.name_kor+'의 양을 1개이상 적어주세요.');
+                // }
                 var sum = 0;
-                if(this.nowmyamount>=1){
-                    if(this.Nowgra_kor!='' && this.nowmyamount>=1 && this.nowCgradient!='' &&this.nowCamount>=1){
+                if(this.changeFoodsTemp.length<2){
+                    if(this.totalShareAmount<=this.Nowgra.amount){
                         if(this.nowmyamount>this.totalShareAmount){
-                            alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                            // alert("교환하고싶은 양이 총 공유양보다 많으면 안됩니다!")
+                            Swal.fire({
+                                    title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
+                            })
                         this.nowmyamount = this.totalShareAmount;
                     }else{
                         var sellPrice = Number(this.nowSellPrice);
                         var sellAmount = Number(this.nowSellAmount);
                         this.changeFoodsTemp.push({
-                            Mygradient:this.Nowgra_kor,
+                            Mygradient:this.Nowgra.name,
+                            Mygradient_kor:this.Nowgra.name_kor,
                             myamount:this.nowmyamount,
-                            Cgradient:this.nowCgradient,
+                            Cgradient:this.selectedFood.name,
+                            Cgradient_kor:this.selectedFood.name_kor,
                             Camount:this.nowCamount,
-                            pricePerOne:(sellPrice/sellAmount),
-                            })
-                            this.nowmyamount = 1;
-                            this.nowCgradient = '';
-                            $('.setFood').text("");
-                            this.nowCamount = 1;
+                        })
                     }
                 }else{
-                    alert('교환하려는 물품과 교환 비율을 정확히 기입해주세요.');
+                    // alert("가지고 있는 감자보다 많은양을 공유할 수 없습니다.");
+                    Swal.fire({
+                        title: '가지고 있는 감자보다 많은양을 공유할 수 없습니다.',
+                    });
+                    this.totalShareAmount=this.Nowgra.amount;
                 }
                 }else{
-                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
+                    // alert("교환목록에는 최대 2개만 들어갈 수 있습니다.")
+                    Swal.fire({
+                        title: '교환목록에는 최대 2개만 들어갈 수 있습니다.',
+                    })
                 }
             },
-            ShareComplete:function(){
-                if(this.totalShareAmount>0){
-                    if(this.changeFoodsTemp.length==0){
-                        alert("교환하고 싶은 음식이 없습니다.")
-                    }else{
-                        if(this.nowSellAmount>=1 && this.nowSellPrice>0){
-                            this.closeShare();
-                            var shareMotion = 'share'+(this.NowClassNum+1);
-                            $('#justMove').addClass(shareMotion);
-                            for(var i=0; i<this.changeFoodsTemp.length;i++){
-                                this.changeFoods.push(this.changeFoodsTemp[i]);
-                                this.changeFoodsTemp = [];
-                            }
-                        }else{
-                            alert("판매가격을 적어주세요.")
-                        }
-                    }
+            putIntoBasket:function(){
+                if(this.changeFoodsTemp.length==2){
+                    this.changeFoods.push({
+                         email : this.userinfo.email,
+                         nickname : this.userinfo.nickname,
+                         myfood: this.changeFoodsTemp[0].Mygradient,
+                         myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
+                         price: 300,
+                         myfoodcount1 : this.changeFoodsTemp[0].myamount,
+                         tradefood1 : this.changeFoodsTemp[0].Cgradient,
+                         tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
+                         tradefoodcount1 : this.changeFoodsTemp[0].Camount,
+                         myfoodcount2 : this.changeFoodsTemp[1].myamount,
+                         tradefood2 : this.changeFoodsTemp[1].Cgradient,
+                         tradefood2_kor : this.changeFoodsTemp[1].Cgradient_kor,
+                         tradefoodcount2 : this.changeFoodsTemp[1].Camount,
+                         content : this.sharedesc,
+                         address : this.userinfo.address,
+                     });
+                     var shareMotion = 'share'+(this.NowClassNum+1);
+                        $('#justMove').addClass(shareMotion);
+                        $('.inputFeild').css('display','none');
+                }else if(this.changeFoodsTemp.length==1){
+                     this.changeFoods.push({
+                         email : this.userinfo.email,
+                         nickname : this.userinfo.nickname,
+                         myfood: this.changeFoodsTemp[0].Mygradient,
+                         myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
+                         price: 300,
+                         myfoodcount1 : this.changeFoodsTemp[0].myamount,
+                         tradefood1 : this.changeFoodsTemp[0].Cgradient,
+                         tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
+                         tradefoodcount1 : this.changeFoodsTemp[0].Camount,
+                         myfoodcount2 : null,
+                         tradefood2 : null,
+                         tradefood2_kor : null,
+                         tradefoodcount2 : null,
+                         content : this.sharedesc,
+                         address : this.userinfo.address,
+                     });
+                     shareMotion = 'share'+(this.NowClassNum+1);
+                this.sharedesc = '';
+                $('#justMove').addClass(shareMotion);
+                $('.inputFeild').css('display','none');
                 }else{
-                    alert('공유하려는 '+this.Nowgra_kor+'의 양을 1개이상 적어주세요.');
+                    // alert("교환할 물품이 올바르게 들어있지 않습니다.");
+                    Swal.fire({
+                        title: '교환할 물품이 올바르게 들어있지 않습니다.',
+                    })
                 }
+                
             },
             openCheckBasket:function(){
                 if($('.checkBasket').css('display')=='none'){
@@ -280,10 +469,14 @@ data() {
                 this.changeFoodsTemp.splice(index,1);
             },
             shareFinish:function(){
-                const shareList = this.changeFoods;
-                console.log(shareList);
-                axios
-                .post(`${SERVER_URL}/MyRef/share`,shareList)
+                // const shareList = this.changeFoods;
+                
+                console.log(typeof(this.changeFoods));
+                axios({
+                    url:`${SERVER_URL}/myref/share`,
+                    method:'post',
+                    data: JSON.stringify(this.changeFoods),
+                    headers: config.headers})
                 .then((response)=>{
                     console.log(response);
                     this.$router.push("/");
@@ -300,14 +493,27 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`${SERVER_URL}/account/myref/`+this.userinfo.email)
+      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
         .then(response => {
-          this.myreflist = response.data.myreflist
+        //   this.myreflist = response.data.myreflist
+          this.foods = response.data.myreflist;
         })
         .catch(error => {
           console.log(error.response)
         })
-      
+
+        axios.get('http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json')
+        .then((response) => {
+            this.xmldata = response.data;
+        })
+        .catch((error)=>{
+                    console.log(error.response);
+        })
+        
+    //    var kamisjson = {"condition":[["20200812"]],"error_code":"000","price":[{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"272","lastest_day":"2020-08-12","productName":"쌀/일반계","item_name":"쌀/일반계","unit":"20kg","day1":"당일","dpr1":"52,358","day2":"1일전","dpr2":"52,282","day3":"1개월전","dpr3":"51,691","day4":"1년전","dpr4":"52,038","direction":"1","value":"0.2"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"274","lastest_day":"2020-08-12","productName":"쌀/일반계","item_name":"쌀/일반계","unit":"1kg","day1":"당일","dpr1":"4,347","day2":"1일전","dpr2":"4,347","day3":"1개월전","dpr3":"4,368","day4":"1년전","dpr4":"4,773","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"275","lastest_day":"2020-08-12","productName":"콩/흰 콩(국산)","item_name":"콩/흰 콩(국산)","unit":"500g","day1":"당일","dpr1":"4,740","day2":"1일전","dpr2":"4,734","day3":"1개월전","dpr3":"4,793","day4":"1년전","dpr4":"4,727","direction":"1","value":"0.1"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"277","lastest_day":"2020-08-12","productName":"팥/붉은 팥(국산)","item_name":"팥/붉은 팥(국산)","unit":"500g","day1":"당일","dpr1":"7,148","day2":"1일전","dpr2":"7,148","day3":"1개월전","dpr3":"7,134","day4":"1년전","dpr4":"7,920","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"279","lastest_day":"2020-08-12","productName":"녹두/국산","item_name":"녹두/국산","unit":"500g","day1":"당일","dpr1":"7,306","day2":"1일전","dpr2":"7,306","day3":"1개월전","dpr3":"7,222","day4":"1년전","dpr4":"6,927","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"281","lastest_day":"2020-08-12","productName":"고구마/밤","item_name":"고구마/밤","unit":"1kg","day1":"당일","dpr1":"8,235","day2":"1일전","dpr2":"8,235","day3":"1개월전","dpr3":"6,874","day4":"1년전","dpr4":"5,230","direction":"2","value":"0.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"100","category_name":"식량작물","productno":"285","lastest_day":"2020-08-12","productName":"감자/수미","item_name":"감자/수미","unit":"100g","day1":"당일","dpr1":"261","day2":"1일전","dpr2":"260","day3":"1개월전","dpr3":"300","day4":"1년전","dpr4":"212","direction":"1","value":"0.4"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"291","lastest_day":"2020-08-12","productName":"배추/고랭지","item_name":"배추/고랭지","unit":"1포기","day1":"당일","dpr1":"6,534","day2":"1일전","dpr2":"6,286","day3":"1개월전","dpr3":[],"day4":"1년전","dpr4":"3,425","direction":"1","value":"4.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"297","lastest_day":"2020-08-12","productName":"양배추/양배추","item_name":"양배추/양배추","unit":"1포기","day1":"당일","dpr1":"3,679","day2":"1일전","dpr2":"3,642","day3":"1개월전","dpr3":"3,045","day4":"1년전","dpr4":"2,875","direction":"1","value":"1.0"},{"product_cls_code":"01","product_cls_name":"소매","category_code":"200","category_name":"채소류","productno":"299","lastest_day":"2020-08-12","productName":"시금치/시금치","item_name":"시금치/시금치","unit":"1kg","day1":"당일","dpr1":"13,737","day2":"1일전","dpr2":"13,762","day3":"1개월전","dpr3":"9,536","day4":"1년전","dpr4":"15,130","direction":"0","value":"0.2"}]};
+        // this.xmldata = kamisjson;
+        // console.log(kamisjson.price);
+
   },
 }
 </script>
@@ -360,7 +566,6 @@ data() {
 }
 .inputFeild{
     width: 143px;
-    height: 362px;
     background-color: white;
     position: fixed;
     margin-left: 212px;
@@ -386,7 +591,7 @@ data() {
     margin-top: 168px;
     box-shadow: 1px 3px 15px #8080806b;
     display: none;
-    z-index: 1000;
+    z-index: 150;
 }
 h5{
     font-size: 13px;
@@ -399,7 +604,7 @@ h5{
     background-color: #f5f5f5;
     border-radius: 4px;
     color:black;
-    width:30px;
+    width:24px;
     height:60px;
     padding:4px;
 
@@ -410,7 +615,7 @@ h5{
     padding: 0 4px;
 }
 .textArea{
-    height: 45px;
+    height: 51px;
     margin-top: 6px;
     padding: 5px 7px;
     border-bottom: 1px solid rgba(224, 224, 224, 0.51);

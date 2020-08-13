@@ -1,8 +1,8 @@
 <template>
 <div style="width:360px; height:640px; margin:auto;">
   <v-app id="app">
-    <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'"/>
-    <router-view @login="onLogin" @signup="onSignup"></router-view>
+    <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
+    <router-view style="width:360px; height:590px;" @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
 </template>
@@ -13,9 +13,12 @@ import axios from "axios";
 import Swal from 'sweetalert2'
 import Home from './views/Home.vue'
 
+const SERVER_URL = store.state.SERVER_URL;
+const cors = require('cors');
+
 
 // const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
 export default {
   components:{Home},
   name: "app",
@@ -49,6 +52,10 @@ export default {
           console.log(store.state.userInfo);
         })
         .catch((error) => {
+          Swal.fire({
+            title: '아이디와 비밀번호를 확인해주세요!',
+            text: '아이디 또는 비밀번호가 틀렸어요!',
+          })
           console.log(error.response);
         });
     },
@@ -102,5 +109,6 @@ export default {
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
   },
+  
 };
 </script>

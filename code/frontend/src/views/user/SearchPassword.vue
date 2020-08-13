@@ -1,31 +1,28 @@
 <template>
-  <div class="user join wrapC" style="position: relative;">
-    <h1>비밀번호 찾기</h1>
-    <p style="font-size: 13px; text-align: center;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
-    <div class="form-wrap">
-      <div class="input-with-label">
-        <input v-model="email" @keyup="onOkBtn" id="email" type="text" />
-        <label for="email">이메일</label>
-      </div>
-
-      <!-- <div class="input-with-label">
-        <input v-model="phonenumber" @keyup="onOkBtn" id="phonenumber" type="text" />
-        <label for="phonenumber">휴대폰 번호</label>
-      </div> -->
-    </div>
-
-    <!-- <div v-if='!okBtn' class='btn find-btn'>인증메일 발송</div>
-    <div v-if='okBtn' @click='findPassword' class='btn on-find-btn'>인증메일 발송</div> -->
-    <!-- <div>
-      <router-link to="/user/checkcertification">
-        <button
-          class="btn-bottom"
-          style="margin-bottom: 0px; bottom: 0; width: 320px"
-        >인증번호 보내기</button>
+  <div style="width:100%; height:100%;">
+    <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+      <router-link to="/">
+        <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+        </v-btn>
       </router-link>
-    </div> -->
-    <button v-if='!okBtn' class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px; background-color: gray;">인증번호 보내기</button>
-    <button v-if='okBtn' @click="searchPwd(email)" class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px">인증번호 보내기</button>
+      <div class="titleBox">
+        <div class="pageTitle">
+          <h3>비밀번호 찾기</h3>
+        </div>
+      </div>
+    </div>
+    <div class="user join wrapC">
+      <p style="font-size: 13px; text-align: center; margin-top: 10px;">비밀번호는 가입 시 입력하신 이메일을 통해 찾을 수 있습니다.</p>
+      <div class="form-wrap">
+        <div class="input-with-label">
+          <input v-model="email" @keyup="onOkBtn" id="email" type="text" />
+          <label for="email">이메일</label>
+        </div>
+      </div>
+      <button v-if='!okBtn' class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px; background-color: gray;">인증번호 보내기</button>
+      <button v-if='okBtn' @click="searchPwd(email)" class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px">인증번호 보내기</button>
+    </div>
   </div>
 </template>
 
@@ -34,8 +31,10 @@ import * as EmailValidator from "email-validator"
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { mapState, mapMutations } from 'vuex'
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+import store from '../../vuex/store.js'
+
+const SERVER_URL = store.state.SERVER_URL;
+
 export default {
   name: 'SearchPassword',
   data: () => {
@@ -108,4 +107,18 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+  .titleBox {
+    display: inline-block;
+    width: 90%;
+    height: 100%;
+    font-size: 17px;
+    text-align: center;
+  }
+  .pageTitle {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

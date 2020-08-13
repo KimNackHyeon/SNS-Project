@@ -32,6 +32,9 @@ public class Trade {
 	private String myfood;
 	
 	@NotEmpty
+	private String myfood_kor;
+	
+	@NotEmpty
 	private String price;
 	
 	@NotEmpty
@@ -40,9 +43,19 @@ public class Trade {
 	private String tradefood2;
 	
 	@NotEmpty
-	private String foodcount1;
+	private String tradefood1_kor;
 	
-	private String foodcount2;
+	private String tradefood2_kor;
+	
+	@NotEmpty
+	private String myfoodcount1;
+	@NotEmpty
+	private String tradefoodcount1;
+	
+	
+	private String myfoodcount2;
+	
+	private String tradefoodcount2;
 	
 	@NotEmpty
 	private String content;
@@ -50,41 +63,50 @@ public class Trade {
 	@NotEmpty
 	private String address;
 	
-	private String imgUrl;
-	
 	@Column(name = "regist_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@CreationTimestamp
 	private LocalDateTime regist_date;
-
-	public Trade() {
-	}
 	
-	@Override
-	public String toString() {
-		return "Trade [no=" + no + ", email=" + email + ", nickname=" + nickname + ", myfood=" + myfood + ", price="
-				+ price + ", tradefood1=" + tradefood1 + ", tradefood2=" + tradefood2 + ", foodcount1=" + foodcount1
-				+ ", foodcount2=" + foodcount2 + ", content=" + content + ", address=" + address + ", imgUrl=" + imgUrl
-				+ ", regist_date=" + regist_date + "]";
+	
+	public Trade() {
+		super();
 	}
 
-	public Trade(@NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
-			@NotEmpty String price, @NotEmpty String tradefood1, String tradefood2, @NotEmpty String foodcount1,
-			String foodcount2, @NotEmpty String content, @NotEmpty String address, String imgUrl) {
+	
+
+
+	public Trade(Long no, @NotEmpty String email, @NotEmpty String nickname, @NotEmpty String myfood,
+			@NotEmpty String myfood_kor, @NotEmpty String price, @NotEmpty String tradefood1, String tradefood2,
+			@NotEmpty String tradefood1_kor, String tradefood2_kor, @NotEmpty String myfoodcount1,
+			@NotEmpty String tradefoodcount1, @NotEmpty String myfoodcount2, @NotEmpty String tradefoodcount2,
+			@NotEmpty String content, @NotEmpty String address, LocalDateTime regist_date) {
 		super();
 		this.no = no;
 		this.email = email;
 		this.nickname = nickname;
 		this.myfood = myfood;
+		this.myfood_kor = myfood_kor;
 		this.price = price;
 		this.tradefood1 = tradefood1;
 		this.tradefood2 = tradefood2;
-		this.foodcount1 = foodcount1;
-		this.foodcount2 = foodcount2;
+		this.tradefood1_kor = tradefood1_kor;
+		this.tradefood2_kor = tradefood2_kor;
+		this.myfoodcount1 = myfoodcount1;
+		this.tradefoodcount1 = tradefoodcount1;
+		this.myfoodcount2 = myfoodcount2;
+		this.tradefoodcount2 = tradefoodcount2;
 		this.content = content;
 		this.address = address;
-		this.imgUrl = imgUrl;
 		this.regist_date = regist_date;
+	}
+
+	public Long getNo() {
+		return no;
+	}
+
+	public void setNo(Long no) {
+		this.no = no;
 	}
 
 	public String getEmail() {
@@ -111,6 +133,14 @@ public class Trade {
 		this.myfood = myfood;
 	}
 
+	public String getMyfood_kor() {
+		return myfood_kor;
+	}
+
+	public void setMyfood_kor(String myfood_kor) {
+		this.myfood_kor = myfood_kor;
+	}
+
 	public String getPrice() {
 		return price;
 	}
@@ -135,20 +165,52 @@ public class Trade {
 		this.tradefood2 = tradefood2;
 	}
 
-	public String getFoodcount1() {
-		return foodcount1;
+	public String getTradefood1_kor() {
+		return tradefood1_kor;
 	}
 
-	public void setFoodcount1(String foodcount1) {
-		this.foodcount1 = foodcount1;
+	public void setTradefood1_kor(String tradefood1_kor) {
+		this.tradefood1_kor = tradefood1_kor;
 	}
 
-	public String getFoodcount2() {
-		return foodcount2;
+	public String getTradefood2_kor() {
+		return tradefood2_kor;
 	}
 
-	public void setFoodcount2(String foodcount2) {
-		this.foodcount2 = foodcount2;
+	public void setTradefood2_kor(String tradefood2_kor) {
+		this.tradefood2_kor = tradefood2_kor;
+	}
+
+	public String getMyfoodcount1() {
+		return myfoodcount1;
+	}
+
+	public void setMyfoodcount1(String myfoodcount1) {
+		this.myfoodcount1 = myfoodcount1;
+	}
+
+	public String getTradefoodcount1() {
+		return tradefoodcount1;
+	}
+
+	public void setTradefoodcount1(String tradefoodcount1) {
+		this.tradefoodcount1 = tradefoodcount1;
+	}
+
+	public String getMyfoodcount2() {
+		return myfoodcount2;
+	}
+
+	public void setMyfoodcount2(String myfoodcount2) {
+		this.myfoodcount2 = myfoodcount2;
+	}
+
+	public String getTradefoodcount2() {
+		return tradefoodcount2;
+	}
+
+	public void setTradefoodcount2(String tradefoodcount2) {
+		this.tradefoodcount2 = tradefoodcount2;
 	}
 
 	public String getContent() {
@@ -167,14 +229,6 @@ public class Trade {
 		this.address = address;
 	}
 
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
-
 	public LocalDateTime getRegist_date() {
 		return regist_date;
 	}
@@ -182,7 +236,16 @@ public class Trade {
 	public void setRegist_date(LocalDateTime regist_date) {
 		this.regist_date = regist_date;
 	}
+
+	@Override
+	public String toString() {
+		return "Trade [no=" + no + ", email=" + email + ", nickname=" + nickname + ", myfood=" + myfood
+				+ ", myfood_kor=" + myfood_kor + ", price=" + price + ", tradefood1=" + tradefood1 + ", tradefood2="
+				+ tradefood2 + ", tradefood1_kor=" + tradefood1_kor + ", tradefood2_kor=" + tradefood2_kor
+				+ ", myfoodcount1=" + myfoodcount1 + ", tradefoodcount1=" + tradefoodcount1 + ", myfoodcount2="
+				+ myfoodcount2 + ", tradefoodcount2=" + tradefoodcount2 + ", content=" + content + ", address="
+				+ address + ", regist_date=" + regist_date + "]";
+	}
 	
-	
-	
+
 }

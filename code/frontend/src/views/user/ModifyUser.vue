@@ -42,7 +42,7 @@
         <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
         <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
       </div>
-      <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
+      <v-dialog v-model="dialog"  width= "100%" class="adressDialog">
         <v-card>
           <v-card-title >주소 검색</v-card-title>
           <v-divider></v-divider>
@@ -77,8 +77,9 @@ import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
 
-const SERVER_URL = "http://127.0.0.1:9999/food/api";
-// const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = store.state.SERVER_URL;
+
 export default {
   data() {
     return {
@@ -142,7 +143,7 @@ export default {
       this.newUserInfo.newNickname = this.userinfo.nickname;
       this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
       this.newUserInfo.newAddress = this.userinfo.address;
-      this.newUserInfo.newPassword = this.userinfo.password
+      this.newUserInfo.newPassword = ''
     }
     // console.log(this.userinfo)
   },
@@ -247,9 +248,10 @@ export default {
             nickname : this.newUserInfo.newNickname,
             address : this.newUserInfo.newAddress,
             password : this.newUserInfo.newPassword,
-            image : this.newUserInfo.newImgUrl
+            image : this.image
           }).then(response => {
             console.log(response);
+            this.newUserInfo.newImgUrl = this.image;
             store.commit('modifyUserInfo', this.newUserInfo)
             console.log(this.newUserInfo)
             this.$router.go(-1)
@@ -260,6 +262,7 @@ export default {
       }
       else {
         console.log('입력칸이 비어있습니다.')
+        alert('입력칸이 비어있습니다.')
         this.checkNickname()
         this.checkPasswordValidate()
         this.checkPassword()
@@ -275,7 +278,7 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' } 
       }).then(response => {
         console.log(response);
-        this.newUserInfo.newImgUrl = response.data;
+        this.image = response.data;
       });
     }
   }
@@ -339,7 +342,7 @@ export default {
     display: inline-block; 
     margin: 5px 0 0 5px;
   }
-  .adressDialog {
-    /* margin: 18px !important; */
-  }
+  /* .adressDialog {
+    margin: 18px !important;
+  } */
 </style>

@@ -3,11 +3,11 @@
     <div v-for="(feedData, i) in feedDatas" :key="i">
       <div class="feed-profil">
         <div class="feed-user">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
+          <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
-          <router-link to="/feed/detail">
+          <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
@@ -20,8 +20,9 @@
           <v-carousel-item
             v-for="(item, i) in feedData.items"
             :key="i"
-            :src="item.src"
+            :src="item.image"
           ></v-carousel-item>
+            <!-- :src="require(`../../assets/images${item.image}`)" -->
         </v-carousel>
         <v-chip
             class="ma-2 imgCount"
@@ -60,7 +61,7 @@
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content">
-            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;">{{comment.nickname}}</p>
+            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</p>
             <span>{{comment.comment}}</span>
           </div>
           <div style="float: right; width: 10%" v-if="comment.email===userInfo.email">
@@ -83,8 +84,7 @@ import $ from 'jquery';
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
-// const SERVER_URL = "http://127.0.0.1:9999/food/api";
-const SERVER_URL = "http://i3b301.p.ssafy.io:9999/food/api";
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data: () => {
@@ -115,56 +115,69 @@ export default {
   mounted(){
       axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
         .then(response => {
-          response.data.forEach(d =>{
+          console.log(response);
+            // var data = {};
+
+          response.data.feedlist.forEach(d =>{
             var data = { // 하나의 피드 데이터
               no: d.no,
               nickname : d.nickname,
               email : d.email,
+              profile : d.profile,
               islike: false,
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [],
+              items: [    
+              ],
+
               comments:[],
             }
 
-            axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
-            .then(response => {
-              // console.log(response);
-              response.data.forEach(c =>{
-                var comment = { // 피드에 해당하는 하나의 댓글
-                  img : '',
-                  nickname : c.nickname,
-                  email : c.email,
-                  content : c.comment,
-                  created_at : c.create_date,
-                }
-                data.comments.push(c);
-              })
-            })
-
           axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
-            // console.log(response);
+            console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
-                img : '',
+                img : c.img,
                 nickname : c.nickname,
                 email: c.email,
-                content : c.comment,
+                comment : c.comment,
                 created_at : c.create_date,
               }
-              data.comments.push(c);
+              data.comments.push(comment);
             })
-          })
+          });
+
+          axios.get(`${SERVER_URL}/feed/check`,{
+            params:
+            {
+              email:store.state.userInfo.email,
+              feedNo : d.no,
+            }
+            })
+          .then(response =>{
+            console.log(response);
+              data.islike = response.data.like;
+              data.isscrap = response.data.scrap;
+          });
+
+          response.data.datalist.forEach(dindex => {
+            if(dindex.feedNo == d.no){
+              var image = {image : dindex.img};
+              data.items.push(image);
+            }
+          });
 
           this.feedDatas.push(data); // 피드 데이터 저장
-        })
-        console.log(this.feedDatas)
+          console.log(data);
+        });
+        console.log(this.feedDatas);
       })
       .catch((error) => {
         console.log(error.response);
       });
+      
   },
   methods: {
     countItem(i) {
@@ -209,50 +222,48 @@ export default {
       })
     },
     likedbtn(feedData_id) {
+      console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
-        console.log(feedData_id);
         if (feedData.no == feedData_id) {
           feedData.islike = !feedData.islike
         }
       })
-      // axios.get(`${SERVER_URL}/like`)
-      //   .then(response => {
-      //     const liked = response.data
-      //     if ( liked ) {
-      //       this.islike = liked
-      //     }
-      //     else {
-      //       this.islike = liked
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.response);
-      //   });
+      axios.get(`${SERVER_URL}/feed/like`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : feedData_id,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+      });
     },
     scrapedbtn(feedData_id) {
+      console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
           feedData.isscrap = !feedData.isscrap
         }
       })
-      // axios.get(`${SERVER_URL}/scrap`)
-      //   .then(response => {
-      //     const scrapped = response.data
-      //     if ( scrapped ) {
-      //       this.isscrap = scrapped
-      //     }
-      //     else {
-      //       this.isscrap = scrapped
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.response);
-      //   });
+      axios.get(`${SERVER_URL}/feed/scrap`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : feedData_id,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
+        console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     }

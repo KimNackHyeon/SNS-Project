@@ -6,19 +6,23 @@ import Yourpage from "./views/user/Yourpage.vue";
 import ModifyUser from "./views/user/ModifyUser.vue";
 import SearchPassword from "./views/user/SearchPassword.vue";
 import CheckCertification from "./views/user/CheckCertification";
-import ChangePassword from "./views/user/ChangePassword";
 import FeedMain from "./views/feed/IndexFeed.vue";
 import FeedDetail from "./views/feed/FeedDetail.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
+import Alarm from "./views/user/Alarm.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
 import MarketPlaceDetail from "./views/store/MarketplaceDetail.vue";
 import GroupBuying from "./views/store/Groupbuying.vue";
 import GroupBuyingdetail from "./views/store/Groupbuyingdetail.vue";
+import WriteGroupBuying from "./views/store/WriteGroupbuying.vue";
+import ModifyMarketPlace from "./views/store/ModifyMarketplace.vue";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
 import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
+import PrivateChat from "./views/chat/PrivateChat.vue"
+import Error from "./views/error.vue"
 
 export default [
   {
@@ -40,6 +44,16 @@ export default [
     component: Home,
   },
   {
+    path: "/alarm",
+    name: "Alarm",
+    component: Alarm,
+  },
+  {
+    path: "/error",
+    name: "Error",
+    component: Error,
+  },
+  {
     path: "/user/join",
     name: "Join",
     component: Join,
@@ -50,7 +64,7 @@ export default [
     component: Mypage,
   },
   {
-    path: "/user/yourpage",
+    path: "/user/yourpage/:email",
     name: "Yourpage",
     component: Yourpage,
   },
@@ -64,11 +78,11 @@ export default [
     name: "FeedMain",
     component: FeedMain,
   },
-  // {
-  //   path: "/feed/:feedNo",
-  //   name: "FeedDetail",
-  //   component: FeedDetail,
-  // },
+  {
+    path: "/feed/detail/:feedNo",
+    name: "FeedDetail",
+    component: FeedDetail,
+  },
   {
     path: "/components",
     name: "Components",
@@ -85,14 +99,19 @@ export default [
     component: CheckCertification,
   },
   {
-    path: "/user/changepassword",
-    name: "ChangePassword",
-    component: ChangePassword,
-  },
-  {
     path: "/store/marketplace",
     name: "MarketPlace",
     component: MarketPlace,
+  },
+  {
+    path: "/store/modify/marketplace",
+    name: "ModifyMarketPlace",
+    component: ModifyMarketPlace,
+  },
+  {
+    path: "/chat/:privatechat",
+    name: "PrivateChat",
+    component: PrivateChat,
   },
   {
     path: "/store/marketplace/:id?",
@@ -115,6 +134,11 @@ export default [
     component: GroupBuyingdetail,
   },
   {
+    path: "/store/writegroupbuying",
+    name: "WriteGroupBuying",
+    component: WriteGroupBuying,
+  },
+  {
     path: "/Main",
     name: "Main",
     component: Main,
@@ -130,8 +154,13 @@ export default [
     component : WriteRecipe
   },
   {
-    path: "/feed/detail",
-    name: "FeedDetail",
-    component: FeedDetail,
+    path: "/store/modify/marketplace",
+    name: "ModifyMarketPlace",
+    component: ModifyMarketPlace,
   },
+  // {
+  //   path: "/feed/detail",
+  //   name: "FeedDetail",
+  //   component: FeedDetail,
+  // },
 ];
