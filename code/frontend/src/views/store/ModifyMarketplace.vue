@@ -193,7 +193,8 @@
 <script>
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
-const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
 export default {
   components: {
     DaumPostcode
