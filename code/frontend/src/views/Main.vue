@@ -80,7 +80,7 @@
         ref_script3:'튜토리얼을 진행하시겠어요?',
         items: [
           {
-            src:'http://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
+            src:'https://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
             link:'https://blog.naver.com/woorikangsan/220990801581'
           },
           {
@@ -88,8 +88,8 @@
             link:'https://www.gompyo.net:444/mil_recipe_list.php'
           },
           {
-            src: 'http://image.auction.co.kr/itemimage/1d/7e/cf/1d7ecf24d3.jpg',
-            link:'http://itempage3.auction.co.kr/detailview.aspx?ItemNo=B443993038&listqs=catetab%3d4%26class%3dCorner.CategoryBest%26listorder%3d1&listtitle=%ba%a3%bd%ba%c6%ae100&frm2=through'
+            src: 'https://image.auction.co.kr/itemimage/1d/7e/cf/1d7ecf24d3.jpg',
+            link:'https://itempage3.auction.co.kr/detailview.aspx?ItemNo=B443993038&listqs=catetab%3d4%26class%3dCorner.CategoryBest%26listorder%3d1&listtitle=%ba%a3%bd%ba%c6%ae100&frm2=through'
           },
           // {
           //   src: 'https://image7.coupangcdn.com/image/bannerunit/bannerunit_2243356c-de84-4983-aa65-695a41d83356.jpg',

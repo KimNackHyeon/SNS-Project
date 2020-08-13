@@ -147,7 +147,7 @@ export default {
     else {
       axios.get(`${SERVER_URL}/groupbuying/readdetail/`+id)
         .then(response => {
-          console.log(response)
+          // console.log(response)
           this.groupbuying = response.data
           // 작성일, 마감일 형식변환
           const [year1, month1, day1] = this.groupbuying.end_date.split('-')
@@ -159,7 +159,7 @@ export default {
           this.groupbuying.content = this.groupbuying.content.split('^').join('<br />');
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     }
   },
@@ -187,7 +187,7 @@ export default {
           window.location.reload();
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     },
     member() {
@@ -199,11 +199,11 @@ export default {
       }
       axios.post(`${SERVER_URL}/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           this.memberList = response.data
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     }
   },

@@ -143,10 +143,10 @@ export default {
           axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          console.log(this.tradelist)
+          // console.log(this.tradelist)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -172,14 +172,14 @@ export default {
       axios.get(`${SERVER_URL}/trade/`)
         .then(response => {
           this.tradelist = response.data.list
-          console.log(this.tradelist)
+          // console.log(this.tradelist)
           this.mapOtherUserInfo = store.state.mapOtherUserInfo
           this.mapOtherUserInfo.address = this.tradelist[0].address
           this.mapOtherUserInfo.food = this.tradelist[0].myfood
-          // console.log(this.mapOtherUserInfo)
+          // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.switched = true;
       }
@@ -188,10 +188,10 @@ export default {
       axios.post(`${SERVER_URL}/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          console.log(this.pagenumber)
+          // console.log(this.pagenumber)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
     del(pageno) {
@@ -233,10 +233,18 @@ created() {
   axios.get(`${SERVER_URL}/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      console.log(this.tradelist)
+      // console.log(this.tradelist)
+      // console.log(this.mapOtherUserInfo.address)
+      if (this.mapOtherUserInfo.address.length === 0) {
+        for (var i = 0; i < this.tradelist.length; i++) {
+          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+        }
+        // console.log('good')
+        // console.log(store.state.mapOtherUserInfo)
+      }
     })
     .catch(error => {
-      console.log(error.response)
+      // console.log(error.response)
     })
   },
   updated(){

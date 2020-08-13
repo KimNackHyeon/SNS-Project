@@ -201,7 +201,7 @@ export default {
     // if(userinfo.email == )
     axios.get(`${SERVER_URL}/groupbuying/read`)
       .then(response => {
-        console.log(response)
+        // console.log(response)
         this.groupBuyings = response.data
         console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {

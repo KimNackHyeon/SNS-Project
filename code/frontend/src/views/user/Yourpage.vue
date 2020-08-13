@@ -90,17 +90,11 @@
         <div class="myrecipe">
           <h3 class="myrecipe-title">{{yourData.nickname}}님의 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food1.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food2.png" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food3.jpg" alt="food">
-            </div>
-            <div class="myrecipe-img">
-              <img class="myrecipe-img-size" src="../../assets/images/food4.jpg" alt="food">
+            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+              <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
+                <img class="myrecipe-img-size" :src="recipe.img" alt="food">
+                <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food"> -->
+              </router-link>
             </div>
           </div>
         </div>
@@ -128,6 +122,7 @@ export default {
         follower:"",
         following:"",
       },
+      recipes:[],
       isfollow : false,
       openFollower: false,
       followers: "",
@@ -146,6 +141,15 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+
+      axios.get(`${SERVER_URL}/account/myrecipe/`, {params: {email: this.$route.params.email}})
+      .then(response => {
+          // console.log(response)
+          this.recipes = response.data;
+        })
+        .catch(error =>{
+          // console.log(error)
+        })
     },
   methods: {
     onFollow(){
@@ -182,15 +186,15 @@ export default {
       // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
       axios.get(`${SERVER_URL}/account/yourpage/`+ this.yourData.email)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           this.yourData.nickname = response.data.nickname;
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
-          console.log(this.yourData.follower+" "+this.yourData.following);
+          // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
     onFollower() {
@@ -201,12 +205,12 @@ export default {
       }
       axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.yourData.email}})
         .then(response => {
-          console.log(response)
+          // console.log(response)
           this.followers = response.data
         })
         .catch(error =>{
-          console.log(error)
-          console.log('에러')
+          // console.log(error)
+          // console.log('에러')
         })
     },
     onFollowing() {
@@ -217,12 +221,12 @@ export default {
       }
       axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.yourData.email}})
         .then(response => {
-          console.log(response)
+          // console.log(response)
           this.followings = response.data
-          console.log(this.followings)
+          // console.log(this.followings)
         })
         .catch(error =>{
-          console.log(error)
+          // console.log(error)
         })      
     },
     updateFollowBtn() {
@@ -237,17 +241,17 @@ export default {
           }
         })
         .then(response => {
-          console.log('성공')
+          // console.log('성공')
           this.$set(following, 'isfollow', response.data)
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
       })
     },
     onFollowBtn(following) {
       following.isfollow = !following.isfollow
-      console.log(following);
+      // console.log(following);
       // this.isfollow = !this.isfollow;
       if(following.isfollow){
         this.addFollow(following.email);
@@ -259,7 +263,7 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        console.log(user_email)
+        // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     },
@@ -279,23 +283,23 @@ export default {
         }
       })
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.isfollow = response.data;
       })
 
 
       axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           this.yourData.email = this.$route.params.email;
           this.yourData.nickname = response.data.nickname;
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
-          console.log(this.yourData.follower+" "+this.yourData.following);
+          // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
   },
 }

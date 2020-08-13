@@ -24,7 +24,7 @@ export default {
   mounted() {
     this.mapdata = store.state.mapOtherUserInfo.address
     if (window.kakao && window.kakao.maps) {
-      console.log(this.mapdata)
+      // console.log(this.mapdata)
       this.initMap();
       this.searchSubmit();
       this.getLocation();
@@ -39,11 +39,12 @@ export default {
   methods : {
     ...mapMutations(['setUserInfo', 'setMapOtherUserInfo']),
     initMap() {
-      var container = document.getElementById('map');
-      var options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 8
-      };
+      var container = document.getElementById('map'),
+        mapcenter = new kakao.maps.LatLng(33.450701, 126.570667),
+        options = {
+          center: mapcenter,
+          level: 3
+        };
       var map = new kakao.maps.Map(container, options);
       this.map = map;
       //마커추가하려면 객체를 아래와 같이 하나 만든다.
@@ -58,15 +59,16 @@ export default {
       for (var ad = 0; ad < this.mapdata.length; ad++) {
         address.push(this.mapdata[ad])
       }
-      console.log('address')
-      console.log(address)
+      // console.log('address')
+      // console.log(address)
       for (var i = 0; i < address.length; i ++) {
         geocoder.addressSearch(address[i], (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
             var bounds = new kakao.maps.LatLngBounds();
-            console.log('ok')
+            // console.log('ok')
             for (var r = 0; r < result.length; r++) {
               var data = result[r];
+              // console.log(data)
               bounds.extend(new kakao.maps.LatLng(data.y, data.x));
             }
             this.map.setBounds(bounds);
@@ -104,7 +106,7 @@ export default {
         // navigator.geolocation.getCurrentPosition(function(position) {
           location.latitude = position.coords.latitude
           location.longitude = position.coords.longitude
-          console.log(location.latitude, location.longitude)
+          // console.log(location.latitude, location.longitude)
         }, function(error) {
           console.error(error);
         }, {
@@ -126,11 +128,11 @@ export default {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  console.log(`${SERVER_URL}/trade/`)
+  // console.log(`${SERVER_URL}/trade/`)
   axios.get(`${SERVER_URL}/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      console.log(this.tradelist)
+      // console.log(this.tradelist)
       if (this.mapOtherUserInfo.address.length === 0) {
         for (var i = 0; i < this.tradelist.length; i++) {
           store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
@@ -139,7 +141,7 @@ export default {
       }
     })
     .catch(error => {
-      console.log(error.response)
+      // console.log(error.response)
     })
   },
 }

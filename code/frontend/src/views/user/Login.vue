@@ -50,17 +50,14 @@
         </div>
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; float: right">
-          <!-- <kakaoLogin :component="component" /> -->
-          <v-dialog v-model="dialog" scrollable width="100%">
-
-          </v-dialog>
-          <KakaoLogin
+          <KakaoLogin :component="component" />
+          <!-- <KakaoLogin
             api-key="4c86227162ae9066234fa38d59d75010"
             image="kakao_login_btn_small"
             :on-success=onSuccess
             :on-failure=onFailure
-          />
-          <!-- <GoogleLogin :component="component" /> -->
+          /> -->
+          <GoogleLogin :component="component" />
         </div>
         <!-- 다른 플랫폼으로 로그인 -->
       </div>
@@ -69,13 +66,14 @@
     <div class="error-message" v-if="error.email||error.password">이메일이 등록되지 않았거나 비밀번호가 달라요.</div>
   </div>
 </template>
-<script src="//developers.kakao.com/sdk/js/kakao.min.js" language="javascript" type="text/javascript"></script>
+ 
+<!--<script src="//developers.kakao.com/sdk/js/kakao.min.js" language="javascript" type="text/javascript"></script>-->
 <script>
 import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
-// import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
-import KakaoLogin from 'vue-kakao-login'
+import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
+// import KakaoLogin from 'vue-kakao-login'
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
 import Main from "../Main.vue";
@@ -111,34 +109,34 @@ export default {
   }, 
   methods: {
 
-    onSuccess(data){
-        console.log("success");
-        console.log(data);
-        this.$cookies.set("auth-token", data.access_token);
-        Kakao.API.request({
-          url: '/v2/user/me',
-            success: function(response) {
-              console.log(response);
-              const kakaoUserInfo = {
-                email: response.kakao_account.email,
-                nickname: response.kakao_account.profile.nickname,
-                profile_image_url: response.kakao_account.profile.profile_image_url,
-                thumbnail_image_url: response.kakao_account.profile.thumbnail_image_url
-              };
-              store.commit('deluserInfo');
-              store.commit('setKakaoUserInfo', response.kakao_account)
-              console.log(store.state.kakaoUserInfo)
-            },
-            fail: function(error) {
-              console.log(error);
-            }
-        });
-        this.$router.push("/main");
-    },
-    onFailure(data){
-        console.log(data)
-        console.log("failure")
-    },
+    // onSuccess(data){
+    //     // console.log("success");
+    //     // console.log(data);
+    //     this.$cookies.set("auth-token", data.access_token);
+    //     Kakao.API.request({
+    //       url: '/v2/user/me',
+    //         success: function(response) {
+    //           // console.log(response);
+    //           const kakaoUserInfo = {
+    //             email: response.kakao_account.email,
+    //             nickname: response.kakao_account.profile.nickname,
+    //             profile_image_url: response.kakao_account.profile.profile_image_url,
+    //             thumbnail_image_url: response.kakao_account.profile.thumbnail_image_url
+    //           };
+    //           store.commit('deluserInfo');
+    //           store.commit('setKakaoUserInfo', response.kakao_account)
+    //           // console.log(store.state.kakaoUserInfo)
+    //         },
+    //         fail: function(error) {
+    //           // console.log(error);
+    //         }
+    //     });
+    //     this.$router.push("/main");
+    // },
+    // onFailure(data){
+    //     // console.log(data)
+    //     // console.log("failure")
+    // },
 
     checkForm() {
       if (this.email.length > 0 && !EmailValidator.validate(this.email))
