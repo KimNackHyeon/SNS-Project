@@ -15,10 +15,11 @@
           solo
           dense
           deletable-chips
+          @keyup.enter="searchTag"
           class="searchBarBtn"
         ></v-combobox>
         <div style="overflow: hidden;">
-          <v-btn icon>
+          <v-btn icon @click="change">
             <v-icon class="right-icon">mdi-magnify</v-icon>
           </v-btn>
         </div>
@@ -31,7 +32,7 @@
       </router-link>
     </div>
     <div class="feed-body">
-        <FeedItem />
+        <FeedItem ref="feeditem"/>
         <!-- <FeedItem />
         <FeedItem />
         <FeedItem /> -->
@@ -59,7 +60,6 @@ export default {
       search: null,
     }
   },
-  props: ["keyword"],
   components: { FeedItem },
   watch: {
       model (val, prev) {
@@ -80,6 +80,17 @@ export default {
     },
 
     methods: {
+      searchTag(){
+        console.log(this.items);
+      },
+      change(){
+        console.log(this.model);
+        const tags = [];
+        this.model.forEach(tag =>{
+          tags.push(tag.text);
+        })
+        this.$refs.feeditem.searchTag(tags);
+      }
     //   edit (index, item) {
     //     if (!this.editing) {
     //       this.editing = item
