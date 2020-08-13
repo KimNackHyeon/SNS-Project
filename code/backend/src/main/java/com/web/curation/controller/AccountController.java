@@ -469,7 +469,6 @@ public class AccountController {
 		System.out.println(result.toString());
 		return result.toString();
 	}
-	
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
