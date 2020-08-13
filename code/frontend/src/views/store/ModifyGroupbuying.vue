@@ -308,9 +308,6 @@ export default {
         return '';
       }
     },
-    // computedDateFormatted () {
-    //   return this.formatDate(this.date)
-    // },
   },
   created(){
     if(store.state.kakaoUserInfo.email != null){
@@ -318,6 +315,17 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
+    // axios.get(`${SERVER_URL}/`+this.$route.params.id)
+    //   .then(response => {
+    //     console.log(response)
+    //     this.title = response.data.title
+    //     this.food = response.data.food
+    //     this.fileLink = response.data.link
+    //     this.content = response.data.content 
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
       
   },
 }
@@ -339,8 +347,8 @@ export default {
 .setFood:hover {
   border: 2px solid #a0d469;
 }
-.v-dialog {
-  height: 80% !important;
+.v-sheet {
+  height: 450px;
 }
 input{
   padding:0px;

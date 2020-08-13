@@ -373,6 +373,7 @@ export default {
         console.log('good')
       } else {
         console.log('실패')
+        
         Swal.fire({
           title: '다시 한번 더 확인해주세요',
           text: '인증번호가 틀렸어요',

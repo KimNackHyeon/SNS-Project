@@ -42,10 +42,9 @@
         <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
-            <div class="food" v-for="(food, i) in inFoods" :key="i">
-              <img :src="`/img/food/${food.img}`" alt="flour" style="width: 30px; height: 30px;">
-              <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
-              <h5 class="food-name">{{food.name}}</h5>
+            <div class="food" v-for="(food, i) in havingFood" :key="i">
+              <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+              <h5 class="food-name">{{food.name_kor}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
           </div>

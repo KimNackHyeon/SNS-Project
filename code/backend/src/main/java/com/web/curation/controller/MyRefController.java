@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.MyRef;
+import com.web.curation.model.Trade;
 import com.web.curation.repo.MyRefRepo;
+import com.web.curation.repo.TradeRepo;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -34,6 +37,8 @@ public class MyRefController {
 	
 	@Autowired
 	private MyRefRepo myrefRepo;
+	@Autowired
+	private TradeRepo tradeRepo;
 	
 	//Create
 	@PostMapping("/regist")
@@ -78,5 +83,14 @@ public class MyRefController {
 			}
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		}
+	}
+	@PostMapping("/share")
+	@ApiOperation(value = "나의 음식 공유")
+	public ResponseEntity<String> shareMyRef(@RequestBody ArrayList<Trade> trade){
+		System.out.println(trade.toString());
+		for (Trade trade2 : trade) {
+			tradeRepo.save(trade2);
+		}
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }
