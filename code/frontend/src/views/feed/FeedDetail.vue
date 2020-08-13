@@ -13,9 +13,9 @@
       </div>
     </div>
     <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-          <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
-        </div>
-    <div style="overflow: scroll; ">
+      <h2 style="   font-weight: 500; font-size: 22px; text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+    </div>
+    <div style="overflow: scroll; height: 519px">
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
@@ -124,11 +124,12 @@
           <div class="userImg">
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content">
-            <div>
+          <div class="content" style="display: table;">
+            <div style="display: table-cell; vertical-align: middle;">
               <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
-              <p style="margin: 0 5px 0 0; display: inline-block;">{{comment.comment}}</p>
-              <p style="margin: 0; display: inline-block; font-size: 12px">{{comment.create_date}}</p>
+              <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
+              <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
+              <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
           </div>
         </div>
