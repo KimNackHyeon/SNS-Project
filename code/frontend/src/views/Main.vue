@@ -1,12 +1,35 @@
 <template>
 <div style="width:100%; height:100%;">
+  <div class="tutorialBox">
+    <div class="confirmBox">
+      <h1>튜토리얼을 진행하시겠습니까?</h1>
+      <button @click="closetutorial" class="confirmbtn" style="background-color:red;">아니오</button>
+      <router-link to="/tutorial">
+        <button class="confirmbtn" style="background-color:rgb(160,212,105);">네</button>
+      </router-link>
+    </div>
+    <div style="width: 100%; height: 116px; background-color: #000000a6; position: absolute; bottom: 0;">
+      <img src="../assets/images/talkRef.gif" style="float:left;width: 118px;
+    height: auto;
+    margin-top: -77px;">
+    <div class="typewriter">
+      <h4 id="first">안녕하세요! </h4>
+      <!-- <h4 id="second">우리동네 냉장고의 마스코트 냉장고입니다.</h4> -->
+      <h4 id="second">튜토리얼하기를 눌러줘서 고마워요.</h4>
+      <h4 id="third">튜토리얼을 진행하시겠어요?</h4>
+    <!-- <h4>{{script}}</h4> -->
+    <!-- <span class="image blinking"><v-icon color="white" size="30px">mdi-menu-down</v-icon>클릭하기 </span> -->
+    </div>
+    </div>
+  </div>
   <div>
-    <div class="introduce">
+    <div @click="opentutorial" class="introduce">
       <div class="introduceIMG"></div>
       <div style="height:112px; width:186px; float:left; text-align:right;
     padding: 28px 16px; font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;;  ">
         <h4>남는 식재료</h4>
         <h4>더이상 버리지 마세요</h4>
+        <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span>
       </div>
     </div>
     <div style=" box-shadow: 0px 0px 10px #00000078 ;">
@@ -46,10 +69,15 @@
 </template>
 
 <script>
+     import $ from 'jquery'
 
    export default {
     data () {
       return {
+        
+        script:'안녕하세요! 우리동네 냉장고의 마스코트 냉장고입니다.',
+        ref_script2:'튜토리얼하기를 눌러줘서 고마워요.',
+        ref_script3:'튜토리얼을 진행하시겠어요?',
         items: [
           {
             src:'http://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
@@ -78,6 +106,12 @@
       openLink(link){
       var newWindow = window.open("about:blank");
       newWindow.location.href = link;
+      },
+      opentutorial(){
+        $('.tutorialBox').css('display','unset'); 
+      },
+      closetutorial(){
+        $('.tutorialBox').css('display','none'); 
       }
     }
   }
@@ -87,6 +121,14 @@
 <style scoped>
 body{
   overflow: hidden;
+}
+.tutorialBox{
+  width:360px;
+  height:593px;
+  background-color: #00000085;
+  position:fixed;
+  z-index:1000;
+  display: none;
 }
 .navbox{
     width: 33%;
@@ -121,4 +163,123 @@ h4{
 .v-image__image--cover{
   background-size: contain;
 }
+.confirmBox{
+  width: 300px;
+    height: 153px;
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 22px;
+    -webkit-box-shadow: 1px 1px 30px black;
+    box-shadow: 1px 1px 30px #00000052;
+    margin: auto;
+    margin-top: 133px;
+}
+.confirmbtn{
+  width: 100px;
+    height: 50px;
+    float: left;
+    border: 4px solid black;
+    border-radius: 7px;
+    margin: 6px 22px;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    font-size: 25px;
+    font-weight: 600;
+    box-shadow: 2px 2px 1px black;
+}
+.typewriter{
+  color:white;
+  padding: 10px;
+}
+.typewriter h4[id="first"]{
+     font-size: 100%;
+     white-space: nowrap;
+     overflow: hidden;
+     -webkit-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+     -webkit-animation-fill-mode:backwards;
+     -moz-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+}
+.typewriter h4[id="second"]{
+     font-size: 100%;
+     white-space: nowrap;
+     overflow: hidden;
+     -webkit-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+     -webkit-animation-delay: 1s;
+     -webkit-animation-fill-mode:backwards;
+     -moz-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+     -moz-animation-delay: 1s;
+}
+.typewriter h4[id="third"]{
+     font-size: 100%;
+     white-space: nowrap;
+     overflow: hidden;
+     border-right: .15em solid black;
+     -webkit-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+     -webkit-animation-delay: 2s;
+     -webkit-animation-fill-mode:backwards;
+     -moz-animation: typing 1s steps(26, end), blink-caret 1s step-end infinite;
+     -moz-animation-delay: 2s;
+}
+.typewriter h4[id="fourth"]{
+     font-size: 100%;
+     white-space: nowrap;
+     overflow: hidden;
+     border-right: .15em solid black;
+     -webkit-animation: typing 5s steps(20, end);
+     -webkit-animation-delay: 2s;
+     /* -webkit-animation-fill-mode: both; */
+     -moz-animation: typing 5s steps(20, end);
+     -moz-animation-delay: 2s;
+}
+.confirmBox{
+  -webkit-animation: show 1s steps(20, end);
+  -webkit-animation-delay: 3s;
+  -webkit-animation-fill-mode:backwards;
+  -moz-animation: show 1s steps(20, end);
+     -moz-animation-delay: 3s;
+}
+@keyframes typing {
+     from {
+       width: 0
+     }
+     to {
+       width: 9em;
+     }
+}
+@keyframes blink-caret {
+     from, to {
+       border-color: transparent
+     }
+     50% {
+       border-color: #000;
+     }
+}
+@keyframes show {
+     from {
+       opacity: 0;
+     }
+     to {
+       opacity: 100%;
+     }
+}
+.blinking{
+  margin-right: -18px;
+  font-size: 11px;
+	-webkit-animation:blink 0.5s ease-in-out infinite alternate;
+    -moz-animation:blink 0.5s ease-in-out infinite alternate;
+    animation:blink 0.5s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-moz-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
 </style>
