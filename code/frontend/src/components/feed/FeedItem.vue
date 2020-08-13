@@ -52,7 +52,7 @@
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
             <div class="btns">
-              <v-btn class="btn" >수정</v-btn>
+              <!-- <v-btn class="btn" >수정</v-btn> -->
               <v-btn class="btn" >삭제</v-btn>
             </div>
           </div>
@@ -70,9 +70,11 @@
           <div class="userImg">
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content">
-            <p class="commentUser" style="display: inline-block; margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</p>
-            <span>{{comment.comment}}</span>
+          <div class="content" style="display: table; height: 35px; margin-left: 10px">
+            <div style="display: table-cell; vertical-align: middle;">
+              <span class="commentUser" style="margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
+              <span>{{comment.comment}}</span>
+            </div>
           </div>
           <!-- <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
             <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
@@ -329,7 +331,7 @@ export default {
   /* height: 60px; */
   z-index: 80;
   left: 300px;
-  top: 345px;
+  top: 375px;
   border: 1px solid lightgray;
   border-radius: 4px;
 }
@@ -371,7 +373,7 @@ export default {
 }
 .content {
   float: left;
-  width: 80%;
+  width: 75%;
 }
 .commentUser {
   margin-bottom: 0 !important;
