@@ -100,7 +100,7 @@ Vue.use(Vuetify, {
   export default {
     updated(){
       
-      if(store.state.kakaoUserInfo.email.length != 0){
+      if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
         this.userinfo = store.state.userInfo;
