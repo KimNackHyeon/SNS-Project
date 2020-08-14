@@ -2,10 +2,7 @@
 
 package com.web.curation.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
-import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -33,24 +31,24 @@ public class Member {
 
 	@NotEmpty
 	private String password;
-	
+
 	@NotEmpty
 	private String nickname;
-	
-	@NotEmpty
+
 	private String address;
-	
+
 	@Column
+	@ColumnDefault("/img/profile_default.png")
 	private String image;
 
 	@Column(name = "create_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@CreationTimestamp
 	private LocalDateTime create_date;
-	
+
 	public Member() {
 	};
-	
+
 	public Member(@NotEmpty String email, @NotEmpty String password, String nickname, String address) {
 		super();
 		this.email = email;
@@ -107,10 +105,18 @@ public class Member {
 		this.create_date = create_date;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
-				+ ", address=" + address + ", create_date=" + create_date + "]";
+				+ ", address=" + address + ", image=" + image + ", create_date=" + create_date + "]";
 	}
-	
+
 }

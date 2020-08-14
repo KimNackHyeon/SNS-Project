@@ -1,8 +1,8 @@
 <template>
-  <div>
-  <v-app>
+  <div style="overflow-x:hidden; width:100%; height:100%;">
+  <v-app style="overflow-x:hidden;  width:100%; height:100%;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;">
+      <v-container fluid style="padding: 0; margin: 0; width:360px;">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -20,134 +20,67 @@
           </v-flex>
         </v-layout>
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
-          <v-flex>
+          <v-flex style="width:90%; float:left;">
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-checkbox label="거리순 정렬" style="margin-top:18px; margin-right: 18px;">
-
-              </v-checkbox>
-              <v-checkbox label="마감임박" style="margin-top:18px">
-
-              </v-checkbox>
+              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px;"></v-switch>
+          </v-toolbar>
+              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-switch @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
+          </v-toolbar>
             </v-toolbar>
           </v-flex>
-          <div style="border: solid 1px lightgrey">
+          <div style="border: solid 1px lightgrey; width:10%; float:left;">
             <v-btn icon style="margin: 5px">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden; height: 490px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/onion.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">양파 필요하신분</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 양파</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">9/10</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/potato.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">♡감자가 좋아♡</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 감자</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/01</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">4/5</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/onion.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">양파 급하게 필요하신 분만!</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 양파</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/07/16</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">1/3</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">한밭대 달걀 공구</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 덕명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/20</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px">2/5</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">달걀 도매 구매</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">11/30</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-            <v-col cols="12">
-              <v-card style="padding: 5px;">
-                <v-row justify="space-start" style="padding: 0; margin: 0;">
-                  <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
-                    <v-img height="80" width="80" padding="60"  src="../../assets/images/store/egg.png" style="border-radius: 5px;"></v-img>
-                  </v-col>
-                  <v-col cols="6" class="text-left pl-2" style="padding: 0;">
-                    <v-card-text style="padding: 0;">달걀 도매 구매</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">품목 : 달걀</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">동네 : 대전광역시 유성구 봉명동</v-card-text>
-                    <v-card-text style="padding: 0; font-size: 10px;">마감일 : 2020/08/31</v-card-text>
-                  </v-col>
-                  <v-col cols="3" style="padding: 0;">
-                    <v-card-text class="text-right" style="padding: 16px 0 0; margin-top: 15px; font-size: 29px; height: 0px;">11/30</v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
+            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
+              <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
+                <v-card style="padding: 5px;">
+                  <v-row style="padding: 0; margin: 0;">
+                    <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
+                      <img height="80" width="80" padding="60" :src="require(`../../assets/images/food/${groupBuying.food}.png`)" style="border-radius: 5px;">
+                    </v-col>
+                    <v-col cols="6" class="text-left pl-2" style="padding: 0;">
+                      <v-card-text style="padding: 0;">{{ groupBuying.title }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">품목 : {{ groupBuying.food_kor }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">동네 : {{ groupBuying.address }}</v-card-text>
+                      <v-card-text style="padding: 0; font-size: 10px;">마감일 : {{ groupBuying.end_date }}</v-card-text>
+                    </v-col>
+                    <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
+                      <div>
+                        <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
+                          <v-btn color="rgba(160, 212, 105, 0.5)" style="margin-right: 5px; width: 35px; height: 25px;">수정</v-btn>
+                        </router-link>
+                        <router-link :to="`/store/groupbuying`">
+                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="rgba(160, 212, 105, 0.5)" style="width: 35px; height: 25px;">삭제</v-btn>
+                        </router-link>
+                      </div>
+                      <div>
+                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                      </div>
+                    </v-col>
+                    <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
+                      <div>
+                        <p style="height: 100px; line-height: 100px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </router-link>
             </v-col>
           </v-row>
         </div>
+        <router-link to="/store/writegroupbuying">
+          <div class="writeButton">
+            <v-icon color="white">mdi-lead-pencil</v-icon>
+            <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+          </div>
+        </router-link>
       </v-container>
     </v-card>
   </v-app>
@@ -155,11 +88,177 @@
 </template>
 
 <script>
-export default {
+const SERVER_URL = store.state.SERVER_URL;
 
+import axios from "axios"
+import store from '../../vuex/store.js'
+import Swal from 'sweetalert2'
+
+// import '../../components/css/store/groupbuying.scss'
+const config = {
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json'
+    }
+}
+export default {
+  name: 'Groupbuying',
+  data() {
+    return {
+      groupBuyings: '',
+      switched:true,
+      switched2:true,
+      mapdata: [],
+      mydata: [],
+      otherdata: [],
+      distancedata2:[],
+    }
+  },
+  methods:{
+    deleteGroupbuying(data) {
+      Swal.fire({
+  title: '정말 삭제하시겠습니까?',
+  text: "되돌릴 수 없습니다!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '네 삭제할게요!'
+}).then((result) => {
+  if (result.value) {
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
+      .then(response => {
+        Swal.fire({
+            // position: 'top-end',
+            icon: 'success',
+            title: '삭제가 완료되었습니다.',
+            showConfirmButton: false,
+            timer: 1500
+})
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  }
+})
+    },
+    callwithaddress(){
+      if(this.switched2 == true){
+        axios({
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyaddress`,
+                    method:'post',
+                    data: JSON.stringify(this.distancedata2),
+                    headers: config.headers})
+                .then((response)=>{
+                    this.groupBuyings = response.data
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                })
+        this.switched2 = false;
+    }
+    else{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched2 = true;
+      }
+    },
+    call(){
+      if(this.switched == true){
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = false;
+    }
+    else{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+        .then(response => {
+          this.groupBuyings = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+        this.switched = true;
+      }
+    },
+  },
+  created(){
+    if(store.state.kakaoUserInfo.email != null){
+      this.userinfo = store.state.kakaoUserInfo;
+    }else{
+      this.userinfo = store.state.userInfo;
+    }
+    // if(userinfo.email == )
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+      .then(response => {
+        // console.log(response)
+        this.groupBuyings = response.data
+        console.log(this.groupBuyings)
+        for (var i = 0; i < this.groupBuyings.length; i++) {
+          this.mapdata.push(this.groupBuyings[i].address)
+        }
+        console.log(this.userinfo.address)
+        console.log(this.mapdata)
+        const script = document.createElement('script');
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
+        document.head.appendChild(script);
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(this.userinfo.address, (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            this.mydata.push([result[0].y, result[0].x])
+          }
+        })
+        for (var m = 0; m < this.mapdata.length; m++) {
+          geocoder.addressSearch(this.mapdata[m], (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result[0])
+              var distancedata = [
+                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
+                new kakao.maps.LatLng(result[0].y, result[0].x)]
+              console.log(distancedata)
+              var polyline = new kakao.maps.Polyline({
+                path: distancedata,
+              })
+              var distance = polyline.getLength();
+              console.log(distance)
+              this.distancedata2.push(distance)
+              // this.otherdata.push(redata);
+            }
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 }
 </script>
 
-<style>
-  
+<style scoped>
+.writeButton{
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  margin-top: -70px;
+  margin-left: 280px;
+  background-color: rgb(147 203 88);
+  z-index: 90;
+  border-radius: 30px;
+  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+  text-align: center;
+  padding-top: 7px;;
+}
+
 </style>

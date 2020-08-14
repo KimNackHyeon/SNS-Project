@@ -8,16 +8,6 @@
   margin: 0 !important;
   width: 100%;
 }
-.searchBarBtn {
-    float: left; 
-    width: 90%; 
-    height: 100%;
-    border-right: 1px solid lightgray; 
-    border-radius: unset !important;
-    overflow-x: scroll;
-    overflow-y: scroll;
-    white-space: nowrap;
-}
 .v-select__selections {
     display: block !important;
   }
@@ -39,9 +29,10 @@
 }
 .v-select__selections {
     display: block !important;
-  }
-.v-autocomplete:not(.v-input--is-disabled).v-select.v-text-field input {
-    width: 80px !important;
+}
+.v-select__selections input {
+  text-align: left !important;
+
 }
 .mdi-close-circle {
     color: white !important;
@@ -62,7 +53,7 @@
 }
 .feed-body {
   overflow: scroll;
-  height: 540px;
+  height: 550px;
 }
 input:hover {
   border: none;

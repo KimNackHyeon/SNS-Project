@@ -19,7 +19,7 @@
     background-image: url(../../assets/images/login_backgroundimg.gif);
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 110%;
     background-position-y: -9px;
 
     h1 {
@@ -55,6 +55,8 @@
       border-radius:5px; 
       font-weight:bold;
       font-size: 15px;
+      -webkit-box-shadow: unset;
+      box-shadow: unset;
     }
     .bottom-btn {
       color: white;
@@ -293,7 +295,7 @@
       border-top: 1px solid lightgray;
     }
     .profil {
-      height: 25%;
+      height: 23%;
       overflow: hidden;
     }
     .myphoto {
@@ -326,8 +328,11 @@
         padding-top: 5px;
       }
     }
+    .onmyprofil-box:hover {
+      background-color: #eee;
+    }
     .myfeed {
-      height: 15%;
+      height: 13%;
     }
     .myprofil-text {
       width: 100%;
@@ -363,7 +368,7 @@
       }
     }
     .myrecipe {
-      height: 60%;
+      height: 100%;
     }
     .myrecipe-title {
       text-align: center;

@@ -2,9 +2,17 @@ package com.web.curation.controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,16 +25,27 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.FeedData;
+import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
+import com.web.curation.model.MyRef;
+import com.web.curation.model.Scrap;
+import com.web.curation.repo.FeedDataRepo;
+import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyBoardRepo;
+import com.web.curation.repo.MyRefRepo;
+import com.web.curation.repo.ScrapRepo;
 import com.web.curation.service.MemberService;
 
 import io.fusionauth.jwt.Signer;
@@ -59,30 +78,17 @@ public class AccountController {
 	@Autowired
 	MyBoardRepo myboardRepo;
 
-//	@GetMapping("/account/login")
-//	@ApiOperation(value = "로그인")
-//	public Object login(@RequestParam(required = true) final String email,
-//			@RequestParam(required = true) final String password) {
-//
-//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(email, password);
-//
-//		ResponseEntity response = null;
-//
-//		if (userOpt.isPresent()) {
-//			final BasicResponse result = new BasicResponse();
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt);
-//			result.status = true;
-//			result.data = "success";
-//			response = new ResponseEntity<>(result, HttpStatus.OK);
-//		} else {
-//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//
-//		return response;
-//	}
+	@Autowired
+	FollowRepo followRepo;
 
-//	@RequestParam(required = false) String email, @RequestParam(required = false) String password
+	@Autowired
+	MyRefRepo myrefRepo;
+
+	@Autowired
+	FeedDataRepo feedDataRepo;
+
+	@Autowired
+	ScrapRepo scrapRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -102,7 +108,34 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	@ApiOperation(value = "카카오 로그인 처리")
+	@PostMapping("/account/kakaologin")
+	public ResponseEntity<Object> kakaologin(@RequestBody Member member) {
+		System.out.println(member);
+		Member userOpt = memberRepo.getUserByEmail(member.getEmail());
+		if (userOpt == null) { // 중복된 이메일이 없으면
+			System.out.println("로그인된 아이디 정보");
+			memberRepo.save(member);
+			return new ResponseEntity<Object>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(userOpt, HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "내 냉장고")
+	@GetMapping("/account/myref/{email}")
+	public ResponseEntity<Map> myRef(@PathVariable String email) {
+		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
+		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
+		if (!myrefList.isEmpty()) {
+			map.put("myreflist", myrefList);
+			return new ResponseEntity<Map>(map, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@ApiOperation(value = "로그아웃 처리")
 	@GetMapping("/account/logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "token") String token) {
@@ -117,18 +150,24 @@ public class AccountController {
 		}
 	}
 
+	@ApiOperation(value = "읽지않은 새소식 반환")
+	@GetMapping("/account/new/{email}")
+	public ResponseEntity<Map> observeNew(@PathVariable String email) {
+		Map<String, Alarm> map = new HashMap<String, Alarm>();
+		// type 1 : 나를 팔로우함
+		// type 2 : 내 게시글에 댓글 달림
+		// type 3 : 내 글에 좋아요 눌림
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "토큰 검증")
-	@PostMapping("/info")
+	@GetMapping("/info")
 	public ResponseEntity<String> verify(@RequestParam String token) {
 		System.out.println(token);
-//		Optional<Member> userOpt = memberRepo.findUserByEmailAndPassword(member.getEmail(), member.getPassword());
 
 		boolean check = cmpToekn(token);
 		System.out.println(check);
 		if (check) {
-//			System.out.println("로그인된 아이디 정보");
-//			System.out.println(userOpt.get().getEmail());
-//			String token = getToken(userOpt.get());
 			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
@@ -140,6 +179,7 @@ public class AccountController {
 	public Object signup(@Valid @RequestBody Member member) {
 		final BasicResponse result = new BasicResponse();
 		// 회원가입단을 생성해 보세요.'
+		member.setImage("/img/profile_default.png");
 		memberRepo.save(member);
 		result.status = true;
 		result.data = "success";
@@ -204,22 +244,93 @@ public class AccountController {
 		return response;
 	}
 
-	@GetMapping("/account/mypage")
+	@GetMapping("/account/mypage/{email}")
 	@ApiOperation(value = "내 페이지 보기")
-	public Object showmypage(@RequestParam(required = true) final String email) {
-		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
-		ResponseEntity response = null;
-		if (myBoardOpt.isPresent()) {
-			final BasicResponse result = new BasicResponse();
-			System.out.println(myBoardOpt);
-			result.status = true;
-			result.data = "success";
-			result.object = myBoardOpt;
-			response = new ResponseEntity<>(result, HttpStatus.OK);
-		} else {
-			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	public ResponseEntity<Map> showmypage(@PathVariable String email) {
+		Long recipe = myboardRepo.countByEmail(email);
+		Long following = followRepo.countByEmail(email);
+		Long follower = followRepo.countByYourEmail(email);
+		Map<String, Long> map = new HashMap<String, Long>();
+//		final BasicResponse result = new BasicResponse();
+//		result.status = true;
+		map.put("recipe", recipe);
+		map.put("following", following);
+		map.put("follower", follower);
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/yourpage/{email}")
+	@ApiOperation(value = "상대 페이지 보기")
+	public ResponseEntity<Map> showyourpage(@PathVariable String email) {
+//		Optional<MyBoard> myBoardOpt = myboardRepo.getMyBoardByEmail(email);
+		Member member = memberRepo.getUserByEmail(email);
+		Long following = followRepo.countByEmail(email);
+		Long follower = followRepo.countByYourEmail(email);
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("nickname", member.getNickname());
+		map.put("img", member.getImage());
+		map.put("following", following);
+		map.put("follower", follower);
+		// 게시글 수 추가
+
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/isfollow/")
+	@ApiOperation(value = "팔로우 인지 아닌지 검색")
+	public ResponseEntity<Boolean> isFollow(@RequestParam String email, @RequestParam String yourEmail) {
+		Optional<Follow> fOpt = followRepo.findUserByEmailAndYourEmail(email, yourEmail);
+
+		boolean result = fOpt.isPresent();
+		return new ResponseEntity<Boolean>(fOpt.isPresent(), HttpStatus.OK);
+	}
+
+	@GetMapping("/account/follow/")
+	@ApiOperation(value = "팔로워 탐색")
+	public List<Member> followList(@RequestParam String email) {
+		List<Follow> list = followRepo.findByYourEmail(email);
+		List<Member> followList = new ArrayList<Member>();
+
+		for (Follow f : list) {
+			Member member = memberRepo.getUserByEmail(f.getEmail());
+			followList.add(member);
 		}
-		return response;
+
+		return followList;
+	}
+
+	@GetMapping("/account/following/")
+	@ApiOperation(value = "팔로잉 탐색")
+	public List<Member> followingList(@RequestParam String email) {
+
+		List<Follow> list = followRepo.findByEmail(email);
+		List<Member> followingList = new ArrayList<Member>();
+
+		for (Follow f : list) {
+			Member member = memberRepo.getUserByEmail(f.getYourEmail());
+			followingList.add(member);
+		}
+
+		return followingList;
+	}
+
+	@PostMapping("/account/follow/")
+	@ApiOperation(value = "팔로우 추가")
+	public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
+
+		System.out.println(follow);
+		followRepo.save(follow);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@PostMapping("/account/unfollow/")
+	@ApiOperation(value = "팔로우 삭제")
+	public ResponseEntity<String> unFollow(@RequestBody Follow follow) {
+		Optional<Follow> fOpt = followRepo.findUserByEmailAndYourEmail(follow.getEmail(), follow.getYourEmail());
+		System.out.println(follow);
+		followRepo.delete(fOpt.get());
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
 	@PostMapping("/account/emailconfirm")
@@ -251,6 +362,124 @@ public class AccountController {
 			result.data = "0";
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PutMapping("/account/update")
+	@ApiOperation(value = "회원정보 수정")
+	public Object update(@RequestBody Member member) {
+		System.out.println(member);
+		Member temp = memberRepo.getUserByEmail(member.getEmail());
+		System.out.println(temp);
+		final BasicResponse result = new BasicResponse();
+		member.setNo(temp.getNo());
+		member.setCreate_date(temp.getCreate_date());
+		memberRepo.save(member);
+//		memberRepo.saveAndFlush(member);
+		result.status = true;
+		result.data = "success";
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/account/upload")
+	@ApiOperation(value = "프로필사진 업로드")
+	public Object upload(@RequestParam MultipartFile image, @RequestParam String email)
+			throws IllegalStateException, IOException {
+		System.out.println("UPLOAD =======================");
+		String filename = image.getOriginalFilename(); // 파일 이름
+		System.out.println(filename);
+		Member member = memberRepo.getUserByEmail(email); // 폴더명
+//		String filepath = "/image/" + member.getNo() + "/profile";// 폴더 상대 경로
+		String filepath = "/dist/img/" + member.getNo() + "/profile";// 폴더 상대 경로
+
+		String path = System.getProperty("user.dir") + filepath; // 폴더 상대 경로
+		System.out.println(path); // 상대경로
+		File folder = new File(path);
+
+		if (!folder.exists()) {
+			try {
+				folder.mkdirs(); // 폴더 생성
+				System.out.println("폴더가 생성");
+
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("폴더가 이미 존재");
+		}
+		image.transferTo(new File(path + "/" + filename));
+		String result = "/img/" + member.getNo() + "/profile/" + filename;
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/myrecipe/")
+	@ApiOperation(value = "내 레시피 탐색")
+	public List<FeedData> recipeList(@RequestParam String email) {
+
+		List<MyBoard> boardList = myboardRepo.findByEmail(email);
+		List<FeedData> datalist = new ArrayList<FeedData>();
+		for (MyBoard myBoard : boardList) {
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(myBoard.getNo(), (long) 0);
+			datalist.add(feeddata);
+		}
+
+		return datalist;
+	}
+
+	@GetMapping("/account/myscrap/")
+	@ApiOperation(value = "내 스크랩 글 탐색")
+	public List<FeedData> scrapList(@RequestParam String email) {
+
+		List<Scrap> scrapList = scrapRepo.findByEmail(email);
+		List<FeedData> datalist = new ArrayList<FeedData>();
+		for (Scrap scrap : scrapList) {
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(scrap.getFeedNo(), (long) 0);
+			datalist.add(feeddata);
+		}
+
+		return datalist;
+	}
+
+	@GetMapping("/account/apitest")
+	@ApiOperation(value = "외부 api 호출")
+	public String callapi() {
+		StringBuffer result = new StringBuffer();
+		System.out.println("외부 api 호출 ======================");
+		try {
+			String urlstr = "http://www.kamis.or.kr/service/price/xml.do?" + "action=dailySalesList"
+					+ "&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac" + "&p_cert_id=1137" + "&p_returntype=json";
+
+			URL url = new URL(urlstr);
+			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
+			urlconnection.setRequestMethod("GET");
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(), "UTF-8"));
+
+			String returnLine;
+
+			while ((returnLine = br.readLine()) != null) {
+				result.append(returnLine);
+			}
+			urlconnection.disconnect();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		System.out.println(result.toString());
+		return result.toString();
+	}
+
+	@PostMapping("/account/checkemail")
+	@ApiOperation(value = "이메일 중복체크")
+	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
+			hashmap.put("data", "1");
+		} else {
+//	         String code = memberService.sendMail(member.getEmail());
+			hashmap.put("data", "0");
+		}
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");

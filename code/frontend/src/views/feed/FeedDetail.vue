@@ -1,66 +1,107 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-      <router-link to="/feed/main">
-        <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 38px;">
-          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
-        </v-btn>
-      </router-link>
-    </div>
-    <div style="overflow: scroll; height: 540px; ">
+    <div>
+      <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+        <router-link to="/feed/main">
+          <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+            <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+          </v-btn>
+        </router-link>
+        <div class="titleBox">
+          <div class="pageTitle">
+            <p style="margin: 0; text-overflow: ellipsis; overflow: hidden;">레시피보기</p>
+          </div>
+        </div>
+      </div>      
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
-          <h4 style="display: inline-block; padding-left: 10px">사용자 이름</h4>
+          <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
         </div>
-        <div style="float: right;">
-          <v-btn icon color="lightgray">
+        <div style="float: right; height: 35px; line-height: 35px">
+          <!-- <v-btn icon color="lightgray">
             <v-icon size="30px">mdi-account-plus</v-icon>
+          </v-btn> -->
+          <v-btn icon @click="likedbtn" style="width: 25px; height: 25px; margin: 5px">
+              <v-icon v-if="!feedData.isLike" size="25px" color="black">mdi-heart-outline</v-icon>
+              <v-icon v-if="feedData.isLike" size="25px" color="red">mdi-heart</v-icon>
           </v-btn>
+          <v-btn icon @click="scrapedbtn" style="width: 25px; height: 25px">
+              <v-icon v-if="!feedData.isScrap" size="25px" color="black">mdi-bookmark-outline</v-icon>
+              <v-icon v-if="feedData.isScrap" size="25px" color="#a0d469">mdi-bookmark</v-icon>
+          </v-btn>
+          <!-- 수정 삭제 -->
+          <div style="display: inline-block" v-if="feedData.email==userinfo.email">
+            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+              <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
+            </v-btn>
+            <div class="btns">
+              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+    <div style="overflow: scroll; height: 490px; position: relative">
+      <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
+      </div>
       <!-- 재료 -->
-      <div style="overflow: hidden; border-bottom: 1px solid lightgray">
+      <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
         <!-- 나에게 있는 재료 -->
-        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center">
+        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
-            <div class="food" v-for="(food, i) in inFoods" :key="i">
+            <div class="food" v-for="(food, i) in havingFood" :key="i">
               <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
-              <h5 class="food-name">{{food.name}}</h5>
+              <h5 class="food-name">{{food.name_kor}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: #a0d469; padding: 5px 10px; width: 40%; text-align: center">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center;    height: 110px;">
           <h5>나에게 없는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
-            <div class="food" v-for="(food, i) in outFoods" :key="i">
+            <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
-                  <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+                  <img :src="`/img/food/${food.img}.png`" alt="flour" style="width: 30px; height: 30px;">
+                  <!-- <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;"> -->
                 </v-btn>
               </div>
-              <h5 class="food-name">{{food.name}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h5 class="food-name">{{food.name_kor}}</h5>
+              <h6>{{food.amount}}개</h6>
             </div>
-              <div  class="balloon">
-                <h5 style="color: white">{{nowFood}}</h5>
-                <v-btn class="buybtn">공동<br>구매</v-btn>
-                <v-btn class="changebtn">물물<br>교환</v-btn>
-              </div>
+            <div  class="balloon">
+              <h5 style="color: white">{{nowFood}}</h5>
+              <router-link to="/store/groupbuying"><v-btn class="buybtn">공동<br>구매</v-btn></router-link>
+              <router-link to="/store/marketplace"><v-btn class="changebtn">물물<br>교환</v-btn></router-link>
+            </div>
           </div>
         </div>
       </div>
       <!-- 글 내용 -->
       <div style="">
-        <div style="text-align: center; padding: 5px">
-          <h2>레시피 제목</h2>
-        </div>
         <div>
-          <img src="../../assets/images/food1.jpg" alt="food" style="width: 100%; height: 300px;">
-          <p style="padding: 10px">1. 실온 버터는 마요네즈 상태로 풀어준 뒤, 설탕과 소금을 넣고 크림화를 합니다.</p>
+          <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
+            <div>
+              <img :src="item.img" style="width:360px; height:auto;">
+              <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
+              
+            </div>
+            <div class="feedContents" v-html="item.content">
+              {{item.content}}
+            </div>
+          </div>
+          </div>
+      </div>
+      <!-- 해시태그 -->
+      <div class="hashBox">
+        <div v-for="(hashTag, i) in feedData.hashTags" :key="i" style="display: inline-block">
+          <div class="hash">#{{ hashTag }}</div>
         </div>
       </div>
       <!-- 댓글 -->
@@ -71,16 +112,17 @@
             <v-icon>mdi-send</v-icon>
           </v-btn>
         </div>
-        <div class="comments" v-for="(comment, i) in comments" :key="i">
+        <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John"></v-avatar>
+            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content">
-            <div>
-              <p class="commentUser">{{comment.name}}</p>
-              <span>{{comment.content}}</span>
+          <div class="content" style="display: table;">
+            <div style="display: table-cell; vertical-align: middle;">
+              <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
+              <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
+              <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
+              <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
-            <span style="font-size: 12px">{{comment.created_at}}</span>
           </div>
         </div>
       </div>
@@ -91,13 +133,21 @@
 
 <script>
 import $ from 'jquery'
+import axios from "axios"
+import store from '../../vuex/store.js'
+
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
     return {
+      userinfo:'',
       nowFood : '',
+      feedData: '',
+      myrefFood:[],
+      havingFood:[],
+      otherFood:[],
       inFoods: [
-        {img: "flour", name: "박력분", amount: "105g"},
       ],
       outFoods: [
         {img: "egg", name: "달걀", amount: "1개"},
@@ -106,18 +156,20 @@ export default {
         {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
         {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
       ],
-      onBuying: false,
+      // onBuying: false,
       comment: "",
-      comments: [
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Jhon34", 
-        content: "아이들도 담백한 맛에 잘 먹을 것 같아요 한번 만들어보세요!! 감사합니다!",
-        created_at: "2020-07-28 15:59"},
-        {img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-        name: "Sara12", 
-        content: "비주얼도 좋고 영양도 듬뿍~~ 다욧식품으로 좋을것 같아요",
-        created_at: "2020-07-28 17:59"},
-      ]
+      hashTags: [
+        '빵', 
+        '베이커리',
+        '인생빵',
+        'JMT',
+        '성심당',
+        '대전빵집',
+        '부추빵',
+        '꿀키',
+        '소보로'
+      ],
+      offset: true,
     }
   },
   watch: {
@@ -130,7 +182,139 @@ export default {
       }
     },
   },
+
+  created(){
+     if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+        // console.log(this.userinfo);
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
+    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+        .then(response => {
+        //   this.myreflist = response.data.myreflist
+          this.myrefFood = response.data.myreflist
+        })
+        .catch(error => {
+          // console.log(error.response)
+        });
+    
+    var feedNo = this.$route.params.feedNo;
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+        .then(response => {
+          // console.log(response);
+            this.feedData = { // 하나의 피드 데이터
+              no: response.data.feeddata.no,
+              nickname : response.data.feeddata.nickname,
+              profile : response.data.feeddata.profile,
+              title: response.data.feeddata.title,
+              email: response.data.feeddata.email,
+              items: [],
+              comments:[],
+              hashTags:[],
+              foods:[],
+              isLike : '',
+              isScrap : '',
+            }
+            response.data.taglist.forEach(tag =>{
+              this.feedData.hashTags.push(tag.tagName);
+            });
+
+            response.data.foodlist.forEach(food =>{
+              this.feedData.foods.push(food);
+            });
+
+            response.data.datalist.forEach(d =>{
+              this.feedData.items.push(d);
+            });
+
+            axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
+              params:
+              {
+                email:store.state.userInfo.email,
+                feedNo : response.data.feeddata.no,
+              }
+              })
+            .then(response =>{
+              // console.log(response);
+                this.feedData.isLike = response.data.like;
+                this.feedData.isScrap = response.data.scrap;
+            });
+          
+          var myrefFoodName = [];
+          var feedFoodlist = this.feedData.foods;
+          this.myrefFood.forEach(reffood=>{
+            myrefFoodName.push(reffood.name_kor);
+          });
+          // console.log(this.myrefFood);
+          feedFoodlist.forEach(recipefood => {
+          // console.log(recipefood.name);
+          if(myrefFoodName.includes(recipefood.name_kor)){
+            this.havingFood.push(recipefood);
+            // console.log(recipefood.name);
+          }else{
+            this.otherFood.push(recipefood);
+          }
+            });
+        // console.log(this.feedData.foods);
+        })
+        .catch((error) => {
+          // console.log(error.response);
+        });
+        setTimeout(() => {
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+              .then(response => {
+                // console.log(response);
+                response.data.forEach(c =>{
+                  var comment = { // 피드에 해당하는 하나의 댓글
+                    img : '',
+                    nickname : c.nickname,
+                    content : c.comment,
+                    created_at : c.create_date,
+                  }
+                  this.feedData.comments.push(c);
+                })
+          });
+        }, 500);
+        
+  },
   methods: {
+    likedbtn() {
+      this.feedData.isLike = !this.feedData.isLike;
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          // console.log(error.response);
+      });
+    },
+    scrapedbtn() {
+      this.feedData.isScrap = !this.feedData.isScrap;
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
+        params:{
+          email : store.state.userInfo.email,
+          feedNo : this.feedData.no,
+        }
+        })
+        .then(response => {
+        })
+        .catch((error) => {
+          // console.log(error.response);
+      });
+    },
+    openBtn() {
+      if($('.btns').css('display')=='block'){
+        $('.btns').css('display','none');  
+      }else{
+        $('.btns').css('display','block');
+      }
+    },
     onBuyingBtn(food) {
       // food.showBtn = !food.showBtn;
       if($('.balloon').css('display')=='block' && this.nowFood ==food.name){
@@ -140,18 +324,42 @@ export default {
       }
       this.nowFood = food.name;
     },
-    onCommentBtn(feedData_id) {
+    onCommentBtn() {
       // 댓글 추가기능
-      this.comments.push({
-          img: "https://cdn.vuetifyjs.com/images/john.jpg", 
-          name: "Sara12", 
-          content: this.comment,
-          created_at: "2020-07-28 17:59"
-        },)
-      // 댓글 input 초기화 해주기
-      this.comment = ""
+      let today = new Date()
+      var comment = {
+        img: this.userinfo.profile_image_url, 
+        nickname: this.userinfo.nickname,
+        email:this.userinfo.email,
+        feedNo: this.$route.params.feedNo,
+        comment: this.comment,
+        // create_date: `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+        create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+      }
+      // console.log(comment);
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
+      .then(response=>{
+        // console.log(response);
+        this.comment = "";
+      })
+
+      this.feedData.comments.push(comment);
     },
-  }
+    moveUser(user_email){
+      if(user_email == store.state.userInfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        // console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+      }
+    },
+    deleteNo(feed_no){
+      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+      .then(response => {
+        this.$router.push('/feed/main');
+      })
+    }
+  },
 }
 </script>
 
@@ -159,12 +367,77 @@ export default {
   .left-icon:hover {
     color: #a0d469;
   }
+  .titleBox {
+    display: inline-block;
+    width: 90%;
+    height: 100%;
+    font-size: 17px;
+    text-align: center;
+  }
+  .pageTitle {
+    height: 100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px;
+    
+  }
+  .v-btn {
+    background-color: unset;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+    color: unset;
+  }
+  .btns {
+    display: none;
+    position: absolute;
+    width: 50px;
+    /* height: 60px; */
+    z-index: 99;
+    left: 300px;
+    top: 60px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background-color: white;
+  }
+  .btn {
+    width: 100%;
+    background-color: unset !important;
+    border-radius: unset;
+    box-shadow: unset;
+    -webkit-box-shadow: unset;
+    height: 100%;
+  }
+  .btn span {
+    height: 30px;
+  }
+  .hashBox {
+    overflow-x: scroll;
+    white-space: nowrap;
+    width: 100%;
+    height: 45px;
+    border-top: 1px solid lightgray;
+    background-color: #80808021;
+    padding: 3px 0px;
+    overflow-y: hidden;
+  }
+  .hash {
+    float: left; 
+    margin: 5px; 
+    background: #a0d469; 
+    color: white; 
+    padding: 5px; 
+    border-radius: 12px; 
+    font-size: 12px
+  }
   .food {
     padding-right: 10px;
     text-align: center;
   }
   .food h6 {
     color: gray;
+    font-size: 12px;
   }
   .food-name {
     font-weight: bold;
@@ -190,7 +463,7 @@ export default {
     margin: 0 5px 5px 5px;
   }
   .balloon {  
-    position: fixed; 
+    position: absolute; 
     width: 120px; 
     background:rgba(44, 44, 44, 0.8);
     border-radius: 5px;
@@ -214,20 +487,27 @@ export default {
   }
   .comments {
     padding: 5px 10px 5px 10px;
+    width:100%;
+    height: 60px;
     overflow: hidden;
+    line-height: 60px;
   }
   .userImg {
     float: left;
-    margin-right: 10px;
     width: 10%;
   }
   .content {
     float: left;
     width: 85%;
+    height: 60px;
   }
   .commentUser {
-    margin-bottom: 0 !important;
+    /* margin-bottom: 0 !important; */
     font-weight: bold; 
     margin-right: 5px;
+  }
+
+  .feedContents{
+    text-align: center;
   }
 </style>

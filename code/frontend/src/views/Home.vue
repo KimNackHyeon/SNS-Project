@@ -3,9 +3,13 @@
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <router-link to="/Main"><v-btn icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
-        <router-link to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
-          <img v-show="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
-          <img v-show="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+        <router-link v-if="$route.name!='MyRef'" to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <!-- <img v-if="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png"> -->
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
+          </v-btn></router-link> 
+          <router-link v-if="$route.name=='MyRef'" to="/"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+          <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
+          <!-- <img v-if="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png"> -->
           </v-btn></router-link> 
     </div>
     
@@ -14,13 +18,13 @@
       temporary
       absolute
       width=320px
-      style="z-index: 100;"
+      style=" z-index: 300;"
     >
       <v-list class="pa-1" style="background:linear-gradient( to top, #a0d469, rgb(27, 187, 26)); width:100%; height:150px; position:relative;">
         <div  style="background-color:white; width:80%; height:170px; position:relative; border-radius: 8px; border:0px solid white; margin: 40px auto auto auto; box-shadow: #1e1e1e4a 2px 2px 9px;">
             <div style="width:100%; height:52%; padding:auto; text-align: center;">
               <div style="position:fixed; width: 25px; height: 25px; margin-left: 214px;
-    margin-top: 10px;"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></div>
+    margin-top: 10px;"><router-link to="/user/modifyuser"><v-icon size="24px;" color="rgb(0 0 0 / 22%)">mdi-cog</v-icon></router-link></div>
                 <div class="profilePhotobox">
                     <!-- <img class="circlePhoto" :src="require(`../assets/images/profiles/${user.profilePhoto}`)"  /> -->
                     <img class="circlePhoto" :src="userinfo.profile_image_url" />
@@ -43,9 +47,11 @@
                   <div class="iconBox"> 
                    <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
                   </div>
-                  <div class="subBox">
-                    <h4>새 소식</h4>
-                  </div>
+                  <router-link to="/alarm">
+                    <div class="subBox">
+                      <h4>새 소식</h4>
+                    </div>
+                  </router-link>
                 </div>
             </div>
         </div>
@@ -72,7 +78,7 @@
 
       <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
     margin-top: 110px; width:100%;"> <!-- 하단 -->
-        <v-icon style="margin:8px">mdi-cog</v-icon>
+        <!-- <router-link to="/user/modifyuser"><v-icon style="margin:8px">mdi-cog</v-icon></router-link> -->
         <v-btn @click="$emit('logout')" icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
     </v-navigation-drawer>
@@ -93,11 +99,12 @@ Vue.use(Vuetify, {
 })
   export default {
     updated(){
-      if(store.state.kakaoUserInfo.email != null){
+      
+      if(store.state.kakaoUserInfo.email.length != 0){
         this.userinfo = store.state.kakaoUserInfo;
-        console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
+        // console.log(this.userinfo);
       }
     },
     components:{ },
@@ -163,8 +170,9 @@ display: inline-block;
     margin-top: 15px;
 }
 .circlePhoto{
-    width: 100%;
-    height:100%;
+    width: 60px;
+    height: 60px;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 .grayLine{

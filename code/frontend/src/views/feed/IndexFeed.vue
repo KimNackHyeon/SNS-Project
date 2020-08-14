@@ -1,8 +1,8 @@
 <template>
-  <div style="width:100%; height:100%">
+  <div style="width:360px; height:100%">
     <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
-      <div style="height: 100%;">
+      <div style="height: 100%; overflow-y:hidden;">
         <v-combobox
           v-model="model"
           :hide-no-data="!search"
@@ -15,23 +15,25 @@
           solo
           dense
           deletable-chips
+          @keyup.enter="change"
           class="searchBarBtn"
+          style="overflow-y:hidden;"
         ></v-combobox>
-        <div style="overflow: hidden;">
-          <v-btn icon>
+        <div style="overflow: hidden; height: 38px">
+          <v-btn icon @click="change">
             <v-icon class="right-icon">mdi-magnify</v-icon>
           </v-btn>
         </div>
       </div>
       <router-link to="/feed/write">
-       <div class="writeButton">
-         <v-icon color="white">mdi-lead-pencil</v-icon>
-         <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+      <div class="writeButton">
+        <v-icon color="white">mdi-lead-pencil</v-icon>
+        <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
       </div>
       </router-link>
     </div>
-    <div class="feed-body">
-        <FeedItem />
+    <div class="feed-body" style="width:360px; height:590px; padding-bottom: 100px">
+        <feed-item ref="feeditem"/>
         <!-- <FeedItem />
         <FeedItem />
         <FeedItem /> -->
@@ -42,7 +44,7 @@
 
 <script>
 
-
+import $ from 'jquery';
 import { mapState } from "vuex";
 import "../../components/css/feed/feed-item.scss";
 import "../../components/css/feed/newsfeed.scss";
@@ -59,7 +61,6 @@ export default {
       search: null,
     }
   },
-  props: ["keyword"],
   components: { FeedItem },
   watch: {
       model (val, prev) {
@@ -77,9 +78,23 @@ export default {
           return v
         })
       },
+      search() {
+        $('.mdi-magnify').css('color', '#a0d469')
+      }
     },
 
     methods: {
+      searchTag(){
+        // console.log(this.items);
+      },
+      change(){
+        // console.log(this.model);
+        const tags = [];
+        this.model.forEach(tag =>{
+          tags.push(tag.text);
+        })
+        this.$refs.feeditem.searchTag(tags);
+      }
     //   edit (index, item) {
     //     if (!this.editing) {
     //       this.editing = item
@@ -119,5 +134,36 @@ export default {
     text-align: center;
     padding-top: 7px;;
 }
-
+.v-input__control {
+  height: 38px;
+}
+.searchBarBtn::-webkit-scrollbar {
+  height:6px;
+}
+.searchBarBtn::-webkit-scrollbar-track {
+  background-color: transparent;
+  height:0px;
+}
+.searchBarBtn::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: gray;
+  height:3px;
+}
+.searchBarBtn::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+.feed-body::-webkit-scrollbar {
+  width:3px;
+}
+.feed-body::-webkit-scrollbar-track {
+  background-color: transparent;
+  height:5px;
+}
+.feed-body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: gray;
+  height:3px;
+  width: 10px;
+}
 </style>
