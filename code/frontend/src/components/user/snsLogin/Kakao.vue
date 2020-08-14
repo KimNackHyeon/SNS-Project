@@ -54,7 +54,8 @@
                             nickname : kakao_account.profile.nickname,
                             email : kakao_account.email,
                             password : authObj.access_token,
-                            profile_image_url : kakao_account.profile.profile_image_url
+                            image : kakao_account.profile.profile_image_url.replace("http://","https://"),
+                            address : null,
                         }
                         console.log(kakao_account);
 
@@ -65,10 +66,12 @@
                              password : userInfo.password
                          })
                          .then(res => {
-                            if(res.data == "sucess"){
+                             console.log(res);
+                             console.log(userInfo);
+                            if(res.data == "success"){
                                 // console.log(res);
-                                store.commit('setKakaoUserInfo', userInfo);
-                                // console.log(store.state.kakaoUserInfo);
+                                store.commit('setUserInfo', userInfo);
+                                console.log(store.state.userInfo);
                             } else{
                                 // console.log(res);
                                 store.commit('setUserInfo', res.data);
