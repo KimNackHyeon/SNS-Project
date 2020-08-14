@@ -142,7 +142,7 @@ export default {
         $('.searchBox').css('display','unset');
       }else{
         if(document.getElementById("searchcontent").value != ""){
-          axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
           // console.log(this.tradelist)
@@ -160,7 +160,7 @@ export default {
     call(){
       if(this.switched == true){
         console.log(this.userinfo.email)
-        axios.get(`${SERVER_URL}/trade/filter/`+this.userinfo.email)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
           // console.log(this.mapOtherUserInfo)
@@ -171,7 +171,7 @@ export default {
         this.switched = false;
     }
     else{
-      axios.get(`${SERVER_URL}/trade/`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
           this.tradelist = response.data.list
           // console.log(this.tradelist)
@@ -187,7 +187,7 @@ export default {
       }
     },
     edit(pageno) {
-      axios.post(`${SERVER_URL}/trade/beforeupdate`, {no:pageno})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
           // console.log(this.pagenumber)
@@ -207,7 +207,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`${SERVER_URL}/trade/deletetrade`, {no:pageno})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/deletetrade`, {no:pageno})
       .then(response => {
         this.pagenumber = pageno;
         Swal.fire({
@@ -239,7 +239,7 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  axios.get(`${SERVER_URL}/trade/`)
+  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       // console.log(this.tradelist)

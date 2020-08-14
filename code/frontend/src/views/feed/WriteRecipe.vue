@@ -315,7 +315,7 @@ export default {
       // console.log(data);
 
       axios
-      .post(`${SERVER_URL}/feed/img`, formData,{
+      .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData,{
         headers: { 'Content-Type': 'multipart/form-data' } 
       })
       .then((response)=>{
@@ -336,7 +336,7 @@ export default {
     register(data){
       // console.log(data);
       axios
-        .put(`${SERVER_URL}/feed/write`, data)
+        .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/write`, data)
         .then((response)=>{
           // console.log(response);
           this.$router.push("/feed/main");

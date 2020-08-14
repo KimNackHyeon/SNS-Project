@@ -58,7 +58,7 @@
                         }
                         console.log(kakao_account);
 
-                         axios.post(`${SERVER_URL}/account/kakaologin`,{
+                         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
                              image : userInfo.profile_image_url,

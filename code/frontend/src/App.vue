@@ -34,7 +34,7 @@ export default {
       };
       // console.log(typeof(loginData));
       axios
-        .post(`${SERVER_URL}/account/login`, loginData)
+        .post(`https://i3b301.p.ssafy.io:9999/food/api/account/login`, loginData)
         .then((response) => {
           // console.log(response);
           // console.log(this)
@@ -59,7 +59,7 @@ export default {
 
     onSignup(signupData) {
       // console.log(signupData);
-      axios.post(`${SERVER_URL}/account/signup`, signupData)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/signup`, signupData)
         .then((response) => {
           // console.log(response);
           // this.$cookies.set("auth-token", response.data.key);
@@ -77,7 +77,7 @@ export default {
     onLogout() {
       var token = this.$cookies.get("auth-token");
       if (store.state.userInfo) {
-        axios.get(`${SERVER_URL}/account/logout`, {params: { token : token}})
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/logout`, {params: { token : token}})
         .then(() => {
           // console.log(this.$cookies.keys());
           var cookies = document.cookie.split(";");
