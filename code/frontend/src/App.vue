@@ -26,7 +26,6 @@ export default {
       userInfo: {},
     };
   },
-  
   methods: {
     onLogin(email, password) {
       const loginData = {

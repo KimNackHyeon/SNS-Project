@@ -39,12 +39,12 @@
     export default {
         methods: {
             kakaoLogin() {
-                window.Kakao.Auth.login({
+                window.Kakao.Auth.loginForm({
                     success: this.GetMe,
                 });
             },
             GetMe(authObj){
-                console.log(authObj);
+                // console.log(authObj);
                 this.$cookies.set("auth-token", authObj.access_token);
                 window.Kakao.API.request({
                     url:'/v2/user/me',
@@ -66,13 +66,13 @@
                          })
                          .then(res => {
                             if(res.data == "sucess"){
-                                console.log(res);
+                                // console.log(res);
                                 store.commit('setKakaoUserInfo', userInfo);
-                                console.log(store.state.kakaoUserInfo);
+                                // console.log(store.state.kakaoUserInfo);
                             } else{
-                                console.log(res);
+                                // console.log(res);
                                 store.commit('setUserInfo', res.data);
-                                console.log(store.state.userInfo);
+                                // console.log(store.state.userInfo);
                             }
                             this.$router.push("/main");
                          })
