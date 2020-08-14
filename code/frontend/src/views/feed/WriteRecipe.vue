@@ -457,5 +457,7 @@ h3{
   padding: 0 10px;
   font-size: 15px;
 }
-
+.titleinput:hover {
+  border: 2px solid #a0d469;
+}
 </style>
