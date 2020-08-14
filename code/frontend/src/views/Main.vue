@@ -80,10 +80,10 @@
         ref_script2:'튜토리얼하기를 눌러줘서 고마워요.',
         ref_script3:'튜토리얼을 진행하시겠어요?',
         items: [
-          {
-            src:'https://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
-            link:'https://blog.naver.com/woorikangsan/220990801581'
-          },
+          // {
+          //   src:'https://blogfiles.naver.net/MjAxNzA0MjRfMTcy/MDAxNDkzMDEzMjQ1MjEx.ovTdJhgqOsB86TVABuLhxdz98kfWOPNvq1eJNI32Qt4g.uqgB-iHZo_tZ4Mt67nRI5YVe3rb3bkYet9bFl4Yuczsg.JPEG.woorikangsan/1.jpg',
+          //   link:'https://blog.naver.com/woorikangsan/220990801581'
+          // },
           {
             src:'https://www.gompyo.net:444/upld/bd/2020/04/09/thmb_img_20200409173757_3787.jpg',
             link:'https://www.gompyo.net:444/mil_recipe_list.php'
