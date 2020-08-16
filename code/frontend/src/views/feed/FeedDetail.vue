@@ -135,6 +135,7 @@
 import $ from 'jquery'
 import axios from "axios"
 import store from '../../vuex/store.js'
+import Swal from 'sweetalert2'
 
 const SERVER_URL = store.state.SERVER_URL;
 
@@ -354,9 +355,29 @@ export default {
       }
     },
     deleteNo(feed_no){
-      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
-      .then(response => {
-        this.$router.push('/feed/main');
+      Swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: "되돌릴 수 없습니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네 삭제할게요!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            window.location.reload();
+            this.$router.push('/feed/main');
+          })
+        }
       })
     }
   },

@@ -342,7 +342,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`${SERVER_URL}/feed/delete`,{params:{feedNo : feed_no}})
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
           .then(response => {
             Swal.fire({
                 // position: 'top-end',
