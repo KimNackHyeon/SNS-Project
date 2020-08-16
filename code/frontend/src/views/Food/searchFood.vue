@@ -96,11 +96,22 @@ export default {
         return {
             isActive: false,
             searchQuery: '',
-            selectedFood:[],
+            selectedFood: [],
             thisSelectedFood:'',
             amount:'',
             amountundernature:'',
             names : foods,
+    }
+  },
+  props: ['foodlist'],
+  watch: {
+    foodlist() {
+      if (this.foodlist == undefined) {
+        this.selectedFood = []
+      }
+      else {
+        this.selectedFood = this.foodlist
+      }
     }
   },
   methods: {

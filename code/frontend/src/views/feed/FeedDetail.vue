@@ -36,7 +36,7 @@
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
             <div class="btns">
-              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn">수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
@@ -392,22 +392,23 @@ export default {
   .btns {
     display: none;
     position: absolute;
-    width: 50px;
+    width: 80px;
     /* height: 60px; */
     z-index: 99;
-    left: 300px;
-    top: 60px;
+    left: 270px;
+    top: 55px;
     border: 1px solid lightgray;
     border-radius: 4px;
     background-color: white;
   }
   .btn {
-    width: 100%;
+    /* width: 100%; */
     background-color: unset !important;
     border-radius: unset;
     box-shadow: unset;
     -webkit-box-shadow: unset;
     height: 100%;
+    color: rgba(0, 0, 0, 0.87);
   }
   .btn span {
     height: 30px;

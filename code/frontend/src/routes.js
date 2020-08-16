@@ -20,10 +20,11 @@ import WriteGroupBuying from "./views/store/WriteGroupbuying.vue";
 import ModifyGroupBuying from "./views/store/ModifyGroupbuying.vue";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
-import WriteRecipe from "./views/feed/WriteRecipe.vue"
-import MarketMap from "./views/store/MarketMap.vue"
-import PrivateChat from "./views/chat/PrivateChat.vue"
-import Error from "./views/error.vue"
+import WriteRecipe from "./views/feed/WriteRecipe.vue";
+import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
+import MarketMap from "./views/store/MarketMap.vue";
+import PrivateChat from "./views/chat/PrivateChat.vue";
+import Error from "./views/error.vue";
 
 export default [
   {
@@ -153,6 +154,11 @@ export default [
     path:"/feed/write",
     name : "WriteRecipe",
     component : WriteRecipe
+  },
+  {
+    path:"/feed/modify/:feedNo?",
+    name : "ModifyRecipe",
+    component : ModifyRecipe
   },
   {
     path: "/store/modify/marketplace",
