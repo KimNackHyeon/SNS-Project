@@ -390,7 +390,7 @@ export default {
       // console.log(formData);
 
       axios
-        .post(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/img`, formData, {
+        .post(`https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/img`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
@@ -413,7 +413,7 @@ export default {
     updateData(data) {
       console.log(data);
       axios
-        .put(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/update`, data)
+        .put(`https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/update`, data)
         .then((response) => {
           // console.log(response);
           this.$router.push("/feed/main");
