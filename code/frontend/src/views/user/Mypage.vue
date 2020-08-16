@@ -143,7 +143,7 @@ export default {
         this.userinfo = store.state.userInfo;
       }
 
-      axios.get(`${SERVER_URL}/account/myrecipe/`, {params: {email: this.userinfo.email}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myrecipe/`, {params: {email: this.userinfo.email}})
       .then(response => {
           // console.log(response)
           this.recipes = response.data;
@@ -152,7 +152,7 @@ export default {
           // console.log(error)
         })
 
-      axios.get(`${SERVER_URL}/account/myscrap/`, {params: {email: this.userinfo.email}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myscrap/`, {params: {email: this.userinfo.email}})
       .then(response => {
           // console.log(response)
           this.scraps = response.data;
@@ -185,7 +185,7 @@ export default {
       }else{
         this.openFollower = false
       }
-      axios.get(`${SERVER_URL}/account/follow/`, {params: {email: this.userinfo.email}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`, {params: {email: this.userinfo.email}})
         .then(response => {
           // console.log(response)
           this.followers = response.data;
@@ -200,7 +200,7 @@ export default {
       }else{
         this.openFollowing = false
       }
-      axios.get(`${SERVER_URL}/account/following/`, {params: {email: this.userinfo.email}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/following/`, {params: {email: this.userinfo.email}})
         .then(response => {
           // console.log(response)
           this.followings = response.data
@@ -234,7 +234,7 @@ export default {
     },
     addFollow(yourEmail){
       // alert('팔로우');
-      axios.post(`${SERVER_URL}/account/follow/`,
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`,
         {
           email : store.state.userInfo.email,
           yourEmail : yourEmail,
@@ -245,7 +245,7 @@ export default {
     },
     unFollow(yourEmail){
       // alert('언팔로우');
-      axios.post(`${SERVER_URL}/account/unfollow/`,
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/unfollow/`,
         {
           email : store.state.userInfo.email,
           yourEmail : yourEmail,
@@ -255,8 +255,8 @@ export default {
       })
     },
     updateList(){
-      // axios.get(`${SERVER_URL}/account/yourpage/`+ this.$route.params.email)
-      axios.get(`${SERVER_URL}/account/yourpage/`+ this.userinfo.email)
+      // axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.userinfo.email)
         .then(response => {
           // console.log(response);
           this.userData.nickname = response.data.nickname;
@@ -290,7 +290,7 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`${SERVER_URL}/account/mypage/`+ this.userinfo.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/mypage/`+ this.userinfo.email)
         .then(response => {
           // console.log(response);
           this.userData.recipe = response.data.recipe;

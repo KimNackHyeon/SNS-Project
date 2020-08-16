@@ -137,7 +137,7 @@ export default {
   },
   methods:{
     registChattingRoom(){
-      axios.post(`${SERVER_URL}/chatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/chatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
         .then(response => {
           this.chatName = response.data;
         })
@@ -157,7 +157,7 @@ export default {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
-    axios.get(`${SERVER_URL}/trade/article/${id}`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/article/${id}`)
     .then(response => {
       this.detailinfo = response.data;
       // 주소 형식 변환
@@ -173,7 +173,7 @@ export default {
     })
 
      axios
-        .get(`${SERVER_URL}/account/apitest`)
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);

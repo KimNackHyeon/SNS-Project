@@ -43,8 +43,8 @@ const dataState = createPersistedState({
   })
 
 
-// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
-const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
+// const SERVER_URL = 'http://localhost:9999/food/api';
 export default new Vuex.Store({
   modules: {
     dataStore
@@ -55,10 +55,10 @@ export default new Vuex.Store({
     SERVER_URL : SERVER_URL,
     // SERVER_URL : 'http://localhost:9999/food/api',
     kakaoUserInfo:{
-      email:'',
-      nickname:'',
-      profile_image_url:'',
-      address:'',
+      email:null,
+      nickname:null,
+      profile_image_url:null,
+      address:null,
     },
     userInfo: {
       email: null,

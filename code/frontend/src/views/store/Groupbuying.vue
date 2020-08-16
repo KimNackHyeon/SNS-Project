@@ -126,7 +126,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`${SERVER_URL}/groupbuying/delete` , {no:data})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
       .then(response => {
         Swal.fire({
             // position: 'top-end',
@@ -146,7 +146,7 @@ export default {
     callwithaddress(){
       if(this.switched2 == true){
         axios({
-                    url:`${SERVER_URL}/groupbuying/orderbyaddress`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyaddress`,
                     method:'post',
                     data: JSON.stringify(this.distancedata2),
                     headers: config.headers})
@@ -159,7 +159,7 @@ export default {
         this.switched2 = false;
     }
     else{
-      axios.get(`${SERVER_URL}/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -171,7 +171,7 @@ export default {
     },
     call(){
       if(this.switched == true){
-        axios.get(`${SERVER_URL}/groupbuying/orderbyenddate`)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -181,7 +181,7 @@ export default {
         this.switched = false;
     }
     else{
-      axios.get(`${SERVER_URL}/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -199,7 +199,7 @@ export default {
       this.userinfo = store.state.userInfo;
     }
     // if(userinfo.email == )
-    axios.get(`${SERVER_URL}/groupbuying/read`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data

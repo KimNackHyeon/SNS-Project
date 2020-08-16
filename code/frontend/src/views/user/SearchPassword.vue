@@ -103,7 +103,7 @@ Swal.fire({
       // console.log(typeof(emailData))
       // console.log(email)
       axios
-      .post(`${SERVER_URL}/account/searchpwd`, emailData)
+      .post(`https://i3b301.p.ssafy.io:9999/food/api/account/searchpwd`, emailData)
       .then((data) => {
         // console.log("성공")
         console.dir(data)

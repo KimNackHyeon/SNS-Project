@@ -151,7 +151,7 @@ export default {
   methods: {
     checkUser() {
       var token = this.$cookies.get("auth-token");
-      axios.get(`${SERVER_URL}/info`, {params: { token : token}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/info`, {params: { token : token}})
         .then((response) => {
           // console.log(response);
         })
@@ -163,7 +163,7 @@ export default {
     },
     // 에러 확인(닉네임, 비밀번호, 비밀번호 확인, 주소)
     checkNickname() {
-      axios.post(`${SERVER_URL}/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
       .then(data => {
         // console.log(data.data.data)
         if (data.data.data == "1" && this.userinfo.nickname != this.newUserInfo.newNickname) {
@@ -244,7 +244,7 @@ export default {
           // console.log(store.state.kakaoUserInfo)
         }
         else {
-          axios.put(`${SERVER_URL}/account/update/`,{
+          axios.put(`https://i3b301.p.ssafy.io:9999/food/api/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
             address : this.newUserInfo.newAddress,
@@ -278,7 +278,7 @@ export default {
       formData.append("image", this.image); // 변경할 프로필 사진
       formData.append("email",store.state.userInfo.email); // 사용자 이메일
 
-      axios.post(`${SERVER_URL}/account/upload/`, formData, { 
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/upload/`, formData, { 
           headers: { 'Content-Type': 'multipart/form-data' } 
       }).then(response => {
         // console.log(response);

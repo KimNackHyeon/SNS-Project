@@ -132,8 +132,8 @@ export default {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  // console.log(`${SERVER_URL}/trade/`)
-  axios.get(`${SERVER_URL}/trade/`)
+  // console.log(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       // console.log(this.tradelist)

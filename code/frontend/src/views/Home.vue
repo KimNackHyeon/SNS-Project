@@ -99,11 +99,12 @@ Vue.use(Vuetify, {
 })
   export default {
     updated(){
+      
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-        console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
+        // console.log(this.userinfo);
       }
     },
     components:{ },
