@@ -56,7 +56,7 @@
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
             <div class="btns">
-              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn" >수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
@@ -96,6 +96,7 @@ import axios from "axios";
 import store from '../../vuex/store'
 import moment from "moment";
 import $ from 'jquery';
+import Swal from 'sweetalert2'
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
@@ -331,9 +332,29 @@ export default {
       // console.log(this.feedDatas);
     },
     deleteNo(feed_no){
-      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
-      .then(response => {
-        this.$router.push('/feed/main');
+      Swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: "되돌릴 수 없습니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네 삭제할게요!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`${SERVER_URL}/feed/delete`,{params:{feedNo : feed_no}})
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            window.location.reload();
+            this.$router.push('/feed/main');
+          })
+        }
       })
     }
   },
@@ -343,16 +364,16 @@ export default {
 .btns {
   display: none;
   position: absolute;
-  width: 50px;
+  width: 80px;
   /* height: 60px; */
   z-index: 80;
-  left: 300px;
+  left: 275px;
   top: 375px;
   border: 1px solid lightgray;
   border-radius: 4px;
 }
 .btn {
-  width: 100%;
+  /* width: 100%; */
   background-color: white !important;
   border-radius: unset;
   box-shadow: unset;
