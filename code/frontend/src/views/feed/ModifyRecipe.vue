@@ -207,7 +207,7 @@ export default {
           file: null,
         },
       ],
-      images: "",
+      images: [],
       loading: false,
     };
   },
@@ -237,9 +237,9 @@ export default {
     // 재료추가 : foodlisk 배열
     // 사진 : items 배열 안에 imageUrl에 url저장, decs: 내용 저장
     var feedNo = this.$route.params.feedNo;
-    axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
       .then(response => {
-        console.log(response)
+        // console.log(response)
         this.title = response.data.feeddata.title
         for (let tag of response.data.taglist) {
           this.tags.push(tag.tagName)
@@ -253,11 +253,10 @@ export default {
             'file': 'File',
             'imageUrl': item.img
           }
+          this.images.push(data.imageUrl);
           this.items.push(data)
         }
         console.log(this.items)
-        
-        
       })
   },
   methods: {
@@ -271,7 +270,7 @@ export default {
         }
       }
       FL = FL + "를 재료로 추가하였습니다.";
-      console.log(foodlist.length)
+      // console.log(foodlist.length)
       Swal.fire({
         icon: "success",
         title: FL,
@@ -323,6 +322,7 @@ export default {
     },
     deleteRecipe(index) {
       this.items.splice(index);
+      this.images.splice(index);
     },
     edit(index, item) {
       if (!this.editing) {
@@ -366,10 +366,12 @@ export default {
         } else {
           contents.push(" ");
         }
-        formData.append("images", item.file);
+        if(item.file != "File")
+          formData.append("images", item.file);
       });
 
       const feedData = {
+        no : this.$route.params.feedNo,
         title: this.title,
         email: this.userinfo.email,
         nickname: this.userinfo.nickname,
@@ -385,30 +387,33 @@ export default {
         images: this.images,
       };
 
-      // console.log(data);
+      // console.log(formData);
 
       axios
-        .post(`${SERVER_URL}/feed/img`, formData, {
+        .post(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/img`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
-          // console.log(response.data);
-          this.images = response.data;
+          console.log(response.data);
+          response.data.forEach(url => {
+            this.images.push(url);
+          })
+          // this.images = response.data;
           data.images = this.images;
-          // console.log(data);
+          console.log(data);
           setTimeout(() => {
             this.loading = false;
-            this.register(data);
+            this.updateData(data);
           }, 1000 * this.items.length + 2000);
         })
         .catch((error) => {
           // console.log(error.response);
         });
     },
-    register(data) {
-      // console.log(data);
+    updateData(data) {
+      console.log(data);
       axios
-        .put(`${SERVER_URL}/feed/write`, data)
+        .put(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/update`, data)
         .then((response) => {
           // console.log(response);
           this.$router.push("/feed/main");
