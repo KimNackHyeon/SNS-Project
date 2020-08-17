@@ -36,7 +36,7 @@
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
             <div class="btns">
-              <!-- <v-btn class="btn" >수정</v-btn> -->
+              <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn">수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
@@ -55,7 +55,7 @@
           <h5>나에게 있는 재료</h5>
           <div style="padding: 5px 10px; display: flex; overflow: scroll;">
             <div class="food" v-for="(food, i) in havingFood" :key="i">
-              <img :src="require(`../../assets/images/food/${food.img}.png`)" alt="flour" style="width: 30px; height: 30px;">
+              <img :src="require(`../../assets/images/food/${food.img}.png`)" style="width: 30px; height: 30px;">
               <h5 class="food-name">{{food.name_kor}}</h5>
               <h6>{{food.amount}}</h6>
             </div>
@@ -135,6 +135,7 @@
 import $ from 'jquery'
 import axios from "axios"
 import store from '../../vuex/store.js'
+import Swal from 'sweetalert2'
 
 const SERVER_URL = store.state.SERVER_URL;
 
@@ -190,7 +191,7 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`${SERVER_URL}/myref/search/`+this.userinfo.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
     //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
@@ -201,7 +202,7 @@ export default {
         });
     
     var feedNo = this.$route.params.feedNo;
-    axios.get(`${SERVER_URL}/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
           // console.log(response);
             this.feedData = { // 하나의 피드 데이터
@@ -229,7 +230,7 @@ export default {
               this.feedData.items.push(d);
             });
 
-            axios.get(`${SERVER_URL}/feed/check`,{
+            axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
               params:
               {
                 email:store.state.userInfo.email,
@@ -263,7 +264,7 @@ export default {
           // console.log(error.response);
         });
         setTimeout(() => {
-          axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
               .then(response => {
                 // console.log(response);
                 response.data.forEach(c =>{
@@ -282,7 +283,7 @@ export default {
   methods: {
     likedbtn() {
       this.feedData.isLike = !this.feedData.isLike;
-      axios.get(`${SERVER_URL}/feed/like`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -296,7 +297,7 @@ export default {
     },
     scrapedbtn() {
       this.feedData.isScrap = !this.feedData.isScrap;
-      axios.get(`${SERVER_URL}/feed/scrap`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -337,7 +338,7 @@ export default {
         create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
       // console.log(comment);
-      axios.post(`${SERVER_URL}/feed/register`,comment)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.comment = "";
@@ -354,9 +355,29 @@ export default {
       }
     },
     deleteNo(feed_no){
-      axios.delete(`${SERVER_URL}/feed/delete`,{params:{feedNo : feed_no}})
-      .then(response => {
-        this.$router.push('/feed/main');
+      Swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: "되돌릴 수 없습니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네 삭제할게요!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            window.location.reload();
+            this.$router.push('/feed/main');
+          })
+        }
       })
     }
   },
@@ -392,22 +413,23 @@ export default {
   .btns {
     display: none;
     position: absolute;
-    width: 50px;
+    width: 80px;
     /* height: 60px; */
     z-index: 99;
-    left: 300px;
-    top: 60px;
+    left: 270px;
+    top: 55px;
     border: 1px solid lightgray;
     border-radius: 4px;
     background-color: white;
   }
   .btn {
-    width: 100%;
+    /* width: 100%; */
     background-color: unset !important;
     border-radius: unset;
     box-shadow: unset;
     -webkit-box-shadow: unset;
     height: 100%;
+    color: rgba(0, 0, 0, 0.87);
   }
   .btn span {
     height: 30px;

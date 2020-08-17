@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15)">
+    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
             <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
@@ -11,11 +11,20 @@
       </div>
     </div>
     <!-- 제목 -->
-    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
+    <!-- <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden; padding:5px;">
       <textarea placeholder="제목을 입력해주세요" style="width:100%; height:100%; paddng:5px; text-align:center; font-size:19px; font-weight:700; resize: none; overflow:hidden;"  v-model="title"></textarea>
-    </div>
+    </div> -->
     <!-- 글작성 본문 -->
     <div style="padding: 10px 20px">
+      <!-- 제목 -->
+      <div style="margin: 10px 0">
+        <div style="float: left; width: 15%; margin-right: 10px">
+          <span style="line-height: 40px">제목</span>
+        </div>
+        <div style="overflow: hidden;">
+          <input v-model="title" class="titleinput" type="text" placeholder="제목을 입력해주세요." style="float:left; width: 100%; height: 40px; padding: 0 10px;">
+        </div>
+      </div>
       <!-- 품목 -->
       <div style="margin: 10px 0">
         <div style="float: left; width: 15%; margin-right: 10px">
@@ -25,7 +34,7 @@
           <input type="text" v-model="food.name_kor" @click="getFood" class="setFood" placeholder="ex) 양파" style="float:left; width: 100%; height: 40px; text-align: center; font-size: 15px;">
         </div>
         <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
-          <v-card>
+          <v-card class="foodDialog">
             <v-card-title >
               <!-- 품목 검색 -->
               <div style="width:100%;"> 
@@ -48,7 +57,7 @@
               <div style="overflow-y: scroll; z-index:20;">
                 <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
                   <div>
-                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
+                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
                   </div>
                   <div>
                     {{ food.name_kor }}
@@ -105,7 +114,7 @@
           <span style="line-height: 40px">참여인원</span>
         </div>
         <div style="overflow: hidden;">
-          <input v-model="numberPeople" class="cntPeople" type="text" placeholder="숫자만 입력해주세요." style="float:left; width: 100%; height: 40px;">
+          <input v-model="numberPeople" class="cntPeople" type="text" placeholder="숫자만 입력해주세요." style="float:left; width: 100%; height: 40px; ">
         </div>
       </div>
       <!-- 파일 링크 -->
@@ -144,9 +153,9 @@
 import $ from 'jquery'
 import "../../components/css/store/writegroupbuying.scss";
 import axios from "axios"
-
+import {foods} from '../Food/Foods.js'
 import store from '../../vuex/store.js'
-        import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 
 
 const SERVER_URL = store.state.SERVER_URL;
@@ -158,6 +167,7 @@ export default {
       title: '',
       food: '',
       numberPeople: '',
+      oknumPeople: false,
       fileLink: '',
       content: '',
       dialog: false,
@@ -168,61 +178,26 @@ export default {
       menu1: false,
       // 품목 선택
       searchQuery: '',
-      names : [
-        {name:'egg',
-        name_kor:'계란',
-        img:'egg'},
-        {name:'flour',
-        name_kor:'밀가루',
-        img:'flour'
-        },
-        {name:'milk',
-        name_kor:'우유',
-        img:'flour'
-        },
-        {name:'olive-oil',
-        name_kor:'올리브오일',
-        img:'olive-oil'
-        },
-        {name:'onion',
-        name_kor:'양파',
-        img:'onion'
-        },
-        {name:'potato',
-        name_kor:'감자',
-        img:'potato'
-        },
-        {name:'sugar',
-        name_kor:'설탕',
-        img:'sugar'
-        },
-        {name:'sweetpotato',
-        name_kor:'고구마',
-        img:'sweetpotato'
-        },
-        {name:'vanilla',
-        name_kor:'바닐라빈',
-        img:'vanilla'
-        },
-        {name:'egg',
-        name_kor:'설탕계란',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'계란양',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'계감란',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'가계란',
-        img:'egg'},
-      ],
+      names : foods,
     }
   },
   watch: {
     date (val) {
       this.dateFormatted = this.formatDate(this.date)
     },
+    numberPeople () {
+      if (Number(this.numberPeople) == 1){
+        this.oknumPeople = false
+        Swal.fire({
+          title: '참여인원 수를 확인해 주세요',
+          text: '참여인원은 2명 이상부터 가능합니다.',
+        })
+      }
+      else {
+        this.oknumPeople = true;
+      }
+      
+    }
   },
   methods: {
     getFood(){
@@ -259,9 +234,9 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content) {
+      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`${SERVER_URL}/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '등록이 완료되었습니다.',
@@ -270,7 +245,14 @@ export default {
           })
           .catch(error => {
           })
-      }else{
+      }
+      else if (!this.oknumPeople) {
+        Swal.fire({
+          title: '참여인원 수를 확인해 주세요',
+          text: '참여인원은 2명 이상부터 가능합니다.',
+        })
+      }
+      else{
         Swal.fire({
           title: '입력이 완료되지 않았습니다.',
           text: '빈칸을 모두 입력해주세요!',
@@ -324,6 +306,19 @@ export default {
 </script>
 
 <style scoped>
+.foodDialog {
+  height: 460px;
+}
+.titleinput {
+  background-color: unset;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  text-align: center;
+  padding: 0 10px;
+}
+.titleinput:hover {
+  border: 2px solid #a0d469;
+}
 .setFood {
   border: 1px solid lightgray;
   background-color: unset;
@@ -392,6 +387,7 @@ input{
   border: 1px solid lightgray;
   border-radius: 4px;
   text-align: center;
+  padding: 0 10px;
 }
 .cntPeople:hover {
   border: 2px solid #a0d469;

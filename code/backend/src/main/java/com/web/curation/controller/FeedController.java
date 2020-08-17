@@ -91,7 +91,7 @@ public class FeedController {
 		List<MyBoard> feedlist = myboardRepo.findAll();
 		List<Tag> taglist = tagRepo.findAll();
 		List<FeedData> datalist = feedDataRepo.findAll();
-
+ 
 		map.put("feedlist", feedlist);
 		map.put("taglist", taglist);
 		map.put("datalist", datalist);
@@ -203,16 +203,86 @@ public class FeedController {
 
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "피드 정보 수정")
+	@PutMapping("/feed/update")
+	public ResponseEntity<String> updateFeed(@RequestBody FormWrapper data) {
+//		System.out.println(data);
+		MyBoard feedData = data.getFeedData();
+		Food[] food = data.getFood();
+		String[] tags = data.getTags();
+		String[] contents = data.getContents();
+		String[] images = data.getImages();
+
+		System.out.println(feedData);
+//		System.out.println(Arrays.toString(food));
+//		System.out.println(Arrays.toString(tags));
+		System.out.println(Arrays.toString(contents));
+		System.out.println(Arrays.toString(images));
+
+		if (images.length == 0)
+			return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+		/* 피드 정보 등록 */
+		myboardRepo.save(feedData);
+		Long feedNo = feedData.getNo(); // 수정할 피드 번호
+
+		System.out.println(feedNo);
+		/* 피드 재료 등록 */
+		List<Food> oriFood = foodRepo.findByFeedNo(feedNo);
+		for (Food f : oriFood) {
+			foodRepo.delete(f);
+		}
+		
+		for (Food f : food) {
+			f.setFeedNo(feedNo);
+			foodRepo.save(f);
+		}
+		
+		System.out.println(Arrays.toString(food));
+		/* 피드 태그 등록 */
+		
+		List<Tag> oriTag = tagRepo.findByFeedNo(feedNo);
+		for (Tag t : oriTag) {
+			tagRepo.delete(t);
+		}
+		
+		for (int i = 0; i < tags.length; i++) {
+			Tag tag = new Tag(feedNo, tags[i]);
+			tagRepo.save(tag);
+		}
+		System.out.println(Arrays.toString(tags));
+
+		/* 피드 내용, 이미지 등록 */
+		
+		List<FeedData> oriFeedData = feedDataRepo.findByFeedNo(feedNo);
+		
+		for (FeedData fd : oriFeedData) {
+			feedDataRepo.delete(fd);
+		}
+		
+		for (int index = 0; index < contents.length; index++) {
+			String content = contents[index];
+			String imgurl = images[index];
+			FeedData feed = new FeedData();
+			feed.setFeedNo(feedNo);
+			feed.setTindex((long) index);
+			feed.setContent(content);
+			feed.setImg(imgurl);
+			feedDataRepo.save(feed);
+		}
+
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "피드 이미지 등록")
 	@PostMapping("/feed/img")
-	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images)
-			throws IllegalStateException, IOException {
-
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images, @RequestParam String email) throws IllegalStateException, IOException {
+		System.out.println(email);
 		List<String> imgList = new ArrayList<String>();
-
-		Long feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
-		String email = myboardRepo.findTopByOrderByNoDesc().getEmail(); // 가장 최근 피드 작성자
+		Long feedNo = 0L;
+		if(myboardRepo.findAll().size() != 0) {
+			feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
+		}
 
 		for (MultipartFile mfile : images) {
 			String imgurl = upload(mfile, feedNo, email);

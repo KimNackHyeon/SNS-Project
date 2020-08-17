@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%; width:100%;">
     <!-- 메뉴바 -->
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/store/marketplace">
@@ -38,43 +38,43 @@
           </tr>
           <tr class="tableBody">
             <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
-            <td><h4>{{ detailinfo.myfood_kor }} 1개</h4></td>
+            <td><h4>{{ detailinfo.myfood_kor }} {{ detailinfo.myfoodcount1 }}개</h4></td>
             <td style="padding-left: 5px;">를</td>
             <td><img :src="'/img/food/' + detailinfo.tradefood1 + '.png'" :alt="detailinfo.tradefood1" style="width: 30px; height: 30px; margin: 0 10px;"></td>
-            <td><h4>{{ detailinfo.tradefood1_kor }} {{ detailinfo.foodcount1 }}개</h4></td>
+            <td><h4>{{ detailinfo.tradefood1_kor }} {{ detailinfo.tradefoodcount1 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
           </tr>
           <tr class="tableBody" v-if="detailinfo.tradefood2">
             <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
-            <td><h4>{{ detailinfo.myfood_kor }} 1개</h4></td>
+            <td><h4>{{ detailinfo.myfood_kor }} {{ detailinfo.myfoodcount2 }}개</h4></td>
             <td style="padding-left: 5px;">를</td>
             <td><img :src="'/img/food/' + detailinfo.tradefood2 + '.png'" :alt="detailinfo.tradefood2" style="width: 30px; height: 30px; margin: 0 10px;"></td>
-            <td><h4>{{ detailinfo.tradefood2_kor }} {{ detailinfo.foodcount2 }}개</h4></td>
+            <td><h4>{{ detailinfo.tradefood2_kor }} {{ detailinfo.tradefoodcount2 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
           </tr>
         </tbody>
       </table>
       <!-- 식품 싯가 -->
       <div style="background: black; font-size: 12px">
-        <div style="padding: 5px 0 0 5px">
-          <div style="color: white; display: inline-block;">1일전</div>
-          <div style="color: yellow; display: inline-block; margin: 0 5px;">계란/특란 (등급:중품)</div>
-          <div style="color: white; display: inline-block;">소매 개당 가격 172 원</div>
+        <div v-if="myapi.name!=''" style="padding: 5px 0 0 5px">
+          <div style="color: yellow; display: inline-block; margin: 0 5px;">{{myapi.name}}</div>
+          <div style="color: white; display: inline-block;">소매 {{myapi.unit}}당 가격 {{myapi.price}} 원</div>
         </div>
-        <div style="padding: 5px 0 0 5px">
-          <div style="color: white; display: inline-block;">1일전</div>
-          <div style="color: yellow; display: inline-block; margin: 0 5px;">양파/양파 (등급:중품)</div>
-          <div style="color: white; display: inline-block;">소매 개당 가격 332 원</div>
+        <div  v-if="trade1api.name!=''" style="padding: 5px 0 0 5px">
+          <div style="color: yellow; display: inline-block; margin: 0 5px;">{{trade1api.name}}</div>
+          <div style="color: white; display: inline-block;">소매 {{trade1api.unit}}당 가격 {{trade1api.price}} 원</div>
         </div>
-        <div style="padding: 5px 0 0 5px">
-          <div style="color: white; display: inline-block;">1일전</div>
-          <div style="color: yellow; display: inline-block; margin: 0 5px;">감자/수미 (등급:중품)</div>
-          <div style="color: white; display: inline-block;">소매 개당 가격 211 원</div>
+        <div  v-if="trade2api.name!=''" style="padding: 5px 0 0 5px">
+          <div style="color: yellow; display: inline-block; margin: 0 5px;">{{trade2api.name}}</div>
+          <div style="color: white; display: inline-block;">소매 {{trade2api.unit}}당 가격 {{trade2api.price}} 원</div>
+        </div>
+        <div  v-if="myapi.name==''&&trade1api.name==''&&trade2api.name==''" style="padding: 5px 0 0 5px">
+          <div style="color: white; display: inline-block;">해당 음식들의 가격정보가 없습니다.</div>
         </div>
         <div style="color: gray; font-size: 10px; text-align: right;">출처 : 농산물 유통정보 KAMIS </div>
       </div>
       <!-- 글 내용 -->
-      <div style="padding: 10px; height: 300px">
+      <div v-html="detailinfo.content" style="padding: 10px; height: 300px">
         {{ detailinfo.content }}
       </div>
     </div>
@@ -115,7 +115,23 @@ export default {
       privatechat:``, //해당 게시글의 번호가 들어가면된다 임시로 123으로 해놈
       chatName:'',
       userinfo:'',
-      detailinfo: [],
+      detailinfo: '',
+      xmldata:[],
+      myapi : {
+        name : '',
+        unit : '',
+        price : '',
+      },
+      trade1api : {
+          name : '',
+          unit : '',
+          price : '',
+      },
+      trade2api : {
+          name : '',
+          unit : '',
+          price : '',
+      },
     }
   },
   methods:{
@@ -141,20 +157,53 @@ export default {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
-    axios.get(`${SERVER_URL}/trade/article/${id}`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/article/${id}`)
     .then(response => {
-      this.detailinfo = response.data
+      this.detailinfo = response.data;
+      // 주소 형식 변환
+      this.detailinfo.regist_date = this.detailinfo.regist_date.substring(0, 10)
+      const [year, month, day] = this.detailinfo.regist_date.split('-')
+      this.detailinfo.regist_date = `${year}/${month}/${day}`
+      // 내용 엔터 변환
+      this.detailinfo.content = this.detailinfo.content.split('^').join('<br />');
+
+      // console.log(this.detailinfo);
     })
     .catch(error => {
     })
-    // axios
-    //     .get(`${SERVER_URL}/account/apitest`)
-    //     .then(response => {
-    //         this.xmldata = response.data;
-    //         console.log(this.xmldata);
-    //         console.log(this.detailinfo)
-    //         }
-    //     )
+
+     axios
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            console.log(this.xmldata);
+            
+            for(var i=0; i<this.xmldata.price.length;i++){
+            var tF = this.xmldata.price[i];
+            var tFname = tF.productName.split('/')[0];
+            console.log(tFname);
+            if(tF.product_cls_code == '01' ){
+              if(tFname == this.detailinfo.myfood_kor ){
+                this.myapi.name = tFname;
+                this.myapi.unit = tF.unit;
+                this.myapi.price = tF.dpr1;
+                continue;
+              }
+              if(tFname == this.detailinfo.tradefood1_kor){
+                this.trade1api.name = tFname;
+                this.trade1api.unit = tF.unit;
+                this.trade1api.price = tF.dpr1;
+                continue;
+              }
+              if(tFname == this.detailinfo.tradefood2_kor){
+                this.trade2api.name = tFname;
+                this.trade2api.unit = tF.unit;
+                this.trade2api.price = tF.dpr1;
+              }
+            }
+          }
+        }
+      )
   },
   computed: {
     param: function() {

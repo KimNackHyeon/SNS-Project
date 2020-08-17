@@ -83,10 +83,10 @@ public class AccountController {
 
 	@Autowired
 	MyRefRepo myrefRepo;
-	
+
 	@Autowired
 	FeedDataRepo feedDataRepo;
-	
+
 	@Autowired
 	ScrapRepo scrapRepo;
 
@@ -108,7 +108,7 @@ public class AccountController {
 			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@ApiOperation(value = "카카오 로그인 처리")
 	@PostMapping("/account/kakaologin")
 	public ResponseEntity<Object> kakaologin(@RequestBody Member member) {
@@ -149,14 +149,14 @@ public class AccountController {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
 	@ApiOperation(value = "읽지않은 새소식 반환")
 	@GetMapping("/account/new/{email}")
 	public ResponseEntity<Map> observeNew(@PathVariable String email) {
 		Map<String, Alarm> map = new HashMap<String, Alarm>();
-		//type 1 : 나를 팔로우함
-		//type 2 : 내 게시글에 댓글 달림
-		//type 3 : 내 글에 좋아요 눌림
+		// type 1 : 나를 팔로우함
+		// type 2 : 내 게시글에 댓글 달림
+		// type 3 : 내 글에 좋아요 눌림
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
@@ -179,6 +179,7 @@ public class AccountController {
 	public Object signup(@Valid @RequestBody Member member) {
 		final BasicResponse result = new BasicResponse();
 		// 회원가입단을 생성해 보세요.'
+		member.setImage("/img/profile_default.png");
 		memberRepo.save(member);
 		result.status = true;
 		result.data = "success";
@@ -313,16 +314,16 @@ public class AccountController {
 
 		return followingList;
 	}
-	
+
 	@PostMapping("/account/follow/")
 	@ApiOperation(value = "팔로우 추가")
 	public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
-		
+
 		System.out.println(follow);
 		followRepo.save(follow);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/account/unfollow/")
 	@ApiOperation(value = "팔로우 삭제")
 	public ResponseEntity<String> unFollow(@RequestBody Follow follow) {
@@ -422,7 +423,7 @@ public class AccountController {
 		String result = "/img/" + member.getNo() + "/profile/" + filename;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/account/myrecipe/")
 	@ApiOperation(value = "내 레시피 탐색")
 	public List<FeedData> recipeList(@RequestParam String email) {
@@ -430,13 +431,13 @@ public class AccountController {
 		List<MyBoard> boardList = myboardRepo.findByEmail(email);
 		List<FeedData> datalist = new ArrayList<FeedData>();
 		for (MyBoard myBoard : boardList) {
-			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(myBoard.getNo(), (long)0);
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(myBoard.getNo(), (long) 0);
 			datalist.add(feeddata);
 		}
 
 		return datalist;
 	}
-	
+
 	@GetMapping("/account/myscrap/")
 	@ApiOperation(value = "내 스크랩 글 탐색")
 	public List<FeedData> scrapList(@RequestParam String email) {
@@ -444,43 +445,54 @@ public class AccountController {
 		List<Scrap> scrapList = scrapRepo.findByEmail(email);
 		List<FeedData> datalist = new ArrayList<FeedData>();
 		for (Scrap scrap : scrapList) {
-			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(scrap.getFeedNo(), (long)0);
+			FeedData feeddata = feedDataRepo.findByFeedNoAndTindex(scrap.getFeedNo(), (long) 0);
 			datalist.add(feeddata);
 		}
 
 		return datalist;
 	}
-	
+
 	@GetMapping("/account/apitest")
 	@ApiOperation(value = "외부 api 호출")
 	public String callapi() {
 		StringBuffer result = new StringBuffer();
 		System.out.println("외부 api 호출 ======================");
 		try {
-			String urlstr = "http://www.kamis.or.kr/service/price/xml.do?"
-					+ "action=dailySalesList"
-					+ "&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac"
-					+ "&p_cert_id=1137"
-					+ "&p_returntype=json";
-			
+			String urlstr = "http://www.kamis.or.kr/service/price/xml.do?" + "action=dailySalesList"
+					+ "&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac" + "&p_cert_id=1137" + "&p_returntype=json";
+
 			URL url = new URL(urlstr);
 			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
 			urlconnection.setRequestMethod("GET");
-			
-			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(),"UTF-8"));
-			 
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(), "UTF-8"));
+
 			String returnLine;
-			
-			while((returnLine = br.readLine()) != null) {
+
+			while ((returnLine = br.readLine()) != null) {
 				result.append(returnLine);
 			}
 			urlconnection.disconnect();
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		System.out.println(result.toString());
 		return result.toString();
+	}
+
+	@PostMapping("/account/checkemail")
+	@ApiOperation(value = "이메일 중복체크")
+	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
+			hashmap.put("data", "1");
+		} else {
+//	         String code = memberService.sendMail(member.getEmail());
+			hashmap.put("data", "0");
+		}
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");

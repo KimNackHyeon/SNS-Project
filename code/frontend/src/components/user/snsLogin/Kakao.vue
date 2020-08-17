@@ -39,12 +39,12 @@
     export default {
         methods: {
             kakaoLogin() {
-                window.Kakao.Auth.login({
+                window.Kakao.Auth.loginForm({
                     success: this.GetMe,
                 });
             },
             GetMe(authObj){
-                console.log(authObj);
+                // console.log(authObj);
                 this.$cookies.set("auth-token", authObj.access_token);
                 window.Kakao.API.request({
                     url:'/v2/user/me',
@@ -54,25 +54,28 @@
                             nickname : kakao_account.profile.nickname,
                             email : kakao_account.email,
                             password : authObj.access_token,
-                            profile_image_url : kakao_account.profile.profile_image_url
+                            image : kakao_account.profile.profile_image_url.replace("http://","https://"),
+                            address : null,
                         }
                         console.log(kakao_account);
 
-                         axios.post(`${SERVER_URL}/account/kakaologin`,{
+                         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
                              image : userInfo.profile_image_url,
                              password : userInfo.password
                          })
                          .then(res => {
-                            if(res.data == "sucess"){
-                                console.log(res);
-                                store.commit('setKakaoUserInfo', userInfo);
-                                console.log(store.state.kakaoUserInfo);
-                            } else{
-                                console.log(res);
-                                store.commit('setUserInfo', res.data);
+                             console.log(res);
+                             console.log(userInfo);
+                            if(res.data == "success"){
+                                // console.log(res);
+                                store.commit('setUserInfo', userInfo);
                                 console.log(store.state.userInfo);
+                            } else{
+                                // console.log(res);
+                                store.commit('setUserInfo', res.data);
+                                // console.log(store.state.userInfo);
                             }
                             this.$router.push("/main");
                          })

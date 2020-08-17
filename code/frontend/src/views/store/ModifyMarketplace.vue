@@ -33,6 +33,7 @@
         <div>
           <input type="text" v-model="food1" @click="getFood1" class="setFood" style="float:left; width: 40%; height: 40px; text-align: center; font-size: 15px;">
         </div>
+        <!-- 수정 -->
         <v-dialog v-model="dialog1" scrollable width= "100%" class="adressDialog">
           <v-card class="foodDialog">
             <v-card-title >
@@ -42,7 +43,7 @@
                   <input class="s" placeholder="음식재료 이름 검색" v-on:input="searchQuery1=$event.target.value" style="text-align:left;">
                   <ul style="display:none;" tabindex="3" >
                     <li tabindex="24" 
-                        v-for="(el, index) in filterList" 
+                        v-for="(el, index) in filterList1" 
                         :key="index"
                         style="z-index:22;"
                         >
@@ -55,9 +56,9 @@
             <v-divider></v-divider>
             <v-card-text>
               <div style="overflow-y: scroll; z-index:20;">
-                <div @click="chooseComplete1(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
+                <div @click="chooseComplete1(food)" class="card" v-for="(food,index) in filterListImg1" :key="index">
                   <div>
-                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
+                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
                   </div>
                   <div>
                     {{ food.name_kor }}
@@ -107,7 +108,7 @@
                   <input class="s" placeholder="음식재료 이름 검색" v-on:input="searchQuery2=$event.target.value" style="text-align:left;">
                   <ul style="display:none;" tabindex="3" >
                     <li tabindex="24" 
-                        v-for="(el, index) in filterList" 
+                        v-for="(el, index) in filterList2" 
                         :key="index"
                         style="z-index:22;"
                         >
@@ -120,9 +121,9 @@
             <v-divider></v-divider>
             <v-card-text>
               <div style="overflow-y: scroll; z-index:20;">
-                <div @click="chooseComplete2(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
+                <div @click="chooseComplete2(food)" class="card" v-for="(food,index) in filterListImg2" :key="index">
                   <div>
-                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.name}.png`)"/>
+                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
                   </div>
                   <div>
                     {{ food.name_kor }}
@@ -191,6 +192,7 @@
 </template>
 
 <script>
+import {foods} from '../Food/Foods.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
 import store from '../../vuex/store.js'
@@ -218,61 +220,15 @@ export default {
       address: '',
       addressDialog: false,
       content: '',
-      names : [
-        {name:'egg',
-        name_kor:'계란',
-        img:'egg'},
-        {name:'flour',
-        name_kor:'밀가루',
-        img:'flour'
-        },
-        {name:'milk',
-        name_kor:'우유',
-        img:'flour'
-        },
-        {name:'olive-oil',
-        name_kor:'올리브오일',
-        img:'olive-oil'
-        },
-        {name:'onion',
-        name_kor:'양파',
-        img:'onion'
-        },
-        {name:'potato',
-        name_kor:'감자',
-        img:'potato'
-        },
-        {name:'sugar',
-        name_kor:'설탕',
-        img:'sugar'
-        },
-        {name:'sweetpotato',
-        name_kor:'고구마',
-        img:'sweetpotato'
-        },
-        {name:'vanilla',
-        name_kor:'바닐라빈',
-        img:'vanilla'
-        },
-        {name:'egg',
-        name_kor:'설탕계란',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'계란양',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'계감란',
-        img:'egg'},
-        {name:'egg',
-        name_kor:'가계란',
-        img:'egg'},
-      ],
+      names : foods,
     }
   },
   created() {
-    axios.post(`${SERVER_URL}/trade/beforeupdate` , {no:this.$route.params.pagenumber})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate` , {no:this.$route.params.pagenumber})
       .then(response => {
         this.beforedata = response.data
+        // 줄바꿈 
+        this.beforedata.content = this.beforedata.content.split('^').join('\n');
         this.food1 = this.beforedata.tradefood1_kor
         this.food1_en = this.beforedata.tradefood1
         this.food2 = this.beforedata.tradefood2_kor
@@ -355,7 +311,14 @@ export default {
       this.beforedata.tradefood2_kor = this.food2
       this.beforedata.tradefood2 = this.food2_en
       this.beforedata.address = this.address
-      axios.post(`${SERVER_URL}/trade/updatetrade`, {no:this.$route.params.pagenumber,address: this.beforedata.address, content: this.beforedata.content, email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, price: this.beforedata.price, tradefood1: this.beforedata.tradefood1, tradefood1_kor: this.beforedata.tradefood1_kor, tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, tradefoodcount2: this.beforedata.tradefoodcount2})
+      const sendContent = this.beforedata.content.replace(/\n/g, '^')
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/updatetrade`, 
+      {no:this.$route.params.pagenumber,address: this.beforedata.address, content: sendContent, 
+      email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, 
+      myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, 
+      price: this.beforedata.price, tradefood1: this.beforedata.tradefood1, tradefood1_kor: this.beforedata.tradefood1_kor, 
+      tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, 
+      tradefoodcount2: this.beforedata.tradefoodcount2})
         .then(response => {
           console.log(this.beforedata)
         })
@@ -365,8 +328,8 @@ export default {
     },
   },
   computed: {
-    filterList() {
-      const str = this.searchQuery;
+    filterList1() {
+      const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
       console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
@@ -378,8 +341,37 @@ export default {
         return '';
       }
     },
-    filterListImg() {
-      const str = this.searchQuery;
+    filterListImg1() {
+      const str = this.searchQuery1;
+      const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
+      console.log(`typing value: ${str}`);
+      if (reg === false && str !== '' && str !== ' ') {
+        // this.isActive = true;
+        return this.names.filter((el) => {
+          return el.name_kor.match(str);
+        });
+      } else if(str == '') {
+        // this.isActive = false;
+        return this.names;
+      }else{
+        return '';
+      }
+    },
+    filterList2() {
+      const str = this.searchQuery2;
+      const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
+      console.log(`typing value: ${str}`);
+      if (reg === false && str !== '' && str !== ' ') {
+        // this.isActive = true;
+        return this.names.filter((el) => {
+          return el.name_kor.match(str);
+        });
+      }else{
+        return '';
+      }
+    },
+    filterListImg2() {
+      const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
       console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {

@@ -39,7 +39,7 @@
       </div>
       <div class="input-with-label">
         <label for="address">주소</label>
-        <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+        <input v-model="newUserInfo.newAddress" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()" tabindex="-1">
         <p v-if="addErrMsg" class="errorMsg">주소를 입력해주세요.</p>
       </div>
       <v-dialog v-model="dialog"  width= "100%" class="adressDialog">
@@ -76,9 +76,10 @@ import store from '../../vuex/store.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios';
 import PasswordValidator from 'password-validator'
+import Swal from 'sweetalert2'
 
-const SERVER_URL = 'http://localhost:9999/food/api';
-// const SERVER_URL = store.state.SERVER_URL;
+// const SERVER_URL = 'http://localhost:9999/food/api';
+const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
@@ -150,7 +151,7 @@ export default {
   methods: {
     checkUser() {
       var token = this.$cookies.get("auth-token");
-      axios.get(`${SERVER_URL}/info`, {params: { token : token}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/info`, {params: { token : token}})
         .then((response) => {
           // console.log(response);
         })
@@ -162,7 +163,7 @@ export default {
     },
     // 에러 확인(닉네임, 비밀번호, 비밀번호 확인, 주소)
     checkNickname() {
-      axios.post(`${SERVER_URL}/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
       .then(data => {
         // console.log(data.data.data)
         if (data.data.data == "1" && this.userinfo.nickname != this.newUserInfo.newNickname) {
@@ -243,7 +244,7 @@ export default {
           // console.log(store.state.kakaoUserInfo)
         }
         else {
-          axios.put(`${SERVER_URL}/account/update/`,{
+          axios.put(`https://i3b301.p.ssafy.io:9999/food/api/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
             address : this.newUserInfo.newAddress,
@@ -262,7 +263,10 @@ export default {
       }
       else {
         // console.log('입력칸이 비어있습니다.')
-        alert('입력칸이 비어있습니다.')
+        Swal.fire({
+          icon: 'warning',
+          title: '입력칸이 비어있습니다.',
+        })
         this.checkNickname()
         this.checkPasswordValidate()
         this.checkPassword()
@@ -274,7 +278,7 @@ export default {
       formData.append("image", this.image); // 변경할 프로필 사진
       formData.append("email",store.state.userInfo.email); // 사용자 이메일
 
-      axios.post(`${SERVER_URL}/account/upload/`, formData, { 
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/upload/`, formData, { 
           headers: { 'Content-Type': 'multipart/form-data' } 
       }).then(response => {
         // console.log(response);

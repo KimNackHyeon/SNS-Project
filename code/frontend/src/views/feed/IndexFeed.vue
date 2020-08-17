@@ -1,8 +1,8 @@
 <template>
-  <div style="width:100%; height:100%">
+  <div style="width:360px; height:100%">
     <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
-      <div style="height: 100%;">
+      <div style="height: 100%; overflow-y:hidden;">
         <v-combobox
           v-model="model"
           :hide-no-data="!search"
@@ -17,6 +17,7 @@
           deletable-chips
           @keyup.enter="change"
           class="searchBarBtn"
+          style="overflow-y:hidden;"
         ></v-combobox>
         <div style="overflow: hidden; height: 38px">
           <v-btn icon @click="change">
@@ -31,8 +32,8 @@
       </div>
       </router-link>
     </div>
-    <div class="feed-body" style="padding-bottom: 100px">
-        <FeedItem ref="feeditem"/>
+    <div class="feed-body" style="width:360px; height:590px; padding-bottom: 100px">
+        <feed-item ref="feeditem"/>
         <!-- <FeedItem />
         <FeedItem />
         <FeedItem /> -->
@@ -135,5 +136,34 @@ export default {
 }
 .v-input__control {
   height: 38px;
+}
+.searchBarBtn::-webkit-scrollbar {
+  height:6px;
+}
+.searchBarBtn::-webkit-scrollbar-track {
+  background-color: transparent;
+  height:0px;
+}
+.searchBarBtn::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: gray;
+  height:3px;
+}
+.searchBarBtn::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+.feed-body::-webkit-scrollbar {
+  width:3px;
+}
+.feed-body::-webkit-scrollbar-track {
+  background-color: transparent;
+  height:5px;
+}
+.feed-body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: gray;
+  height:3px;
+  width: 10px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="feed-item">
-    <div v-for="(feedData, i) in feedDatas" :key="i" style="position: relative">
-      <div class="feed-profil">
+    <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
+      <div class="feed-profil"  >
         <div class="feed-user">
           <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
           <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
@@ -14,7 +14,7 @@
           </router-link>
         </div>
       </div>
-      <div style="position: relative;">
+      <div  style=" width:360px;">
         <v-carousel v-model="feedData.pictureNum">
         <!-- <v-carousel show-arrows-on-hover> -->
           <v-carousel-item
@@ -26,7 +26,10 @@
         </v-carousel>
         <v-chip
             class="ma-2 imgCount"
-            color="#2c2c2c">
+            color="#2c2c2c"
+            style="
+    top: 49px;
+    width: 46px;">
             {{feedData.pictureNum + 1}}/{{feedData.items.length}} 
           </v-chip>
       </div>
@@ -40,6 +43,7 @@
           <v-btn icon color="black" @click="onComment(feedData.no)">
               <v-icon size="30px">mdi-chat-outline</v-icon>
           </v-btn>
+          <b>좋아요 {{feedData.likecount}} 개</b>
         </div>
         <div style="float: right;">
           <v-btn icon @click="scrapedbtn(feedData.no)">
@@ -52,8 +56,8 @@
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
             <div class="btns">
-              <!-- <v-btn class="btn" >수정</v-btn> -->
-              <v-btn class="btn" >삭제</v-btn>
+              <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn" >수정</v-btn></router-link>
+              <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
         </div>
@@ -92,6 +96,7 @@ import axios from "axios";
 import store from '../../vuex/store'
 import moment from "moment";
 import $ from 'jquery';
+import Swal from 'sweetalert2'
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
@@ -134,7 +139,7 @@ export default {
   },
   methods: {
     callList(){
-      axios.get(`${SERVER_URL}/feed/searchAll`) // 피드 가져오기
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchAll`) // 피드 가져오기
         .then(response => {
           // console.log(response);
             // var data = {};
@@ -153,9 +158,10 @@ export default {
               ],
               tags:[],
               comments:[],
+              likecount: d.likecount,
             }
 
-          axios.get(`${SERVER_URL}/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
             // console.log(response);
             response.data.forEach(c =>{
@@ -170,7 +176,7 @@ export default {
             })
           });
 
-          axios.get(`${SERVER_URL}/feed/check`,{
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
             params:
             {
               email:store.state.userInfo.email,
@@ -227,7 +233,7 @@ export default {
         comment: this.inputComment
       }
       // console.log(comment);
-      axios.post(`${SERVER_URL}/feed/register`,comment)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.inputComment = "";
@@ -252,10 +258,15 @@ export default {
       // console.log(feedData_id + " " + store.state.userInfo.email);
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
+          if(feedData.islike == false){
+            feedData.likecount += 1;
+          }else{
+            feedData.likecount -= 1;
+          }
           feedData.islike = !feedData.islike
         }
       })
-      axios.get(`${SERVER_URL}/feed/like`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -274,7 +285,7 @@ export default {
           feedData.isscrap = !feedData.isscrap
         }
       })
-      axios.get(`${SERVER_URL}/feed/scrap`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -319,6 +330,32 @@ export default {
         })
       }
       // console.log(this.feedDatas);
+    },
+    deleteNo(feed_no){
+      Swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: "되돌릴 수 없습니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네 삭제할게요!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            window.location.reload();
+            this.$router.push('/feed/main');
+          })
+        }
+      })
     }
   },
 };
@@ -327,20 +364,29 @@ export default {
 .btns {
   display: none;
   position: absolute;
-  width: 50px;
+  width: 80px;
   /* height: 60px; */
   z-index: 80;
-  left: 300px;
+  left: 275px;
   top: 375px;
   border: 1px solid lightgray;
   border-radius: 4px;
 }
 .btn {
-  width: 100%;
+  /* width: 100%; */
   background-color: white !important;
   border-radius: unset;
   box-shadow: unset;
   -webkit-box-shadow: unset;
+}
+.feed-item {
+    padding:0px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+    border-top: 1px solid #eee;
+    left:auto;
 }
 .btn span {
     height: 30px;
@@ -379,5 +425,11 @@ export default {
   margin-bottom: 0 !important;
   font-weight: bold; 
   margin-right: 5px;
+}
+.imgCount {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -50px;
 }
 </style>

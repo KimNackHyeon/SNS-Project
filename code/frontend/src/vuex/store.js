@@ -55,10 +55,10 @@ export default new Vuex.Store({
     SERVER_URL : SERVER_URL,
     // SERVER_URL : 'http://localhost:9999/food/api',
     kakaoUserInfo:{
-      email:'',
-      nickname:'',
-      profile_image_url:'',
-      address:'',
+      email:null,
+      nickname:null,
+      profile_image_url:null,
+      address:null,
     },
     userInfo: {
       email: null,

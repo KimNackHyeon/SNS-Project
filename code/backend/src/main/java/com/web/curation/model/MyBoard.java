@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
 @Table(name = "MyBoard")
 public class MyBoard {
 	@Id

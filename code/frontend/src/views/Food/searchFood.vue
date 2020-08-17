@@ -88,6 +88,7 @@
 <script>
 import $ from 'jquery'
 import {foods} from './Foods.js'
+import Swal from 'sweetalert2'
 
 export default {
          
@@ -95,11 +96,22 @@ export default {
         return {
             isActive: false,
             searchQuery: '',
-            selectedFood:[],
+            selectedFood: [],
             thisSelectedFood:'',
             amount:'',
             amountundernature:'',
             names : foods,
+    }
+  },
+  props: ['foodlist'],
+  watch: {
+    foodlist() {
+      if (this.foodlist == undefined) {
+        this.selectedFood = []
+      }
+      else {
+        this.selectedFood = this.foodlist
+      }
     }
   },
   methods: {
@@ -117,7 +129,10 @@ export default {
     addIngradient(){
       var resultamount ='';
       if(this.amount==''){
-        alert("필요한 갯수를 적어주세요.");
+        Swal.fire({
+          icon: 'info',
+          title: '필요한 갯수를 적어주세요.',
+        })
       }else{
         if(this.amountundernature !=''){
           resultamount = this.amount + '/'+this.amountundernature;

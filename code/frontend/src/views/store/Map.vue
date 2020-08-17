@@ -6,6 +6,7 @@
 import { mapState, mapMutations } from 'vuex';
 import store from '../../vuex/store.js'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 // const SERVER_URL = 'http://localhost:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
@@ -115,7 +116,10 @@ export default {
           timeout: Infinity
         });
       } else {
-        alert('GPS를 지원하지 않습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: 'GPS를 지원하지 않습니다.',
+        })
       }
     }
   },
@@ -128,8 +132,8 @@ export default {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  // console.log(`${SERVER_URL}/trade/`)
-  axios.get(`${SERVER_URL}/trade/`)
+  // console.log(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       // console.log(this.tradelist)

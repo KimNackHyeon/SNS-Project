@@ -12,6 +12,8 @@ import com.web.curation.model.Tag;
 public interface TagRepo extends JpaRepository<Tag, Long>{
 	
 	List<Tag> findByFeedNo(Long feedNo);
+
+	Tag findByFeedNoAndTagName(Long feedNo, String tagName);
 	
 	
 }

@@ -1,8 +1,8 @@
 <template>
-  <div>
-  <v-app>
+  <div style="overflow-x:hidden; width:100%; height:100%;">
+  <v-app style="overflow-x:hidden;  width:100%; height:100%;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;">
+      <v-container fluid style="padding: 0; margin: 0; width:360px;">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -20,23 +20,23 @@
           </v-flex>
         </v-layout>
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
-          <v-flex>
+          <v-flex style="width:90%; float:left;">
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px;"></v-switch>
           </v-toolbar>
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="call" label="마감임박순" style="margin-top:20px; margin-right: 18px;"></v-switch>
+            <v-switch @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
           </v-toolbar>
             </v-toolbar>
           </v-flex>
-          <div style="border: solid 1px lightgrey">
+          <div style="border: solid 1px lightgrey; width:10%; float:left;">
             <v-btn icon style="margin: 5px">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 490px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden; height: 490px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
@@ -61,12 +61,12 @@
                         </router-link>
                       </div>
                       <div>
-                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 30px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
                       <div>
-                        <p style="height: 100px; line-height: 100px; text-align: center; font-size: 40px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
+                        <p style="height: 100px; line-height: 100px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                   </v-row>
@@ -126,7 +126,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`${SERVER_URL}/groupbuying/delete` , {no:data})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
       .then(response => {
         Swal.fire({
             // position: 'top-end',
@@ -146,7 +146,7 @@ export default {
     callwithaddress(){
       if(this.switched2 == true){
         axios({
-                    url:`${SERVER_URL}/groupbuying/orderbyaddress`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyaddress`,
                     method:'post',
                     data: JSON.stringify(this.distancedata2),
                     headers: config.headers})
@@ -159,7 +159,7 @@ export default {
         this.switched2 = false;
     }
     else{
-      axios.get(`${SERVER_URL}/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -171,7 +171,7 @@ export default {
     },
     call(){
       if(this.switched == true){
-        axios.get(`${SERVER_URL}/groupbuying/orderbyenddate`)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -181,7 +181,7 @@ export default {
         this.switched = false;
     }
     else{
-      axios.get(`${SERVER_URL}/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -199,7 +199,7 @@ export default {
       this.userinfo = store.state.userInfo;
     }
     // if(userinfo.email == )
-    axios.get(`${SERVER_URL}/groupbuying/read`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data

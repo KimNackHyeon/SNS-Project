@@ -57,7 +57,7 @@
             :on-success=onSuccess
             :on-failure=onFailure
           /> -->
-          <GoogleLogin :component="component" />
+          <!-- <GoogleLogin :component="component" /> -->
         </div>
         <!-- 다른 플랫폼으로 로그인 -->
       </div>
@@ -83,7 +83,7 @@ import store from '../../vuex/store'
 export default {
   components: {
     KakaoLogin,
-    GoogleLogin,
+    // GoogleLogin,
   },
   created() {
     this.component = this;

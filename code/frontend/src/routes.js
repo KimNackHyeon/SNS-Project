@@ -167,6 +167,11 @@ export default [
     component : WriteRecipe
   },
   {
+    path:"/feed/modify/:feedNo?",
+    name : "ModifyRecipe",
+    component : ModifyRecipe
+  },
+  {
     path: "/store/modify/marketplace",
     name: "ModifyMarketPlace",
     component: ModifyMarketPlace,
