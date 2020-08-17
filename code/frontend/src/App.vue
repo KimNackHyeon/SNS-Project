@@ -1,6 +1,6 @@
 <template>
-<div style="width:360px; height:640px; margin:auto; overflow-y:hidden; overflow-x:hidden;">
-  <v-app id="app">
+<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin:auto; overflow-y:hidden; overflow-x:hidden;">
+  <v-app id="app" style="width:100%; height:100%; overflow:hidden;">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
     <router-view @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
@@ -24,9 +24,20 @@ export default {
     return {
       isLoggedIn: false,
       userInfo: {},
+      frameSize:{
+        x:0,
+        y:0,
+      }
     };
   },
   methods: {
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerHeight){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight};
+      }else{
+        this.frameSize = {x:window.innerWidth};
+        }
+    },
     onLogin(email, password) {
       const loginData = {
         email: email,
@@ -109,6 +120,7 @@ export default {
   },
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
+    this.onResize();
   },
   
 };
