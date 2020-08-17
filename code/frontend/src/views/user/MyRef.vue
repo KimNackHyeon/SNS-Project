@@ -1,6 +1,6 @@
 <template>
   <div class="rootContainer">
-      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none; position:fixed; z-index:80;">
+      <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none; position:fixed; z-index:80;">
           <div style="height:50px; width:100%; background-color:white">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
@@ -134,7 +134,7 @@
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
-        <div style="position:fixed; margin-top: 590px; width:360px;">
+        <div :style="{'margin-top':height-85+'px',}" style="position:fixed; width:360px;">
             <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
@@ -170,6 +170,7 @@ export default {
     components:{getOneFood,RefPaging},
 data() {
     return {
+        height:0,
         selectedFood:'',  //냉장고에 채우고싶은 재료 
         fillFoodNum:1, //냉장고에 채우고 싶은 재료 개수
         fillFoodDate:'', //냉장고에 채우고 싶은 재료를 산 날짜
@@ -216,6 +217,9 @@ data() {
         myreflist:[],
         xmldata:[],
     }
+  },
+  mounted(){
+      this.height = window.innerHeight;
   },
     methods:{
         deleteFoodfromRef(){
@@ -589,7 +593,7 @@ data() {
     text-align: center;
 }
 .rootContainer{
-    width:360px;
+    width:100%;
     height:100%;
     background-image: url(../../assets/images/myref.png);
     background-size: contain;

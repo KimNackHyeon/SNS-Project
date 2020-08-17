@@ -160,7 +160,7 @@ export var foods=[
             },
             {name:'cherry_tomato',
             name_kor:'방울토마토',
-            img:'cherry_tomato' 
+            img:'tomato' 
             },
             {name:'radish',
             name_kor:'무',

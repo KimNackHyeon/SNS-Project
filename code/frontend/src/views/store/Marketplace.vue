@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn  flat icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -34,7 +34,7 @@
         </div>
       </v-layout>
     </div>
-    <v-card flat>
+    <v-card>
       <v-container fluid style="padding: 0; margin: 0; width:360px;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
@@ -110,6 +110,12 @@
         </div>
       </v-container>
     </v-card>
+        <router-link to="/MyRef">
+          <div class="writeButton">
+            <v-icon color="white">mdi-lead-pencil</v-icon>
+            <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+          </div>
+        </router-link>
   </div>
 </template>
 
@@ -291,4 +297,18 @@ created() {
     font-size: 21px;
     padding: 4px 6px;
   }
+  .writeButton{
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  margin-top: 427px;
+  margin-left: 280px;
+  background-color: rgb(147 203 88);
+  z-index: 90;
+  border-radius: 30px;
+  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+  text-align: center;
+  padding-top: 7px;;
+}
+
 </style>
