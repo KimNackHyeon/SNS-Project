@@ -26,6 +26,7 @@ import PrivateChat from "./views/chat/PrivateChat.vue"
 import Error from "./views/error.vue"
 import DirectChat from "./views/chat/DirectChat.vue"
 import MyChatList from "./views/user/MyChatList.vue"
+import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
 
 export default [
   {
