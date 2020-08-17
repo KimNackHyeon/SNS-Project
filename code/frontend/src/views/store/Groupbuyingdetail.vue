@@ -89,7 +89,7 @@
       </div>
       <div style="overflow: hidden">
         <div style="float: left;">
-          <v-btn 
+          <v-btn @click="moveDirectChat"
             color="rgb(160, 212, 105)" 
             style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
             >
@@ -172,6 +172,29 @@ export default {
     }
   },
   methods: {
+  moveDirectChat(){
+      // axios.post(`${SERVER_URL}/directchatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
+      //   .then(response => {
+      //     this.chatName = response.data;
+      //     this.$router.push({ name: 'PrivateChat', params: { privatechat: this.privatechat, chatName: this.chatName }})
+      //   })
+      //   .catch(error => {
+      //   })
+      axios.post(`${SERVER_URL}/chatting`, {otherNickname:this.groupbuying.nickname, myNickname:this.userinfo.nickname ,otherEmail:this.groupbuying.email, myEmail:this.userinfo.email, type:"2"})
+      .then(response=>{
+        if(response.data == "불가능"){
+          Swal.fire({
+          icon: 'error',
+          title: '자기자신에게 문의할 수 없습니다.',
+        })
+        }else{
+          console.log(response.data)
+          this.$router.push({ name: 'DirectChat', params: { chatKey: response.data, receiverNickname: this.groupbuying.nickname }})
+        }
+      }).error(response=>{
+        console.log(response)
+      })
+    },
     onParticipate() {
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {

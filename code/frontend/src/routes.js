@@ -20,11 +20,12 @@ import WriteGroupBuying from "./views/store/WriteGroupbuying.vue";
 import ModifyGroupBuying from "./views/store/ModifyGroupbuying.vue";
 import Main from "./views/Main.vue";
 import MyRef from "./views/user/MyRef.vue";
-import WriteRecipe from "./views/feed/WriteRecipe.vue";
-import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
-import MarketMap from "./views/store/MarketMap.vue";
-import PrivateChat from "./views/chat/PrivateChat.vue";
-import Error from "./views/error.vue";
+import WriteRecipe from "./views/feed/WriteRecipe.vue"
+import MarketMap from "./views/store/MarketMap.vue"
+import PrivateChat from "./views/chat/PrivateChat.vue"
+import Error from "./views/error.vue"
+import DirectChat from "./views/chat/DirectChat.vue"
+import MyChatList from "./views/user/MyChatList.vue"
 
 export default [
   {
@@ -51,6 +52,11 @@ export default [
     component: Alarm,
   },
   {
+    path:"/directchat",
+    name:"DirectChat",
+    component: DirectChat,
+  },
+  {
     path: "/error",
     name: "Error",
     component: Error,
@@ -59,6 +65,11 @@ export default [
     path: "/user/join",
     name: "Join",
     component: Join,
+  },
+  {
+    path: "/chat/mychatlist",
+    name: "MyChatList",
+    component: MyChatList,
   },
   {
     path: "/user/mypage",

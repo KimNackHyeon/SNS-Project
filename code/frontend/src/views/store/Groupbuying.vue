@@ -203,12 +203,12 @@ export default {
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data
-        console.log(this.groupBuyings)
+        // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
         }
-        console.log(this.userinfo.address)
-        console.log(this.mapdata)
+        // console.log(this.userinfo.address)
+        // console.log(this.mapdata)
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -223,16 +223,16 @@ export default {
         for (var m = 0; m < this.mapdata.length; m++) {
           geocoder.addressSearch(this.mapdata[m], (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              console.log(result[0])
+              // console.log(result[0])
               var distancedata = [
                 new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
                 new kakao.maps.LatLng(result[0].y, result[0].x)]
-              console.log(distancedata)
+              // console.log(distancedata)
               var polyline = new kakao.maps.Polyline({
                 path: distancedata,
               })
               var distance = polyline.getLength();
-              console.log(distance)
+              // console.log(distance)
               this.distancedata2.push(distance)
               // this.otherdata.push(redata);
             }

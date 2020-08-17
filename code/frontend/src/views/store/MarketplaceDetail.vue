@@ -90,14 +90,13 @@
     <!-- 채팅 버튼 -->
     <div>
       <!-- <router-link to="/chat/privatechat"> -->
-      <router-link :to="{ name: 'PrivateChat', params: { privatechat }}">
+      
       <v-btn @click="registChattingRoom()"
         color="rgb(160, 212, 105)" 
         style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
         >
         <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
         </v-btn>
-      </router-link>
     </div>
   </div>
 </template>
@@ -137,9 +136,10 @@ export default {
   },
   methods:{
     registChattingRoom(){
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/chatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
+      axios.post(`${SERVER_URL}/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
         .then(response => {
           this.chatName = response.data;
+          this.$router.push({ name: 'PrivateChat', params: { privatechat: this.privatechat, chatName: this.chatName }})
         })
         .catch(error => {
         })
