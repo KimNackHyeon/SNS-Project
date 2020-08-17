@@ -209,6 +209,8 @@ export default {
       ],
       images: [],
       loading: false,
+      likecount: '',
+      createDate:'',
     };
   },
   watch: {
@@ -239,8 +241,10 @@ export default {
     var feedNo = this.$route.params.feedNo;
     axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
       .then(response => {
-        // console.log(response)
+        console.log(response.data)
         this.title = response.data.feeddata.title
+        this.likecount = response.data.feeddata.likecount
+        this.createDate = response.data.feeddata.create_date
         for (let tag of response.data.taglist) {
           this.tags.push(tag.tagName)
         }
@@ -376,7 +380,8 @@ export default {
         email: this.userinfo.email,
         nickname: this.userinfo.nickname,
         profile: this.userinfo.profile_image_url,
-        likecount: 0,
+        likecount: this.likecount,
+        create_date : this.createDate
       };
 
       const data = {
@@ -390,7 +395,7 @@ export default {
       // console.log(formData);
 
       axios
-        .post(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/img`, formData, {
+        .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
@@ -413,7 +418,7 @@ export default {
     updateData(data) {
       console.log(data);
       axios
-        .put(`http://https://i3b301.p.ssafy.io:9999/food/api/food/api/feed/update`, data)
+        .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/update`, data)
         .then((response) => {
           // console.log(response);
           this.$router.push("/feed/main");
