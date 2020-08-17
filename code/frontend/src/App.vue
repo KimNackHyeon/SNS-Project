@@ -2,7 +2,7 @@
 <div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin:auto; overflow-y:hidden; overflow-x:hidden;">
   <v-app id="app" style="width:100%; height:100%; overflow:hidden;">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
-    <router-view @login="onLogin" @signup="onSignup"></router-view>
+    <router-view :style="{width:frameSize.x+'px', height:(frameSize.y-50)+'px'}" @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
 </template>
@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     onResize(){
-      if(window.innerHeight*0.5625 <=window.innerHeight){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
         this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight};
       }else{
-        this.frameSize = {x:window.innerWidth};
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth *1.77};
         }
     },
     onLogin(email, password) {

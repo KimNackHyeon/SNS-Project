@@ -1,21 +1,22 @@
 <template>
+<div style="width:100%; height:100%; background-color:#f5efb3;">
   <div class="rootContainer">
       <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none; position:fixed; z-index:80;">
-          <div style="height:50px; width:100%; background-color:white">
+          <div style="height:50px; background-color:white" :style="{width:frameSize.x+'px'}">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
-          <get-one-food @addfood="addFood" ></get-one-food>
+          <get-one-food @addfood="addFood" :style="{width:frameSize.x+'px', height:(frameSize.y-90)+'px'}"></get-one-food>
       </div>
-      <div id="dark" @click="closeCheckBasket()" style="width:360px; height:640px; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
+      <div id="dark" @click="closeCheckBasket()" :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
     
-        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef">
+        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef" >
             
         </ref-paging>
-        <div id="basket">
-            <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
+            <div id="basket">
+            <v-btn @click="openCheckBasket()" icon :style="{width:(frameSize.per*200)+'px',height:(frameSize.per*150)+'px'}"><img style="width:100%; height:100%;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
-        <div id="FillBtn" style="position:fixed; margin-left: 256px; margin-top: 10px; display:unset;">
+        <div id="FillBtn" :style="{'margin-left': (256*frameSize.per)+'px'}" style="position:fixed; margin-top: 10px; display:unset;">
             <v-btn  v-on:click="openregistMater" color="rgb(160,212,105)" width="90px" height="50px" >
                 <v-icon >mdi-cart</v-icon>
                 <h4>채우기</h4>
@@ -134,10 +135,11 @@
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
-        <div :style="{'margin-top':height-85+'px',}" style="position:fixed; width:360px;">
+        <div :style="{'margin-top':frameSize.y-85+'px',width:frameSize.x+'px'}" style="position:fixed;">
             <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
+  </div>
   </div>
 </template>
 
@@ -170,7 +172,7 @@ export default {
     components:{getOneFood,RefPaging},
 data() {
     return {
-        height:0,
+        frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
         selectedFood:'',  //냉장고에 채우고싶은 재료 
         fillFoodNum:1, //냉장고에 채우고 싶은 재료 개수
         fillFoodDate:'', //냉장고에 채우고 싶은 재료를 산 날짜
@@ -219,9 +221,16 @@ data() {
     }
   },
   mounted(){
-      this.height = window.innerHeight;
+     this.onResize();
   },
     methods:{
+        onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
         deleteFoodfromRef(){
             var minusAmount = this.totalShareAmount * -1;
             const deleteFood = {
@@ -593,20 +602,20 @@ data() {
     text-align: center;
 }
 .rootContainer{
-    width:100%;
-    height:100%;
+    width:360px;
+    height:590px;
     background-image: url(../../assets/images/myref.png);
     background-size: contain;
     position:relative;
     overflow-x: hidden;
 }
 #insideRef{
-    width: 183px;
-    height: 452px;
+    width:183px;
+    height:452px;
+    margin-left: 18px;
+    margin-top:82px;
     border: 1px solid transparent;
     position: fixed;
-    margin-left: 18px;
-    margin-top: 82px;
 }
 .smallboxInside{
     width: 183px;
@@ -716,22 +725,18 @@ box-shadow: -2px -2px 1px #70b526;
     box-shadow: 2px 2px 1px #ab1b29;
 }
 .F1{
-width: 60px;
-height: 60px;
 position:fixed;
 margin-left: 15px;
 margin-top:10px;
 }
 .F2{
-width: 60px;
-height: 60px;
+
 position:fixed;
 margin-left: 108px;
 margin-top:10px;
 }
 .F3{
-width: 60px; 
-height: 60px;
+
 /* float: left;
 margin: 10px 15px; */
 position:fixed;
@@ -739,8 +744,7 @@ margin-left: 15px;
 margin-top:87px;
 }
 .F4{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 10px 15px; */
 position:fixed;
@@ -748,8 +752,7 @@ margin-left: 108px;
 margin-top:87px;
 }
 .F5{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 46px 15px 10px 15px; */
 position:fixed;
@@ -758,8 +761,7 @@ margin-left: 15px;
 }
 
 .F6{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 46px 15px 10px 15px; */
 position:fixed;
@@ -767,8 +769,7 @@ position:fixed;
     margin-top: 202px;
 }
 .F7{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin:20px 106px 10px 15px; */
 position:fixed;
@@ -776,8 +777,7 @@ position:fixed;
     margin-top: 291px;
 }
 .F8{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin:14px 106px 10px 15px; */
 position:fixed;
