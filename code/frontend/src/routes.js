@@ -24,6 +24,7 @@ import WriteRecipe from "./views/feed/WriteRecipe.vue"
 import MarketMap from "./views/store/MarketMap.vue"
 import PrivateChat from "./views/chat/PrivateChat.vue"
 import Error from "./views/error.vue"
+import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
 
 export default [
   {
