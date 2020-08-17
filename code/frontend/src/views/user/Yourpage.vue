@@ -107,7 +107,7 @@
 import axios from "axios"
 import "../../components/css/user.scss"
 import store from '../../vuex/store.js'
-
+import Swal from 'sweetalert2'
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -265,6 +265,14 @@ export default {
       }else{
         // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
+        this.openFollowing = false;
+        this.openFollower = false;
+        Swal.fire({
+  icon: 'success',
+  showConfirmButton: false,
+  timer: 1500
+})
+        window.location.reload();
       }
     },
   },

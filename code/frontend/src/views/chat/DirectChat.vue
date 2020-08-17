@@ -10,7 +10,7 @@
       <div class="titleBox">
         <div class="pageTitle">
           <!-- <p style="margin: 11px; margin-left:162px;"> -->
-            {{chatname}}
+            "{{chatname}}"님과의 채팅
             <!-- </p> -->
         </div>
       </div>
@@ -184,8 +184,8 @@ export default {
         }
     },
     created(){
-      this.chatNo = this.$route.params.privatechat;
-      this.chatname = this.$route.params.chatName;
+      this.chatNo = this.$route.params.chatKey;
+      this.chatname = this.$route.params.receiverNickname;
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
@@ -193,7 +193,6 @@ export default {
       }
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
-
     }
 }
 </script>

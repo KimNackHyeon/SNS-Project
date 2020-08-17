@@ -71,6 +71,33 @@ export default {
     }, 1000);
     },
     retry() {
+      let timerInterval
+Swal.fire({
+  title: '인증번호 전송중',
+  html: '전송까지 <b></b> 초 남았습니다.',
+  timer: 2000,
+  timerProgressBar: true,
+  onBeforeOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getContent()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  onClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+  }
+})
       const emailData = {
         email: this.pwd,
       }
@@ -97,14 +124,18 @@ export default {
       // console.log('ok')
       if (this.certificationNumber === this.confirm) {
         // console.log('ok2')
+        Swal.fire({
+  icon: 'success',
+  title: '인증에 성공했습니다.',
+  text:'비밀번호를 가입 이메일로 전송했습니다.',
+  showConfirmButton: false,
+  timer: 2500
+})
         axios
         .post(`${SERVER_URL}/account/findpwd`, emailData)
         .then((data) => {
           // console.log(data.data.data)
-          Swal.fire({
-            title: '인증에 성공했습니다.',
-            text: '이메일로 비밀번호를 전송하였습니다.',
-        })
+          
           this.$router.push("/")
         })
         .catch((data) => {

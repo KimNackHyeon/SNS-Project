@@ -465,7 +465,7 @@ data() {
             },
             shareFinish:function(){
                 // const shareList = this.changeFoods;
-                if(this.changeFoods.lenth>0){
+                if(this.changeFoods.length>0){
 
                     console.log(typeof(this.changeFoods));
                 axios({
@@ -475,7 +475,7 @@ data() {
                     headers: config.headers})
                 .then((response)=>{
                     console.log(response);
-                    this.$router.push("/");
+                    this.$router.push("/store/marketplace");
                 })
                 .catch((error)=>{
                     console.log(error.response);
