@@ -32,7 +32,11 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
+        <div>
+            <input type="text">
+          </div>
       </v-layout>
+      
     </div>
     <v-card>
       <v-container fluid style="padding: 0; margin: 0; width:360px;">
@@ -139,6 +143,7 @@ export default {
       show:false,
       inputKeyword:'',
       originalList:[],
+      myList:[],
     }
   },
   methods:{
@@ -162,6 +167,7 @@ export default {
           $('.searchBox').css('display','none')
         }
       }
+      this.inputKeyword = "";
     },
     call(){
       if(this.switched == true){
@@ -169,6 +175,7 @@ export default {
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
+          this.myList = this.tradelist
           // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
@@ -180,6 +187,7 @@ export default {
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
           this.tradelist = response.data.list
+          this.myList = this.tradelist
           // console.log(this.tradelist)
           this.mapOtherUserInfo = store.state.mapOtherUserInfo
           this.mapOtherUserInfo.address = this.tradelist[0].address
@@ -233,10 +241,18 @@ export default {
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      this.tradelist = this.originalList;
-      this.tradelist = this.tradelist.filter(function (item) {
-          return item.myfood_kor.indexOf(keyword)!=-1;
-        });
+      console.log(this.myList);
+      if(this.myList.length == 0){
+        this.tradelist = this.originalList;
+        this.tradelist = this.tradelist.filter(function (item) {
+            return item.myfood_kor.indexOf(keyword)!=-1;
+          });
+      }else{
+        this.tradelist = this.myList;
+        this.tradelist = this.tradelist.filter(function (item) {
+            return item.myfood_kor.indexOf(keyword)!=-1;
+          });
+      }
     }
   },
 created() {
