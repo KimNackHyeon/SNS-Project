@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="writegroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -389,6 +389,9 @@ input{
 .v-text-field {
   margin: 0 !important;
   padding: 0 !important;
+}
+.v-input__control {
+  border: 1px solid lightgray !important;
 }
 .v-input__slot:before{
   border-color: unset !important;
