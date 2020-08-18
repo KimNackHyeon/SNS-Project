@@ -11,105 +11,39 @@
           <p style="margin: 0;">내가 참여한 채팅방</p>
         </div>
       </div>
-      <!-- <router-link to="/store/marketmap" style="">
-        <v-btn  flat icon style="width:30x; height:30px; background-size:cover;">
-          <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
-        </v-btn>
-      </router-link> -->
     </div>
-    <!-- <div style="display: flex; border-bottom: 1px solid lightgray; padding: 0; background: rgb(202, 231, 171); height: 48px;">
-      <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
-        <v-flex>
-          <div class="searchBox">
-            <textarea placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" value=""></textarea>
-          </div>
-          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
-          </v-toolbar>
-        </v-flex>
-        <div @click="search" style="border: solid 1px lightgrey; background-color: white;">
-          <v-btn icon  style="margin: 5px">
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
+    <div class="chatdivide">
+      <button class="marketchat" @click="marketOn">
+        <div>
+          <!-- <img src="../../assets/images/pencil.png" alt="my recipe"> -->
+          <!-- <i class="fas fa-pencil-alt fa-lg"></i> -->
+          <h4>우리동네장터</h4>
+          <h4>채팅방</h4>
         </div>
-      </v-layout>
-    </div> -->
+      </button>
+      <button class="groupchat" @click="groupOn">
+        <div>
+          <!-- <img src="../../assets/images/bookmark.png" alt="scrap"> -->
+          <!-- <i class="far fa-bookmark"></i> -->
+          <h4>공동구매</h4>
+          <h4>채팅방</h4>
+        </div>
+      </button>
+    </div>
     <v-card flat>
       <v-container fluid style="padding: 0; margin: 0;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in chatlist" :key="i" cols="12">
-              <!-- <router-link :to="`/store/marketplace/${ info.no }`"> -->
-                <v-card style="padding: 5px;">
-                  <!-- <v-row style="padding: 0; margin: 0;"> -->
-                    <!-- <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;"> -->
-                      <!-- <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img> -->
-                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
-                      <!-- <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text> -->
-                    <!-- </v-col> -->
-                    <!-- <v-col cols="5" class="text-center" style="padding: 0;">
-                      <v-row class="pa-0">
-                        <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
-                      </v-row>
-                      <v-row class="pa-0 ma-1">
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount1 }}개당</v-card-text>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.tradefood1"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
-                        </v-col>
-                      </v-row>
-                      <v-row class="pa-0 ma-1" v-if="info.tradefood2!=null">
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount2 }}개당</v-card-text>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood2}.png`)"></v-img>
-                        </v-col>
-                        <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount2 }}개</v-card-text>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="3" style="padding: 0; border-left: solid 1px lightgray">
-                      <v-row class="pa-0 ma-1">
-                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                          <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
-                        </v-col>
-                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                          <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
-                        </v-col>
-                        <v-col cols="12" class="pa-1 text-center">
-                          <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
-                          <span class="text-center pa-0" style="font-size: 18px;">원</span>
-                        </v-col>
-                        <v-col cols="12" class="pa-1 text-center" v-if="userinfo.email === tradelist[i].email">
-                          <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 10px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
-                          </router-link>
-                          <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 10px; background-color: red; color: white;">삭제</v-btn>
-                          </router-link>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row> -->
-                </v-card>
-              <!-- </router-link> -->
+              <v-card style="padding: 5px;" v-if="info.type === chattype">
+                <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
+              </v-card>
             </v-col>
           </v-row>
         </div>
       </v-container>
     </v-card>
+
   </div>
 </template>
 
@@ -132,6 +66,7 @@ export default {
       userinfo:'',
       show:false,
       chatlist:'',
+      chattype: '1',
     }
   },
   methods:{
@@ -155,6 +90,16 @@ export default {
           $('.searchBox').css('display','none')
         }
       }
+    },
+    marketOn() {
+      this.chattype = '1'
+      $('.marketchat').css('background-color', 'rgb(202, 231, 171)')
+      $('.groupchat').css('background-color', 'white')
+    },
+    groupOn() {
+      this.chattype = '2'
+      $('.marketchat').css('background-color', 'white')
+      $('.groupchat').css('background-color', 'rgb(202, 231, 171)')
     },
     call(){
       if(this.switched == true){
@@ -232,6 +177,8 @@ created() {
     this.userinfo = store.state.userInfo;
   }
   this.chatlist = this.$route.params.chatlist.list;
+  console.log(this.chatlist)
+  this.marketOn()
 }
 }
 </script>
@@ -260,5 +207,24 @@ created() {
     margin: 5px;
     font-size: 21px;
     padding: 4px 6px;
+  }
+  .chatdivide {
+    height: 7%;
+  }
+  .marketchat{
+    width: 50%;
+    height: 100%;
+    float: left;
+    border: 1px solid lightgray;
+    border-left: none;
+    background-color: rgb(202, 231, 171);
+  }
+  .groupchat{
+    width: 50%;
+    height: 100%;
+    float: right;
+    border: 1px solid lightgray;
+    border-left: none;
+    border-right: none;
   }
 </style>

@@ -27,9 +27,6 @@ import Error from "./views/error.vue"
 import DirectChat from "./views/chat/DirectChat.vue"
 import MyChatList from "./views/user/MyChatList.vue"
 import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
-import MarketMap from "./views/store/MarketMap.vue";
-import PrivateChat from "./views/chat/PrivateChat.vue";
-import Error from "./views/error.vue";
 import Tutorial from './views/tutorial/Tutorial.vue';
 import Tutorial1 from './views/tutorial/Tutorial_1.vue';
 import Tutorial2 from './views/tutorial/Tutorial_2.vue'
