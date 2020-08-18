@@ -232,6 +232,7 @@ created() {
     this.userinfo = store.state.userInfo;
   }
   this.chatlist = this.$route.params.chatlist.list;
+  console.log(this.chatlist)
 }
 }
 </script>
