@@ -50,7 +50,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-//  http://localhost:9999/food/swagger-ui.html
+//  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController

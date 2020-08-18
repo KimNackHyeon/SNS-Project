@@ -15,4 +15,6 @@ public interface MyChatRepo extends JpaRepository<MyChat, Long>{
 
 	ArrayList<Optional<MyChat>> findByChatKey(String chatKey);
 
+	MyChat findByChatKeyAndMyEmail(String chatkey, String email);
+
 }

@@ -196,7 +196,7 @@ import {foods} from '../Food/Foods.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
 import store from '../../vuex/store.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 export default {
   components: {
