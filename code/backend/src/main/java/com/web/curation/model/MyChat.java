@@ -32,15 +32,24 @@ public class MyChat {
 	private String otherNickname;
 	
 	private String type;
+	
+	private String image;
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public MyChat() {
 		super();
 	}
 
 	public MyChat(String chatKey, String chatName, String myEmail, String myNickname, String otherEmail,
-			String otherNickname, String type) {
+			String otherNickname, String type, String image) {
 		super();
-		this.no = no;
 		this.chatKey = chatKey;
 		this.chatName = chatName;
 		this.myEmail = myEmail;
@@ -48,6 +57,7 @@ public class MyChat {
 		this.otherEmail = otherEmail;
 		this.otherNickname = otherNickname;
 		this.type = type;
+		this.image = image;
 	}
 
 	public Long getNo() {
@@ -118,7 +128,7 @@ public class MyChat {
 	public String toString() {
 		return "MyChat [no=" + no + ", chatKey=" + chatKey + ", chatName=" + chatName + ", myEmail=" + myEmail
 				+ ", myNickname=" + myNickname + ", otherEmail=" + otherEmail + ", otherNickname=" + otherNickname
-				+ ", type=" + type + "]";
+				+ ", type=" + type + ", image="+image+"]";
 	}
 	
 }
