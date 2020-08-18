@@ -2,7 +2,7 @@
   <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
   <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -36,7 +36,7 @@
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
+        <div style="padding: 10px; padding-bottom: 40px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
@@ -52,12 +52,12 @@
                       <v-card-text style="padding: 0; font-size: 10px;">마감일 : {{ groupBuying.end_date }}</v-card-text>
                     </v-col>
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
-                      <div>
+                      <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn color="rgba(160, 212, 105, 0.5)" style="margin-right: 5px; width: 35px; height: 25px;">수정</v-btn>
+                          <v-btn color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="rgba(160, 212, 105, 0.5)" style="width: 35px; height: 25px;">삭제</v-btn>
+                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
                       <div>
@@ -261,9 +261,9 @@ export default {
 .writeButton{
   width: 60px;
   height: 60px;
-  position: fixed;
-  margin-top: -70px;
-  margin-left: 280px;
+  position: absolute;
+  top: 82%;
+  left: 80%;
   background-color: rgb(147 203 88);
   z-index: 90;
   border-radius: 30px;

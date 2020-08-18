@@ -7,9 +7,13 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import com.web.curation.model.GroupMember;
 import com.web.curation.model.Trade;
+import com.web.curation.model.TradeMember;
 
+@Repository
 public interface TradeRepo extends JpaRepository<Trade, Long>{
 	ArrayList<Trade> findAll();
 	ArrayList<Trade> findByMyfood(String content);
@@ -28,6 +32,9 @@ public interface TradeRepo extends JpaRepository<Trade, Long>{
 	void update(Long no, String tradefood1, String tradefood2, String tradefood1_kor, String tradefood2_kor,
 			String myfoodcount1, String myfoodcount2, String content, String address, String tradefoodcount1,
 			String tradefoodcount2);
+	
+	
+	
 	
 	
 	

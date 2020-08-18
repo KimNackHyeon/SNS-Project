@@ -177,11 +177,11 @@
       </div>
     </div>
     <!-- 글 작성 버튼 -->
-    <div>
-      <router-link to="/store/marketplace">
+    <div style="width: inherit">
+      <router-link to="/store/marketplace" style="width: inherit">
         <v-btn 
         color="rgb(160, 212, 105)" 
-        style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+        style="width: inherit; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
         @click="onModify()"
         >
         수정하기
