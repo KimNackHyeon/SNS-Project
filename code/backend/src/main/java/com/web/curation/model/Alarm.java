@@ -15,37 +15,25 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="Alarm")
+@Table(name = "Alarm")
 public class Alarm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
-	
-	@NotEmpty
-	private String email;
-	
-	@NotEmpty
-	private String content;
-	
-	@NotEmpty
-	private String type;
-	
-	@NotEmpty
-	private String nickname;
-	
-	@NotEmpty
-	private Long confirm;
 
-	public Alarm(Long no, @NotEmpty String email, @NotEmpty String content, @NotEmpty String type,
-			@NotEmpty String nickname, @NotEmpty Long confirm) {
-		super();
-		this.no = no;
-		this.email = email;
-		this.content = content;
-		this.type = type;
-		this.nickname = nickname;
-		this.confirm = confirm;
-	}
+	private String email; // 알람을 받을 이메일
+
+	private String content; // 알람 내용
+
+	private String type; // 알람 타입 ( 1 : 팔로우 , 2 : 게시글 댓글, 3 : 게시글 좋아요, 4: 신선도 평가 )
+
+	private String image; // 알람을 보낸 사람의 프로필 사진
+
+	private Long confirm; // 알람을 읽었는지 체크 ( 0 : 확인 x , 1 : 확인 o )
+
+	private Long feedNo; // 연결되는 피드번호
+
+	private String semail; // 연결되는 사용자 계정
 
 	public Alarm() {
 		super();
@@ -83,12 +71,12 @@ public class Alarm {
 		this.type = type;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getImage() {
+		return image;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public Long getConfirm() {
@@ -98,8 +86,27 @@ public class Alarm {
 	public void setConfirm(Long confirm) {
 		this.confirm = confirm;
 	}
-	
 
-	
-	
+	public Long getFeedNo() {
+		return feedNo;
+	}
+
+	public void setFeedNo(Long feedNo) {
+		this.feedNo = feedNo;
+	}
+
+	public String getSemail() {
+		return semail;
+	}
+
+	public void setSemail(String semail) {
+		this.semail = semail;
+	}
+
+	@Override
+	public String toString() {
+		return "Alarm [no=" + no + ", email=" + email + ", content=" + content + ", type=" + type + ", image=" + image
+				+ ", confirm=" + confirm + ", feedNo=" + feedNo + ", semail=" + semail + "]";
+	}
+
 }

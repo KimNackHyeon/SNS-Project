@@ -8,55 +8,54 @@
         <h4>새소식</h4>
       </div>
     </div>
-    <!-- 좋아요 알람 -->
-    <div class="likebox">
+    <div class="likebox" v-for="(alarm, i) in alarms" :key="i">
       <div class="myphoto">
-        <v-avatar size="50"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
+        <v-avatar size="50"><img :src="alarm.image"></v-avatar>
       </div>
-      <div class="content" style="display: table;">
+      <div class="content" style="display: table;" @click="move(alarm)">
         <div style="display: table-cell; vertical-align: middle;">
-          <p style="margin: 0;">000님이 000님의 게시글에 좋아요<v-icon color="red" size="18">mdi-heart</v-icon>를 눌렀습니다.</p>
+            <p style="margin: 0;">{{alarm.content}}</p>
         </div>
       </div>
     </div>
-    <!-- 팔로우 알람 -->
-    <div class="followbox" style="height: 80px;">
-      <div class="myphoto">
-        <v-avatar size="50"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
-      </div>
-      <div class="content" style="display: table;">
-        <div style="display: table-cell; vertical-align: middle;">
-          <p style="margin: 0;">000님이 000님을 팔로우 했습니다.</p>
-        </div>
-      </div>
-    </div>
-    <!-- 댓글 알람 -->
-    <div class="commentbox" style="height: 80px;">
-      <div class="myphoto">
-        <v-avatar size="50"><img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"></v-avatar>
-      </div>
-      <div class="content" style="display: table;">
-        <div style="display: table-cell; vertical-align: middle;">
-          <p style="margin: 0;">000님이 000님의 게시글에 댓글을 작성했습니다.</p>
-          <p style="margin: 0 5px 0 0; display: inline-block"><v-icon color="blue" size="18">mdi-chat</v-icon>너무 맛있겠다^^</p>
-          <p style="margin: 0; display: inline-block">08/20</p>
-        </div>
-      </div>
-    </div>
+
   </div>
 </template>
 
 <script>
+import axios from "axios"
+import store from '../../vuex/store.js'
+
 export default {
   data() {
     return {
-
+      alarms:[]
     }
+  },
+  created(){
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
+    .then(response => {
+      console.log(response);
+      response.data.reverse();
+      this.alarms = response.data;
+    })
   },
   methods: {
     onleft() {
       this.$router.go(-1)
     },
+    move(alarm){
+      console.log(alarm);
+      switch(alarm.type){
+        case "2": 
+          this.$router.push({name: 'FeedDetail',params: { feedNo : alarm.feedNo }});
+          break;
+        case "3": 
+          this.$router.push({name: 'FeedDetail',params: { feedNo : alarm.feedNo }});
+          break;
+        default:
+      }
+    }
   }
 }
 </script>
