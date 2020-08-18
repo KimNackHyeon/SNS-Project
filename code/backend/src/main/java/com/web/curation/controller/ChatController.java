@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-//  http://localhost:9999/food/swagger-ui.html
+//  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
@@ -102,14 +102,22 @@ public class ChatController {
 		}
 	}
 	
-	
 	@GetMapping("/chatting/{email}")
 	@ApiOperation(value = "나의 채팅방 리스트조회")
 	public ResponseEntity<Map> searchmyChattingroom(@PathVariable String email) {
+		System.out.println(email);
 		Map<String, ArrayList<MyChat>> map = new HashMap<String, ArrayList<MyChat>>();
 		ArrayList<MyChat> chatlist = new ArrayList<MyChat>();
 		chatlist = mychatRepo.findByMyEmail(email);
 		map.put("list", chatlist);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
+	@GetMapping("/chattingrefresh/{no}/{email}")
+	   @ApiOperation(value = "나의 채팅방 새로고침")
+	   public ResponseEntity<MyChat> researchmyChattingroom(@PathVariable String no, @PathVariable String email) {
+	      System.out.println(no+" "+email);
+	      MyChat chat = mychatRepo.findByChatKeyAndMyEmail(no, email);
+	      return new ResponseEntity<MyChat>(chat, HttpStatus.OK);
+	   }
+	
 }

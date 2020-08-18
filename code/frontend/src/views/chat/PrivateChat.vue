@@ -109,7 +109,7 @@
               <!-- <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
                 <div class="received_withd_msg">
                     <div style="width: 100%; position: relative; ">
-              <div :class="[message.author===authUser.name?'sent_msg':'received_msg']">
+              <div :class="[message.author===authUser.name.nickname?'sent_msg':'received_msg']" >
                   <p>{{message.message}}</p>
                   <span class="time_date">| {{message.createdAt}} | {{message.author}} |</span></div>
                     </div>
@@ -148,6 +148,7 @@ export default {
         }
     },
     methods:{
+     
             scrollToBottom(){
             let box = document.querySelector('.msg_history');
             box.scrollTop = box.scrollHeight;
@@ -159,7 +160,7 @@ export default {
             //파이어스토어에 메세지 저장하자 건호야
             db.collection(this.chatNo).add({
                 message:this.message,
-                author:this.authUser.name, //이 부분에 유저의 닉네임을 넣어주면 된다.
+                author:this.authUser.name.nickname, //이 부분에 유저의 닉네임을 넣어주면 된다.
                 createdAt: this.$moment(new Date()).format('YYYY년MM월DD일'),
                 createDate: new Date(),
             }).then(()=>{
