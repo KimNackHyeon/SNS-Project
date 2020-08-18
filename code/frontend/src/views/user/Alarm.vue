@@ -35,7 +35,7 @@ export default {
     }
   },
   created(){
-    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
+    axios.get(`http://localhost:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
     .then(response => {
       console.log(response);
       response.data.reverse();

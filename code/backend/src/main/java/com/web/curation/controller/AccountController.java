@@ -63,7 +63,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-//  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
+//  http://localhost:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
@@ -512,6 +512,15 @@ public class AccountController {
 
 		return alarmList;
 	}
+	
+	@PostMapping("/account/freshalarm")
+	@ApiOperation(value = "평가 알람")
+	public ResponseEntity<String> freshAlarm(@RequestBody Alarm alarm) {
+		alarm.setConfirm(0L);
+		alarmRepo.save(alarm);
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
 
 	@PostMapping("/account/freshalarm")
 	@ApiOperation(value = "평가 알람")
