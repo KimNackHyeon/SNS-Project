@@ -192,7 +192,7 @@ export default {
         this.userinfo = store.state.userInfo;
       }
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
-    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+    //   axios.get('https://i3b301.p.ssafy.io:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.myrefFood = response.data.myreflist
