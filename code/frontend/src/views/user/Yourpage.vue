@@ -269,10 +269,10 @@ export default {
         this.openFollowing = false;
         this.openFollower = false;
         Swal.fire({
-  icon: 'success',
-  showConfirmButton: false,
-  timer: 1500
-})
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        })
         window.location.reload();
       }
     },

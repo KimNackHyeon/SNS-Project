@@ -77,26 +77,26 @@
     </div>
     <div v-html="groupbuying.content" style="padding: 10px; height: 280px">
     </div>
-    <div style="position:fixed; bottom: 0; width: 100%">
+    <div style="position:fixed; bottom: 0; width: inherit">
       <div>
         <v-btn
           :href="groupbuying.link"
           color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 20px; color: white; font-size: 16px; padding: 0px 30px; border-radius: 0px; margin-bottom: 2px;" 
+          style="width: 100%; height: 20px; color: white; font-size: 16px; border-radius: 0px; margin-bottom: 2px;" 
           >
           <v-icon style="margin-right: 5px">mdi-link</v-icon>제품 보러가기
         </v-btn>
       </div>
-      <div style="overflow: hidden">
-        <div style="float: left;">
+      <div style="overflow: hidden;">
+        <div style="float: left; width: 49%">
           <v-btn @click="moveDirectChat"
             color="rgb(160, 212, 105)" 
-            style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
+            style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
             >
             <v-icon style="margin-right: 5px">mdi-comment-multiple-outline</v-icon>문의하기
             </v-btn>
         </div>
-        <div style="float: right;" @click="onParticipate">
+        <div style="float: right; width: 49%" @click="onParticipate">
           <v-btn 
             color="rgb(160, 212, 105)" 
             style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
@@ -228,7 +228,16 @@ export default {
         .catch(error => {
           // console.log(error)
         })
-    }
+    },
+    moveUser(user_email){
+      if(user_email == this.userinfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        // console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+        this.openMember = false;
+      }
+    },
   },
 }
 </script>
