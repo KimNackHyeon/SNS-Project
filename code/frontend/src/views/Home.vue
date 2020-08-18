@@ -1,8 +1,8 @@
 <template>
-  <v-layout wrap style="width:360px; height:50px; margin:auto;">
+  <v-layout wrap style="width:100%;height:50px; margin:auto;">
     <div style="width:100%; height:47px;background-color:white; z-index:100">
         <v-btn icon @click.stop="drawer = !drawer"><v-icon size="30px">fas fa-list</v-icon></v-btn>
-        <router-link to="/Main"><v-btn icon style="margin:5px 73px; width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
+        <router-link to="/Main"><v-btn icon :style="{'margin-left':((frameSize.x-212)/2)+'px','margin-right':((frameSize.x-212)/2)+'px'}" style="width:140px;"><h4 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h4></v-btn></router-link>
         <router-link v-if="$route.name!='MyRef'" to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
           <!-- <img v-if="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png"> -->
           <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
@@ -76,8 +76,8 @@
       </div>
       </router-link>
 
-      <div style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
-    margin-top: 110px; width:100%;"> <!-- 하단 -->
+      <div :style="{'margin-top':(frameSize.y-531)+'px'}" style="background-color:rgba(224, 224, 224, 0.42); height:40px; position: unset;
+     width:100%;"> <!-- 하단 -->
         <!-- <router-link to="/user/modifyuser"><v-icon style="margin:8px">mdi-cog</v-icon></router-link> -->
         <v-btn @click="$emit('logout')" icon style="float: right; width: 80px; margin: 3px;">로그아웃</v-btn>
       </div>
@@ -109,16 +109,26 @@ Vue.use(Vuetify, {
         // console.log(this.userinfo);
       }
     },
+    mounted(){
+      this.onResize();
+      console.log(this.frameHeight);
+    },
     components:{ },
     data () {
       return {
         userinfo:'',
         drawer: null,
-        user:{email:"bu03101@naver.com",nickname:"mamtte",profilePhoto:'mamtte.png',address:'대전광역시 유성구 덕명동'},
-        // user:{email:"nack@naver.com",nickname:"nack",profilePhoto:'nack.png',address:'대전광역시 유성구 궁동'},
+        frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       }
     },
     methods:{
+        onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+        },
         chatlist(){
           axios.get(`${SERVER_URL}/chatting/`+ this.userinfo.email)
         .then(response => {

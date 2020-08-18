@@ -27,6 +27,11 @@ import Error from "./views/error.vue"
 import DirectChat from "./views/chat/DirectChat.vue"
 import MyChatList from "./views/user/MyChatList.vue"
 import ModifyRecipe from "./views/feed/ModifyRecipe.vue";
+import Tutorial from './views/tutorial/Tutorial.vue';
+import Tutorial1 from './views/tutorial/Tutorial_1.vue';
+import Tutorial2 from './views/tutorial/Tutorial_2.vue'
+import Tutorial3 from './views/tutorial/Tutorial_3.vue'
+import Tutorial4 from './views/tutorial/Tutorial_4.vue'
 
 export default [
   {
@@ -51,6 +56,31 @@ export default [
     path: "/alarm",
     name: "Alarm",
     component: Alarm,
+  },
+  {
+    path: "/tutorial",
+    name: "Tutorial",
+    component: Tutorial,
+  },
+  {
+    path: "/tutorial/1",
+    name: "Tutorial1",
+    component: Tutorial1,
+  },
+  {
+    path: "/tutorial/2",
+    name: "Tutorial2",
+    component: Tutorial2,
+  },
+  {
+    path: "/tutorial/3",
+    name: "Tutorial3",
+    component: Tutorial3,
+  },
+  {
+    path: "/tutorial/4",
+    name: "Tutorial4",
+    component: Tutorial4,
   },
   {
     path:"/directchat",

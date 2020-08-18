@@ -62,7 +62,7 @@
                          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
-                             image : userInfo.profile_image_url,
+                             image : userInfo.image,
                              password : userInfo.password
                          })
                          .then(res => {

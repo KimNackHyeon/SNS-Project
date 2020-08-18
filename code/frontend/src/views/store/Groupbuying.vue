@@ -1,8 +1,8 @@
 <template>
-  <div style="overflow-x:hidden; width:100%; height:100%;">
-  <v-app style="overflow-x:hidden;  width:100%; height:100%;">
+  <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
+  <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -36,7 +36,7 @@
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden; height: 490px;" grid-list-lg>
+        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
@@ -112,9 +112,20 @@ export default {
       mydata: [],
       otherdata: [],
       distancedata2:[],
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
     }
   },
+  mounted(){
+    this.onResize();
+  },
   methods:{
+     onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     deleteGroupbuying(data) {
       Swal.fire({
   title: '정말 삭제하시겠습니까?',
