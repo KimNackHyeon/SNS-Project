@@ -25,7 +25,7 @@
               <input v-model="title" class="titleinput" type="text" placeholder="제목을 입력해주세요." style="float:left; width: 100%; height: 40px;">
             </div>
           </div>
-          <div style="width:100%; height:32%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden;">
+          <div class="tags" style="">
           <div style="height: 100%;">
          <v-container style="max-height:30px;min-height:13px; padding:0px;">
             <v-combobox
@@ -349,6 +349,16 @@ export default {
 } 
 </script>
 <style scoped>
+.tags {
+  width:100%; 
+  height:32%; 
+  border-top: 1px solid rgba(128, 128, 128, 0.15); 
+  overflow:hidden;
+}
+.tags:hover {
+  border: 2px solid #a0d469;
+  border-radius: 4px;
+}
 .addFoodBtn{
     width: 80px;
     height: 80px;

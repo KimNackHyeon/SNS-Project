@@ -8,13 +8,15 @@
         <h4>새소식</h4>
       </div>
     </div>
-    <div class="likebox" v-for="(alarm, i) in alarms" :key="i">
-      <div class="myphoto">
-        <v-avatar size="50"><img :src="alarm.image"></v-avatar>
-      </div>
-      <div class="content" style="display: table;" @click="move(alarm)">
-        <div style="display: table-cell; vertical-align: middle;">
-            <p style="margin: 0;">{{alarm.content}}</p>
+    <div v-for="(alarm, i) in alarms" :key="i">
+      <div :class="alarm.confirm" @click="check(alarm)">
+        <div class="myphoto">
+          <v-avatar size="50"><img :src="alarm.image" @click="moveUser(alarm)"></v-avatar>
+        </div>
+        <div class="content" style="display: table;" @click="move(alarm)">
+          <div style="display: table-cell; vertical-align: middle;">
+              <p style="margin: 0;">{{alarm.content}}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +40,16 @@ export default {
       console.log(response);
       response.data.reverse();
       this.alarms = response.data;
-    })
+      this.alarms.forEach(alarm => {
+        if(alarm.confirm == 1){
+          alarm.confirm = "alarmbox";
+        } else{
+          alarm.confirm = "likebox";
+        }
+      })
+      console.log(this.alarms);
+    });
+
   },
   methods: {
     onleft() {
@@ -47,6 +58,9 @@ export default {
     move(alarm){
       console.log(alarm);
       switch(alarm.type){
+        case "1": 
+          this.$router.push({name: 'Yourpage', params: {email : alarm.semail}});
+          break;
         case "2": 
           this.$router.push({name: 'FeedDetail',params: { feedNo : alarm.feedNo }});
           break;
@@ -55,6 +69,24 @@ export default {
           break;
         default:
       }
+    },
+    moveUser(alarm){
+      this.$router.push({name: 'Yourpage', params: {email : alarm.semail}});
+    },
+    check(alarm){
+      if(alarm.confirm == "likebox"){ // 안 읽었을 경우
+        this.alarms.forEach(a => {
+          if(a.no == alarm.no){
+            // alert(alarm.no);
+            a.confirm = "alarmbox";
+          }
+        })
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarmcheck`,{ params: { no : alarm.no } })
+        .then(response => {
+
+        })
+      }
+      // console.log(this.alarms);
     }
   }
 }
@@ -72,16 +104,6 @@ export default {
   background-color: #FFCCCC;
   padding: 5px;
   /* border-radius: 4px; */
-}
-.followbox {
-  height: 80px;
-  background-color: #D9EFB9;
-  padding: 5px;
-}
-.commentbox {
-  height: 80px;
-  background-color: #CEEEFF;
-  padding: 5px;
 }
 .myphoto {
   float: left;

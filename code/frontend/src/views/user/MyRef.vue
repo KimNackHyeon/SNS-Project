@@ -74,6 +74,7 @@
                 </div>
             </div>
             <div style="width:100%; height:74px; background-color:black; color:white; font-size: 15px; padding: 5px; overflow-y:scroll;">
+             <div style="color: white; font-size: 15px; text-align: center;">- 실시간 시세 정보 -</div>
              <div v-if="myapi.name!=''">{{myapi.name}} {{myapi.unit}} 당 {{myapi.price}}원</div>
              <div v-if="trade1api.name!=''">{{trade1api.name}} {{trade1api.unit}} 당 {{trade1api.price}}원</div>
              <div v-if="trade2api.name!=''">{{trade2api.name}} {{trade2api.unit}} 당 {{trade2api.price}}원</div>
@@ -122,7 +123,7 @@
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll; text-align: center;">
-           <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
+           <div class="textArea" v-for="(food,index) in changeFoods" :key="index" style="height:auto;">
                <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left; font-size:12px;">(개당 {{food.price}} 원)</h4>
                 <div style=" height: 20px; font-size: 15px;">
                     <h4 style="float:left; width:100%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
@@ -440,6 +441,7 @@ data() {
                 }
             },
             putIntoBasket:function(){
+                if(this.sharedesc !=''){
                 if(this.changeFoodsTemp.length==2){
                     this.changeFoods.push({
                          email : this.userinfo.email,
@@ -488,7 +490,12 @@ data() {
                         title: '교환목록을 채워주세요.',
                     })
                 }
-                
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '장터에 올릴때 들어갈 부가설명을 적어주세요.',
+                    })
+                }
             },
             openCheckBasket:function(){
                 if($('.checkBasket').css('display')=='none'){
@@ -507,8 +514,9 @@ data() {
             },
             shareFinish:function(){
                 // const shareList = this.changeFoods;
+                
                 if(this.changeFoods.length>0){
-
+                    
                     console.log(typeof(this.changeFoods));
                 axios({
                     url:`http://localhost:9999/food/api/myref/share`,

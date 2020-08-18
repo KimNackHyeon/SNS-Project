@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%; position: relative;">
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/Main">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -93,12 +93,12 @@
                           <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
                           <span class="text-center pa-0" style="font-size: 18px;">원</span>
                         </v-col>
-                        <v-col cols="12" class="pa-1 text-center" v-if="userinfo.email === tradelist[i].email">
+                        <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 10px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 10px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -296,7 +296,7 @@ created() {
 }
 </script>
 
-<style>
+<style scoped>
   .titleBox {
     display: inline-block;
     width: 77%;
@@ -324,9 +324,11 @@ created() {
   .writeButton{
   width: 60px;
   height: 60px;
-  position: fixed;
-  margin-top: 427px;
-  margin-left: 280px;
+  position: absolute;
+  /* margin-top: 427px;
+  margin-left: 280px; */
+  top: 88%;
+  left: 82%;
   background-color: rgb(147 203 88);
   z-index: 90;
   border-radius: 30px;

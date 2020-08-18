@@ -1,6 +1,17 @@
 @charset "utf-8";
 @import "../../css/common";
 
+.searchBar .v-input__slot:hover {
+  border: unset !important;
+}
+.searchBar .v-input__slot{
+  border: none !important;
+  height: inherit !important;
+}
+.v-input__control {
+  height: inherit !important;
+  min-height: unset !important;
+}
 .feed-wrapB {
   padding: 0;
 }
