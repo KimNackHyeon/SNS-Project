@@ -56,6 +56,7 @@
       </table>
       <!-- 식품 싯가 -->
       <div style="background: black; font-size: 12px">
+        <div style="color: white; font-size: 15px; text-align: center;">- 실시간 시세 정보 -</div>
         <div v-if="myapi.name!=''" style="padding: 5px 0 0 5px">
           <div style="color: yellow; display: inline-block; margin: 0 5px;">{{myapi.name}}</div>
           <div style="color: white; display: inline-block;">소매 {{myapi.unit}}당 가격 {{myapi.price}} 원</div>

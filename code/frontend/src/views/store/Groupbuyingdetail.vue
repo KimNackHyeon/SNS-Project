@@ -77,7 +77,7 @@
     </div>
     <div v-html="groupbuying.content" style="padding: 10px; height: 280px">
     </div>
-    <div style="position:fixed; bottom: 0; width: 100%">
+    <div style="position:fixed; bottom: 0;" :style="{width:frameSize.x+'px'}">
       <div>
         <v-btn
           :href="groupbuying.link"
@@ -91,7 +91,7 @@
         <div style="float: left;">
           <v-btn 
             color="rgb(160, 212, 105)" 
-            style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
+            style="height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;"  :style="{width:frameSize.x/2+'px'}"
             >
             <v-icon style="margin-right: 5px">mdi-comment-multiple-outline</v-icon>문의하기
             </v-btn>
@@ -99,7 +99,7 @@
         <div style="float: right;" @click="onParticipate">
           <v-btn 
             color="rgb(160, 212, 105)" 
-            style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
+            style="height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" :style="{width:frameSize.x/2+'px'}"
             >
             <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
             </v-btn>
@@ -121,6 +121,7 @@ import Swal from 'sweetalert2'
 export default {
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       userinfo: '',
       groupbuying: '',
       memberList: '',
@@ -164,6 +165,7 @@ export default {
     }
   },
   mounted() {
+     this.onResize();
     if (store.state.kakaoUserInfo.email != null) {
       this.userinfo = store.state.kakaoUserInfo;
     }
@@ -172,6 +174,13 @@ export default {
     }
   },
   methods: {
+      onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     onParticipate() {
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
