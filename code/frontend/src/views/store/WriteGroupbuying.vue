@@ -140,7 +140,7 @@
     <div>
       <v-btn 
       color="rgb(160, 212, 105)" 
-      style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+      :style="{width:frameSize.x+'px'}" style=" height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
       작성하기
@@ -163,6 +163,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       userinfo:'',
       title: '',
       food: '',
@@ -180,6 +181,9 @@ export default {
       searchQuery: '',
       names : foods,
     }
+  },
+  mounted(){
+    this.onResize();
   },
   watch: {
     date (val) {
@@ -200,6 +204,13 @@ export default {
     }
   },
   methods: {
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     getFood(){
       // console.log('getFood 실행')
       if (this.dialog === false) {

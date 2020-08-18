@@ -44,10 +44,10 @@
                   </div>
                 </div>
                 <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
+                  <router-link to="/alarm">
                   <div class="iconBox"> 
                    <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
                   </div>
-                  <router-link to="/alarm">
                     <div class="subBox">
                       <h4>새 소식</h4>
                     </div>

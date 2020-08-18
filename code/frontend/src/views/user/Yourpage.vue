@@ -170,7 +170,9 @@ export default {
         }
       ).then(response => {
         this.updateList();
-      })
+      });
+
+      
     },
     unFollow(yourEmail){
       // alert('언팔로우');

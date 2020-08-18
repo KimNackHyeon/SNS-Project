@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn flat icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -32,15 +32,12 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <div>
-            <input type="text">
-          </div>
       </v-layout>
       
     </div>
-    <v-card>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
+    <v-card flat>
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
+        <div style="padding: 10px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">
@@ -135,6 +132,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       tradelist: [
       ],
       pagenumber: '',
@@ -146,7 +144,17 @@ export default {
       myList:[],
     }
   },
+  mounted(){
+    this.onResize();
+  },
   methods:{
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     ...mapMutations(['setMapOtherUserInfo']),
     search(){
       if($('.searchBox').css('display')=='none'){

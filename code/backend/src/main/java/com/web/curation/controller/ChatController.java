@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Member;
 import com.web.curation.model.MyChat;
 import com.web.curation.repo.DirectChatRepo;
+import com.web.curation.repo.MemberRepo;
 import com.web.curation.repo.MyChatRepo;
 
 import io.swagger.annotations.ApiOperation;
@@ -42,10 +44,13 @@ public class ChatController {
 	@Autowired
 	DirectChatRepo directchatRepo;
 	
+	@Autowired
+	MemberRepo memberRepo;
+	
 	@PostMapping("/chatting")
 	@ApiOperation(value = "나의 채팅방 등록")
 	public ResponseEntity<String> registmyChattingroom(@RequestBody MyChat chatroom) {
-		if(chatroom.getType().equals("1")) {
+		if(chatroom.getType().equals("1")) { // 우리동네 장터
 			ArrayList<MyChat> myChatList = mychatRepo.findByMyEmail(chatroom.getMyEmail());
 			
 			boolean insert = true;
@@ -67,7 +72,7 @@ public class ChatController {
 				mychatRepo.save(chatroom);
 			}
 			if(insert2) {
-				MyChat chatroom2 = new MyChat(chatroom.getChatKey(), chatroom.getChatName(), chatroom.getOtherEmail(), chatroom.getOtherNickname(), chatroom.getMyEmail(), chatroom.getMyNickname(), "1");
+				MyChat chatroom2 = new MyChat(chatroom.getChatKey(), chatroom.getChatName(), chatroom.getOtherEmail(), chatroom.getOtherNickname(), chatroom.getMyEmail(), chatroom.getMyNickname(), "1", "");
 				mychatRepo.save(chatroom2);
 			}
 			return new ResponseEntity<>(chatroom.getChatName(), HttpStatus.OK);
@@ -86,8 +91,11 @@ public class ChatController {
 			if(opt.isEmpty()) {
 				chatroom.setChatKey(chatKey);
 				chatroom.setChatName(chatroom.getOtherNickname()+"님과의 채팅");
+				Member member = memberRepo.getUserByEmail(chatroom.getOtherEmail());
+				chatroom.setImage(member.getImage());
 				mychatRepo.save(chatroom);
-				MyChat chatroom2 = new MyChat(chatroom.getChatKey(), chatroom.getMyNickname()+"님과의 채팅", chatroom.getOtherEmail(), chatroom.getOtherNickname(), chatroom.getMyEmail(), chatroom.getMyNickname(), "2");
+				MyChat chatroom2 = new MyChat(chatroom.getChatKey(), chatroom.getMyNickname()+"님과의 채팅", chatroom.getOtherEmail(), chatroom.getOtherNickname(), chatroom.getMyEmail(), chatroom.getMyNickname(), "2", "");
+				chatroom2.setImage((memberRepo.getUserByEmail(chatroom2.getOtherEmail())).getImage());
 				mychatRepo.save(chatroom2);
 			}
 			return new ResponseEntity<String>(chatKey, HttpStatus.OK);
