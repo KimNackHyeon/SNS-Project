@@ -39,7 +39,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-//  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
+//  http://localhost:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
@@ -155,6 +155,19 @@ public class TradeController {
 		}else {
 			return new ResponseEntity<String>("Fail", HttpStatus.OK);
 		}
+	}
+	@PostMapping("/trade/removetrademember")
+	@ApiOperation(value = "우리동네 장터 참가멤버 삭제하기")
+	public ResponseEntity<ArrayList<Member>> removeparticipate(@RequestBody TradeMember trademember) {
+		System.out.println(trademember.toString());
+		Optional<TradeMember> deleteUser = tradememberRepo.findByTradeNoAndParticipantEmail(trademember.getTradeNo(), trademember.getParticipantEmail());
+		tradememberRepo.delete(deleteUser.get());
+		ArrayList<TradeMember> tmlist = tradememberRepo.findByTradeNo(trademember.getTradeNo());
+		ArrayList<Member> memberlist = new ArrayList<Member>();
+		for (TradeMember member : tmlist) {
+			memberlist.add(memberRepo.getUserByEmail(member.getParticipantEmail()));
+		}
+		return new ResponseEntity<ArrayList<Member>>(memberlist, HttpStatus.OK);
 	}
 	
 //	@PostMapping("/")

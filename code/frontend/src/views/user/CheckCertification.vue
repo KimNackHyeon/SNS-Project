@@ -106,7 +106,7 @@ Swal.fire({
       var threeMin = 60 * 3,
       display = document.querySelector('#times');
       this.countTimer(threeMin, display);
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/researchpwd`, emailData)
+      axios.post(`http://localhost:9999/food/api/account/researchpwd`, emailData)
       .then(data => {
         console.log("성공")
         // console.dir(data)
@@ -132,7 +132,7 @@ Swal.fire({
   timer: 2500
 })
         axios
-        .post(`https://i3b301.p.ssafy.io:9999/food/api/account/findpwd`, emailData)
+        .post(`http://localhost:9999/food/api/account/findpwd`, emailData)
         .then((data) => {
           // console.log(data.data.data)
           
