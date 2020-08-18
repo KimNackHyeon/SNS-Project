@@ -115,6 +115,7 @@
         }
     },
       openLink(link){
+      // var newWindow = window.open("about:blank");
       window.location.href = link;
       },
       opentutorial(){

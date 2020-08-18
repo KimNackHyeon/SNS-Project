@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
 import com.web.curation.model.FeedData;
@@ -33,6 +34,7 @@ import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.Scrap;
 import com.web.curation.model.Tag;
+import com.web.curation.repo.AlarmRepo;
 import com.web.curation.repo.CommentRepo;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FoodRepo;
@@ -51,7 +53,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-//  http://localhost:9999/food/swagger-ui.html
+//  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 @CrossOrigin("*")
 @RestController
@@ -82,6 +84,9 @@ public class FeedController {
 	@Autowired
 	ScrapRepo scrapRepo;
 
+	@Autowired
+	AlarmRepo alarmRepo;
+
 	@ApiOperation(value = "피드 전체 불러오기")
 	@GetMapping("/feed/searchAll")
 	public ResponseEntity<Map> searchAll() {
@@ -91,7 +96,7 @@ public class FeedController {
 		List<MyBoard> feedlist = myboardRepo.findAll();
 		List<Tag> taglist = tagRepo.findAll();
 		List<FeedData> datalist = feedDataRepo.findAll();
- 
+
 		map.put("feedlist", feedlist);
 		map.put("taglist", taglist);
 		map.put("datalist", datalist);
@@ -150,7 +155,28 @@ public class FeedController {
 	public ResponseEntity<String> register(@RequestBody Comment comment) {
 		System.out.println(comment);
 
+		/* 댓글 정보 저장 */
 		commentRepo.save(comment);
+
+		/* 알람 디비에 저장 */
+		Alarm alarm = new Alarm();
+
+		String sMember = comment.getNickname();
+		String rMember = myboardRepo.findById(comment.getFeedNo()).get().getEmail();
+		String rMember_nickname = myboardRepo.findById(comment.getFeedNo()).get().getNickname();
+		String content = sMember + "님이 회원님의 게시물에 댓글을 남겼습니다.";
+		if (!sMember.trim().equals(rMember_nickname.trim())) {
+			alarm.setEmail(rMember); // 알람을 받을 사람
+			alarm.setType("2"); // 알람 타입 ( 2 : 게시글 댓글 )
+			alarm.setConfirm(0L); // 알람 확인 체크 ( 0 : 확인 x 1 : 확인 o )
+			alarm.setContent(content);
+			alarm.setImage(memberRepo.getUserByEmail(comment.getEmail()).getImage());
+			alarm.setSemail(memberRepo.getUserByEmail(comment.getEmail()).getEmail());
+			alarm.setFeedNo(comment.getFeedNo());
+
+			System.out.println(alarm);
+			alarmRepo.save(alarm);
+		}
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
@@ -203,7 +229,7 @@ public class FeedController {
 
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "피드 정보 수정")
 	@PutMapping("/feed/update")
 	public ResponseEntity<String> updateFeed(@RequestBody FormWrapper data) {
@@ -232,20 +258,20 @@ public class FeedController {
 		for (Food f : oriFood) {
 			foodRepo.delete(f);
 		}
-		
+
 		for (Food f : food) {
 			f.setFeedNo(feedNo);
 			foodRepo.save(f);
 		}
-		
+
 		System.out.println(Arrays.toString(food));
 		/* 피드 태그 등록 */
-		
+
 		List<Tag> oriTag = tagRepo.findByFeedNo(feedNo);
 		for (Tag t : oriTag) {
 			tagRepo.delete(t);
 		}
-		
+
 		for (int i = 0; i < tags.length; i++) {
 			Tag tag = new Tag(feedNo, tags[i]);
 			tagRepo.save(tag);
@@ -253,13 +279,13 @@ public class FeedController {
 		System.out.println(Arrays.toString(tags));
 
 		/* 피드 내용, 이미지 등록 */
-		
+
 		List<FeedData> oriFeedData = feedDataRepo.findByFeedNo(feedNo);
-		
+
 		for (FeedData fd : oriFeedData) {
 			feedDataRepo.delete(fd);
 		}
-		
+
 		for (int index = 0; index < contents.length; index++) {
 			String content = contents[index];
 			String imgurl = images[index];
@@ -276,11 +302,12 @@ public class FeedController {
 
 	@ApiOperation(value = "피드 이미지 등록")
 	@PostMapping("/feed/img")
-	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images, @RequestParam String email) throws IllegalStateException, IOException {
+	public ResponseEntity<List> registerImg(@RequestParam MultipartFile[] images, @RequestParam String email)
+			throws IllegalStateException, IOException {
 		System.out.println(email);
 		List<String> imgList = new ArrayList<String>();
 		Long feedNo = 0L;
-		if(myboardRepo.findAll().size() != 0) {
+		if (myboardRepo.findAll().size() != 0) {
 			feedNo = myboardRepo.findTopByOrderByNoDesc().getNo() + 1L; // 가장 최근 피드 번호
 		}
 
@@ -306,6 +333,29 @@ public class FeedController {
 			likeRepo.save(like); // 좋아요 등록하고
 			boardOpt.get().setLikecount(boardOpt.get().getLikecount() + 1L); // 좋아요 수 늘려주고
 			myboardRepo.save(boardOpt.get()); // 업데이트
+			
+			
+			/* 알람 디비에 저장 */
+			Alarm alarm = new Alarm();
+
+			String sMember = memberRepo.getUserByEmail(email).getNickname(); // 좋아요 누른 사람의 닉네임
+			String rMember = myboardRepo.findById(feedNo).get().getEmail(); // 작성자의 이메일 
+			String rMember_nickname = myboardRepo.findById(feedNo).get().getNickname(); // 작성자의 닉네임
+			String content = sMember + "님이 회원님의 게시물을 좋아합니다.";
+			if (!sMember.trim().equals(rMember_nickname.trim())) {
+				alarm.setEmail(rMember); // 알람을 받을 사람
+				alarm.setType("3"); // 알람 타입 ( 3 : 게시글 좋아요 )
+				alarm.setConfirm(0L); // 알람 확인 체크 ( 0 : 확인 x 1 : 확인 o )
+				alarm.setContent(content);
+				alarm.setImage(memberRepo.getUserByEmail(email).getImage());
+				alarm.setSemail(memberRepo.getUserByEmail(email).getEmail());
+				alarm.setFeedNo(feedNo);
+
+				System.out.println(alarm);
+				alarmRepo.save(alarm);
+			}
+			
+			
 			return new ResponseEntity<String>("like", HttpStatus.OK);
 		} else {
 			likeRepo.delete(isLike.get()); // 좋아요 해제하고
@@ -347,14 +397,14 @@ public class FeedController {
 
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "피드 삭제")
 	@DeleteMapping("/feed/delete")
 	public ResponseEntity<String> deleteFeed(@RequestParam Long feedNo) {
 
 		Optional<MyBoard> myBoardOpt = myboardRepo.findMyBoardByNo(feedNo);
 		String result = "fail";
-		if(myBoardOpt.isPresent()) {
+		if (myBoardOpt.isPresent()) {
 			myboardRepo.delete(myBoardOpt.get());
 			result = "success";
 		}

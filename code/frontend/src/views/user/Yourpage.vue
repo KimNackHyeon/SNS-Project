@@ -170,7 +170,9 @@ export default {
         }
       ).then(response => {
         this.updateList();
-      })
+      });
+
+      
     },
     unFollow(yourEmail){
       // alert('언팔로우');
@@ -269,10 +271,10 @@ export default {
         this.openFollowing = false;
         this.openFollower = false;
         Swal.fire({
-  icon: 'success',
-  showConfirmButton: false,
-  timer: 1500
-})
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        })
         window.location.reload();
       }
     },

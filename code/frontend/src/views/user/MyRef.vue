@@ -155,7 +155,7 @@ import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 const SERVER_URL = store.state.SERVER_URL;
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 var convert = require('xml-js');
 const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 

@@ -1,8 +1,8 @@
 <template>
-  <div style="overflow-x:hidden; width:100%; height:100%;">
-  <v-app style="overflow-x:hidden;  width:100%; height:100%;">
+  <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
+  <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
     <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -36,7 +36,7 @@
             </v-btn>
           </div>
         </v-layout>
-        <div style="padding: 10px; margin: 0; overflow-y: scroll;overflow-x: hidden; height: 490px;" grid-list-lg>
+        <div style="padding: 10px; padding-bottom: 40px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
@@ -52,12 +52,12 @@
                       <v-card-text style="padding: 0; font-size: 10px;">마감일 : {{ groupBuying.end_date }}</v-card-text>
                     </v-col>
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
-                      <div>
+                      <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn color="rgba(160, 212, 105, 0.5)" style="margin-right: 5px; width: 35px; height: 25px;">수정</v-btn>
+                          <v-btn color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="rgba(160, 212, 105, 0.5)" style="width: 35px; height: 25px;">삭제</v-btn>
+                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
                       <div>
@@ -112,9 +112,20 @@ export default {
       mydata: [],
       otherdata: [],
       distancedata2:[],
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
     }
   },
+  mounted(){
+    this.onResize();
+  },
   methods:{
+     onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     deleteGroupbuying(data) {
       Swal.fire({
   title: '정말 삭제하시겠습니까?',
@@ -203,12 +214,12 @@ export default {
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data
-        console.log(this.groupBuyings)
+        // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
         }
-        console.log(this.userinfo.address)
-        console.log(this.mapdata)
+        // console.log(this.userinfo.address)
+        // console.log(this.mapdata)
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -223,16 +234,16 @@ export default {
         for (var m = 0; m < this.mapdata.length; m++) {
           geocoder.addressSearch(this.mapdata[m], (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              console.log(result[0])
+              // console.log(result[0])
               var distancedata = [
                 new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
                 new kakao.maps.LatLng(result[0].y, result[0].x)]
-              console.log(distancedata)
+              // console.log(distancedata)
               var polyline = new kakao.maps.Polyline({
                 path: distancedata,
               })
               var distance = polyline.getLength();
-              console.log(distance)
+              // console.log(distance)
               this.distancedata2.push(distance)
               // this.otherdata.push(redata);
             }
@@ -250,9 +261,9 @@ export default {
 .writeButton{
   width: 60px;
   height: 60px;
-  position: fixed;
-  margin-top: -70px;
-  margin-left: 280px;
+  position: absolute;
+  top: 82%;
+  left: 80%;
   background-color: rgb(147 203 88);
   z-index: 90;
   border-radius: 30px;

@@ -8,13 +8,13 @@
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
-            <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
+            <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100%">
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
           </router-link>
         </div>
       </div>
-      <div  style=" width:360px;">
+      <div  style=" width:inherit">
         <v-carousel v-model="feedData.pictureNum">
         <!-- <v-carousel show-arrows-on-hover> -->
           <v-carousel-item
@@ -28,8 +28,9 @@
             class="ma-2 imgCount"
             color="#2c2c2c"
             style="
-    top: 49px;
-    width: 46px;">
+            top: 49px;
+            width: 46px;
+            left: 83%;">
             {{feedData.pictureNum + 1}}/{{feedData.items.length}} 
           </v-chip>
       </div>

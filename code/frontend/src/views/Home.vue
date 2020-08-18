@@ -35,19 +35,19 @@
                 </div></router-link>
             </div>
             <div  style="width:100%; height:48%;">
-                <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
+                <div class="grayLine" @click="chatlist" style="width:50%; height:100%; display: inline-block; text-align: center;">
                   <div class="iconBox">
-                    <v-badge color="red" dot><v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon></v-badge>
+                    <v-badge  color="red" dot><v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon></v-badge>
                   </div>
-                  <div class="subBox">
+                  <div  class="subBox">
                     <h4>내 채팅방</h4>
                   </div>
                 </div>
                 <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
+                  <router-link to="/alarm">
                   <div class="iconBox"> 
                    <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
                   </div>
-                  <router-link to="/alarm">
                     <div class="subBox">
                       <h4>새 소식</h4>
                     </div>
@@ -86,11 +86,13 @@
 </template>
 
 <script>
+const SERVER_URL = store.state.SERVER_URL;
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import $ from 'jquery'
 import Vuex from 'vuex'
  import store from '../vuex/store.js'
+ import axios from "axios"
 
 Vue.use(Vuex)
 
@@ -126,6 +128,15 @@ Vue.use(Vuetify, {
       }else{
         this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
         }
+        },
+        chatlist(){
+          axios.get(`${SERVER_URL}/chatting/`+ this.userinfo.email)
+        .then(response => {
+          this.$router.push({ name: 'MyChatList', params: { chatlist: response.data}})
+        })
+        .catch(error => {
+          // console.log(error)
+        })
         },
         showSlides() {
             var slideIndex = 0;
