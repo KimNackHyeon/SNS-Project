@@ -199,7 +199,7 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participatelist`, {marketNo:this.$route.params.id})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participatelist`, {tradeNo:this.$route.params.id})
         .then(response => {
           this.memberList = response.data
         })
@@ -208,16 +208,27 @@ export default {
         })
     },
     onParticipate() {
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participate`, {marketNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
+          console.log(response.data)
           if(response.data == "Fail"){
             Swal.fire({
-            text: "이미 참가하신 공동구매 방입니다.",
-          })
+  icon: 'error',
+  title: '이미 참가하신 교환방입니다.',
+})
+          }else if(response.data == "Owner"){
+            Swal.fire({
+  icon: 'error',
+  title: '참가할 수 없습니다.',
+  text: '작성자 본인은 아니신가요?',
+})
           }else{
             Swal.fire({
-              text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
-            })
+  icon: 'success',
+  title: '참가가 완료되었습니다.',
+  showConfirmButton: false,
+  timer: 1500
+})
           }
           window.location.reload();
         })
@@ -361,7 +372,7 @@ export default {
   }
   .completebtn {
     float: right;
-    width: 50px;
+    width: 80px;
   }
   .memberNick {
     margin: 0 !important;
