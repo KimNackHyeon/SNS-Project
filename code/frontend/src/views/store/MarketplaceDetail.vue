@@ -28,7 +28,7 @@
         <div style="font-size: 10px; display: inline-block; margin-right: 20px;">{{ detailinfo.nickname }}</div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 400px;">
+    <div>
       <!-- 교환물품 -->
       <table style="width: 100%; border-collapse: collapse;">
         <thead></thead>
@@ -74,72 +74,74 @@
         <div style="color: gray; font-size: 10px; text-align: right;">출처 : 농산물 유통정보 KAMIS </div>
       </div>
       <!-- 글 내용 -->
-      <div v-html="detailinfo.content" style="padding: 10px; height: 300px">
+      <div v-html="detailinfo.content" style="padding: 10px; height: 280px;">
         {{ detailinfo.content }}
       </div>
     </div>
-    <!-- 현금 거래 -->
-    <div style="padding: 5px; background: #eee; overflow: hidden;">
-      <div style="float: left"><h4>현금 거래시</h4></div>
-      <div style="float: right">
-        <div style="display: inline-block"><h6>1개당</h6></div>
-        <div style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
-        <div style="display: inline-block"><h4>원</h4></div>
+    <div style="position:fixed; bottom: 0; width: inherit">
+      <!-- 현금 거래 -->
+      <div style="padding: 5px; background: #eee; overflow: hidden;">
+        <div style="float: left"><h4>현금 거래시</h4></div>
+        <div style="float: right">
+          <div style="display: inline-block"><h6>1개당</h6></div>
+          <div style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
+          <div style="display: inline-block"><h4>원</h4></div>
+        </div>
       </div>
-    </div>
-    <div style="overflow: hidden">
-    <!-- 채팅 버튼 -->
-      <div style="float:left; width: 49%">
-        <!-- <router-link to="/chat/privatechat"> -->
-        <v-btn @click="registChattingRoom()"
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
-        </v-btn>
-      </div>
-      <!-- 참가자 명단 -->
-      <div v-if="userinfo.email == detailinfo.email" style="float: right; width: 49%" @click="member">
-        <v-btn 
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가자 명단
-        </v-btn>
-      </div>
-      <v-dialog v-model="openMember" scrollable width= "100%">
-        <v-card>
-          <v-card-title >참가자 {{memberList.length}}명</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text>
-            <div class="members" v-for="(member, i) in memberList" :key="i">
-              <div class="userImg">
-                <v-avatar size="35" @click="moveUser(member.email)"><img :src="member.image" :alt="`${member.nickname} 사진`"></v-avatar>
+      <div style="overflow: hidden">
+      <!-- 채팅 버튼 -->
+        <div style="float:left; width: 49%">
+          <!-- <router-link to="/chat/privatechat"> -->
+          <v-btn @click="registChattingRoom()"
+            color="rgb(160, 212, 105)" 
+            style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
+            >
+            <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
+          </v-btn>
+        </div>
+        <!-- 참가자 명단 -->
+        <div v-if="userinfo.email == detailinfo.email" style="float: right; width: 49%" @click="member">
+          <v-btn 
+            color="rgb(160, 212, 105)" 
+            style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
+            >
+            <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가자 명단
+          </v-btn>
+        </div>
+        <v-dialog v-model="openMember" scrollable width= "100%">
+          <v-card>
+            <v-card-title >참가자 {{memberList.length}}명</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div class="members" v-for="(member, i) in memberList" :key="i">
+                <div class="userImg">
+                  <v-avatar size="35" @click="moveUser(member.email)"><img :src="member.image" :alt="`${member.nickname} 사진`"></v-avatar>
+                </div>
+                <div class="content">
+                  <p class="memberNick" @click="moveUser(member.email)">{{member.nickname}}</p>
+                  <p class="memberEmail">{{member.email}}</p>
+                </div>
+                <div class="completebtn" @click="onCompleteBtn()">
+                  <v-btn class="Complete" color="#a0d469" style="box-shadow: unset; color: white">거래완료</v-btn>
+                </div>
               </div>
-              <div class="content">
-                <p class="memberNick" @click="moveUser(member.email)">{{member.nickname}}</p>
-                <p class="memberEmail">{{member.email}}</p>
-              </div>
-              <div class="completebtn" @click="onCompleteBtn()">
-                <v-btn class="Complete" color="#a0d469" style="box-shadow: unset; color: white">거래완료</v-btn>
-              </div>
-            </div>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="black" text @click="openMember = false">닫기</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <!-- 참가하기 -->
-      <div v-if="userinfo.email != detailinfo.email" style="float: right; width: 49%"  @click="onParticipate">
-        <v-btn 
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
-        </v-btn>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="black" text @click="openMember = false">닫기</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- 참가하기 -->
+        <div v-if="userinfo.email != detailinfo.email" style="float: right; width: 49%"  @click="onParticipate">
+          <v-btn 
+            color="rgb(160, 212, 105)" 
+            style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
+            >
+            <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
+          </v-btn>
+        </div>
       </div>
     </div>
   </div>
