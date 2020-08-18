@@ -74,7 +74,7 @@
                                 console.log(store.state.userInfo);
                             } else{
                                 // console.log(res);
-                                store.commit('setUserInfo', res.data);
+                                store.commit('setUserInfo', userInfo);
                                 // console.log(store.state.userInfo);
                             }
                             this.$router.push("/main");

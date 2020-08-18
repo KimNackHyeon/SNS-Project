@@ -481,20 +481,6 @@ public class AccountController {
 		return result.toString();
 	}
 
-	@PostMapping("/account/checkemail")
-	@ApiOperation(value = "이메일 중복체크")
-	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
-		HashMap<String, String> hashmap = new HashMap<String, String>();
-		// 이메일, 닉네임 중복처리 필수
-		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			hashmap.put("data", "1");
-		} else {
-//	         String code = memberService.sendMail(member.getEmail());
-			hashmap.put("data", "0");
-		}
-		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
-	}
-
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
 
 	public String getToken(Member member) {
