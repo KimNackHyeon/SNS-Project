@@ -11,7 +11,7 @@ import com.web.curation.model.TradeMember;
 @Repository
 public interface TradeMemberRepo extends JpaRepository<TradeMember, Long>{
 
-	ArrayList<TradeMember> findByTradeNo(String tradeNo);
+   ArrayList<TradeMember> findByTradeNo(String tradeNo);
 
-	Optional<TradeMember> findByTradeNoAndParticipantEmail(String tradeNo, String participantEmail);
+   Optional<TradeMember> findByTradeNoAndParticipantEmail(String tradeNo, String participantEmail);
 }

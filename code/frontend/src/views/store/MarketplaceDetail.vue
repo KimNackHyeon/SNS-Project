@@ -144,6 +144,61 @@
         </div>
       </div>
     </div>
+    <div style="overflow: hidden">
+    <!-- 채팅 버튼 -->
+      <div style="float:left; width: 49%">
+        <!-- <router-link to="/chat/privatechat"> -->
+        <v-btn @click="registChattingRoom()"
+          color="rgb(160, 212, 105)" 
+          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
+          >
+          <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
+        </v-btn>
+      </div>
+      <!-- 참가자 명단 -->
+      <div v-if="userinfo.email == detailinfo.email" style="float: right; width: 49%" @click="member">
+        <v-btn 
+          color="rgb(160, 212, 105)" 
+          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
+          >
+          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가자 명단
+        </v-btn>
+      </div>
+      <v-dialog v-model="openMember" scrollable width= "100%">
+        <v-card>
+          <v-card-title >참가자 {{memberList.length}}명</v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            <div class="members" v-for="(member, i) in memberList" :key="i">
+              <div class="userImg">
+                <v-avatar size="35" @click="moveUser(member.email)"><img :src="member.image" :alt="`${member.nickname} 사진`"></v-avatar>
+              </div>
+              <div class="content">
+                <p class="memberNick" @click="moveUser(member.email)">{{member.nickname}}</p>
+                <p class="memberEmail">{{member.email}}</p>
+              </div>
+              <div class="completebtn" @click="onCompleteBtn(member.email)">
+                <v-btn class="Complete" color="#a0d469" style="box-shadow: unset; color: white">거래완료</v-btn>
+              </div>
+            </div>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="black" text @click="openMember = false">닫기</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- 참가하기 -->
+      <div v-if="userinfo.email != detailinfo.email" style="float: right; width: 49%"  @click="onParticipate">
+        <v-btn 
+          color="rgb(160, 212, 105)" 
+          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
+          >
+          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
+        </v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -215,22 +270,22 @@ export default {
           console.log(response.data)
           if(response.data == "Fail"){
             Swal.fire({
-  icon: 'error',
-  title: '이미 참가하신 교환방입니다.',
-})
-          }else if(response.data == "Owner"){
-            Swal.fire({
-  icon: 'error',
-  title: '참가할 수 없습니다.',
-  text: '작성자 본인은 아니신가요?',
-})
-          }else{
-            Swal.fire({
-  icon: 'success',
-  title: '참가가 완료되었습니다.',
-  showConfirmButton: false,
-  timer: 1500
-})
+              icon: 'error',
+              title: '이미 참가하신 교환방입니다.',
+            })
+                      }else if(response.data == "Owner"){
+                        Swal.fire({
+              icon: 'error',
+              title: '참가할 수 없습니다.',
+              text: '작성자 본인은 아니신가요?',
+            })
+                      }else{
+                        Swal.fire({
+              icon: 'success',
+              title: '참가가 완료되었습니다.',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
           window.location.reload();
         })
@@ -247,10 +302,19 @@ export default {
         this.openMember = false;
       }
     },
-    onCompleteBtn(){
+    onCompleteBtn(user_email){
       $('Complete').css('color', 'black')
       $('Complete').attr('color', '#eee')
       // axios로 보내기(새소식으로 신선도 평가 보내기)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.image, semail:this.userinfo.email })
+    .then(response => {
+      if(response.data == "Success"){
+        Swal.fire({
+        icon: 'success',
+        title: '거래완료 알림이 전송되었습니다.',
+      })
+      }
+    })
     },
   },
   created(){

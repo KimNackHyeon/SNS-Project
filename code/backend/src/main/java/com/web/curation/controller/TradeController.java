@@ -35,9 +35,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
-		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
-		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
-		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
+      @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
+      @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
+      @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
 //  https://i3b301.p.ssafy.io:9999/food/swagger-ui.html
 //  http://i3b301.p.ssafy.io:9999/food/swagger-ui.html
@@ -166,6 +166,6 @@ public class TradeController {
 //	}
 //	List<Trade> tradeList = new ArrayList<Trade>();
 
-	
-	
+   
+   
 }
