@@ -136,7 +136,7 @@ export default {
   },
   methods:{
     registChattingRoom(){
-      axios.post(`${SERVER_URL}/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
         .then(response => {
           this.chatName = response.data;
           this.$router.push({ name: 'PrivateChat', params: { privatechat: this.privatechat, chatName: this.chatName }})

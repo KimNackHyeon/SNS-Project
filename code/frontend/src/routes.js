@@ -148,7 +148,7 @@ export default [
     component: MarketPlace,
   },
   {
-    path: "/chat/:privatechat",
+    path: "/chat",
     name: "PrivateChat",
     component: PrivateChat,
   },
