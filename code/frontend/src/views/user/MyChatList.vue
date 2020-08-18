@@ -8,22 +8,22 @@
       </router-link>
       <div class="titleBox">
         <div class="pageTitle">
-          <p style="margin: 0;">우리 동네 장터</p>
+          <p style="margin: 0;">내가 참여한 채팅방</p>
         </div>
       </div>
-      <router-link to="/store/marketmap" style="">
-        <v-btn icon style="width:30x; height:30px; background-size:cover;">
+      <!-- <router-link to="/store/marketmap" style="">
+        <v-btn  flat icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
-      </router-link>
+      </router-link> -->
     </div>
-    <div style="display: flex; border-bottom: 1px solid lightgray; padding: 0; background: rgb(202, 231, 171); height: 48px;">
+    <!-- <div style="display: flex; border-bottom: 1px solid lightgray; padding: 0; background: rgb(202, 231, 171); height: 48px;">
       <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
         <v-flex>
           <div class="searchBox">
-            <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
+            <textarea placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" value=""></textarea>
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -32,26 +32,22 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <div>
-            <input type="text">
-          </div>
       </v-layout>
-      
-    </div>
-    <v-card>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
+    </div> -->
+    <v-card flat>
+      <v-container fluid style="padding: 0; margin: 0;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
-              <router-link :to="`/store/marketplace/${ info.no }`">
+            <v-col v-for="(info, i) in chatlist" :key="i" cols="12">
+              <!-- <router-link :to="`/store/marketplace/${ info.no }`"> -->
                 <v-card style="padding: 5px;">
-                  <v-row style="padding: 0; margin: 0;">
-                    <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
-                      <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
-                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.myfood_kor }}</v-card-text>
-                      <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text>
-                    </v-col>
-                    <v-col cols="5" class="text-center" style="padding: 0;">
+                  <!-- <v-row style="padding: 0; margin: 0;"> -->
+                    <!-- <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;"> -->
+                      <!-- <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img> -->
+                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
+                      <!-- <v-card-text class="text-center" style="padding: 0; font-size: 9px;">{{ info.address }}</v-card-text> -->
+                    <!-- </v-col> -->
+                    <!-- <v-col cols="5" class="text-center" style="padding: 0;">
                       <v-row class="pa-0">
                         <v-card-text style="font-size: 20px; padding: 0; padding-bottom: 15px;">물물교환</v-card-text>
                       </v-row>
@@ -63,7 +59,7 @@
                           <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount1 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood1}.png`)"></v-img>
+                          <v-img height="30" width="30" class="ma-0 pa-0" :src="info.tradefood1"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
@@ -106,20 +102,14 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                 </v-card>
-              </router-link>
+              <!-- </router-link> -->
             </v-col>
           </v-row>
         </div>
       </v-container>
     </v-card>
-        <router-link to="/MyRef">
-          <div class="writeButton">
-            <v-icon color="white">mdi-lead-pencil</v-icon>
-            <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
-          </div>
-        </router-link>
   </div>
 </template>
 
@@ -141,9 +131,7 @@ export default {
       switched:true,
       userinfo:'',
       show:false,
-      inputKeyword:'',
-      originalList:[],
-      myList:[],
+      chatlist:'',
     }
   },
   methods:{
@@ -153,7 +141,7 @@ export default {
         $('.searchBox').css('display','unset');
       }else{
         if(document.getElementById("searchcontent").value != ""){
-          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
+          axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
           // console.log(this.tradelist)
@@ -167,15 +155,13 @@ export default {
           $('.searchBox').css('display','none')
         }
       }
-      this.inputKeyword = "";
     },
     call(){
       if(this.switched == true){
         console.log(this.userinfo.email)
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
+        axios.get(`${SERVER_URL}/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
-          this.myList = this.tradelist
           // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
@@ -184,10 +170,9 @@ export default {
         this.switched = false;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+      axios.get(`${SERVER_URL}/trade/`)
         .then(response => {
           this.tradelist = response.data.list
-          this.myList = this.tradelist
           // console.log(this.tradelist)
           this.mapOtherUserInfo = store.state.mapOtherUserInfo
           this.mapOtherUserInfo.address = this.tradelist[0].address
@@ -201,7 +186,7 @@ export default {
       }
     },
     edit(pageno) {
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
+      axios.post(`${SERVER_URL}/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
           // console.log(this.pagenumber)
@@ -221,7 +206,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/deletetrade`, {no:pageno})
+    axios.post(`${SERVER_URL}/trade/deletetrade`, {no:pageno})
       .then(response => {
         this.pagenumber = pageno;
         Swal.fire({
@@ -239,21 +224,6 @@ export default {
   }
 })
     },
-    searchKeyword(){
-      var keyword = this.inputKeyword;
-      console.log(this.myList);
-      if(this.myList.length == 0){
-        this.tradelist = this.originalList;
-        this.tradelist = this.tradelist.filter(function (item) {
-            return item.myfood_kor.indexOf(keyword)!=-1;
-          });
-      }else{
-        this.tradelist = this.myList;
-        this.tradelist = this.tradelist.filter(function (item) {
-            return item.myfood_kor.indexOf(keyword)!=-1;
-          });
-      }
-    }
   },
 created() {
   if(store.state.kakaoUserInfo.email != null){
@@ -261,30 +231,8 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
-    .then(response => {
-      this.tradelist = response.data.list
-      // console.log(this.tradelist)
-      // console.log(this.mapOtherUserInfo.address)
-      if (this.mapOtherUserInfo.address.length === 0) {
-        for (var i = 0; i < this.tradelist.length; i++) {
-          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
-        }
-        // console.log('good')
-        // console.log(store.state.mapOtherUserInfo)
-      }
-      this.originalList = this.tradelist;
-    })
-    .catch(error => {
-      // console.log(error.response)
-    })
-  },
-  updated(){
-    
-  },
-  computed: {
-    ...mapState(['mapOtherUserInfo']),
-  },
+  this.chatlist = this.$route.params.chatlist.list;
+}
 }
 </script>
 
@@ -313,18 +261,4 @@ created() {
     font-size: 21px;
     padding: 4px 6px;
   }
-  .writeButton{
-  width: 60px;
-  height: 60px;
-  position: fixed;
-  margin-top: 427px;
-  margin-left: 280px;
-  background-color: rgb(147 203 88);
-  z-index: 90;
-  border-radius: 30px;
-  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
-  text-align: center;
-  padding-top: 7px;;
-}
-
 </style>

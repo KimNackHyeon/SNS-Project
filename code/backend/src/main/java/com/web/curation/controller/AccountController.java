@@ -335,19 +335,32 @@ public class AccountController {
 
 	@PostMapping("/account/emailconfirm")
 	@ApiOperation(value = "이메일 인증하기")
-	public Object emailconfirm(@RequestBody Member member) {
-		final BasicResponse result = new BasicResponse();
+	public ResponseEntity<HashMap<String, String>> emailconfirm(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
 		// 이메일, 닉네임 중복처리 필수
+		System.out.println("hihi");
 		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			result.status = true;
-			result.data = "1";
+			hashmap.put("data", "1");
 		} else {
 			String code = memberService.sendMail(member.getEmail());
-			result.status = true;
-			result.data = code;
+			hashmap.put("data", code);
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
+	@PostMapping("/account/checkemail")
+	@ApiOperation(value = "이메일 중복체크")
+	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
+			hashmap.put("data", "1");
+		} else {
+//			String code = memberService.sendMail(member.getEmail());
+			hashmap.put("data", "0");
+		}
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
+	}
+	
 
 	@PostMapping("/account/nicknameconfirm")
 	@ApiOperation(value = "닉네임 중복검사")
@@ -466,20 +479,6 @@ public class AccountController {
 		}
 		System.out.println(result.toString());
 		return result.toString();
-	}
-
-	@PostMapping("/account/checkemail")
-	@ApiOperation(value = "이메일 중복체크")
-	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
-		HashMap<String, String> hashmap = new HashMap<String, String>();
-		// 이메일, 닉네임 중복처리 필수
-		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			hashmap.put("data", "1");
-		} else {
-//	         String code = memberService.sendMail(member.getEmail());
-			hashmap.put("data", "0");
-		}
-		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");
