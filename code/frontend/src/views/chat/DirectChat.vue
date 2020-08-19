@@ -10,7 +10,7 @@
       <div class="titleBox">
         <div class="pageTitle">
           <!-- <p style="margin: 11px; margin-left:162px;"> -->
-            "{{chatname}}"님과의 채팅
+            "{{this.chatlist.otherNickname}}"님과의 채팅
             <!-- </p> -->
         </div>
       </div>
@@ -133,6 +133,9 @@
 
 <script>
 import store from '../../vuex/store.js'
+import axios from 'axios'
+const SERVER_URL = store.state.SERVER_URL;
+
 export default {
     name:'PrivateChat',
     props:['privatechat'],
@@ -141,6 +144,7 @@ export default {
           userinfo:'',
           chatNo: '',
           chatname: '',
+          chatlist:'',
           writerinfo:'',
             message:null,
             messages:[],
@@ -185,14 +189,26 @@ export default {
     },
     created(){
       this.chatNo = this.$route.params.chatKey;
+      console.log(this.chatNo)
+      console.log(this.$route.params)
       this.chatname = this.$route.params.receiverNickname;
+      console.log(this.chatname)
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
         this.userinfo = store.state.userInfo;
       }
+      console.log(this.userinfo.email)
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
+      axios.get(`${SERVER_URL}/chattingrefresh/${this.chatNo}/${this.userinfo.email}`)
+        .then(response => {
+          this.chatlist = response.data
+          console.log(this.chatlist.otherNickname)
+        })
+        .catch(error => {
+          // console.log(error)
+        })
     }
 }
 </script>

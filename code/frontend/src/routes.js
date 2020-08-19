@@ -184,11 +184,6 @@ export default [
     component: WriteGroupBuying,
   },
   {
-    path: "/store/modifygroupbuying/:id?",
-    name: "ModifyGroupBuying",
-    component: ModifyGroupBuying,
-  },
-  {
     path: "/Main",
     name: "Main",
     component: Main,
