@@ -171,8 +171,8 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`http://localhost:9999/food/api/myref/search/`+this.userinfo.email)
-    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
+    //   axios.get('https://i3b301.p.ssafy.io:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.myrefFood = response.data.myreflist
@@ -182,7 +182,7 @@ export default {
         });
     
     var feedNo = this.$route.params.feedNo;
-    axios.get(`http://localhost:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
           // console.log(response);
             this.feedData = { // 하나의 피드 데이터
@@ -210,7 +210,7 @@ export default {
               this.feedData.items.push(d);
             });
 
-            axios.get(`http://localhost:9999/food/api/feed/check`,{
+            axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
               params:
               {
                 email:store.state.userInfo.email,
@@ -244,7 +244,7 @@ export default {
           // console.log(error.response);
         });
         setTimeout(() => {
-          axios.get(`http://localhost:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
               .then(response => {
                 // console.log(response);
                 response.data.forEach(c =>{
@@ -263,7 +263,7 @@ export default {
   methods: {
     likedbtn() {
       this.feedData.isLike = !this.feedData.isLike;
-      axios.get(`http://localhost:9999/food/api/feed/like`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -277,7 +277,7 @@ export default {
     },
     scrapedbtn() {
       this.feedData.isScrap = !this.feedData.isScrap;
-      axios.get(`http://localhost:9999/food/api/feed/scrap`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -318,7 +318,7 @@ export default {
         create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
       // console.log(comment);
-      axios.post(`http://localhost:9999/food/api/feed/register`,comment)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.comment = "";
@@ -345,7 +345,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`http://localhost:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
           .then(response => {
             Swal.fire({
                 // position: 'top-end',
