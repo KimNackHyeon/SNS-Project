@@ -167,11 +167,13 @@ export default {
             // console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
+                no : c.no,
+                feed_no : d.no,
                 img : c.img,
                 nickname : c.nickname,
                 email: c.email,
                 comment : c.comment,
-                created_at : c.create_date,
+                create_date : c.create_date,
               }
               data.comments.push(comment);
             })
@@ -251,7 +253,14 @@ export default {
     deleteComment(feedData_id, comment) {
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
+          var comm = feedData.comments[feedData.comments.indexOf(comment)];
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
+          console.log(comm);
+
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
+          .then(response =>{
+
+          })
         }
       })
     },
