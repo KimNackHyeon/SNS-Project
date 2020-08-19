@@ -7,6 +7,7 @@
             <div class="myphoto"><v-avatar size="100"><img :src="yourData.image" alt="John"></v-avatar></div>
             <div class="myprofil">
               <div style="margin: 10px">
+                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도">
                 <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
               <v-container style="min-height: 0; padding: 10px; width: 250px" >
@@ -121,7 +122,7 @@ export default {
         recipe:"",
         follower:"",
         following:"",
-        score: '',
+        score:"",
       },
       recipes:[],
       isfollow : false,

@@ -524,9 +524,9 @@ p {
   text-align: center;
   line-height: 50px;
   font-weight: $f600;
-  position: fixed;
+  // position: fixed;
   // left: 20px;
-  bottom: 17px;
+  // bottom: 17px;
   cursor: pointer;
   transform: rotate(0.1deg);
   &.disabled {
@@ -777,7 +777,7 @@ p {
     @include wrap;
     height: 50px;
     line-height: 1;
-    padding: 2px 15px 0 85px;
+    padding: 2px 15px 0 95px;
     box-sizing: border-box;
     color: green;
     border: 4px solid yellowgreen;
@@ -1589,9 +1589,9 @@ p {
   }
   .btns-bottom,
   .btn-bottom {
-    width: 520px;
-    left: 50%;
-    margin-left: -260px;
+    // width: 520px;
+    // left: 50%;
+    // margin-left: -260px;
   }
   .feed-item {
     padding: 30px;

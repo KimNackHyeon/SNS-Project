@@ -1,7 +1,7 @@
 <template>
   <div class="feed-item">
     <v-toolbar color="rgba(202, 231, 171)" flat height="36px">
-      <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch>
+      <!-- <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch> -->
     </v-toolbar>
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
@@ -56,10 +56,10 @@
           </v-btn>
           <!-- 수정 삭제 -->
           <div style="display: inline-block" v-if="feedData.email==userInfo.email">
-            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+            <v-btn @click="openBtn(feedData.no)" icon style="width: 25px; height: 25px">
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
-            <div class="btns">
+            <div class="btns" v-if="feedData.no == btnsFeedNo">
               <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn" >수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
@@ -115,6 +115,7 @@ export default {
       inputComment: '',
       commentData: [],
       originalDatas: [],
+      btnsFeedNo: '',
       myDatas:[],
       switched:true,
     };
@@ -319,11 +320,18 @@ export default {
           // console.log(error.response);
         });
     },
-    openBtn() {
-      if($('.btns').css('display')=='block'){
-        $('.btns').css('display','none');  
-      }else{
-        $('.btns').css('display','block');
+    openBtn(feedNo) {
+      // if($('.btns').css('display')=='block'){
+      //   $('.btns').css('display','none');  
+      // }else{
+      //   $('.btns').css('display','block');
+      // }
+      console.log(feedNo)
+      if (this.btnsFeedNo) {
+        this.btnsFeedNo = ''
+      }
+      else{
+        this.btnsFeedNo = feedNo
       }
     },
     moveUser(user_email){
@@ -459,13 +467,13 @@ export default {
 </script>
 <style scoped>
 .btns {
-  display: none;
+  /* display: none; */
   position: absolute;
   width: 80px;
   /* height: 60px; */
   z-index: 80;
-  left: 275px;
-  top: 375px;
+  left: 77%;
+  top: 83%;
   border: 1px solid lightgray;
   border-radius: 4px;
 }
