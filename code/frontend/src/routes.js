@@ -209,7 +209,7 @@ export default [
     component : ModifyRecipe
   },
   {
-    path: "/store/modify/marketplace",
+    path: "/store/modify/marketplace/:pagenumber?",
     name: "ModifyMarketPlace",
     component: ModifyMarketPlace,
   },

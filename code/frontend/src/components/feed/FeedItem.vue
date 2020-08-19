@@ -81,11 +81,11 @@
               <span>{{comment.comment}}</span>
             </div>
           </div>
-          <!-- <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
+          <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
             <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
               <v-icon size="18px">mdi-trash-can-outline</v-icon>
             </v-btn>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>

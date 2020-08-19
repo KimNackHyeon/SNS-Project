@@ -145,61 +145,6 @@
         </div>
       </div>
     </div>
-    <div style="overflow: hidden">
-    <!-- 채팅 버튼 -->
-      <div style="float:left; width: 49%">
-        <!-- <router-link to="/chat/privatechat"> -->
-        <v-btn @click="registChattingRoom()"
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: unset;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-chat</v-icon>채팅하기
-        </v-btn>
-      </div>
-      <!-- 참가자 명단 -->
-      <div v-if="userinfo.email == detailinfo.email" style="float: right; width: 49%" @click="member">
-        <v-btn 
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가자 명단
-        </v-btn>
-      </div>
-      <v-dialog v-model="openMember" scrollable width= "100%">
-        <v-card>
-          <v-card-title >참가자 {{memberList.length}}명</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text>
-            <div class="members" v-for="(member, i) in memberList" :key="i">
-              <div class="userImg">
-                <v-avatar size="35" @click="moveUser(member.email)"><img :src="member.image" :alt="`${member.nickname} 사진`"></v-avatar>
-              </div>
-              <div class="content">
-                <p class="memberNick" @click="moveUser(member.email)">{{member.nickname}}</p>
-                <p class="memberEmail">{{member.email}}</p>
-              </div>
-              <div class="completebtn" @click="onCompleteBtn(member.email, member.nickname)">
-                <v-btn class="Complete" color="#a0d469" style="box-shadow: unset; color: white">거래완료</v-btn>
-              </div>
-            </div>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="black" text @click="openMember = false">닫기</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <!-- 참가하기 -->
-      <div v-if="userinfo.email != detailinfo.email" style="float: right; width: 49%"  @click="onParticipate">
-        <v-btn 
-          color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 50px; color: white; font-size: 22px; border-radius: 0px;" 
-          >
-          <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
-        </v-btn>
-      </div>
-    </div>
   </div>
 </template>
 
