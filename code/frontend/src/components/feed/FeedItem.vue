@@ -115,6 +115,8 @@ export default {
       inputComment: '',
       commentData: [],
       originalDatas: [],
+      myDatas:[],
+      switched:true,
     };
   },
   computed: {
@@ -143,7 +145,7 @@ export default {
   },
   methods: {
     callList(){
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchAll`) // 피드 가져오기
+      axios.get(`http://localhost:9999/food/api/feed/searchAll`) // 피드 가져오기
         .then(response => {
           // console.log(response);
             // var data = {};
@@ -158,11 +160,11 @@ export default {
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [    
-              ],
+              items: [],
               tags:[],
               comments:[],
               likecount: d.likecount,
+              foods:[],
             }
 
           axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
@@ -208,6 +210,13 @@ export default {
               data.tags.push(tag);
             }
           });
+
+          response.data.foodlist.forEach(f => {
+            if(f.feedNo == d.no){
+              var food = {foodName : f.name_kor};
+              data.foods.push(food);
+            }
+          })
 
           this.feedDatas.push(data); // 피드 데이터 저장
           // console.log(data);
@@ -327,20 +336,37 @@ export default {
     },
     searchTag(tags){
       // console.log(tags);
-      this.feedDatas = this.originalDatas;
-      if(tags.length != 0){
-        this.feedDatas = this.feedDatas.filter(function (item) {
-          var isTag = false;
-          item.tags.forEach(tag => {
-            if(tags.indexOf("#"+tag.tagName) != -1){
-              // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
-              // console.log(item);
-              isTag = true;
-              return;
-            }
+      if(this.myDatas.length == 0){
+        this.feedDatas = this.originalDatas;
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
           })
-          return isTag;
-        })
+        }
+      } else{
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
+          })
+        }
       }
       // console.log(this.feedDatas);
     },
@@ -369,7 +395,65 @@ export default {
           })
         }
       })
-    }
+    },
+    call(){
+      if(this.switched == true){
+        let timerInterval
+        Swal.fire({
+          title: '레시피를 찾는 중입니다.',
+          html: '',
+          timer: 500,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
+                }
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        })
+        var myFood = [];
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+store.state.userInfo.email)
+        .then(response => {
+          this.feedDatas = this.originalDatas;  //  원본 데이터
+          response.data.myreflist.forEach(d => {
+            myFood.push(d.name_kor);
+          })
+          // console.log(myFood);
+          this.feedDatas = this.feedDatas.filter(function (feed) {
+            var hasFood = false;
+            feed.foods.forEach(food => {
+              if(myFood.indexOf(food.foodName) != -1){
+                // console.log(feed.no);
+                hasFood = true;
+                // this.myDatas.push(feed);
+                return;
+              }
+            });
+            return hasFood;
+          });
+          // console.log(this.feedDatas);
+          this.myDatas = this.feedDatas;
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+
+        this.switched = false;
+      }
+      else{
+          this.feedDatas = this.originalDatas;
+          this.switched = true;
+        }
+    },
   },
 };
 </script>

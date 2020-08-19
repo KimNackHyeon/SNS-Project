@@ -96,10 +96,12 @@ public class FeedController {
 		List<MyBoard> feedlist = myboardRepo.findAll();
 		List<Tag> taglist = tagRepo.findAll();
 		List<FeedData> datalist = feedDataRepo.findAll();
+		List<Food> foodlist = foodRepo.findAll();
 
 		map.put("feedlist", feedlist);
 		map.put("taglist", taglist);
 		map.put("datalist", datalist);
+		map.put("foodlist",foodlist);
 
 //		for (MyBoard myBoard : feedlist) {
 //			System.out.println(myBoard);
