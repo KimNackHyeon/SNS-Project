@@ -26,11 +26,11 @@
           <v-flex style="width:90%; float:left;">
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px;"></v-switch>
-          </v-toolbar>
+                <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
+              </v-toolbar>
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
-          </v-toolbar>
+                <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
+              </v-toolbar>
             </v-toolbar>
           </v-flex>
           <div style="border: solid 1px lightgrey; width:10%; float:left;">
@@ -62,9 +62,6 @@
                         <router-link :to="`/store/groupbuying`">
                           <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
-                      </div>
-                      <div>
-                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
@@ -109,7 +106,10 @@ export default {
   name: 'Groupbuying',
   data() {
     return {
+      distswitch:false,
+      dateswitch:false,
       groupBuyings: '',
+      distancegroup:[],
       switched:true,
       switched2:true,
       mapdata: [],
@@ -119,6 +119,7 @@ export default {
       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       inputKeyword:'',
       originalList:[],
+      addresspoint: [],
     }
   },
   mounted(){
@@ -162,18 +163,43 @@ export default {
     },
     callwithaddress(){
       if(this.switched2 == true){
+        let timerInterval
+                  Swal.fire({
+                    title: '가까운 순으로 정렬 중입니다.',
+                    html: '정렬하기까지 <b></b> 초.',
+                    timer: 500,
+                    timerProgressBar: true,
+                    onBeforeOpen: () => {
+                      Swal.showLoading()
+                      timerInterval = setInterval(() => {
+                        const content = Swal.getContent()
+                        if (content) {
+                          const b = content.querySelector('b')
+                          if (b) {
+                            b.textContent = Swal.getTimerLeft()
+                          }
+                        }
+                      }, 100)
+                    },
+                    onClose: () => {
+                      clearInterval(timerInterval)
+                    }
+                  })
         axios({
-            url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyaddress`,
-            method:'post',
-            data: JSON.stringify(this.distancedata2),
-            headers: config.headers})
-        .then((response)=>{
-            this.groupBuyings = response.data
-        })
-        .catch((error)=>{
-            console.log(error.response);
-        })
+                    url:`http://localhost:9999/food/api/groupbuying/orderbyaddress/`+this.mydata[0][0]+`/`+this.mydata[0][1],
+                    method:'post',
+                    data: JSON.stringify(this.groupBuyings),
+                    headers: config.headers})
+                .then((response)=>{
+                    this.groupBuyings = response.data
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                })
+        this.distswitch = true;
+        this.dateswitch = false;
         this.switched2 = false;
+        this.switched = true;
     }
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
@@ -183,7 +209,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.distswitch = false;
+        this.dateswitch = false;
         this.switched2 = true;
+        this.switched = true;
       }
     },
     call(){
@@ -195,7 +224,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.dateswitch = true;
+        this.distswitch = false;
         this.switched = false;
+        this.switched2 = true;
     }
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
@@ -205,7 +237,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.dateswitch = false;
+        this.distswitch = false;
         this.switched = true;
+        this.switched2 = true;
       }
     },
     search(){
@@ -265,6 +300,27 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
+        for (var m = 0; m <= this.mapdata.length; m++) {
+          geocoder.addressSearch(this.mapdata[m], (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              var distancedata = [
+                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
+                new kakao.maps.LatLng(result[0].y, result[0].x)
+              ]
+              // console.log(distancedata)
+              this.addresspoint.push([result[0].y, result[0].x])
+              var polyline = new kakao.maps.Polyline({
+                path: distancedata,
+              })
+              var distance = polyline.getLength();
+              // console.log(distance)
+              this.distancedata2.push(distance)
+              // this.otherdata.push(redata);
+          this.distancegroup.push(distancedata[1]) 
+            }
+          })
+        }
+        console.log(this.addresspoint)
       })
       .catch(error => {
         console.log(error)
