@@ -77,29 +77,29 @@
     </div>
     <div v-html="groupbuying.content" style="padding: 10px; height: 280px">
     </div>
-    <div style="position:fixed; bottom: 0; width: 100%">
+    <div style="position:fixed; bottom: 0;" :style="{width:frameSize.x+'px'}">
       <div>
         <v-btn
           :href="groupbuying.link"
           color="rgb(160, 212, 105)" 
-          style="width: 100%; height: 20px; color: white; font-size: 16px; padding: 0px 30px; border-radius: 0px; margin-bottom: 2px;" 
+          style="width: 100%; height: 20px; color: white; font-size: 16px; border-radius: 0px; margin-bottom: 2px;" 
           >
           <v-icon style="margin-right: 5px">mdi-link</v-icon>제품 보러가기
         </v-btn>
       </div>
-      <div style="overflow: hidden">
-        <div style="float: left;">
+      <div style="overflow: hidden;">
+        <div style="float: left; width: 49%">
           <v-btn @click="moveDirectChat"
             color="rgb(160, 212, 105)" 
-            style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
+            style="height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;"  :style="{width:frameSize.x/2+'px'}"
             >
             <v-icon style="margin-right: 5px">mdi-comment-multiple-outline</v-icon>문의하기
             </v-btn>
         </div>
-        <div style="float: right;" @click="onParticipate">
+        <div style="float: right; width: 49%" @click="onParticipate">
           <v-btn 
             color="rgb(160, 212, 105)" 
-            style="width: 100%; height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" 
+            style="height: 50px; color: white; font-size: 22px; padding: 0px 30px; border-radius: 0px;" :style="{width:frameSize.x/2+'px'}"
             >
             <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
             </v-btn>
@@ -121,6 +121,7 @@ import Swal from 'sweetalert2'
 export default {
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       userinfo: '',
       groupbuying: '',
       memberList: '',
@@ -170,6 +171,7 @@ export default {
     }
   },
   mounted() {
+     this.onResize();
     if (store.state.kakaoUserInfo.email != null) {
       this.userinfo = store.state.kakaoUserInfo;
     }
@@ -178,6 +180,13 @@ export default {
     }
   },
   methods: {
+      onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+        },
   moveDirectChat(){
       // axios.post(`${SERVER_URL}/directchatting/`, {chatTitle:this.detailinfo.myfood_kor, chatNo:this.privatechat ,email:this.userinfo.email, nickname:this.detailinfo.nickname})
       //   .then(response => {
@@ -236,7 +245,16 @@ export default {
         .catch(error => {
           // console.log(error)
         })
-    }
+    },
+    moveUser(user_email){
+      if(user_email == this.userinfo.email){
+        this.$router.push({name: 'Mypage'});
+      }else{
+        // console.log(user_email)
+        this.$router.push({name: 'Yourpage', params: {email : user_email}});
+        this.openMember = false;
+      }
+    },
   },
 }
 </script>

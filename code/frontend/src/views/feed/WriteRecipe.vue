@@ -25,7 +25,7 @@
               <input v-model="title" class="titleinput" type="text" placeholder="제목을 입력해주세요." style="float:left; width: 100%; height: 40px;">
             </div>
           </div>
-          <div style="width:100%; height:32%; border-top: 1px solid rgba(128, 128, 128, 0.15); overflow:hidden;">
+          <div class="tags" style="">
           <div style="height: 100%;">
          <v-container style="max-height:30px;min-height:13px; padding:0px;">
             <v-combobox
@@ -313,6 +313,7 @@ export default {
       }
 
       // console.log(data);
+      
 
       axios
       .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData,{
@@ -323,10 +324,45 @@ export default {
         this.images = response.data;
         data.images = this.images;
         // console.log(data);
-        setTimeout(() => {
-        this.loading = false;
-        this.register(data);
-      }, 1000*this.items.length + 2000);
+
+        let timerInterval;
+        Swal.fire({
+          title: '레시피 등록중',
+          // html: '전송까지 <b></b> 초 남았습니다.',
+          timer: 1000*this.items.length + 2000,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            Swal.color= 'green';
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
+                }
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+            Swal.fire(
+              '등록완료!',
+              '',
+              'success'
+            )
+            this.loading = false;
+            this.register(data);
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer')
+          }
+        })
+      //   setTimeout(() => {
+        
+      // }, 1000*this.items.length + 2000);
       })
       .catch((error)=>{
         // console.log(error.response);
@@ -349,6 +385,16 @@ export default {
 } 
 </script>
 <style scoped>
+.tags {
+  width:100%; 
+  height:32%; 
+  border-top: 1px solid rgba(128, 128, 128, 0.15); 
+  overflow:hidden;
+}
+.tags:hover {
+  border: 2px solid #a0d469;
+  border-radius: 4px;
+}
 .addFoodBtn{
     width: 80px;
     height: 80px;

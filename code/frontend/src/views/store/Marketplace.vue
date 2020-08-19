@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%; position: relative;">
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/Main">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn flat icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -32,15 +32,12 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <div>
-            <input type="text">
-          </div>
       </v-layout>
       
     </div>
-    <v-card>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
+    <v-card flat>
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
+        <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">
@@ -96,12 +93,12 @@
                           <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
                           <span class="text-center pa-0" style="font-size: 18px;">원</span>
                         </v-col>
-                        <v-col cols="12" class="pa-1 text-center" v-if="userinfo.email === tradelist[i].email">
+                        <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 10px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 10px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -135,6 +132,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       tradelist: [
       ],
       pagenumber: '',
@@ -146,7 +144,17 @@ export default {
       myList:[],
     }
   },
+  mounted(){
+    this.onResize();
+  },
   methods:{
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     ...mapMutations(['setMapOtherUserInfo']),
     search(){
       if($('.searchBox').css('display')=='none'){
@@ -288,7 +296,7 @@ created() {
 }
 </script>
 
-<style>
+<style scoped>
   .titleBox {
     display: inline-block;
     width: 77%;
@@ -316,9 +324,11 @@ created() {
   .writeButton{
   width: 60px;
   height: 60px;
-  position: fixed;
-  margin-top: 427px;
-  margin-left: 280px;
+  position: absolute;
+  /* margin-top: 427px;
+  margin-left: 280px; */
+  top: 88%;
+  left: 82%;
   background-color: rgb(147 203 88);
   z-index: 90;
   border-radius: 30px;

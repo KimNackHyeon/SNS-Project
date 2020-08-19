@@ -1,6 +1,6 @@
 <template>
   <div style="width:360px; height:100%">
-    <div class="searchBar" style="height:40px; border: 1px solid lightgray;">
+    <div class="searchBar" style="height: 40px; border: 1px solid lightgray;">
       <!-- 해시태그 검색창 -->
       <div style="height: 100%; overflow-y:hidden;">
         <v-combobox
@@ -32,7 +32,7 @@
       </div>
       </router-link>
     </div>
-    <div class="feed-body" style="width:360px; height:590px; padding-bottom: 100px">
+    <div class="feed-body" style="width:inheirt; height:92%; padding-bottom: 70px">
         <feed-item ref="feeditem"/>
         <!-- <FeedItem />
         <FeedItem />
@@ -121,18 +121,27 @@ export default {
 </script>
 
 <style scoped>
+.v-application--wrap {
+  position: relative;
+}
 .writeButton{
   width: 60px;
-    height: 60px;
-    position: fixed;
-    margin-top: 466px;
-    margin-left: 284px;
-    background-color: rgb(147 203 88);
-    z-index: 90;
-    border-radius: 30px;
-    box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
-    text-align: center;
-    padding-top: 7px;;
+  height: 60px;
+  position: absolute;
+  top: 88%;
+  left: 82%;
+  background-color: rgb(147 203 88);
+  z-index: 90;
+  border-radius: 30px;
+  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+  text-align: center;
+  padding-top: 7px;
+}
+.searchBarBtn:hover {
+  border: 2px solid #a0d469;
+}
+.v-input__slot:hover {
+  border: unset !important;
 }
 .v-input__control {
   height: 38px;

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="writegroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -140,7 +140,7 @@
     <div>
       <v-btn 
       color="rgb(160, 212, 105)" 
-      style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+      :style="{width:frameSize.x+'px'}" style=" height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
       작성하기
@@ -163,6 +163,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       userinfo:'',
       title: '',
       food: '',
@@ -180,6 +181,9 @@ export default {
       searchQuery: '',
       names : foods,
     }
+  },
+  mounted(){
+    this.onResize();
   },
   watch: {
     date (val) {
@@ -200,6 +204,13 @@ export default {
     }
   },
   methods: {
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     getFood(){
       // console.log('getFood 실행')
       if (this.dialog === false) {
@@ -378,6 +389,9 @@ input{
 .v-text-field {
   margin: 0 !important;
   padding: 0 !important;
+}
+.v-input__control {
+  border: 1px solid lightgray !important;
 }
 .v-input__slot:before{
   border-color: unset !important;

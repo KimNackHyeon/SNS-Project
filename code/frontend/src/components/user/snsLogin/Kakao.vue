@@ -62,7 +62,7 @@
                          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
-                             image : userInfo.profile_image_url,
+                             image : userInfo.image,
                              password : userInfo.password
                          })
                          .then(res => {
@@ -74,7 +74,7 @@
                                 console.log(store.state.userInfo);
                             } else{
                                 // console.log(res);
-                                store.commit('setUserInfo', res.data);
+                                store.commit('setUserInfo', userInfo);
                                 // console.log(store.state.userInfo);
                             }
                             this.$router.push("/main");

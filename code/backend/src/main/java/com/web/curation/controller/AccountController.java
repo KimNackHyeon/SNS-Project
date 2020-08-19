@@ -40,6 +40,7 @@ import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
 import com.web.curation.model.Scrap;
+import com.web.curation.repo.AlarmRepo;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
@@ -89,6 +90,9 @@ public class AccountController {
 
 	@Autowired
 	ScrapRepo scrapRepo;
+
+	@Autowired
+	AlarmRepo alarmRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -318,9 +322,25 @@ public class AccountController {
 	@PostMapping("/account/follow/")
 	@ApiOperation(value = "팔로우 추가")
 	public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
-
 		System.out.println(follow);
+		/* 팔로우 디비에 저장 */
 		followRepo.save(follow);
+
+		/* 알람 디비에 저장 */
+		Alarm alarm = new Alarm();
+		String sMember = memberRepo.getUserByEmail(follow.getEmail()).getNickname();
+		String content = sMember + "님이 회원님을 팔로우합니다.";
+
+		alarm.setEmail(follow.getYourEmail()); // 알람을 받을 사람
+		alarm.setType("1"); // 알람 타입 ( 1 : 팔로우 )
+		alarm.setConfirm(0L); // 알람 확인 체크 ( 0 : 확인 x 1 : 확인 o )
+		alarm.setContent(content);
+		alarm.setImage(memberRepo.getUserByEmail(follow.getEmail()).getImage());
+		alarm.setSemail(memberRepo.getUserByEmail(follow.getEmail()).getEmail());
+
+		System.out.println(alarm);
+		alarmRepo.save(alarm);
+
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
@@ -347,6 +367,7 @@ public class AccountController {
 		}
 		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
+
 	@PostMapping("/account/checkemail")
 	@ApiOperation(value = "이메일 중복체크")
 	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
@@ -360,7 +381,6 @@ public class AccountController {
 		}
 		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
-	
 
 	@PostMapping("/account/nicknameconfirm")
 	@ApiOperation(value = "닉네임 중복검사")
@@ -479,6 +499,37 @@ public class AccountController {
 		}
 		System.out.println(result.toString());
 		return result.toString();
+	}
+
+	@GetMapping("/account/alarm")
+	@ApiOperation(value = "내 알람 탐색")
+	public List<Alarm> alarmList(@RequestParam String email) {
+		System.out.println(email);
+		List<Alarm> alarmList = alarmRepo.findByEmail(email);
+		for (Alarm alarm : alarmList) {
+			System.out.println(alarm);
+		}
+
+		return alarmList;
+	}
+
+	@PostMapping("/account/freshalarm")
+	@ApiOperation(value = "평가 알람")
+	public ResponseEntity<String> freshAlarm(@RequestBody Alarm alarm) {
+		System.out.println(alarm.toString());
+		alarm.setConfirm(0L);
+		alarmRepo.save(alarm);
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/account/alarmcheck")
+	@ApiOperation(value = "평가 알람")
+	public ResponseEntity<String> alarmCheck(@RequestParam Long no) {
+		Optional<Alarm> alarm = alarmRepo.findById(no);
+		alarm.get().setConfirm(1L);
+		System.out.println(alarm.get().toString());
+		alarmRepo.save(alarm.get() );
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");

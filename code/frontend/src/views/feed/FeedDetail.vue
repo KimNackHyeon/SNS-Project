@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 490px; position: relative">
+    <div style="overflow: scroll; height: 100%; position: relative; padding-bottom: 20px;">
       <!-- 제목 -->
       <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
         <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
@@ -147,29 +147,9 @@ export default {
       feedData: '',
       myrefFood:[],
       havingFood:[],
-      otherFood:[],
-      inFoods: [
-      ],
-      outFoods: [
-        {img: "egg", name: "달걀", amount: "1개"},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
-        {img: "vanilla", name: "바닐라빈", amount: "1/4개"},
-      ],
+      otherFood:[],   
       // onBuying: false,
       comment: "",
-      hashTags: [
-        '빵', 
-        '베이커리',
-        '인생빵',
-        'JMT',
-        '성심당',
-        '대전빵집',
-        '부추빵',
-        '꿀키',
-        '소보로'
-      ],
       offset: true,
     }
   },
