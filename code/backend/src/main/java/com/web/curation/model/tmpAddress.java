@@ -119,12 +119,13 @@ public class tmpAddress implements Comparable<tmpAddress>{
 	public void setRegist_date(LocalDateTime regist_date) {
 		this.regist_date = regist_date;
 	}
+	
 	@Override
 	public String toString() {
-		return "tmpAddress [no=" + no + ", email=" + email + ", nickname=" + nickname + ", title=" + title
-				+ ", food=" + food + ", food_kor=" + food_kor + ", address=" + address + ", end_date="
-				+ end_date + ", max_people=" + max_people + ", now_people=" + now_people + ", link=" + link
-				+ ", content=" + content + ", regist_date=" + regist_date + "]";
+		return "tmpAddress [no=" + no + ", email=" + email + ", nickname=" + nickname + ", title=" + title + ", food="
+				+ food + ", food_kor=" + food_kor + ", address=" + address + ", end_date=" + end_date + ", max_people="
+				+ max_people + ", now_people=" + now_people + ", link=" + link + ", content=" + content
+				+ ", regist_date=" + regist_date + ", distance=" + distance + "]";
 	}
 	public tmpAddress(Long no, String email, String nickname, String title, String food, String food_kor,
 			String address, String end_date, Long max_people, Long now_people, String link, String content,
