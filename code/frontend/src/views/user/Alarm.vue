@@ -38,7 +38,7 @@ export default {
     }
   },
   created(){
-    axios.get(`http://localhost:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
     .then(response => {
       console.log(response);
       response.data.reverse();
@@ -87,7 +87,7 @@ export default {
             a.confirm = "alarmbox";
           }
         })
-        axios.get(`http://localhost:9999/food/api/account/alarmcheck`,{ params: { no : alarm.no } })
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarmcheck`,{ params: { no : alarm.no } })
         .then(response => {
 
         })

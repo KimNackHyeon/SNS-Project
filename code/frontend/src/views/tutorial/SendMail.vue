@@ -146,7 +146,7 @@ export default {
       // 모든 항목 다 작성되었는지 검사
       if (this.title && this.content ) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/account/qna`, {title:this.title, content:sendContent, email:this.userinfo.email, nickname:this.userinfo.nickname})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/qna`, {title:this.title, content:sendContent, email:this.userinfo.email, nickname:this.userinfo.nickname})
           .then(response => {
             Swal.fire({
             icon:'success',

@@ -388,7 +388,7 @@ export default {
     },
     checkNickname() {
       axios
-      .post(`http://localhost:9999/food/api/account/nicknameconfirm`, this.signupData)
+      .post(`https://i3b301.p.ssafy.io:9999/food/api/account/nicknameconfirm`, this.signupData)
       .then(data => {
         // console.log(data.data.data)
         if (data.data.data == "1") {
@@ -456,7 +456,7 @@ Swal.fire({
     console.log('I was closed by the timer')
   }
 })
-        axios.post(`http://localhost:9999/food/api/account/emailconfirm`, this.signupData)
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/emailconfirm`, this.signupData)
         .then(data => {
           if (data.data.data == "1") {
             // console.log('success')
@@ -487,7 +487,7 @@ Swal.fire({
           if (this.emailSucMsg) {
             // console.log('sucsess1')
             // console.log(this.signupData.email)
-            axios.post(`http://localhost:9999/food/api/account/checkemail`, this.signupData)
+            axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/checkemail`, this.signupData)
             .then(data => {
               // console.log('sucsess2')
               if (data.data.data === "1") {

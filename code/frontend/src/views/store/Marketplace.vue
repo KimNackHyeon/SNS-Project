@@ -128,7 +128,7 @@ import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
 import {foods} from '../../views/Food/Foods.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -164,7 +164,7 @@ export default {
         $('.searchBox').css('display','unset');
       }else{
         if(document.getElementById("searchcontent").value != ""){
-          axios.get(`http://localhost:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
           // console.log(this.tradelist)
@@ -183,7 +183,7 @@ export default {
     call(){
       if(this.switched == true){
         console.log(this.userinfo.email)
-        axios.get(`http://localhost:9999/food/api/trade/filter/`+this.userinfo.email)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
@@ -204,7 +204,7 @@ export default {
         this.switched = false;
     }
     else{
-      axios.get(`http://localhost:9999/food/api/trade/`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
@@ -225,7 +225,7 @@ export default {
       }
     },
     edit(pageno) {
-      axios.post(`http://localhost:9999/food/api/trade/beforeupdate`, {no:pageno})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
           // console.log(this.pagenumber)
@@ -245,7 +245,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`http://localhost:9999/food/api/trade/deletetrade`, {no:pageno})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/deletetrade`, {no:pageno})
       .then(response => {
         this.pagenumber = pageno;
         Swal.fire({
@@ -285,12 +285,12 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  axios.get(`http://localhost:9999/food/api/trade/`)
+  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       // console.log(this.tradelist)
       // console.log(this.mapOtherUserInfo.address)
-      axios.get(`http://localhost:9999/food/api/account/apitest`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             for(var m = 0; m < this.xmldata.price.length; m++){

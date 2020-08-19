@@ -382,7 +382,7 @@ whiteReciptComplete(){
       
 
       axios
-      .post(`http://localhost:9999/food/api/feed/img`, formData,{
+      .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData,{
         headers: { 'Content-Type': 'multipart/form-data' } 
       })
       .then((response)=>{
@@ -438,7 +438,7 @@ whiteReciptComplete(){
     register(data) {
       // console.log(data);
       axios
-        .put(`http://localhost:9999/food/api/feed/write`, data)
+        .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/write`, data)
         .then((response) => {
           // console.log(response);
           this.$router.push("/feed/main");

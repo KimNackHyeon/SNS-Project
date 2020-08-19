@@ -240,7 +240,7 @@ export default {
       // 모든 항목 다 작성되었는지 검사
       if (this.title && this.food && this.dateFormatted && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '수정이 완료되었습니다.',
@@ -305,7 +305,7 @@ export default {
       }
     console.log(typeof(this.$route.params.id))
     axios({
-                    url:`http://localhost:9999/food/api/groupbuying/beforeupdate`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/beforeupdate`,
                     method:'post',
                     data:{no:this.$route.params.id},
                     headers: config.headers})
