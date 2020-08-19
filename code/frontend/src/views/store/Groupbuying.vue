@@ -23,11 +23,11 @@
           <v-flex style="width:90%; float:left;">
             <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="callwithaddress" label="거리순" style="margin-top:20px;"></v-switch>
-          </v-toolbar>
+                <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
+              </v-toolbar>
               <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
-            <v-switch @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
-          </v-toolbar>
+                <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
+              </v-toolbar>
             </v-toolbar>
           </v-flex>
           <div style="border: solid 1px lightgrey; width:10%; float:left;">
@@ -105,7 +105,10 @@ export default {
   name: 'Groupbuying',
   data() {
     return {
+      distswitch:false,
+      dateswitch:false,
       groupBuyings: '',
+      distancegroup:[],
       switched:true,
       switched2:true,
       mapdata: [],
@@ -156,10 +159,32 @@ export default {
     },
     callwithaddress(){
       if(this.switched2 == true){
+        let timerInterval
+                  Swal.fire({
+                    title: '가까운 순으로 정렬 중입니다.',
+                    html: '정렬하기까지 <b></b> 초.',
+                    timer: 500,
+                    timerProgressBar: true,
+                    onBeforeOpen: () => {
+                      Swal.showLoading()
+                      timerInterval = setInterval(() => {
+                        const content = Swal.getContent()
+                        if (content) {
+                          const b = content.querySelector('b')
+                          if (b) {
+                            b.textContent = Swal.getTimerLeft()
+                          }
+                        }
+                      }, 100)
+                    },
+                    onClose: () => {
+                      clearInterval(timerInterval)
+                    }
+                  })
         axios({
-                    url:`http://localhost:9999/food/api/groupbuying/orderbyaddress`,
+                    url:`http://localhost:9999/food/api/groupbuying/orderbyaddress/`+this.mydata[0][0]+`/`+this.mydata[0][1],
                     method:'post',
-                    data: JSON.stringify(this.distancedata2),
+                    data: JSON.stringify(this.groupBuyings),
                     headers: config.headers})
                 .then((response)=>{
                     this.groupBuyings = response.data
@@ -167,7 +192,10 @@ export default {
                 .catch((error)=>{
                     console.log(error.response);
                 })
+        this.distswitch = true;
+        this.dateswitch = false;
         this.switched2 = false;
+        this.switched = true;
     }
     else{
       axios.get(`http://localhost:9999/food/api/groupbuying/read`)
@@ -177,7 +205,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.distswitch = false;
+        this.dateswitch = false;
         this.switched2 = true;
+        this.switched = true;
       }
     },
     call(){
@@ -189,7 +220,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.dateswitch = true;
+        this.distswitch = false;
         this.switched = false;
+        this.switched2 = true;
     }
     else{
       axios.get(`http://localhost:9999/food/api/groupbuying/read`)
@@ -199,7 +233,10 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        this.dateswitch = false;
+        this.distswitch = false;
         this.switched = true;
+        this.switched2 = true;
       }
     },
   },
@@ -246,6 +283,7 @@ export default {
               // console.log(distance)
               this.distancedata2.push(distance)
               // this.otherdata.push(redata);
+          this.distancegroup.push(distancedata[1]) 
             }
           })
         }

@@ -521,16 +521,6 @@ public class AccountController {
 		return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
 	
-
-	@PostMapping("/account/freshalarm")
-	@ApiOperation(value = "평가 알람")
-	public ResponseEntity<String> freshAlarm(@RequestBody Alarm alarm) {
-		System.out.println(alarm.toString());
-		alarm.setConfirm(0L);
-		alarmRepo.save(alarm);
-		return new ResponseEntity<String>("Success", HttpStatus.OK);
-	}
-	
 	@GetMapping("/account/alarmcheck")
 	@ApiOperation(value = "평가 알람")
 	public ResponseEntity<String> alarmCheck(@RequestParam Long no) {
