@@ -33,6 +33,7 @@ import Tutorial1 from './views/tutorial/Tutorial_1.vue';
 import Tutorial2 from './views/tutorial/Tutorial_2.vue'
 import Tutorial3 from './views/tutorial/Tutorial_3.vue'
 import Tutorial4 from './views/tutorial/Tutorial_4.vue'
+import SendMail from './views/tutorial/SendMail.vue'
 
 export default [
   {
@@ -117,6 +118,11 @@ export default [
     path: "/user/yourpage/:email",
     name: "Yourpage",
     component: Yourpage,
+  },
+  {
+    path: "/tutorial/sendmail",
+    name: "SendMail",
+    component: SendMail,
   },
   {
     path: "/user/modifyuser",

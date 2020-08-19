@@ -144,7 +144,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
+          axios.post(`http://localhost:9999/food/api/groupbuying/delete` , {no:data})
             .then(response => {
               Swal.fire({
                   // position: 'top-end',
@@ -202,7 +202,7 @@ export default {
         this.switched = true;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -217,7 +217,7 @@ export default {
     },
     call(){
       if(this.switched == true){
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
+        axios.get(`http://localhost:9999/food/api/groupbuying/orderbyenddate`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -230,7 +230,7 @@ export default {
         this.switched2 = true;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -278,7 +278,7 @@ export default {
       this.userinfo = store.state.userInfo;
     }
     // if(userinfo.email == )
-    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+    axios.get(`http://localhost:9999/food/api/groupbuying/read`)
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data;
