@@ -242,7 +242,7 @@ export default {
   },
   methods:{
     registChattingRoom(){
-      axios.post(`http://localhost:9999/food/api/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
         .then(response => {
           this.chatName = response.data;
           this.$router.push({ name: 'PrivateChat', params: { privatechat: this.privatechat, chatName: this.chatName }})
@@ -257,7 +257,7 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`http://localhost:9999/food/api/trade/participatelist`, {tradeNo:this.$route.params.id})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participatelist`, {tradeNo:this.$route.params.id})
         .then(response => {
           this.memberList = response.data
         })
@@ -266,7 +266,7 @@ export default {
         })
     },
     onParticipate() {
-      axios.post(`http://localhost:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
           console.log(response.data)
           if(response.data == "Fail"){
@@ -307,7 +307,7 @@ export default {
       $('Complete').css('color', 'black')
       $('Complete').attr('color', '#eee')
       // axios로 보내기(새소식으로 신선도 평가 보내기)
-      axios.post(`http://localhost:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
     .then(response => {
       if(response.data == "Success"){
         Swal.fire({
@@ -316,7 +316,7 @@ export default {
       })
       }
     })
-    axios.post(`http://localhost:9999/food/api/trade/removetrademember`, {participantEmail:user_email, tradeNo:this.$route.params.id, participantNickname: user_nickname})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/removetrademember`, {participantEmail:user_email, tradeNo:this.$route.params.id, participantNickname: user_nickname})
         .then(response => {
           this.memberList = response.data
           
@@ -336,7 +336,7 @@ export default {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
-    axios.get(`http://localhost:9999/food/api/trade/article/${id}`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/article/${id}`)
     .then(response => {
       this.detailinfo = response.data;
       // 주소 형식 변환
@@ -352,7 +352,7 @@ export default {
     })
 
      axios
-        .get(`http://localhost:9999/food/api/account/apitest`)
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);

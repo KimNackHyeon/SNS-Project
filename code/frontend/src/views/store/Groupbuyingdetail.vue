@@ -146,7 +146,7 @@ export default {
       this.$router.go(-1)
     }
     else {
-      axios.get(`http://localhost:9999/food/api/groupbuying/readdetail/`+id)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/readdetail/`+id)
         .then(response => {
           // console.log(response)
           this.groupbuying = response.data
@@ -205,7 +205,7 @@ export default {
       })
     },
     onParticipate() {
-      axios.post(`http://localhost:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
           if(response.data == "Fail"){
             Swal.fire({
@@ -229,7 +229,7 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`http://localhost:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
           // console.log(response.data)
           this.memberList = response.data

@@ -239,7 +239,7 @@ export default {
     // 재료추가 : foodlisk 배열
     // 사진 : items 배열 안에 imageUrl에 url저장, decs: 내용 저장
     var feedNo = this.$route.params.feedNo;
-    axios.get(`http://localhost:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
       .then(response => {
         console.log(response.data)
         this.title = response.data.feeddata.title
@@ -395,7 +395,7 @@ export default {
       // console.log(formData);
 
       axios
-        .post(`http://localhost:9999/food/api/feed/img`, formData, {
+        .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
@@ -406,10 +406,44 @@ export default {
           // this.images = response.data;
           data.images = this.images;
           console.log(data);
-          setTimeout(() => {
-            this.loading = false;
+          let timerInterval;
+          Swal.fire({
+            title: '레시피 수정중',
+            // html: '전송까지 <b></b> 초 남았습니다.',
+            timer: 1000*this.items.length + 2000,
+            timerProgressBar: true,
+            onBeforeOpen: () => {
+              Swal.showLoading()
+              Swal.color= 'green';
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            onClose: () => {
+              clearInterval(timerInterval)
+              Swal.fire(
+                '수정완료!',
+                '',
+                'success'
+              )
+              this.loading = false;
             this.updateData(data);
-          }, 1000 * this.items.length + 2000);
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
+          // setTimeout(() => {
+            
+          // }, 1000 * this.items.length + 2000);
         })
         .catch((error) => {
           // console.log(error.response);
@@ -418,7 +452,7 @@ export default {
     updateData(data) {
       console.log(data);
       axios
-        .put(`http://localhost:9999/food/api/feed/update`, data)
+        .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/update`, data)
         .then((response) => {
           // console.log(response);
           this.$router.push("/feed/main");
