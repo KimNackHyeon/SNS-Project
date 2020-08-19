@@ -41,9 +41,8 @@
       :key="i"
       :src="item.src"
       hide-delimiters
-      style="width:100%;height:100%;"
+      style="width:100%;height:100%;cursor:pointer;"
       @click="openLink(item.link)"
-      style="cursor:pointer;"
     ></v-carousel-item>
   </v-carousel>
   </div> 
