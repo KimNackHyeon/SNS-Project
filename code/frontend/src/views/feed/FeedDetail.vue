@@ -44,27 +44,23 @@
       </div>
     </div>
     <div style="overflow: scroll; height: 100%; position: relative; padding-bottom: 20px;">
-      <!-- 제목 -->
-      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
-      </div>
       <!-- 재료 -->
-      <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
+      <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 130px;">
         <!-- 나에게 있는 재료 -->
-        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
+        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center; height: 130px;">
           <h5>나에게 있는 재료</h5>
-          <div style="padding: 5px 10px; display: flex; overflow: scroll;">
+          <div style="padding: 5px 10px; display: flex; overflow-x: scroll; height: 100px">
             <div class="food" v-for="(food, i) in havingFood" :key="i">
               <img :src="require(`../../assets/images/food/${food.img}.png`)" style="width: 30px; height: 30px;">
               <h5 class="food-name">{{food.name_kor}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h6>{{food.amount}}개</h6>
             </div>
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center;    height: 110px;">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center; height: 130px;">
           <h5>나에게 없는 재료</h5>
-          <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
+          <div style="padding: 5px 10px; display: flex; overflow-x: scroll; height: 100px" id="scrollBtns">
             <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
@@ -83,16 +79,20 @@
           </div>
         </div>
       </div>
+      <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h2 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+      </div>
       <!-- 글 내용 -->
       <div style="">
         <div>
           <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
             <div>
-              <img :src="item.img" style="width:360px; height:auto;">
+              <img :src="item.img" style="width:100%; height:auto;">
               <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
               
             </div>
-            <div class="feedContents" v-html="item.content">
+            <div class="feedContents" v-html="item.content" style="margin: 10px 0; font-size: 16px;">
               {{item.content}}
             </div>
           </div>
@@ -116,7 +116,7 @@
           <div class="userImg">
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content" style="display: table;">
+          <div class="content" style="display: table; padding-left: 15px;">
             <div style="display: table-cell; vertical-align: middle;">
               <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
               <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
