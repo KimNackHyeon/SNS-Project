@@ -10,7 +10,7 @@
       <div class="titleBox">
         <div class="pageTitle">
           <!-- <p style="margin: 11px; margin-left:162px;"> -->
-            {{chatname}}
+            {{this.chatlist.chatName}}
             <!-- </p> -->
         </div>
       </div>
@@ -107,16 +107,15 @@
           <div class="msg_history">
             <div v-for="(message, index) in messages" :key="index" class="incoming_msg">
               <!-- <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
-                <div class="received_withd_msg">
-                    <div style="width: 100%; position: relative; ">
-              <div :class="[message.author===authUser.name?'sent_msg':'received_msg']">
-                  <p>{{message.message}}</p>
-                  <span class="time_date">| {{message.createdAt}} | {{message.author}} |</span></div>
-                    </div>
+              <div class="received_withd_msg">
+                <div style="width: 100%; position: relative; ">
+                  <div :class="[message.author===authUser.name?'sent_msg':'received_msg']">
+                    <p>{{message.message}}</p>
+                    <span class="time_date">| {{message.createdAt}} | {{message.author}} |</span>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            
           </div>
           <div class="type_msg">
             <div class="input_msg_write" style="width: 80%;
@@ -133,6 +132,9 @@
 
 <script>
 import store from '../../vuex/store.js'
+import axios from 'axios'
+const SERVER_URL = store.state.SERVER_URL;
+
 export default {
     name:'PrivateChat',
     props:['privatechat'],
@@ -141,6 +143,7 @@ export default {
           userinfo:'',
           chatNo: '',
           chatname: '',
+          chatlist:'',
           writerinfo:'',
             message:null,
             messages:[],
@@ -185,7 +188,10 @@ export default {
     },
     created(){
       this.chatNo = this.$route.params.privatechat;
+      // console.log(this.chatNo)
+      console.log(this.$route.params)
       this.chatname = this.$route.params.chatName;
+      // console.log(this.chatname)
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
@@ -193,7 +199,14 @@ export default {
       }
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
-
+      axios.get(`${SERVER_URL}/chattingrefresh/${this.chatNo}/${this.userinfo.email}`)
+        .then(response => {
+          this.chatlist = response.data
+          console.log(this.chatlist.chatName)
+        })
+        .catch(error => {
+          // console.log(error)
+        })
     }
 }
 </script>

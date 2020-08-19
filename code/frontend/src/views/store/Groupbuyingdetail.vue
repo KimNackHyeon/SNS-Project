@@ -124,6 +124,7 @@ export default {
       userinfo: '',
       groupbuying: '',
       memberList: '',
+      directchat: '',
       openMember: false,
     }
   },
@@ -157,6 +158,11 @@ export default {
           this.groupbuying.regist_date = `${year2}/${month2}/${day2}`
           // 줄바꿈
           this.groupbuying.content = this.groupbuying.content.split('^').join('<br />');
+          axios.post(`${SERVER_URL}/chatting`, {otherNickname:this.groupbuying.nickname, myNickname:this.userinfo.nickname ,otherEmail:this.groupbuying.email, myEmail:this.userinfo.email, type:"2"})
+          .then(response => {
+            console.log(response.data)
+            this.directchat = response.data
+          })
         })
         .catch(error => {
           // console.log(error)
@@ -189,7 +195,9 @@ export default {
         })
         }else{
           console.log(response.data)
-          this.$router.push({ name: 'DirectChat', params: { chatKey: response.data, receiverNickname: this.groupbuying.nickname }})
+          this.directchat = response.data
+          console.log(this.groupbuying.nickname)
+          this.$router.push({ name: 'DirectChat', params: { chatKey: this.directchat, receiverNickname: this.groupbuying.nickname }})
         }
       }).error(response=>{
         console.log(response)

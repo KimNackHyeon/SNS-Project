@@ -35,9 +35,23 @@
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in chatlist" :key="i" cols="12">
-              <v-card style="padding: 5px;" v-if="info.type === chattype">
-                <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
-              </v-card>
+              <router-link v-if="info.type === '2'" :to="{ name: 'DirectChat', params: { chatKey : info.chatKey, receiverNickname: info.otherNickname }}">
+                <v-card style="padding: 5px;" v-if="info.type === chattype">
+                  <v-row justify="left">
+                    <v-col style="margin: 0 10px; padding: 0;" cols="auto">
+                      <v-img style="margin: 10px; padding: 0" height="30" width="30" :src="info.image"></v-img>
+                    </v-col>
+                    <v-col style="padding: 12px 0" cols="auto">
+                      <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </router-link>
+              <router-link v-if="info.type === '1'" :to="{ name: 'PrivateChat', params: { privatechat : info.chatKey, chatName: info.chatName }}">
+                <v-card style="padding: 5px;" v-if="info.type === chattype">
+                  <v-card-text class="text-center" style="padding: 0; border-bottom: solid 1px lightgray">{{ info.chatName }}</v-card-text>
+                </v-card>
+              </router-link>
             </v-col>
           </v-row>
         </div>
@@ -53,7 +67,7 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -176,9 +190,15 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  this.chatlist = this.$route.params.chatlist.list;
-  console.log(this.chatlist)
-  this.marketOn()
+  axios.get(`${SERVER_URL}/chatting/`+ this.userinfo.email)
+  .then(response => {
+    this.chatlist = response.data.list
+    console.log(this.chatlist)
+    this.marketOn()
+  })
+  .catch(error => {
+    // console.log(error)
+  })
 }
 }
 </script>
