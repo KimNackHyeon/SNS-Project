@@ -192,10 +192,10 @@ export default {
     numberPeople () {
       if (Number(this.numberPeople) == 1){
         this.oknumPeople = false
-        Swal.fire({
-          title: '참여인원 수를 확인해 주세요',
-          text: '참여인원은 2명 이상부터 가능합니다.',
-        })
+        // Swal.fire({
+        //   title: '참여인원 수를 확인해 주세요',
+        //   text: '참여인원은 2명 이상부터 가능합니다.',
+        // })
       }
       else {
         this.oknumPeople = true;
@@ -245,7 +245,7 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
+      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && this.userinfo.address) {
         const sendContent = this.content.replace(/\n/g, '^')
         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
@@ -257,10 +257,26 @@ export default {
           .catch(error => {
           })
       }
-      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && !this.oknumPeople) {
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && !this.oknumPeople && this.userinfo.address) {
         Swal.fire({
           title: '참여인원 수를 확인해 주세요',
           text: '참여인원은 2명 이상부터 가능합니다.',
+        })
+      }
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && !this.userinfo.address) {
+        Swal.fire({
+            title: '필수 정보가 부족합니다.',
+            text: "회원정보수정에서 주소를 입력해주세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '회원정보수정'
+        })
+        .then((result) => {
+        if (result.value) {
+            this.$router.push('/user/modifyuser')
+        }
         })
       }
       else{
