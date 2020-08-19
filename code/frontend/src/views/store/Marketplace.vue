@@ -37,7 +37,7 @@
     </div>
     <v-card flat>
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
-        <div style="padding: 10px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
+        <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">

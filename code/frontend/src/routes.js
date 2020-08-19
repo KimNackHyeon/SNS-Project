@@ -11,6 +11,7 @@ import FeedDetail from "./views/feed/FeedDetail.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
 import Alarm from "./views/user/Alarm.vue";
+import EvaluateUser from "./views/user/EvaluateUser.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
 import MarketPlaceDetail from "./views/store/MarketplaceDetail.vue";
 import ModifyMarketPlace from "./views/store/ModifyMarketplace.vue"
@@ -56,6 +57,11 @@ export default [
     path: "/alarm",
     name: "Alarm",
     component: Alarm,
+  },
+  {
+    path: "/evaluateuser",
+    name: "EvaluateUser",
+    component: EvaluateUser,
   },
   {
     path: "/tutorial",
