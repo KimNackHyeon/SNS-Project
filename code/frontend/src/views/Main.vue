@@ -23,7 +23,7 @@
     </div>
   </div>
   <div>
-   <div @click="opentutorial" class="introduce">
+   <div @click="opentutorial" class="introduce" style="cursor:pointer">
       <!-- <div class="introduce"> -->
       <div class="introduceIMG" :style="{'background-position-x': (frameSize.x-360)/2-33+'px'}"></div>
       <div style="height:112px;width:50%; float:right; text-align:right;
@@ -43,6 +43,7 @@
       hide-delimiters
       style="width:100%;height:100%;"
       @click="openLink(item.link)"
+      style="cursor:pointer;"
     ></v-carousel-item>
   </v-carousel>
   </div> 

@@ -44,10 +44,6 @@
       </div>
     </div>
     <div style="overflow: scroll; height: 85.5%; position: relative; padding-bottom: 20px;">
-      <!-- 제목 -->
-      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
-      </div>
       <!-- 재료 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 130px;">
         <!-- 나에게 있는 재료 -->
@@ -414,8 +410,8 @@ export default {
     width: 80px;
     /* height: 60px; */
     z-index: 99;
-    left: 270px;
-    top: 55px;
+    left: 76%;
+    top: 9%;
     border: 1px solid lightgray;
     border-radius: 4px;
     background-color: white;
