@@ -1,16 +1,28 @@
 <template>
-  <v-layout wrap style="width:100%;height:50px; margin:auto;">
+  <v-layout wrap style="width:100%;height:50px; margin: 0px auto; max-height: 50px;">
     <div style="width:100%; height:50px;background-color:white; z-index:100">
-        <v-btn icon @click.stop="drawer = !drawer" style="height: 100%"><v-icon size="30px">fas fa-list</v-icon></v-btn>
-        <v-btn icon :style="{'margin-left':((frameSize.x-212)/2)+'px','margin-right':((frameSize.x-212)/2)+'px'}" style="width:140px; height: 100%"><router-link to="/Main"><h3 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h3></router-link></v-btn>
-        <router-link v-if="$route.name!='MyRef'" to="/MyRef"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
-          <!-- <img v-if="$route.name=='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png"> -->
+      <v-btn icon @click.stop="drawer = !drawer" style="height: 100%">
+        <v-icon size="30px">
+          fas fa-list
+        </v-icon>
+      </v-btn>
+      <v-btn icon :style="{'margin-left':((frameSize.x-212)/2)+'px','margin-right':((frameSize.x-212)/2)+'px'}" style="width:140px; height: 100%">
+        <router-link to="/Main">
+          <h3 style="font-weight:bold; color:rgb(160,212,105);">
+            우리동네 냉장고
+          </h3>
+        </router-link>
+      </v-btn>
+      <router-link v-if="$route.name!='MyRef'" to="/MyRef">
+        <v-btn icon style="width:30px; height:30px; background-size:cover; ">
           <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png">
-          </v-btn></router-link> 
-          <router-link v-if="$route.name=='MyRef'" to="/"><v-btn icon style="width:30px; height:30px; background-size:cover; ">
+        </v-btn>
+      </router-link> 
+      <router-link v-if="$route.name=='MyRef'" to="/">
+        <v-btn icon style="width:30px; height:30px; background-size:cover; ">
           <img id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_open.png">
-          <!-- <img v-if="$route.name!='MyRef'" id="refIcon" style="width:auto; height:30px;" src="../assets/images/ref_close.png"> -->
-          </v-btn></router-link> 
+        </v-btn>
+      </router-link> 
     </div>
     
     <v-navigation-drawer
@@ -39,7 +51,7 @@
                   <div class="iconBox">
                     <v-badge  color="red" dot><v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon></v-badge>
                   </div>
-                  <div  class="subBox">
+                  <div class="subBox">
                     <h4>내 채팅방</h4>
                   </div>
                 </div>

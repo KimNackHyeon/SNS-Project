@@ -305,7 +305,7 @@ export default {
       }
     console.log(typeof(this.$route.params.id))
     axios({
-                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/beforeupdate`,
+                    url:`http://localhost:9999/food/api/groupbuying/beforeupdate`,
                     method:'post',
                     data:{no:this.$route.params.id},
                     headers: config.headers})

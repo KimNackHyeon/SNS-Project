@@ -5,7 +5,7 @@
         <router-link to="/tutorial/1"><div id="Marketplace" class="tutorial"><h4>내 재료 다른 재료와</h4> <h4>교환하기</h4></div></router-link>
         <router-link to="/tutorial/2"><div id="GroupBuying"  class="tutorial"><h4>다른사람과</h4><h4>공동구매하기</h4></div></router-link>
         <router-link to="/tutorial/3"><div id="feed" class="tutorial"><h4>내가 가진 재료로</h4><h4>다양한 음식만들기</h4></div></router-link>
-        <router-link to="/tutorial/4"><div id="QnA" class="tutorial" style="color:gray"><h4>더 알고싶다면?</h4><h4>메일보내기</h4></div></router-link>
+        <router-link to="/tutorial/sendmail"><div id="QnA" class="tutorial" style="color:gray"><h4>더 알고싶다면?</h4><h4>메일보내기</h4></div></router-link>
     </div>
     <router-link to="/Main"><div class="tutorial" style="background-color:red; font-color:white;width:100px; height:60px; " :style="{'margin-left':frameSize.x-110+'px'}"><h4 style="color:white; text-shadow:1px 1px 5px black">그만보기</h4></div></router-link>
     <div style="width: 100%; height: 116px; background-color: #000000a6; margin-top:419px;">
@@ -67,10 +67,10 @@ data () {
     width:auto;
     height:auto;
     -webkit-animation: show 1s steps(20, end);
-  -webkit-animation-delay: 2s;
+  -webkit-animation-delay: 0s;
   -webkit-animation-fill-mode:backwards;
   -moz-animation: show 1s steps(20, end);
-     -moz-animation-delay: 2s;
+     -moz-animation-delay: 0s;
 }
 .tutorial{
     width: 150px;

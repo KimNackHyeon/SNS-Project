@@ -6,8 +6,8 @@
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
         <div class="feed-user">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
+          <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px cursor : pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
@@ -76,11 +76,11 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
+            <v-avatar size="35" style="cursor : pointer;"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content" style="display: table; height: 35px; margin-left: 10px">
             <div style="display: table-cell; vertical-align: middle;">
-              <span class="commentUser" style="margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
+              <span class="commentUser" style="margin: 0 5px 0 0; cursor : pointer;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
               <span>{{comment.comment}}</span>
             </div>
           </div>
@@ -116,6 +116,8 @@ export default {
       commentData: [],
       originalDatas: [],
       btnsFeedNo: '',
+      myDatas:[],
+      switched:true,
     };
   },
   computed: {
@@ -144,7 +146,7 @@ export default {
   },
   methods: {
     callList(){
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchAll`) // 피드 가져오기
+      axios.get(`http://localhost:9999/food/api/feed/searchAll`) // 피드 가져오기
         .then(response => {
           // console.log(response);
             // var data = {};
@@ -159,14 +161,14 @@ export default {
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [    
-              ],
+              items: [],
               tags:[],
               comments:[],
               likecount: d.likecount,
+              foods:[],
             }
 
-          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`http://localhost:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
             // console.log(response);
             response.data.forEach(c =>{
@@ -183,7 +185,7 @@ export default {
             })
           });
 
-          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
+          axios.get(`http://localhost:9999/food/api/feed/check`,{
             params:
             {
               email:store.state.userInfo.email,
@@ -209,6 +211,13 @@ export default {
               data.tags.push(tag);
             }
           });
+
+          response.data.foodlist.forEach(f => {
+            if(f.feedNo == d.no){
+              var food = {foodName : f.name_kor};
+              data.foods.push(food);
+            }
+          })
 
           this.feedDatas.push(data); // 피드 데이터 저장
           // console.log(data);
@@ -240,7 +249,7 @@ export default {
         comment: this.inputComment
       }
       // console.log(comment);
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
+      axios.post(`http://localhost:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.inputComment = "";
@@ -261,7 +270,7 @@ export default {
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
           console.log(comm);
 
-          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
+          axios.delete(`http://localhost:9999/food/api/feed/comment`,{params:{no : comm.no}})
           .then(response =>{
 
           })
@@ -280,7 +289,7 @@ export default {
           feedData.islike = !feedData.islike
         }
       })
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
+      axios.get(`http://localhost:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -299,7 +308,7 @@ export default {
           feedData.isscrap = !feedData.isscrap
         }
       })
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
+      axios.get(`http://localhost:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -335,20 +344,37 @@ export default {
     },
     searchTag(tags){
       // console.log(tags);
-      this.feedDatas = this.originalDatas;
-      if(tags.length != 0){
-        this.feedDatas = this.feedDatas.filter(function (item) {
-          var isTag = false;
-          item.tags.forEach(tag => {
-            if(tags.indexOf("#"+tag.tagName) != -1){
-              // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
-              // console.log(item);
-              isTag = true;
-              return;
-            }
+      if(this.myDatas.length == 0){
+        this.feedDatas = this.originalDatas;
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
           })
-          return isTag;
-        })
+        }
+      } else{
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
+          })
+        }
       }
       // console.log(this.feedDatas);
     },
@@ -363,7 +389,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          axios.delete(`http://localhost:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
           .then(response => {
             Swal.fire({
                 // position: 'top-end',
@@ -377,7 +403,65 @@ export default {
           })
         }
       })
-    }
+    },
+    call(){
+      if(this.switched == true){
+        let timerInterval
+        Swal.fire({
+          title: '레시피를 찾는 중입니다.',
+          html: '',
+          timer: 500,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
+                }
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        })
+        var myFood = [];
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+store.state.userInfo.email)
+        .then(response => {
+          this.feedDatas = this.originalDatas;  //  원본 데이터
+          response.data.myreflist.forEach(d => {
+            myFood.push(d.name_kor);
+          })
+          // console.log(myFood);
+          this.feedDatas = this.feedDatas.filter(function (feed) {
+            var hasFood = false;
+            feed.foods.forEach(food => {
+              if(myFood.indexOf(food.foodName) != -1){
+                // console.log(feed.no);
+                hasFood = true;
+                // this.myDatas.push(feed);
+                return;
+              }
+            });
+            return hasFood;
+          });
+          // console.log(this.feedDatas);
+          this.myDatas = this.feedDatas;
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+
+        this.switched = false;
+      }
+      else{
+          this.feedDatas = this.originalDatas;
+          this.switched = true;
+        }
+    },
   },
 };
 </script>

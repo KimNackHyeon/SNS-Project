@@ -37,6 +37,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Evaluate;
 import com.web.curation.model.FeedData;
 import com.web.curation.model.Follow;
+import com.web.curation.model.GroupBuying;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
@@ -234,6 +235,11 @@ public class AccountController {
 
 		return response;
 	}
+	@PostMapping("/account/qna")
+	@ApiOperation(value = "관리자에게 문의하기")
+	public void researchpwd(@RequestBody GroupBuying groupbuying) {
+		memberService.qnaMail(groupbuying.getNickname(), groupbuying.getTitle(), groupbuying.getContent());
+	}
 
 	@PostMapping("/account/findpwd")
 	@ApiOperation(value = "비밀번호 전송")
@@ -259,12 +265,16 @@ public class AccountController {
 		Long recipe = myboardRepo.countByEmail(email);
 		Long following = followRepo.countByEmail(email);
 		Long follower = followRepo.countByYourEmail(email);
+		Long eval_count = memberRepo.findByEmail(email).get().getEvalCount();
+		Long eval_point = memberRepo.findByEmail(email).get().getEvalPoint();
 		Map<String, Long> map = new HashMap<String, Long>();
 //		final BasicResponse result = new BasicResponse();
 //		result.status = true;
 		map.put("recipe", recipe);
 		map.put("following", following);
 		map.put("follower", follower);
+		map.put("eval_count",eval_count);
+		map.put("eval_point",eval_point);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
@@ -275,12 +285,16 @@ public class AccountController {
 		Member member = memberRepo.getUserByEmail(email);
 		Long following = followRepo.countByEmail(email);
 		Long follower = followRepo.countByYourEmail(email);
+		Long eval_count = memberRepo.findByEmail(email).get().getEvalCount();
+		Long eval_point = memberRepo.findByEmail(email).get().getEvalPoint();
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("nickname", member.getNickname());
 		map.put("img", member.getImage());
 		map.put("following", following);
 		map.put("follower", follower);
+		map.put("eval_count",eval_count);
+		map.put("eval_point",eval_point);
 		// 게시글 수 추가
 
 		return new ResponseEntity<Map>(map, HttpStatus.OK);

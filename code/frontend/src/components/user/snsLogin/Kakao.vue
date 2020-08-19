@@ -59,7 +59,7 @@
                         }
                         console.log(kakao_account);
 
-                         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
+                         axios.post(`http://localhost:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
                              image : userInfo.image,

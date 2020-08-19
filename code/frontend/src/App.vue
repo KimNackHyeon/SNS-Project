@@ -1,5 +1,5 @@
 <template>
-<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin:auto; overflow-y:hidden; overflow-x:hidden;">
+<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin: 0px auto; overflow-y:hidden; overflow-x:hidden;">
   <v-app id="app" style="width:100%; height:100%; overflow:hidden;">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
     <router-view :style="{width:frameSize.x+'px', height:(frameSize.y-50)+'px'}" @login="onLogin" @signup="onSignup"></router-view>
@@ -45,7 +45,7 @@ export default {
       };
       // console.log(typeof(loginData));
       axios
-        .post(`https://i3b301.p.ssafy.io:9999/food/api/account/login`, loginData)
+        .post(`http://localhost:9999/food/api/account/login`, loginData)
         .then((response) => {
           // console.log(response);
           // console.log(this)
@@ -70,7 +70,7 @@ export default {
 
     onSignup(signupData) {
       // console.log(signupData);
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/signup`, signupData)
+      axios.post(`http://localhost:9999/food/api/account/signup`, signupData)
         .then((response) => {
           // console.log(response);
           // this.$cookies.set("auth-token", response.data.key);
@@ -88,7 +88,7 @@ export default {
     onLogout() {
       var token = this.$cookies.get("auth-token");
       if (store.state.userInfo) {
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/logout`, {params: { token : token}})
+        axios.get(`http://localhost:9999/food/api/account/logout`, {params: { token : token}})
         .then(() => {
           // console.log(this.$cookies.keys());
           var cookies = document.cookie.split(";");
@@ -125,3 +125,6 @@ export default {
   
 };
 </script>
+<style>
+
+</style>

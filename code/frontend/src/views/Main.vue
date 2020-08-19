@@ -25,23 +25,23 @@
   <div>
    <div @click="opentutorial" class="introduce" style="cursor:pointer">
       <!-- <div class="introduce"> -->
-      <div class="introduceIMG"></div>
-      <div style="height:112px; width:186px; float:left; text-align:right;
-    padding: 28px 16px; font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;;  ">
+      <div class="introduceIMG" :style="{'background-position-x': (frameSize.x-360)/2-33+'px'}"></div>
+      <div style="height:112px;width:50%; float:right; text-align:right;
+    font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;padding-top: 17px;
+    padding-right: 5px;  text-overflow:hidden;">
         <h4>남는 식재료</h4>
         <h4>더이상 버리지 마세요</h4>
         <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span>
       </div>
     </div>
     <div style=" box-shadow: 0px 0px 10px #00000078 ;">
-  <v-carousel style="margin:20px 0px; " height="300px" hide-delimiters cycle vertical-delimiters="true" interval="2000" show-arrows-on-hover>
+  <v-carousel style="margin:20px 0px; " :style="{height:frameSize.y-330+'px'}" hide-delimiters cycle vertical-delimiters="true" interval="2000" show-arrows-on-hover>
     <v-carousel-item  cycle 
       v-for="(item,i) in items"
       :key="i"
       :src="item.src"
       hide-delimiters
-      :width="frameSize.x"
-      :height="frameSize.y"
+      style="width:100%;height:100%;"
       @click="openLink(item.link)"
       style="cursor:pointer;"
     ></v-carousel-item>
@@ -106,6 +106,7 @@
     },
     mounted(){
          this.onResize();
+         $('.v-image').css('height','100%');
     },
     methods:{
        onResize(){
@@ -162,16 +163,16 @@ h4{
       background-color:rgb(129 203 104); 
 }
 .introduceIMG{
-     background-image: url(/img/login_backgroundimg.3ff816a3.gif);
+    background-image: url(/img/login_backgroundimg.3ff816a3.gif);
     height: 112px;
-    width: 174px;
-    background-size: 109%;
-    background-position-x: -14px;
-    background-position-y: -134px;
+    width: 50%;
+    background-size: 242px 314px;
+
+    background-position-y: -141px;
     float: left;
 }
-.v-image__image--cover{
-  background-size: contain;
+.v-image__image--cover {
+    background-size: contain;
 }
 .confirmBox{
   width: 300px;
