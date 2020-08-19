@@ -47,7 +47,7 @@
                 </div></router-link>
             </div>
             <div  style="width:100%; height:48%;">
-                <div class="grayLine" @click="chatlist" style="width:50%; height:100%; display: inline-block; text-align: center;">
+                <div class="grayLine" @click="chatlist" style="cursor:pointer; width:50%; height:100%; display: inline-block; text-align: center;">
                   <div class="iconBox">
                     <v-badge  color="red" dot><v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon></v-badge>
                   </div>

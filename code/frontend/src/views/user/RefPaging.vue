@@ -12,11 +12,11 @@
                 </button>
       </div>
       </div>
-      <button :disabled="pageNum === 0" @click="prevPage" class="page-btn">
+      <button :disabled="pageNum === 0" @click="prevPage" class="page-btn" style="cursor:pointer;">
         <v-icon size="40px">mdi-arrow-left-drop-circle</v-icon>
       </button>
       
-      <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn" style="margin-left: 154px;">
+      <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn" style="cursor:pointer; margin-left: 154px;">
         <v-icon size="40px">mdi-arrow-right-drop-circle</v-icon>
       </button>
   </div>

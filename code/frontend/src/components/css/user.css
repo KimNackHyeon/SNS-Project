@@ -221,11 +221,11 @@
 
 @media (max-height: 650px) {
   .user.join .btn-bottom {
-    position: inherit;
+    /* position: inherit;
     width: 100%;
     float: left;
     margin-top: 60px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; */
   }
 }
 /*# sourceMappingURL=user.css.map */

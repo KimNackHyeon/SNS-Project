@@ -7,11 +7,12 @@
       <div class="feed-profil"  >
         <div class="feed-user">
           <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px cursor : pointer;">{{feedData.nickname}}</h4>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:10px; cursor:pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100%">
+            <!-- <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100% border-right: 1px solid lightgray"> -->
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
           </router-link>
@@ -56,10 +57,10 @@
           </v-btn>
           <!-- 수정 삭제 -->
           <div style="display: inline-block" v-if="feedData.email==userInfo.email">
-            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+            <v-btn @click="openBtn(feedData.no)" icon style="width: 25px; height: 25px">
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
-            <div class="btns">
+            <div class="btns" v-if="feedData.no == btnsFeedNo">
               <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn" >수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
@@ -115,6 +116,7 @@ export default {
       inputComment: '',
       commentData: [],
       originalDatas: [],
+      btnsFeedNo: '',
       myDatas:[],
       switched:true,
     };
@@ -222,7 +224,7 @@ export default {
           // console.log(data);
         });
         // console.log(this.feedDatas);
-        this.originalDatas = this.feedDatas;
+        this.originalDatas = this.feedDatas.reverse();
       })
       .catch((error) => {
         // console.log(error.response);
@@ -319,11 +321,18 @@ export default {
           // console.log(error.response);
         });
     },
-    openBtn() {
-      if($('.btns').css('display')=='block'){
-        $('.btns').css('display','none');  
-      }else{
-        $('.btns').css('display','block');
+    openBtn(feedNo) {
+      // if($('.btns').css('display')=='block'){
+      //   $('.btns').css('display','none');  
+      // }else{
+      //   $('.btns').css('display','block');
+      // }
+      console.log(feedNo)
+      if (this.btnsFeedNo) {
+        this.btnsFeedNo = ''
+      }
+      else{
+        this.btnsFeedNo = feedNo
       }
     },
     moveUser(user_email){
@@ -459,13 +468,13 @@ export default {
 </script>
 <style scoped>
 .btns {
-  display: none;
+  /* display: none; */
   position: absolute;
   width: 80px;
   /* height: 60px; */
   z-index: 80;
-  left: 275px;
-  top: 375px;
+  left: 77%;
+  top: 83%;
   border: 1px solid lightgray;
   border-radius: 4px;
 }

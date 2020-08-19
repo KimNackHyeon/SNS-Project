@@ -7,6 +7,7 @@
             <div class="myphoto"><v-avatar size="100"><img :src="yourData.image" alt="John"></v-avatar></div>
             <div class="myprofil">
               <div style="margin: 10px">
+                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${yourData.score}.png`)" alt="신선도">
                 <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
               <v-container style="min-height: 0; padding: 10px; width: 250px" >
@@ -27,12 +28,12 @@
                       <v-divider></v-divider>
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
-                          <div class="userImg">
-                            <v-avatar size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                          <div class="userImg" >
+                            <v-avatar style="cursor:pointer;" size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                             <!-- <v-avatar size="35"><img :src="require(`../../assets/images/food/${follower.img}`)" alt="John"></v-avatar> -->
                           </div>
                           <div class="content">
-                            <p class="followNick" @click="moveUser(follower.email)">{{follower.nickname}}</p>
+                            <p class="followNick" style="cursor:pointer;" @click="moveUser(follower.email)">{{follower.nickname}}</p>
                             <p class="followEmail">{{follower.email}}</p>
                           </div>
                         </div>
@@ -57,10 +58,10 @@
                       <v-card-text>
                         <div class="follow" v-for="(following, i) in followings" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                            <v-avatar style="cursor:pointer;" size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
-                            <p class="followNick" @click="moveUser(following.email)">{{following.nickname}}</p>
+                            <p class="followNick" style="cursor:pointer;" @click="moveUser(following.email)">{{following.nickname}}</p>
                             <p class="followEmail">{{following.email}}</p>
                           </div>
                           <div class="followbtn" @click="onFollowBtn(following)">
@@ -121,7 +122,7 @@ export default {
         recipe:"",
         follower:"",
         following:"",
-        score: '',
+        score:"",
       },
       recipes:[],
       isfollow : false,

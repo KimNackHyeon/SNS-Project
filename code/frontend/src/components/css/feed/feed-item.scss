@@ -43,7 +43,7 @@
 }
 .v-select__selections input {
   text-align: left !important;
-
+  border: unset !important;
 }
 .mdi-close-circle {
     color: white !important;
@@ -150,9 +150,6 @@ input:hover {
         padding: 5px 0;
         background-color: #f1f3f5;
         border-left: 1px solid lightgray;
-    }
-    .feed-right-icon:hover {
-        color: #a0d469;
     }
     .v-carousel__controls {
         height: 30px;

@@ -17,61 +17,62 @@
         </div>
       </div>
     </div>
-    <div class="user join wrapC">
-      <div class="form-wrap">
-        <div class="input-with-label">
-          <label for="email-join">이메일</label>
-          <input v-model='signupData.email' type="text" id='email-join' placeholder="example@naver.com" style="width: 80%;">
-          <button type="button" @click="checkEmail" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">인증</button>
-          <div v-if="!confirm" style="margin-top: 10px">
-            <label for="confirmNumber" style="margin-top: 3.65rem;">인증번호</label>
-            <input v-model="certification" type="text" id="confirmNumber" placeholder="comfirm" style="width: 80%;">
-            <button type="button" @click="checkCertification" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">확인</button>
+    <div style="width:inherit">
+      <div class="user join wrapC" style="width: inherit">
+        <div class="form-wrap">
+          <div class="input-with-label">
+            <label for="email-join">이메일</label>
+            <input v-model='signupData.email' type="text" id='email-join' placeholder="example@naver.com" style="width: 80%;">
+            <button type="button" @click="checkEmail" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">인증</button>
+            <div v-if="!confirm" style="margin-top: 10px">
+              <label for="confirmNumber" style="margin-top: 3.65rem;">인증번호</label>
+              <input v-model="certification" type="text" id="confirmNumber" placeholder="comfirm" style="width: 80%;">
+              <button type="button" @click="checkCertification" style="width: 18%; height: 50px; background-color: yellowgreen; color: white; border-radius: 10px; margin-left: 2%;">확인</button>
+            </div>
+            <p v-if="emailErrMsg" style="color: red;">유효하지 않은 이메일 형식입니다.</p>
+            <p v-if="emailSucMsg && completeMail" style="color: red;">이미 사용중인 이메일입니다.</p>
           </div>
-          <p v-if="emailErrMsg" style="color: red;">유효하지 않은 이메일 형식입니다.</p>
-          <p v-if="emailSucMsg && completeMail" style="color: red;">이미 사용중인 이메일입니다.</p>
-        </div>
 
-        <div class="input-with-label">
-          <label for="password">비밀번호</label>
-          <input v-model='signupData.password' :type="passwordType" id="password" placeholder="password" >
-          <p v-if="pwdErrMsg" style="color: red; display: inline;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
-        </div>
+          <div class="input-with-label">
+            <label for="password">비밀번호</label>
+            <input v-model='signupData.password' :type="passwordType" id="password" placeholder="password" >
+            <p v-if="pwdErrMsg" style="color: red; display: inline;">영문,숫자 포함 8 자리이상이어야 합니다.</p>
+          </div>
 
-        <div class="input-with-label">
-          <label for="password-confirm">비밀번호 확인</label>
-          <input v-model='signupData.passwordConfirm' :type="passwordConfirmType" id="password-confirm" placeholder="password confirm">
-          <p v-if="pwErrMsg" style="color: red; display: inline;">비밀번호가 일치하지 않습니다.</p>
-        </div>
+          <div class="input-with-label">
+            <label for="password-confirm">비밀번호 확인</label>
+            <input v-model='signupData.passwordConfirm' :type="passwordConfirmType" id="password-confirm" placeholder="password confirm">
+            <p v-if="pwErrMsg" style="color: red; display: inline;">비밀번호가 일치하지 않습니다.</p>
+          </div>
 
-        <div class="input-with-label">
-          <label for="nickname">닉네임</label>
-          <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
-          <p v-if="nickErrMsg" style="color: red; display: inline;">이미 사용중인 닉네임입니다.</p>
+          <div class="input-with-label">
+            <label for="nickname">닉네임</label>
+            <input v-on:input="signupData.nickname = $event.target.value" type="text" id="nickname" placeholder="nickname"  maxlength="128">
+            <p v-if="nickErrMsg" style="color: red; display: inline;">이미 사용중인 닉네임입니다.</p>
+          </div>
+          <div class="input-with-label">
+            <label for="address">주소</label>
+            <input tabindex="-1" v-model="signupData.address" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
+          </div>
+          <v-dialog v-model="open" scrollable width= "100%">
+            <v-card>
+              <v-card-title >주소 검색</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
+                <DaumPostcode style="height:300px" :on-complete="handleAddress" />
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="open = false">닫기</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </div>
-        <div class="input-with-label">
-          <label for="address">주소</label>
-          <input tabindex="-1" v-model="signupData.address" type="text" id="address" placeholder="주소를 입력하세요." @click="addressgo()">
-        </div>
-        <v-dialog v-model="open" scrollable width= "100%">
-          <v-card>
-            <v-card-title >주소 검색</v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-              <DaumPostcode style="height:300px" :on-complete="handleAddress" />
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="open = false">닫기</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
-      <label>
-        <input @click="close_toggle" v-model="isTerm" type="checkbox" id="term" />
-        <span>약관을 동의합니다.</span>
-      </label>
+        <label>
+          <input @click="close_toggle" v-model="isTerm" type="checkbox" id="term" />
+          <span>약관을 동의합니다.</span>
+        </label>
 
       <v-dialog v-model="dialog" scrollable width= "100%">
           <v-card>
@@ -210,7 +211,6 @@
       <span @click="handle_toggle" type="button">약관보기</span>
       <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
     </div>
-
   </div>
 </template>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>

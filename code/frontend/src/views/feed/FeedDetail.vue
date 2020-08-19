@@ -16,7 +16,7 @@
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 style="display: inline-block; padding-left: 10px cursor : pointer;" @click="moveUser(feedData.email)">{{feedData.nickname}}</h4>
+          <h4 style="display: inline-block; padding-left: 10px; cursor : pointer;" @click="moveUser(feedData.email)">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
@@ -44,10 +44,6 @@
       </div>
     </div>
     <div style="overflow: scroll; height: 85.5%; position: relative; padding-bottom: 20px;">
-      <!-- 제목 -->
-      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
-      </div>
       <!-- 재료 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 130px;">
         <!-- 나에게 있는 재료 -->
@@ -383,9 +379,6 @@ export default {
 </script>
 
 <style scoped>
-  .left-icon:hover {
-    color: #a0d469;
-  }
   .titleBox {
     display: inline-block;
     width: 90%;
@@ -414,8 +407,8 @@ export default {
     width: 80px;
     /* height: 60px; */
     z-index: 99;
-    left: 270px;
-    top: 55px;
+    left: 76%;
+    top: 9%;
     border: 1px solid lightgray;
     border-radius: 4px;
     background-color: white;
@@ -452,7 +445,7 @@ export default {
     font-size: 12px
   }
   .food {
-    padding-right: 10px;
+    padding-right: 15px;
     text-align: center;
   }
   .food h6 {
