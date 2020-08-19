@@ -252,7 +252,7 @@ export default {
       $('Complete').css('color', 'black')
       $('Complete').attr('color', '#eee')
       // axios로 보내기(새소식으로 신선도 평가 보내기)
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
+      axios.post(`http://localhost:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
     .then(response => {
       if(response.data == "Success"){
         Swal.fire({
