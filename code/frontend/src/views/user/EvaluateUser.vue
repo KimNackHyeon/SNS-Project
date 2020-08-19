@@ -9,7 +9,7 @@
       </div>
     </div>
     <div style="width: 100%; height: 20%; text-align: center; display: flex;">
-      <h1 style="margin: auto; margin-right: 0">"00님"</h1>
+      <h1 style="margin: auto; margin-right: 0">"{{evalData.nickname}}님"</h1>
       <h2 style="margin: auto; margin-left: 0"> 과의 거래는 어떠셨나요?</h2>
     </div>
     <!-- 평가하는거 넣기 -->
@@ -36,7 +36,7 @@
       </div>
     </div>
     <div style="padding: 20px; text-align: center; font-size: 22px">
-      <span style="font-weight: 500; font-size: 25px">"00님"</span>
+      <span style="font-weight: 500; font-size: 25px">"{{evalData.nickname}}님"</span>
       <span> 에게</span>
       <br>
       <span>신선도 </span>
@@ -56,6 +56,7 @@
 <script>
 import $ from 'jquery'
 import Swal from 'sweetalert2'
+import axios from "axios"
 
 export default {
   data() {
@@ -63,7 +64,23 @@ export default {
       power: 0,
       score: 0,
       // check: false,
+      evalData : '',
     }
+  },
+  created(){
+    axios.get(`http://localhost:9999/food/api/account/evaluate`,{params:{no : this.$route.params.no}})
+    .then(response => {
+      console.log(response);
+      this.evalData = response.data;
+    }).catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: '',
+        text: '이미 평가가 완료되었습니다.',
+      }).then(response => {
+        this.$router.push('/alarm');
+      })
+    })
   },
   methods: {
     onleft() {
@@ -150,7 +167,7 @@ export default {
     onEvaluate() {
       Swal.fire({
         title: '평가 완료하시겠습니까?',
-        text: `"00님에게 ${this.score}점을 주었습니다. 되돌릴 수 없습니다!"`,
+        text: `"${this.evalData.nickname}님에게 ${this.score}점을 주었습니다. 되돌릴 수 없습니다!"`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -160,21 +177,25 @@ export default {
       .then((result) => {
         if (result.value) {
           // 평가한거 axios 보내기
-          // axios.post()
-          // .then(response => {
-          //   Swal.fire({
-          //       // position: 'top-end',
-          //       icon: 'success',
-          //       title: '평가가 완료되었습니다.',
-          //       showConfirmButton: false,
-          //       timer: 1500
-          //   })
-          //   // window.location.reload();
-          //   this.$router.push('/alarm')
-          // })
-          // .catch(error => {
-          //   console.log(error.response)
-          // })
+          axios.post(`http://localhost:9999/food/api/account/evaluate`,{
+              no : this.evalData.no, 
+              email : this.evalData.email, 
+              score : this.score
+            })
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '평가가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            // window.location.reload();
+            this.$router.push('/alarm')
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
         }
       })
     },
