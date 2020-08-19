@@ -324,6 +324,28 @@ export default {
       } else {
         this.userinfo = store.state.userInfo;
       }
+      if(!this.title){
+        Swal.fire({
+          icon: 'error',
+          title: '',
+          text: '제목을 입력해주세요',
+        })
+        return;
+      } else if(!this.foodlist){
+        Swal.fire({
+          icon: 'error',
+          title: '',
+          text: '재료를 하나 이상 입력해주세요',
+        })
+        return;
+      } else if(!this.items[0].imageUrl){
+        Swal.fire({
+          icon: 'error',
+          title: '',
+          text: '레시피를 하나 이상 입력해주세요',
+        })
+        return;
+      }
 
       this.loading = true;
 
@@ -385,23 +407,24 @@ export default {
                     b.textContent = Swal.getTimerLeft();
                   }
                 }
-              }, 100);
-            },
-            onClose: () => {
-              clearInterval(timerInterval);
-              Swal.fire("등록완료!", "", "success");
-              this.loading = false;
-              this.register(data);
-            },
-          }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-              console.log("I was closed by the timer");
-            }
-          });
-          //   setTimeout(() => {
-
-          // }, 1000*this.items.length + 2000);
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+            Swal.fire(
+              '등록완료!',
+              '',
+              'success'
+            )
+            this.loading = false;
+            this.register(data);
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log('I was closed by the timer')
+          }
         })
         .catch((error) => {
           // console.log(error.response);

@@ -46,6 +46,10 @@ public class Member {
 	@CreationTimestamp
 	private LocalDateTime create_date;
 
+	private Long evalCount;
+
+	private Long evalPoint;
+
 	public Member() {
 	};
 
@@ -113,10 +117,27 @@ public class Member {
 		this.image = image;
 	}
 
+	public Long getEvalCount() {
+		return evalCount;
+	}
+
+	public void setEvalCount(Long evalCount) {
+		this.evalCount = evalCount;
+	}
+
+	public Long getEvalPoint() {
+		return evalPoint;
+	}
+
+	public void setEvalPoint(Long evalPoint) {
+		this.evalPoint = evalPoint;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
-				+ ", address=" + address + ", image=" + image + ", create_date=" + create_date + "]";
+				+ ", address=" + address + ", image=" + image + ", create_date=" + create_date + ", evalCount="
+				+ evalCount + ", evalPoint=" + evalPoint + "]";
 	}
 
 }
