@@ -1,5 +1,5 @@
 <template>
-<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin:auto; overflow-y:hidden; overflow-x:hidden;">
+<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin: 0px auto; overflow-y:hidden; overflow-x:hidden;">
   <v-app id="app" style="width:100%; height:100%; overflow:hidden;">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
     <router-view :style="{width:frameSize.x+'px', height:(frameSize.y-50)+'px'}" @login="onLogin" @signup="onSignup"></router-view>
@@ -125,3 +125,6 @@ export default {
   
 };
 </script>
+<style>
+
+</style>

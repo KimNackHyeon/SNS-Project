@@ -4,7 +4,7 @@
       <div @click="nextPage" class="tutorialPage">
           <img style="width:100%; height:100%;" :src="require(`../../assets/images/tutorial/1/${Page}.png`)">
       </div>
-      <div style="height: 116px; background-color: #000000a6;z-index:30; position:fixed;" :style="{width:frameSize.x+'px'}">
+      <div @click="nextPage" style="height: 116px; background-color: #000000a6;z-index:30; position:fixed;" :style="{width:frameSize.x+'px'}">
             <img src="../../assets/images/talkRef.gif" style="float:left;width: 118px;
             height: auto;
             margin-top: -77px;">
