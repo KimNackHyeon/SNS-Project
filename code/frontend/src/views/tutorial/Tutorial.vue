@@ -67,10 +67,10 @@ data () {
     width:auto;
     height:auto;
     -webkit-animation: show 1s steps(20, end);
-  -webkit-animation-delay: 2s;
+  -webkit-animation-delay: 0s;
   -webkit-animation-fill-mode:backwards;
   -moz-animation: show 1s steps(20, end);
-     -moz-animation-delay: 2s;
+     -moz-animation-delay: 0s;
 }
 .tutorial{
     width: 150px;

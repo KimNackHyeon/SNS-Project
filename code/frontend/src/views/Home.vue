@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap style="width:100%;height:50px; margin:auto;">
+  <v-layout wrap style="width:100%;height:50px; margin: 0px auto; max-height: 50px;">
     <div style="width:100%; height:50px;background-color:white; z-index:100">
         <v-btn icon @click.stop="drawer = !drawer" style="height: 100%"><v-icon size="30px">fas fa-list</v-icon></v-btn>
         <v-btn icon :style="{'margin-left':((frameSize.x-212)/2)+'px','margin-right':((frameSize.x-212)/2)+'px'}" style="width:140px; height: 100%"><router-link to="/Main"><h3 style="font-weight:bold; color:rgb(160,212,105);">우리동네 냉장고</h3></router-link></v-btn>
