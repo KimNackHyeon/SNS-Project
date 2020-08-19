@@ -36,7 +36,7 @@ export default {
         this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight};
       }else{
         this.frameSize = {x:window.innerWidth, y:window.innerWidth *1.77};
-        }
+      }
     },
     onLogin(email, password) {
       const loginData = {
