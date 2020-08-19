@@ -257,7 +257,7 @@ export default {
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
-        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
         document.head.appendChild(script);
         var geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch(this.userinfo.address, (result, status) => {
@@ -265,24 +265,6 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m < this.mapdata.length; m++) {
-          geocoder.addressSearch(this.mapdata[m], (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              // console.log(result[0])
-              var distancedata = [
-                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)]
-              // console.log(distancedata)
-              var polyline = new kakao.maps.Polyline({
-                path: distancedata,
-              })
-              var distance = polyline.getLength();
-              // console.log(distance)
-              this.distancedata2.push(distance)
-              // this.otherdata.push(redata);
-            }
-          })
-        }
       })
       .catch(error => {
         console.log(error)
