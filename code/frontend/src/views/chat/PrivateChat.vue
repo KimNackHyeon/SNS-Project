@@ -1,21 +1,16 @@
 <template>
   <div style="width:100%; height:100%">
-            <!-- <v-btn @click="goback" icon style="margin: 5px">
-              <v-icon>mdi-chevron-left</v-icon>
-            </v-btn> -->
-            <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-        <v-btn @click="goback" icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
-          <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
-        </v-btn>
+    <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+      <v-btn @click="goback" icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
+        <v-icon class="left-icon" size="35px">mdi-chevron-left</v-icon>
+      </v-btn>
       <div class="titleBox">
         <div class="pageTitle">
-          <!-- <p style="margin: 11px; margin-left:162px;"> -->
             {{this.chatlist.chatName}}
-            <!-- </p> -->
         </div>
       </div>
     </div>
-<div class="messaging">
+    <div class="messaging">
       <div class="inbox_msg">
         <div class="inbox_people">
           <div class="headind_srch">
@@ -28,81 +23,81 @@
                 <span class="input-group-addon">
                 <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                 </span> </div>
+              </div>
+            </div>
+            <div class="inbox_chat">
+              <div class="chat_list active_chat">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat_list">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                    <p>Test, which is a new approach to have all solutions 
+                      astrology under one roof.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="inbox_chat">
-            <div class="chat_list active_chat">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="mesgs">
           <div class="msg_history">
             <div v-for="(message, index) in messages" :key="index" class="incoming_msg">
@@ -118,10 +113,8 @@
             </div>
           </div>
           <div class="type_msg">
-            <div class="input_msg_write" style="width: 80%;
-    z-index: 50;
-    background-color: white;">
-              <input @keyup.enter="saveMessage" v-model="message" type="text" class="write_msg" placeholder="Type a message" />
+            <div class="input_msg_write" style="width: 80%; z-index: 50; background-color: white;">
+              <input @keyup.enter="saveMessage" v-model="message" type="text" style="padding-left: 10px;" placeholder="Type a message" />
               <button v-on:click="saveMessage" class="msg_send_btn" type="button"><v-icon style="transform:rotate(45)">mdi-send</v-icon></button>
             </div>
           </div>
@@ -163,7 +156,7 @@ export default {
             //파이어스토어에 메세지 저장하자 건호야
             db.collection(this.chatNo).add({
                 message:this.message,
-                author:this.authUser.name.nickname, //이 부분에 유저의 닉네임을 넣어주면 된다.
+                author:this.authUser.name, //이 부분에 유저의 닉네임을 넣어주면 된다.
                 createdAt: this.$moment(new Date()).format('YYYY년MM월DD일'),
                 createDate: new Date(),
             }).then(()=>{
@@ -347,7 +340,7 @@ img{ max-width:100%;}
     padding: 0px;;
 }
 .input_msg_write input {
-      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: medium none;
     color: #4c4c4c;
     font-size: 15px;
@@ -356,13 +349,14 @@ img{ max-width:100%;}
     padding: 0px;
 }
 
-.type_msg {position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 10%;
-    margin: 0px;
-    box-shadow: 0px -2px 10px #00000038;
-    }
+.type_msg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+  margin: 0px;
+  box-shadow: 0px -2px 10px #00000038;
+  }
 .msg_send_btn {
   background: rgb(161 219 99) none repeat scroll 0 0;
     border: medium none;
@@ -380,7 +374,7 @@ img{ max-width:100%;}
 }
 .messaging {
   width: 100%;
-    height: 552px;
+    height: 92%;
     position: relative;
     /* padding: 0 0 50px 0;*/}
 .msg_history {

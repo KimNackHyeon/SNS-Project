@@ -14,7 +14,7 @@
     </div>
     <div class="modifyBody">
       <div class="myphoto">
-        <v-avatar size="100"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
+        <v-avatar size="95"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
         <div class="filebox">
           <v-btn color="#a0d469">
             <label for="changeFile">사진 변경</label>
@@ -333,9 +333,9 @@ export default {
     border: 0; 
   }
   .modifyBody {
-    padding: 20px;
-    overflow: scroll;
-    height: 540px;
+    padding: 10px;
+    /* overflow: scroll; */
+    height: 92%;
   }
   .myphoto {
     /* padding: 0 10px; */

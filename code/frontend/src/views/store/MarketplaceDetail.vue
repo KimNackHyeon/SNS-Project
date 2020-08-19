@@ -84,9 +84,10 @@
       <div style="padding: 5px; background: #eee; overflow: hidden;">
         <div style="float: left"><h4>현금 거래시</h4></div>
         <div style="float: right">
-          <div style="display: inline-block"><h6>1개당</h6></div>
-          <div style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
-          <div style="display: inline-block"><h4>원</h4></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block"><h6>1개당</h6></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block"><h4>원</h4></div>
+          <div v-if="(detailinfo.price === '0')" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>직접 문의해주세요.</h4></div>
         </div>
       </div>
       <div style="overflow: hidden">

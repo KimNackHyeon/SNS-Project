@@ -9,7 +9,7 @@
               <div style="margin: 10px">
                 <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
-              <v-container style="min-height: 0; padding: 10px" >
+              <v-container style="min-height: 0; padding: 10px; width: 250px" >
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
@@ -121,6 +121,7 @@ export default {
         recipe:"",
         follower:"",
         following:"",
+        score: '',
       },
       recipes:[],
       isfollow : false,
@@ -307,6 +308,8 @@ export default {
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
+          this.yourData.score = Math.floor(Number(response.data.eval_point) / Number(response.data.eval_count));
+          console.log(this.yourData)
           // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
