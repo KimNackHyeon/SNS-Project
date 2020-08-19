@@ -11,6 +11,7 @@ import FeedDetail from "./views/feed/FeedDetail.vue";
 import Components from "./views/Components.vue";
 import Home from "./views/Home.vue";
 import Alarm from "./views/user/Alarm.vue";
+import EvaluateUser from "./views/user/EvaluateUser.vue";
 import MarketPlace from "./views/store/Marketplace.vue";
 import MarketPlaceDetail from "./views/store/MarketplaceDetail.vue";
 import ModifyMarketPlace from "./views/store/ModifyMarketplace.vue"
@@ -56,6 +57,11 @@ export default [
     path: "/alarm",
     name: "Alarm",
     component: Alarm,
+  },
+  {
+    path: "/evaluateuser",
+    name: "EvaluateUser",
+    component: EvaluateUser,
   },
   {
     path: "/tutorial",
@@ -178,11 +184,6 @@ export default [
     component: WriteGroupBuying,
   },
   {
-    path: "/store/modifygroupbuying/:id?",
-    name: "ModifyGroupBuying",
-    component: ModifyGroupBuying,
-  },
-  {
     path: "/Main",
     name: "Main",
     component: Main,
@@ -203,7 +204,7 @@ export default [
     component : ModifyRecipe
   },
   {
-    path: "/store/modify/marketplace",
+    path: "/store/modify/marketplace/:pagenumber?",
     name: "ModifyMarketPlace",
     component: ModifyMarketPlace,
   },

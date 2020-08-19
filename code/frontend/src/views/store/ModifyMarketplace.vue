@@ -55,7 +55,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete1(food)" class="card" v-for="(food,index) in filterListImg1" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -120,7 +120,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style="z-index:20;">
                 <div @click="chooseComplete2(food)" class="card" v-for="(food,index) in filterListImg2" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -196,7 +196,7 @@ import {foods} from '../Food/Foods.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
 import store from '../../vuex/store.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 export default {
   components: {
@@ -224,7 +224,7 @@ export default {
     }
   },
   created() {
-    axios.post(`http://localhost:9999/food/api/trade/beforeupdate` , {no:this.$route.params.pagenumber})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate` , {no:this.$route.params.pagenumber})
       .then(response => {
         this.beforedata = response.data
         // 줄바꿈 
@@ -312,7 +312,7 @@ export default {
       this.beforedata.tradefood2 = this.food2_en
       this.beforedata.address = this.address
       const sendContent = this.beforedata.content.replace(/\n/g, '^')
-      axios.post(`http://localhost:9999/food/api/trade/updatetrade`, 
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/updatetrade`, 
       {no:this.$route.params.pagenumber,address: this.beforedata.address, content: sendContent, 
       email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, 
       myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, 
@@ -473,5 +473,8 @@ input{
   border: 1px solid lightgray;
   border-radius: 4px;
   padding: 5px 10px
+}
+.contentinput:hover {
+  border: 2px solid #a0d469;
 }
 </style>

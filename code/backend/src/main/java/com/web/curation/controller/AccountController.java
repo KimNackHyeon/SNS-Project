@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Evaluate;
 import com.web.curation.model.FeedData;
 import com.web.curation.model.Follow;
 import com.web.curation.model.Member;
@@ -41,6 +42,7 @@ import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
 import com.web.curation.model.Scrap;
 import com.web.curation.repo.AlarmRepo;
+import com.web.curation.repo.EvaluateRepo;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
@@ -93,6 +95,9 @@ public class AccountController {
 
 	@Autowired
 	AlarmRepo alarmRepo;
+	
+	@Autowired
+	EvaluateRepo evaluateRepo;
 
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
@@ -512,23 +517,54 @@ public class AccountController {
 
 		return alarmList;
 	}
-	
+
 	@PostMapping("/account/freshalarm")
 	@ApiOperation(value = "평가 알람")
 	public ResponseEntity<String> freshAlarm(@RequestBody Alarm alarm) {
+		System.out.println(alarm.toString());
+		
+		Evaluate eval = new Evaluate();
+		eval.setEmail(alarm.getSemail());
+		eval.setNickname(memberRepo.findByEmail(alarm.getSemail()).get().getNickname());
+		
+		Evaluate e = evaluateRepo.save(eval);
+		System.out.println(e);
+		
 		alarm.setConfirm(0L);
+		alarm.setFeedNo(e.getNo());
 		alarmRepo.save(alarm);
 		return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
 	
 	@GetMapping("/account/alarmcheck")
-	@ApiOperation(value = "평가 알람")
+	@ApiOperation(value = "알람 체크")
 	public ResponseEntity<String> alarmCheck(@RequestParam Long no) {
 		Optional<Alarm> alarm = alarmRepo.findById(no);
 		alarm.get().setConfirm(1L);
 		System.out.println(alarm.get().toString());
 		alarmRepo.save(alarm.get());
 		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/account/evaluate")
+	@ApiOperation(value = "신선도 페이지 이동")
+	public ResponseEntity<Evaluate> moveEval(@RequestParam Long no) {
+		Optional<Evaluate> eval = evaluateRepo.findById(no);
+		return new ResponseEntity<Evaluate>(eval.get(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/account/evaluate")
+	@ApiOperation(value = "신선도 평가")
+	public ResponseEntity<String> addEval(@RequestBody Map<String, String> map) {
+		Optional<Evaluate> eval = evaluateRepo.findById(Long.parseLong(map.get("no")));
+		
+		Member member = memberRepo.findByEmail(map.get("email")).get();
+		member.setEvalCount(member.getEvalCount()+1L);
+		member.setEvalPoint(member.getEvalPoint()+ Long.parseLong(map.get("score")));
+		
+		evaluateRepo.delete(eval.get());
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");

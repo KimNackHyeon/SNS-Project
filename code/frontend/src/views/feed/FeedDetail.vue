@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div>
+    <div style="height:14.5%;">
       <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
         <router-link to="/feed/main">
           <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -43,28 +43,28 @@
         </div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 100%; position: relative; padding-bottom: 20px;">
+    <div style="overflow: scroll; height: 85.5%; position: relative; padding-bottom: 20px;">
       <!-- 제목 -->
       <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
         <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
       </div>
       <!-- 재료 -->
-      <div style="overflow: hidden; border-bottom: 1px solid lightgray;margin-bottom:20px;    height: 110px;">
+      <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 130px;">
         <!-- 나에게 있는 재료 -->
-        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center;    height: 110px;">
+        <div style="float: left; padding: 5px 10px; width: 60%; text-align: center; height: 130px;">
           <h5>나에게 있는 재료</h5>
-          <div style="padding: 5px 10px; display: flex; overflow: scroll;">
+          <div style="padding: 5px 10px; display: flex; overflow-x: scroll; height: 100px">
             <div class="food" v-for="(food, i) in havingFood" :key="i">
               <img :src="require(`../../assets/images/food/${food.img}.png`)" style="width: 30px; height: 30px;">
               <h5 class="food-name">{{food.name_kor}}</h5>
-              <h6>{{food.amount}}</h6>
+              <h6>{{food.amount}}개</h6>
             </div>
           </div>
         </div>
         <!-- 나에게 없는 재료 -->
-        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center;    height: 110px;">
+        <div style="float: right; background-color: rgb(202, 231, 171); padding: 5px 10px; width: 40%; text-align: center; height: 130px;">
           <h5>나에게 없는 재료</h5>
-          <div style="padding: 5px 10px; display: flex; overflow-x: scroll;" id="scrollBtns">
+          <div style="padding: 5px 10px; display: flex; overflow-x: scroll; height: 100px" id="scrollBtns">
             <div class="food" v-for="(food, i) in otherFood" :key="i">
               <div>
                 <v-btn icon @click="onBuyingBtn(food)">
@@ -83,16 +83,20 @@
           </div>
         </div>
       </div>
+      <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h2 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
+      </div>
       <!-- 글 내용 -->
       <div style="">
         <div>
           <div v-for="(item,i) in feedData.items" :key="i" style="margin-bottom:10px;">
             <div>
-              <img :src="item.img" style="width:360px; height:auto;">
+              <img :src="item.img" style="width:100%; height:auto;">
               <!-- <img :src="require(`../../assets/images${item.img}`)" style="width:360px; height:auto;"> -->
               
             </div>
-            <div class="feedContents" v-html="item.content">
+            <div class="feedContents" v-html="item.content" style="margin: 10px 0; font-size: 16px;">
               {{item.content}}
             </div>
           </div>
@@ -116,13 +120,18 @@
           <div class="userImg">
             <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
-          <div class="content" style="display: table;">
+          <div class="content" style="display: table; padding-left: 15px;">
             <div style="display: table-cell; vertical-align: middle;">
               <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
               <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
               <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
               <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
+          </div>
+          <div style="float: right; width: 10%" v-if="comment.email==userinfo.email">
+            <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
+              <v-icon size="18px">mdi-trash-can-outline</v-icon>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -171,8 +180,8 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`http://localhost:9999/food/api/myref/search/`+this.userinfo.email)
-    //   axios.get('http://localhost:9999/food/api/myref/search/'+this.userinfo.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
+    //   axios.get('https://i3b301.p.ssafy.io:9999/food/api/myref/search/'+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.myrefFood = response.data.myreflist
@@ -182,7 +191,7 @@ export default {
         });
     
     var feedNo = this.$route.params.feedNo;
-    axios.get(`http://localhost:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
         .then(response => {
           // console.log(response);
             this.feedData = { // 하나의 피드 데이터
@@ -210,7 +219,7 @@ export default {
               this.feedData.items.push(d);
             });
 
-            axios.get(`http://localhost:9999/food/api/feed/check`,{
+            axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
               params:
               {
                 email:store.state.userInfo.email,
@@ -244,7 +253,7 @@ export default {
           // console.log(error.response);
         });
         setTimeout(() => {
-          axios.get(`http://localhost:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : feedNo}}) // 피드에 해당하는 댓글 불러오기
               .then(response => {
                 // console.log(response);
                 response.data.forEach(c =>{
@@ -263,7 +272,7 @@ export default {
   methods: {
     likedbtn() {
       this.feedData.isLike = !this.feedData.isLike;
-      axios.get(`http://localhost:9999/food/api/feed/like`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -277,7 +286,7 @@ export default {
     },
     scrapedbtn() {
       this.feedData.isScrap = !this.feedData.isScrap;
-      axios.get(`http://localhost:9999/food/api/feed/scrap`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : this.feedData.no,
@@ -318,13 +327,25 @@ export default {
         create_date: `${today.toISOString().substring(0, 10)}T${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
       }
       // console.log(comment);
-      axios.post(`http://localhost:9999/food/api/feed/register`,comment)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.comment = "";
       })
 
       this.feedData.comments.push(comment);
+    },
+    // 댓글 삭제하기
+    deleteComment(feedData_id, comment) {
+      var comm = this.feedData.comments[this.feedData.comments.indexOf(comment)];
+      this.feedData.comments.splice(this.feedData.comments.indexOf(comment), 1);
+      console.log(comm);
+
+      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
+      .then(response =>{
+
+      })
+      
     },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
@@ -345,7 +366,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`http://localhost:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
           .then(response => {
             Swal.fire({
                 // position: 'top-end',
@@ -500,7 +521,7 @@ export default {
   }
   .content {
     float: left;
-    width: 85%;
+    width: 80%;
     height: 60px;
   }
   .commentUser {

@@ -1,6 +1,14 @@
 @charset "utf-8";
 @import "./common";
 
+.v-dialog__content {
+  width: inherit !important;
+  height: 100%;
+  left: unset !important;
+}
+.v-application {
+  width: inherit !important;
+}
 .user {
   @include wrap;
   min-height: 100%;

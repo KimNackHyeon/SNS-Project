@@ -59,7 +59,7 @@
                         }
                         console.log(kakao_account);
 
-                         axios.post(`http://localhost:9999/food/api/account/kakaologin`,{
+                         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
                              image : userInfo.image,
@@ -74,7 +74,7 @@
                                 console.log(store.state.userInfo);
                             } else{
                                 // console.log(res);
-                                store.commit('setUserInfo', userInfo);
+                                store.commit('setUserInfo', res.data);
                                 // console.log(store.state.userInfo);
                             }
                             this.$router.push("/main");

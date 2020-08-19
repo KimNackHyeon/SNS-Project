@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="modifygroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -240,7 +240,7 @@ export default {
       // 모든 항목 다 작성되었는지 검사
       if (this.title && this.food && this.dateFormatted && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '수정이 완료되었습니다.',
@@ -305,7 +305,7 @@ export default {
       }
     console.log(typeof(this.$route.params.id))
     axios({
-                    url:`http://localhost:9999/food/api/groupbuying/beforeupdate`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/beforeupdate`,
                     method:'post',
                     data:{no:this.$route.params.id},
                     headers: config.headers})
@@ -433,7 +433,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

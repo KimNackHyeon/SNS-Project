@@ -54,7 +54,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -192,10 +192,10 @@ export default {
     numberPeople () {
       if (Number(this.numberPeople) == 1){
         this.oknumPeople = false
-        Swal.fire({
-          title: '참여인원 수를 확인해 주세요',
-          text: '참여인원은 2명 이상부터 가능합니다.',
-        })
+        // Swal.fire({
+        //   title: '참여인원 수를 확인해 주세요',
+        //   text: '참여인원은 2명 이상부터 가능합니다.',
+        // })
       }
       else {
         this.oknumPeople = true;
@@ -245,9 +245,9 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
+      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && this.userinfo.address) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '등록이 완료되었습니다.',
@@ -257,10 +257,26 @@ export default {
           .catch(error => {
           })
       }
-      else if (!this.oknumPeople) {
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && !this.oknumPeople && this.userinfo.address) {
         Swal.fire({
           title: '참여인원 수를 확인해 주세요',
           text: '참여인원은 2명 이상부터 가능합니다.',
+        })
+      }
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && !this.userinfo.address) {
+        Swal.fire({
+            title: '필수 정보가 부족합니다.',
+            text: "회원정보수정에서 주소를 입력해주세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '회원정보수정'
+        })
+        .then((result) => {
+        if (result.value) {
+            this.$router.push('/user/modifyuser')
+        }
         })
       }
       else{
@@ -425,7 +441,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

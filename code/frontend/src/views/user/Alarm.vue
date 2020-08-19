@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 590px">
+  <div style="height: 590px;">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15)">
       <div @click="onleft" style="width:40px; height:100%; border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
           <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
@@ -8,14 +8,16 @@
         <h4>새소식</h4>
       </div>
     </div>
-    <div v-for="(alarm, i) in alarms" :key="i">
-      <div :class="alarm.confirm" @click="check(alarm)">
-        <div class="myphoto">
-          <v-avatar size="50"><img :src="alarm.image" @click="moveUser(alarm)"></v-avatar>
-        </div>
-        <div class="content" style="display: table;" @click="move(alarm)">
-          <div style="display: table-cell; vertical-align: middle;">
-              <p style="margin: 0;">{{alarm.content}}</p>
+    <div style="overflow: scroll;" :style="{height:(frameSize.y)+'px'}">
+      <div v-for="(alarm, i) in alarms" :key="i">
+        <div :class="alarm.confirm" @click="check(alarm)">
+          <div class="myphoto">
+            <v-avatar size="50"><img :src="alarm.image" @click="moveUser(alarm)"></v-avatar>
+          </div>
+          <div class="content" style="display: table;" @click="move(alarm)">
+            <div style="display: table-cell; vertical-align: middle;">
+                <p style="margin: 0;">{{alarm.content}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -31,11 +33,12 @@ import store from '../../vuex/store.js'
 export default {
   data() {
     return {
-      alarms:[]
+      alarms:[],
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
     }
   },
   created(){
-    axios.get(`http://localhost:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
     .then(response => {
       console.log(response);
       response.data.reverse();
@@ -67,6 +70,9 @@ export default {
         case "3": 
           this.$router.push({name: 'FeedDetail',params: { feedNo : alarm.feedNo }});
           break;
+        case "4": 
+          this.$router.push({name: 'EvaluateUser', params: { no : alarm.feedNo }});
+          break;
         default:
       }
     },
@@ -96,7 +102,7 @@ export default {
 /* 공통 박스 axios에서 오는 type에 따라 배경색 다르게 */
 .alarmbox {
   height: 80px;
-  background-color: #eee;
+  background-color: #FFF;
   padding: 5px;
 }
 .likebox {
