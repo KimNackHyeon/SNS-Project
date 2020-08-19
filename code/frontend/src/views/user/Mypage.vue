@@ -31,10 +31,10 @@
                       <v-card-text>
                         <div class="follow" v-for="(follower, i) in followers" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
+                            <v-avatar style="cursor:pointer;" size="35" @click="moveUser(follower.email)"><img :src="follower.image" :alt="`${follower.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
-                            <p class="followNick" @click="moveUser(follower.email)">{{follower.nickname}}</p>
+                            <p class="followNick" style="cursor:pointer;" @click="moveUser(follower.email)">{{follower.nickname}}</p>
                             <p class="followEmail">{{follower.email}}</p>
                           </div>
                         </div>
@@ -59,10 +59,10 @@
                       <v-card-text>
                         <div class="follow" v-for="(following, i) in followings" :key="i">
                           <div class="userImg">
-                            <v-avatar size="35" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
+                            <v-avatar size="35" style="cursor:pointer;" @click="moveUser(following.email)"><img :src="following.image" :alt="`${following.nickname} 사진`"></v-avatar>
                           </div>
                           <div class="content">
-                            <p class="followNick" @click="moveUser(following.email)">{{following.nickname}}</p>
+                            <p class="followNick" style="cursor:pointer;" @click="moveUser(following.email)">{{following.nickname}}</p>
                             <p class="followEmail">{{following.email}}</p>
                           </div>
                           <div class="followbtn" @click="onFollowBtn(following)">

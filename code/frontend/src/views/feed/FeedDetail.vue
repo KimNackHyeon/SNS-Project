@@ -16,7 +16,7 @@
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
           <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 style="display: inline-block; padding-left: 10px cursor : pointer;" @click="moveUser(feedData.email)">{{feedData.nickname}}</h4>
+          <h4 style="display: inline-block; padding-left: 10px; cursor : pointer;" @click="moveUser(feedData.email)">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
@@ -379,9 +379,6 @@ export default {
 </script>
 
 <style scoped>
-  .left-icon:hover {
-    color: #a0d469;
-  }
   .titleBox {
     display: inline-block;
     width: 90%;
@@ -448,7 +445,7 @@ export default {
     font-size: 12px
   }
   .food {
-    padding-right: 10px;
+    padding-right: 15px;
     text-align: center;
   }
   .food h6 {

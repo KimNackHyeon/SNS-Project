@@ -290,9 +290,6 @@ export default {
 </script>
 
 <style scoped>
-  .left-icon:hover {
-    color: #a0d469;
-  }
   .titleBox {
     display: inline-block;
     width: 90%;

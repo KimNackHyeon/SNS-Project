@@ -39,7 +39,7 @@
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
         <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
+            <v-col v-for="(info, i) in tradelist" :key="i" cols="12" class="onemarketplace">
               <router-link :to="`/store/marketplace/${ info.no }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
@@ -96,10 +96,10 @@
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2 btn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center btn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -378,5 +378,10 @@ created() {
   text-align: center;
   padding-top: 7px;;
 }
-
+.onemarketplace:hover {
+  box-shadow: 0px 0px 10px rgb(160, 212, 105);
+}
+.btn:hover {
+  box-shadow: 0px 0px 10px gray;
+}
 </style>

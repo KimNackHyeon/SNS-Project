@@ -41,7 +41,7 @@
         </v-layout>
         <div style="padding: 10px; padding-bottom: 40px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
-            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
+            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12" class="onegroupbuying">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
                 <v-card style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
@@ -57,11 +57,14 @@
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
                       <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
+                          <v-btn class="btn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
+                          <v-btn class="btn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
+                      </div>
+                      <div>
+                        <p style="height: 80px; line-height: 80px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
@@ -354,5 +357,10 @@ export default {
   font-size: 21px;
   padding: 4px 6px;
 }
-
+.onegroupbuying:hover {
+  box-shadow: 0px 0px 10px rgb(160, 212, 105);
+}
+.btn:hover {
+  box-shadow: 0px 0px 10px gray;
+}
 </style>

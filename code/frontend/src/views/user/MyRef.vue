@@ -33,8 +33,8 @@
 ">mdi-close</v-icon></button></div>
             <div class="textArea" style="height: 50px; margin-top: 0px; text-align: center; padding: 5px 36px;;">
                 <input v-model="totalShareAmount" type="text" class="inputText" style="float: left; width: 40px; height: 35px; text-align: center;"><h5 style="font-size:15px">개를</h5>
-                <div class="shareButton" @click="openShareBox">공유</div>
-                <div class="deleteButton" @click="deleteFoodfromRef" >삭제</div>
+                <div class="shareButton" @click="openShareBox" style="cursor:pointer;">공유</div>
+                <div class="deleteButton" @click="deleteFoodfromRef" style="cursor:pointer;" >삭제</div>
             
             </div>
             <div class="sharebox" style="display:none;">
