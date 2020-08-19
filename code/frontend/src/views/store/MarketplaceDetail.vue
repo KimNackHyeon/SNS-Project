@@ -84,9 +84,10 @@
       <div style="padding: 5px; background: #eee; overflow: hidden;">
         <div style="float: left"><h4>현금 거래시</h4></div>
         <div style="float: right">
-          <div style="display: inline-block"><h6>1개당</h6></div>
-          <div style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
-          <div style="display: inline-block"><h4>원</h4></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block"><h6>1개당</h6></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ detailinfo.price }}</h4></div>
+          <div v-if="!(detailinfo.price === '0')" style="display: inline-block"><h4>원</h4></div>
+          <div v-if="(detailinfo.price === '0')" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>직접 문의해주세요.</h4></div>
         </div>
       </div>
       <div style="overflow: hidden">
@@ -122,7 +123,7 @@
                   <p class="memberNick" @click="moveUser(member.email)">{{member.nickname}}</p>
                   <p class="memberEmail">{{member.email}}</p>
                 </div>
-                <div class="completebtn" @click="onCompleteBtn()">
+                <div class="completebtn" @click="onCompleteBtn(member.email, member.nickname)">
                   <v-btn class="Complete" color="#a0d469" style="box-shadow: unset; color: white">거래완료</v-btn>
                 </div>
               </div>
@@ -187,7 +188,7 @@ export default {
   },
   methods:{
     registChattingRoom(){
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
+      axios.post(`http://localhost:9999/food/api/chatting`, {chatName:this.detailinfo.nickname+" 님의 "+this.detailinfo.myfood_kor+"교환방", chatKey:this.privatechat ,myEmail:this.userinfo.email, myNickname:this.userinfo.nickname, otherEmail:this.detailinfo.email, otherNickname:this.detailinfo.nickname, type:"1"})
         .then(response => {
           this.chatName = response.data;
           this.$router.push({ name: 'PrivateChat', params: { privatechat: this.privatechat, chatName: this.chatName }})
@@ -202,7 +203,7 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participatelist`, {tradeNo:this.$route.params.id})
+      axios.post(`http://localhost:9999/food/api/trade/participatelist`, {tradeNo:this.$route.params.id})
         .then(response => {
           this.memberList = response.data
         })
@@ -211,7 +212,7 @@ export default {
         })
     },
     onParticipate() {
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+      axios.post(`http://localhost:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
           console.log(response.data)
           if(response.data == "Fail"){
@@ -252,7 +253,7 @@ export default {
       $('Complete').css('color', 'black')
       $('Complete').attr('color', '#eee')
       // axios로 보내기(새소식으로 신선도 평가 보내기)
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
+      axios.post(`http://localhost:9999/food/api/account/freshalarm`, {email:user_email, content:this.userinfo.nickname+"님을 평가해주세요!", type:"4", image:this.userinfo.profile_image_url, semail:this.userinfo.email })
     .then(response => {
       if(response.data == "Success"){
         Swal.fire({
@@ -261,7 +262,8 @@ export default {
       })
       }
     })
-    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/removetrademember`, {participantEmail:user_email, tradeNo:this.$route.params.id, participantNickname: user_nickname})
+    console.log(user_email+" "+this.$route.params.id+" "+user_nickname)
+    axios.post(`http://localhost:9999/food/api/trade/removetrademember`, {participantEmail:user_email, tradeNo:this.$route.params.id, participantNickname: user_nickname})
         .then(response => {
           this.memberList = response.data
           
@@ -282,7 +284,7 @@ export default {
       // this.$router.push('/store/groupbuying')
       this.$router.go(-1)
     }
-    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/article/${id}`)
+    axios.get(`http://localhost:9999/food/api/trade/article/${id}`)
     .then(response => {
       this.detailinfo = response.data;
       // 주소 형식 변환
@@ -298,7 +300,7 @@ export default {
     })
 
      axios
-        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
+        .get(`http://localhost:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);

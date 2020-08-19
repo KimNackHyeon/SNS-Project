@@ -147,10 +147,12 @@ export default {
       this.$router.go(-1)
     }
     else {
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/readdetail/`+id)
+      axios.get(`http://localhost:9999/food/api/groupbuying/readdetail/`+id)
         .then(response => {
           // console.log(response)
           this.groupbuying = response.data
+          console.log(this.groupbuying.now_people / this.groupbuying.max_people)
+          console.log(this.groupbuying)
           // 작성일, 마감일 형식변환
           const [year1, month1, day1] = this.groupbuying.end_date.split('-')
           this.groupbuying.end_date = `${year1}/${month1}/${day1}`
@@ -213,22 +215,29 @@ export default {
       })
     },
     onParticipate() {
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
-        .then(response => {
-          if(response.data == "Fail"){
-            Swal.fire({
-            text: "이미 참가하신 공동구매 방입니다.",
-          })
-          }else{
-            Swal.fire({
-              text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
+      if (this.groupbuying.now_people / this.groupbuying.max_people >= 1) {
+        Swal.fire({
+          icon: 'error',
+          text: '인원이 가득 찼습니다.'
+        })
+      } else {
+        axios.post(`http://localhost:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+          .then(response => {
+            if(response.data == "Fail"){
+              Swal.fire({
+              text: "이미 참가하신 공동구매 방입니다.",
             })
-          }
-          window.location.reload();
-        })
-        .catch(error => {
-          // console.log(error)
-        })
+            } else {
+              Swal.fire({
+                text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
+              })
+            }
+            window.location.reload();
+          })
+          .catch(error => {
+            // console.log(error)
+          })
+      }
     },
     member() {
       if (this.openMember == false) {
@@ -237,7 +246,7 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
+      axios.post(`http://localhost:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
           // console.log(response.data)
           this.memberList = response.data

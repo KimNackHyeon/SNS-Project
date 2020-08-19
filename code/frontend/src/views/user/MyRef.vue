@@ -155,7 +155,7 @@ import RefPaging from './RefPaging.vue'
 // import json from 'http://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
 const SERVER_URL = store.state.SERVER_URL;
-// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
+// const SERVER_URL = 'http://localhost:9999/food/api';
 var convert = require('xml-js');
 const $api_url = 'https://www.kamis.or.kr/service/price/xml.do?action=dailySalesList&p_cert_key=73081fa5-fa86-492a-b3f3-905e315da6ac&p_cert_id=1137&p_returntype=json';
 
@@ -243,8 +243,8 @@ data() {
                 img:this.Nowgra.img,
             };
             axios
-            // .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
-            .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
+            // .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
+            .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
                 window.location.reload();
@@ -261,8 +261,8 @@ data() {
             // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
         };
         axios
-        // .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
-        .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
+        // .post(`http://localhost:9999/food/api/myref/regist`,registFood)
+        .post(`http://localhost:9999/food/api/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
             Swal.fire({
@@ -381,8 +381,8 @@ data() {
                
                 var sum = 0;
                 if(this.changeFoodsTemp.length<2){
-                    if(this.totalShareAmount<=this.Nowgra.amount){
-                        if(this.nowmyamount>this.totalShareAmount){
+                    if(Number(this.totalShareAmount)<=Number(this.Nowgra.amount)){
+                        if(Number(this.nowmyamount)>Number(this.totalShareAmount)){
                             Swal.fire({
                                 icon: 'error',
                                 title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
@@ -448,7 +448,7 @@ data() {
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
@@ -469,7 +469,7 @@ data() {
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
@@ -519,7 +519,7 @@ data() {
                     
                     console.log(typeof(this.changeFoods));
                 axios({
-                    url:`https://i3b301.p.ssafy.io:9999/food/api/myref/share`,
+                    url:`http://localhost:9999/food/api/myref/share`,
                     method:'post',
                     data: JSON.stringify(this.changeFoods),
                     headers: config.headers})
@@ -584,7 +584,7 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
+      axios.get(`http://localhost:9999/food/api/myref/search/`+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
@@ -594,7 +594,7 @@ data() {
         })
 
         axios
-        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
+        .get(`http://localhost:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);

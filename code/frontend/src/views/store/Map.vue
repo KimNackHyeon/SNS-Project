@@ -32,7 +32,7 @@ export default {
     } else {
       const script = document.createElement('script');
       /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap);
+      // script.onload = () => kakao.maps.load(this.initMap);
       script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
       document.head.appendChild(script);
     }
@@ -44,7 +44,7 @@ export default {
         mapcenter = new kakao.maps.LatLng(33.450701, 126.570667),
         options = {
           center: mapcenter,
-          level: 3
+          level: 1,
         };
       var map = new kakao.maps.Map(container, options);
       this.map = map;

@@ -9,7 +9,7 @@
               <div style="margin: 10px">
                 <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
-              <v-container style="min-height: 0; padding: 10px" >
+              <v-container style="min-height: 0; padding: 10px; width: 250px" >
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
@@ -121,6 +121,7 @@ export default {
         recipe:"",
         follower:"",
         following:"",
+        score: '',
       },
       recipes:[],
       isfollow : false,
@@ -142,7 +143,7 @@ export default {
         this.userinfo = store.state.userInfo;
       }
 
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myrecipe/`, {params: {email: this.$route.params.email}})
+      axios.get(`http://localhost:9999/food/api/account/myrecipe/`, {params: {email: this.$route.params.email}})
       .then(response => {
           // console.log(response)
           this.recipes = response.data;
@@ -163,7 +164,7 @@ export default {
     },
     addFollow(yourEmail){
       // alert('팔로우');
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`,
+      axios.post(`http://localhost:9999/food/api/account/follow/`,
         {
           email : this.userinfo.email,
           yourEmail : yourEmail
@@ -176,7 +177,7 @@ export default {
     },
     unFollow(yourEmail){
       // alert('언팔로우');
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/unfollow/`,
+      axios.post(`http://localhost:9999/food/api/account/unfollow/`,
         {
           email : this.userinfo.email,
           yourEmail : yourEmail
@@ -186,8 +187,8 @@ export default {
       })
     },
     updateList(){
-      // axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.yourData.email)
+      // axios.get(`http://localhost:9999/food/api/account/yourpage/`+ this.$route.params.email)
+      axios.get(`http://localhost:9999/food/api/account/yourpage/`+ this.yourData.email)
         .then(response => {
           // console.log(response);
           this.yourData.nickname = response.data.nickname;
@@ -206,7 +207,7 @@ export default {
       }else{
         this.openFollower = false
       }
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`, {params: {email: this.yourData.email}})
+      axios.get(`http://localhost:9999/food/api/account/follow/`, {params: {email: this.yourData.email}})
         .then(response => {
           // console.log(response)
           this.followers = response.data
@@ -222,7 +223,7 @@ export default {
       }else{
         this.openFollowing = false
       }
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/following/`, {params: {email: this.yourData.email}})
+      axios.get(`http://localhost:9999/food/api/account/following/`, {params: {email: this.yourData.email}})
         .then(response => {
           // console.log(response)
           this.followings = response.data
@@ -235,7 +236,7 @@ export default {
     updateFollowBtn() {
       // yourpage의 following 리스트가 뜨고 내가 그 사람을 팔로우 했는지 안했는지 검사
       this.followings.forEach(following => {
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/isfollow/`,
+        axios.get(`http://localhost:9999/food/api/account/isfollow/`,
         {
           params:
           {
@@ -285,7 +286,7 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/isfollow/`,
+      axios.get(`http://localhost:9999/food/api/account/isfollow/`,
       {
         params:
         {
@@ -299,7 +300,7 @@ export default {
       })
 
 
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
+      axios.get(`http://localhost:9999/food/api/account/yourpage/`+ this.$route.params.email)
         .then(response => {
           // console.log(response);
           this.yourData.email = this.$route.params.email;
@@ -307,6 +308,8 @@ export default {
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
+          this.yourData.score = Math.floor(Number(response.data.eval_point) / Number(response.data.eval_count));
+          console.log(this.yourData)
           // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {

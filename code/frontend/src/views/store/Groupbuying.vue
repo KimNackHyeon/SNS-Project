@@ -63,9 +63,6 @@
                           <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
-                      <div>
-                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
-                      </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
                       <div>
@@ -122,6 +119,7 @@ export default {
       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       inputKeyword:'',
       originalList:[],
+      addresspoint: [],
     }
   },
   mounted(){
@@ -146,7 +144,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
+          axios.post(`http://localhost:9999/food/api/groupbuying/delete` , {no:data})
             .then(response => {
               Swal.fire({
                   // position: 'top-end',
@@ -204,7 +202,7 @@ export default {
         this.switched = true;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -219,7 +217,7 @@ export default {
     },
     call(){
       if(this.switched == true){
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
+        axios.get(`http://localhost:9999/food/api/groupbuying/orderbyenddate`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -232,7 +230,7 @@ export default {
         this.switched2 = true;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
@@ -280,7 +278,7 @@ export default {
       this.userinfo = store.state.userInfo;
     }
     // if(userinfo.email == )
-    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
+    axios.get(`http://localhost:9999/food/api/groupbuying/read`)
       .then(response => {
         // console.log(response)
         this.groupBuyings = response.data;
@@ -294,7 +292,7 @@ export default {
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
-        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
         document.head.appendChild(script);
         var geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch(this.userinfo.address, (result, status) => {
@@ -302,14 +300,15 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m < this.mapdata.length; m++) {
+        for (var m = 0; m <= this.mapdata.length; m++) {
           geocoder.addressSearch(this.mapdata[m], (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              // console.log(result[0])
               var distancedata = [
                 new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)]
+                new kakao.maps.LatLng(result[0].y, result[0].x)
+              ]
               // console.log(distancedata)
+              this.addresspoint.push([result[0].y, result[0].x])
               var polyline = new kakao.maps.Polyline({
                 path: distancedata,
               })
@@ -321,6 +320,7 @@ export default {
             }
           })
         }
+        console.log(this.addresspoint)
       })
       .catch(error => {
         console.log(error)

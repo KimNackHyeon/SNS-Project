@@ -38,6 +38,15 @@ public class MemberService {
 		mailSender.send(message);
 		return certificateNumber;
 	}
+	public void qnaMail(String sendNickname, String title, String content) {
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo("rjsgh1232@naver.com");
+		message.setFrom(FROM_ADDRESS);
+		message.setSubject(sendNickname+"님이 문의메일을 보냈습니다.");
+		message.setText(content);
+		mailSender.send(message);
+	}
 	public String sendMailforpassword(String address) {
 		
 		SimpleMailMessage message = new SimpleMailMessage();

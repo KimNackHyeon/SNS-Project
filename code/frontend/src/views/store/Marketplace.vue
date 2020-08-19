@@ -86,12 +86,13 @@
                         <v-col cols="12" style="padding: 0; padding-bottom: 13px">
                           <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
                         </v-col>
-                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
+                        <v-col v-if="!(info.price === '0')" cols="12" style="padding: 0; padding-bottom: 13px">
                           <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
                         </v-col>
                         <v-col cols="12" class="pa-1 text-center">
-                          <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
-                          <span class="text-center pa-0" style="font-size: 18px;">원</span>
+                          <span v-if="!(info.price === '0')" class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
+                          <span v-if="!(info.price === '0')" class="text-center pa-0" style="font-size: 18px;">원</span>
+                          <span v-if="info.price === '0'" class="text-center pa-0" style="font-size: 12px; color: red;">가격정보가 없습니다. 직접 문의해주세요</span>
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
@@ -126,7 +127,8 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
-// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
+import {foods} from '../../views/Food/Foods.js'
+// const SERVER_URL = 'http://localhost:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -146,6 +148,7 @@ export default {
   },
   mounted(){
     this.onResize();
+    
   },
   methods:{
     onResize(){
@@ -161,7 +164,7 @@ export default {
         $('.searchBox').css('display','unset');
       }else{
         if(document.getElementById("searchcontent").value != ""){
-          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
+          axios.get(`http://localhost:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
           // console.log(this.tradelist)
@@ -180,26 +183,39 @@ export default {
     call(){
       if(this.switched == true){
         console.log(this.userinfo.email)
-        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
+        axios.get(`http://localhost:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
           // console.log(this.mapOtherUserInfo)
-        })
+          
+          this.mapOtherUserInfo.address.length = []
+          if (this.mapOtherUserInfo.address.length === 0) {
+            for (var k = 0; k < this.tradelist.length; k++) {
+              this.mapOtherUserInfo.address.push(this.tradelist[k].address)
+            }
+          }
+          console.log(store.state.mapOtherUserInfo.address)
+          this.originalList = this.tradelist;
+          })
         .catch(error => {
           console.log(error)
         })
         this.switched = false;
     }
     else{
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+      axios.get(`http://localhost:9999/food/api/trade/`)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
           // console.log(this.tradelist)
-          this.mapOtherUserInfo = store.state.mapOtherUserInfo
-          this.mapOtherUserInfo.address = this.tradelist[0].address
-          this.mapOtherUserInfo.food = this.tradelist[0].myfood
+          this.mapOtherUserInfo.address.length = []
+          if (this.mapOtherUserInfo.address.length === 0) {
+            for (var k = 0; k < this.tradelist.length; k++) {
+              this.mapOtherUserInfo.address.push(this.tradelist[k].address)
+            }
+          }
+          console.log(store.state.mapOtherUserInfo.address)
           // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
@@ -209,7 +225,7 @@ export default {
       }
     },
     edit(pageno) {
-      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
+      axios.post(`http://localhost:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
           // console.log(this.pagenumber)
@@ -229,7 +245,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/deletetrade`, {no:pageno})
+    axios.post(`http://localhost:9999/food/api/trade/deletetrade`, {no:pageno})
       .then(response => {
         this.pagenumber = pageno;
         Swal.fire({
@@ -269,23 +285,49 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+  axios.get(`http://localhost:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
       // console.log(this.tradelist)
       // console.log(this.mapOtherUserInfo.address)
-      if (this.mapOtherUserInfo.address.length === 0) {
-        for (var i = 0; i < this.tradelist.length; i++) {
-          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+      axios.get(`http://localhost:9999/food/api/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            for(var m = 0; m < this.xmldata.price.length; m++){
+              for (var i = 0; i < this.tradelist.length; i++) {
+                for (var j = 0; j < foods.length; j++) {
+                  if (this.tradelist[i].myfood === foods[j].name) {
+                    this.tradelist[i].myfood = foods[j].img
+                  }
+                  if (this.tradelist[i].tradefood1 === foods[j].name) {
+                    this.tradelist[i].tradefood1 = foods[j].img
+                  }
+                  if (this.tradelist[i].tradefood2 === foods[j].name) {
+                    this.tradelist[i].tradefood2 = foods[j].img
+                  }
+                }
+                var tF = this.xmldata.price[m];
+                var tFname = tF.productName.split('/')[0];
+                if(tF.product_cls_code == '01' ){
+                  if(tFname === this.tradelist[i].myfood_kor){
+                    this.tradelist[i].price = tF.dpr1;
+                    // console.log(this.tradelist[i].price)
+                  }
+                }
+              }
+            }
+          }
+        )
+        if (this.mapOtherUserInfo.address.length === 0) {
+          for (var k = 0; k < this.tradelist.length; k++) {
+            store.state.mapOtherUserInfo.address.push(this.tradelist[k].address)
+          }
         }
-        // console.log('good')
-        // console.log(store.state.mapOtherUserInfo)
-      }
-      this.originalList = this.tradelist;
-    })
-    .catch(error => {
-      // console.log(error.response)
-    })
+        this.originalList = this.tradelist;
+        })
+        .catch(error => {
+          // console.log(error.response)
+        })
   },
   updated(){
     

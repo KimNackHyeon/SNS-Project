@@ -68,7 +68,7 @@ export default {
     }
   },
   created(){
-    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/evaluate`,{params:{no : this.$route.params.no}})
+    axios.get(`http://localhost:9999/food/api/account/evaluate`,{params:{no : this.$route.params.no}})
     .then(response => {
       console.log(response);
       this.evalData = response.data;
@@ -177,7 +177,7 @@ export default {
       .then((result) => {
         if (result.value) {
           // 평가한거 axios 보내기
-          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/evaluate`,{
+          axios.post(`http://localhost:9999/food/api/account/evaluate`,{
               no : this.evalData.no, 
               email : this.evalData.email, 
               score : this.score

@@ -119,10 +119,8 @@
             
           </div>
           <div class="type_msg">
-            <div class="input_msg_write" style="width: 80%;
-    z-index: 50;
-    background-color: white;">
-              <input @keyup.enter="saveMessage" v-model="message" type="text" class="write_msg" placeholder="Type a message" />
+            <div class="input_msg_write" style="width: 80%; z-index: 50; background-color: white;">
+              <input @keyup.enter="saveMessage" v-model="message" type="text" style="padding-left: 10px" placeholder="Type a message" />
               <button v-on:click="saveMessage" class="msg_send_btn" type="button"><v-icon style="transform:rotate(45)">mdi-send</v-icon></button>
             </div>
           </div>
@@ -357,13 +355,14 @@ img{ max-width:100%;}
     padding: 0px;
 }
 
-.type_msg {position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 10%;
-    margin: 0px;
-    box-shadow: 0px -2px 10px #00000038;
-    }
+.type_msg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+  margin: 0px;
+  box-shadow: 0px -2px 10px #00000038;
+  }
 .msg_send_btn {
   background: rgb(161 219 99) none repeat scroll 0 0;
     border: medium none;
@@ -381,7 +380,7 @@ img{ max-width:100%;}
 }
 .messaging {
   width: 100%;
-    height: 552px;
+    height: 92%;
     position: relative;
     /* padding: 0 0 50px 0;*/}
 .msg_history {
