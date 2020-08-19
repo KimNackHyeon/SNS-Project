@@ -326,6 +326,7 @@ export default {
   },
   created(){
     this.privatechat = this.$route.params.id
+    console.log(this.privatechat)
     if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
