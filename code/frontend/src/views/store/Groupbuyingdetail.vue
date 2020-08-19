@@ -33,10 +33,13 @@
       <p style="margin: 0px;">{{groupbuying.address}}</p>
     </div>
     <div style="overflow: hidden; background: black;">
-      <div style="float: left;">
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: white; padding: 10px 0;">1일전</div>
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: orange;">감자/수미(등급:중품)</div>
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: white;">소매 개당 가격</div>
+      <div v-if="myapi.unit != ''" style="float: left;">
+        <div style="font-size: 10px; display: inline-block; margin-left: 15px; color: orange;">{{groupbuying.food_kor}}</div>
+        <div style="font-size: 10px; display: inline-block; margin-left: 15px; color: white;">소매 {{myapi.unit}}당 {{myapi.price}}가격</div>
+      </div>
+      <div v-if="myapi.unit == ''" style="text-align:center; padding:10px;">
+        <div style="font-size: 10px;  margin-left: 15px; color: white;">해당 음식의 가격정보가 없습니다.</div>
+        <div style="font-size: 10px;  margin-left: 15px; color: white;">게시물 작성자에게 문의해주세요.</div>
       </div>
       <div style="float: right;">
         <div style="font-size: 6px; display: inline-block; margin-right: 20px; color: gray; padding-top: 20px;">출처: 농산물 유통정보 KAMIS</div>
@@ -127,6 +130,12 @@ export default {
       memberList: '',
       directchat: '',
       openMember: false,
+      xmldata:[],
+      myapi : {
+                    name : '',
+                    unit : '',
+                    price : '',
+                },
     }
   },
   computed: {
@@ -170,6 +179,25 @@ export default {
         .catch(error => {
           // console.log(error)
         })
+
+axios
+        .get(`http://localhost:9999/food/api/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            console.log(this.xmldata);
+            for(var i=0; i<this.xmldata.price.length;i++){
+                        var tF = this.xmldata.price[i];
+                        var tFname = tF.productName.split('/')[0];
+                        if(tF.product_cls_code == '01' ){
+                            if(tFname==this.groupbuying.food_kor){
+                                this.myapi.name = tFname;
+                                this.myapi.unit = tF.unit;
+                                this.myapi.price = tF.dpr1;
+                            }
+                        }
+                    }
+            }
+        )
     }
   },
   mounted() {

@@ -25,7 +25,7 @@
   <div>
    <div @click="opentutorial" class="introduce" style="cursor:pointer">
       <!-- <div class="introduce"> -->
-      <div class="introduceIMG" :style="{'background-position-x': (frameSize.x-360)/2-33+'px'}"></div>
+      <div class="introduceIMG" :style="{'background-position-x': (360-frameSize.x)/2+'px'}"></div>
       <div style="height:112px;width:50%; float:right; text-align:right;
     font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;padding-top: 17px;
     padding-right: 5px;  text-overflow:hidden;">
@@ -41,9 +41,8 @@
       :key="i"
       :src="item.src"
       hide-delimiters
-      style="width:100%;height:100%;"
+      style="width:100%;height:100%;cursor:pointer;"
       @click="openLink(item.link)"
-      style="cursor:pointer;"
     ></v-carousel-item>
   </v-carousel>
   </div> 

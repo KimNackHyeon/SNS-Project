@@ -11,7 +11,7 @@
             <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
           </div>
         </router-link>
-        <div style="width:270px;height:100%; text-align:center; float:left; padding-top:8px;">
+        <div style="height:100%; text-align:center; float:left; padding-top:8px;" :style="{width:frameSize.x-90+'px'}">
           <h4>글쓰기</h4>
         </div>
         <div style="width:40px; height:100%; float:left; "></div>
@@ -33,7 +33,7 @@
           />
         </div>
       </div>
-      <div class="tags" style>
+      <div class="tags">
         <div style="height: 100%;">
           <v-container style="max-height:30px;min-height:13px; padding:0px;">
             <v-combobox
@@ -41,7 +41,7 @@
               :hide-no-data="!search"
               :search-input.sync="search"
               hide-selected
-              label="tags"
+              label="# 레시피 관련 태그를 입력해주세요(추가:enter)"
               multiple
               small-chips
               deletable-chips
@@ -65,7 +65,7 @@
       <h4>재료추가</h4>
     </div>
     <!-- end of 재료 등록 -->
-    <div class="addFood">
+    <div class="addFood" :style="{width:frameSize.x+'px',height:frameSize.y-50+'px'}">
       <div @click="closeAddFood" style="width:40px; height:40px;">
         <v-icon style="margin-left:330px;">mdi-close</v-icon>
       </div>
@@ -73,17 +73,17 @@
         <search-food @addfood="addFood"></search-food>
       </div>
     </div>
-    <div class="carousel-container" style="height:77%; width:100%;">
+    <div class="carousel-container" style=" width:100%;" :style="{height:(frameSize.x-30+frameSize.y*0.2)+'px'}">
       <div class="carousel-slide" style="height: 100%; display: flex; overflow: hidden; margin-left:11px;">
         <div
           v-for="(img,index) in items"
           :key="index"
-          style="width:300px; height: 94%; margin:20px; margin-top:20px; box-shadow: #80808066 1px 1px 8px; float:left;"
+          style=" margin:20px; margin-top:20px; box-shadow: #80808066 1px 1px 8px; float:left;" :style="{width:(frameSize.x-60)+'px',height:(frameSize.x-60+frameSize.y*0.2)+'px'}"
         >
-          <div style="width:300px; height:60%; margin:auto;">
+          <div style="margin:auto;" :style="{width:(frameSize.x-60)+'px',height:(frameSize.x-60)+'px'}">
             <div
               @click="deleteRecipe(index)"
-              style="position:fixed; width:30px; height:30px; margin-left:270px;"
+              style="position:fixed; width:30px; height:30px;" :style="{'margin-left':(frameSize.x-20-60)+'px'}"
             >
               <v-icon size="30px">mdi-close</v-icon>
             </div>
@@ -92,23 +92,23 @@
               style="width:100%; height:100%; background-color:#e0e0e0d9;"
             >
               <div class="fileBox">
-                <label for="ex_file">
-                  <v-icon size="100px">mdi-camera-plus</v-icon>
+                <label for="ex_file" :style="{margin:(frameSize.x-60)/4+'px',width:(frameSize.x-60)/2+'px',height:(frameSize.x-60)/2+'px',padding:(frameSize.x-140)/4+'px'}">
+                  <v-icon style="width:50%; height:50%" :size="80">mdi-camera-plus</v-icon>
                 </label>
                 <input
                   id="ex_file"
                   type="file"
                   accept="image/*"
                   @change="onChange($event,index)"
-                  style="width:150px; height:150px;"
+                  :style="{width:(frameSize.x-60)/2+'px',height:(frameSize.x-60+frameSize.y*0.2)/2+'px'}"
                 />
               </div>
             </div>
             <div v-if="img.imageUrl != null" id="preview" style="width:100%; height:100%;">
-              <img style="width:300px; height:300px;" :src="img.imageUrl" />
+              <img :style="{width:(frameSize.x-60)+'px',height:(frameSize.x-60)+'px'}" :src="img.imageUrl" />
             </div>
           </div>
-          <div style="width:300px; height:40%; border-top: 1px solid #80808063;">
+          <div style="border-top: 1px solid #80808063;" :style="{width:(frameSize.x-60)+'px',height:(frameSize.y*0.2)+'px'}">
             <textarea
               style="width:100%; height:100%; resize: none; "
               v-model="items[index].desc"
@@ -125,8 +125,8 @@
         </v-container>-->
         <!-- </v-dialog> -->
 
-        <div class="plusBtnArea">
-          <div class="plusBtn" @click="addRecipe">
+        <div class="plusBtnArea" style="width:100%; height:100%;">
+          <div class="plusBtn" @click="addRecipe" :style="{'margin-top':(frameSize.y-407)/2+'px','margin-left':(frameSize.x-150-60)/2+'px'}">
             <v-icon size="100px">mdi-plus</v-icon>
           </div>
         </div>
@@ -139,8 +139,7 @@
     <div
       @click="whiteReciptComplete"
       style="height: 45px;
-    width: 100%;
-    background-color: rgb(160,212,105); text-align:center; padding:5px;"
+    background-color: rgb(160,212,105); text-align:center; padding:5px; position:fixed" :style="{width:frameSize.x+'px'}"
     >
       <h3 v-if="!loading">레시피 등록</h3>
       <div align="center">
@@ -148,10 +147,13 @@
       </div>
     </div>
     <div>
-      <div class="toLeftBtn" @click="clicktoLeftBtn">
+      <div class="toLeftBtn" @click="clicktoLeftBtn" :style="{'margin-top':-(frameSize.y-50)/2+'px'}">
         <v-icon color="white" size="47px">mdi-chevron-left</v-icon>
       </div>
-      <div class="toRightBtn" @click="clicktoRightBtn">
+      <div class="showPage" :style="{'margin-top':-100+'px','margin-left':(frameSize.x-80)/2+'px'}">
+        - {{thisPage}} -
+      </div>
+      <div class="toRightBtn" @click="clicktoRightBtn" :style="{'margin-top':-(frameSize.y-50)/2+'px','margin-left':(frameSize.x-60)+'px'}">
         <v-icon color="white" size="47px">mdi-chevron-right</v-icon>
       </div>
     </div>
@@ -169,7 +171,7 @@ import Swal from "sweetalert2";
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
-  thisPage: 1,
+  
   components: { searchFood },
   name: "imageUpload",
   userinfo: "",
@@ -191,6 +193,8 @@ export default {
   ],
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
+      thisPage: 1,
       search: null,
       title: "",
       item: {
@@ -232,7 +236,18 @@ export default {
       });
     },
   },
-  methods: {
+  mounted(){
+    this.onResize();
+    
+  },
+  methods:{
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     addFood(foodlist) {
       var FL = "음식재료 ";
       for (var i = 0; i < foodlist.length; i++) {
@@ -268,23 +283,31 @@ export default {
       // console.log(this.items);
     },
     clicktoLeftBtn() {
+      if(this.thisPage>1){
       var thisMarginStr = $(".carousel-slide").css("margin-left");
       var thisMargin = Number(thisMarginStr.split("p")[0]);
       if (thisMargin < 11) {
-        var afterMargin = thisMargin + 340 + "px";
+        var afterMargin = thisMargin + (this.frameSize.x-20) + "px";
       }
       $(".carousel-slide").css("margin-left", afterMargin);
+        this.thisPage -=1;
+      }
+        console.log(this.thisPage);
       // transform:translateX(10px);
       // console.log(this.item);
       // console.log(this.items);
     },
     clicktoRightBtn() {
+      if(this.thisPage < this.items.length+1){
       var thisMarginStr = $(".carousel-slide").css("margin-left");
       var thisMargin = Number(thisMarginStr.split("p")[0]);
-      var afterMargin = thisMargin - 340 + "px";
+      var afterMargin = thisMargin - (this.frameSize.x-20) + "px";
       $(".carousel-slide").css("margin-left", afterMargin);
       // console.log(this.item);
       // console.log(this.items);
+        this.thisPage += 1;
+      }
+        console.log(this.thisPage+" "+this.items.length);
     },
     closeAddFood() {
       $(".addFood").css("display", "none");
@@ -474,8 +497,6 @@ whiteReciptComplete(){
 }
 
 .addFood {
-  width: 360px;
-  height: 510px;
   background-color: white;
   position: fixed;
   z-index: 101;
@@ -489,10 +510,9 @@ whiteReciptComplete(){
   background-color: #00000070;
   border-radius: 10px;
   color: white;
-  position: absolute;
-  left: 0;
+  position: fixed;
   /* margin-left: auto; */
-  margin-top: -362px;
+
 }
 .v-input__control {
   min-height: 13px;
@@ -503,30 +523,22 @@ whiteReciptComplete(){
   background-color: #00000070;
   border-radius: 10px;
   color: white;
-  position: absolute;
-  right: 0;
   /* margin-left: auto; */
-  margin-top: -362px;
+position: fixed;
 }
 .fileBox label {
-  width: 200px;
-  height: 200px;
-  margin: 47px;
   display: inline-block;
   color: #fff;
   font-size: inherit;
   background-color: #ffffff5c;
   border-radius: 150px;
   cursor: pointer;
-  padding: 43px;
 }
 
 .plusBtn {
   width: 150px;
   height: 150px;
   background-color: rgb(173 222 122 / 85%);
-  margin: 100px 19px;
-  margin-right: 108px;
   border-radius: 75px;
   -webkit-box-shadow: 1px 1px 10px #0000005e;
   box-shadow: 1px 1px 10px #0000005e;
@@ -534,10 +546,7 @@ whiteReciptComplete(){
   padding: 24px;
 }
 .plusBtnArea {
-  width: 240px;
-  height: 400px;
   margin: 20px;
-  margin-right: 149px;
   float: left;
 }
 
@@ -571,5 +580,16 @@ h3 {
 }
 .titleinput:hover {
   border: 2px solid #a0d469;
+}
+.showPage{
+  width: 80px;
+  height: 50px;
+
+  border-radius: 10px;
+  color: black;
+  position: fixed;
+  /* margin-left: auto; */
+  font-size: 30px;
+  text-align: center;
 }
 </style>
