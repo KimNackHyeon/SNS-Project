@@ -292,7 +292,7 @@ export default {
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
-        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=fe4633478ebd650ea111ca4b11bea91c&libraries=services';
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
         document.head.appendChild(script);
         var geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch(this.userinfo.address, (result, status) => {

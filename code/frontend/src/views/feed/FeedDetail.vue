@@ -15,8 +15,8 @@
       </div>      
       <div style="overflow: hidden; padding: 5px; border-bottom: 1px solid lightgray;">
         <div style="float: left;">
-          <v-avatar size="35"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 style="display: inline-block; padding-left: 10px">{{feedData.nickname}}</h4>
+          <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 style="display: inline-block; padding-left: 10px cursor : pointer;" @click="moveUser(feedData.email)">{{feedData.nickname}}</h4>
         </div>
         <div style="float: right; height: 35px; line-height: 35px">
           <!-- <v-btn icon color="lightgray">
@@ -84,9 +84,6 @@
         </div>
       </div>
       <!-- 제목 -->
-      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
-        <h2 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h2>
-      </div>
       <!-- 글 내용 -->
       <div style="">
         <div>
@@ -118,11 +115,11 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
+            <v-avatar size="35" style="cursor : pointer;"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content" style="display: table; padding-left: 15px;">
             <div style="display: table-cell; vertical-align: middle;">
-              <p class="commentUser" style="margin: 0;">{{comment.nickname}}</p>
+              <p class="commentUser" style="margin: 0; cursor : pointer;" @click="moveUser(feedData.email)">{{comment.nickname}}</p>
               <!-- <p style="margin: 0 5px 0 0;">댓글</p> -->
               <p style="margin: 0 5px 0 0;">{{comment.comment}}</p>
               <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
@@ -439,7 +436,7 @@ export default {
     overflow-x: scroll;
     white-space: nowrap;
     width: 100%;
-    height: 45px;
+    height: 55px;
     border-top: 1px solid lightgray;
     background-color: #80808021;
     padding: 3px 0px;

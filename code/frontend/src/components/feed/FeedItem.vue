@@ -6,8 +6,8 @@
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
         <div class="feed-user">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
+          <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px cursor : pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
@@ -76,11 +76,11 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
+            <v-avatar size="35" style="cursor : pointer;"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content" style="display: table; height: 35px; margin-left: 10px">
             <div style="display: table-cell; vertical-align: middle;">
-              <span class="commentUser" style="margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
+              <span class="commentUser" style="margin: 0 5px 0 0; cursor : pointer;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
               <span>{{comment.comment}}</span>
             </div>
           </div>
