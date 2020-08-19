@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div>
+    <div style="height:14.5%;">
       <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
         <router-link to="/feed/main">
           <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 100%; position: relative; padding-bottom: 20px;">
+    <div style="overflow: scroll; height: 85.5%; position: relative; padding-bottom: 20px;">
       <!-- 제목 -->
       <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
         <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
@@ -333,7 +333,15 @@ export default {
     },
     // 댓글 삭제하기
     deleteComment(feedData_id, comment) {
+      var comm = this.feedData.comments[this.feedData.comments.indexOf(comment)];
       this.feedData.comments.splice(this.feedData.comments.indexOf(comment), 1);
+      console.log(comm);
+
+      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
+      .then(response =>{
+
+      })
+      
     },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){

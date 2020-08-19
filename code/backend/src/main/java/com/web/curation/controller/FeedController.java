@@ -411,6 +411,14 @@ public class FeedController {
 
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "피드 댓글 삭제")
+	@DeleteMapping("/feed/comment")
+	public ResponseEntity<String> deleteComment(@RequestParam Long no) {
+//		System.out.println(commentRepo.findById(no).get());
+		commentRepo.delete(commentRepo.findById(no).get());
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
 
 	public String upload(MultipartFile image, Long feedNo, String email) throws IllegalStateException, IOException {
 		System.out.println("UPLOAD =======================");
