@@ -7,7 +7,7 @@
         </div>
       </router-link>
       <div style="height:100%; text-align:center; padding-top:8px;">
-        <h4>공동구매 글쓰기</h4>
+        <h4>관리자에게 메일보내기</h4>
       </div>
     </div>
     <!-- 제목 -->
@@ -17,122 +17,21 @@
     <!-- 글작성 본문 -->
     <div style="padding: 10px 20px">
       <!-- 제목 -->
-      <div style="margin: 10px 0">
+      <div style="margin: 80px 0 0 0">
         <div style="float: left; width: 15%; margin-right: 10px">
           <span style="line-height: 40px">제목</span>
         </div>
         <div style="overflow: hidden;">
-          <input v-model="title" class="titleinput" type="text" placeholder="제목을 입력해주세요." style="float:left; width: 100%; height: 40px; padding: 0 10px;">
-        </div>
-      </div>
-      <!-- 품목 -->
-      <div style="margin: 10px 0">
-        <div style="float: left; width: 15%; margin-right: 10px">
-          <span style="line-height: 40px">품목</span>
-        </div>
-        <div style="overflow: hidden;">
-          <input type="text" v-model="food.name_kor" @click="getFood" class="setFood" placeholder="ex) 양파" style="float:left; width: 100%; height: 40px; text-align: center; font-size: 15px;">
-        </div>
-        <v-dialog v-model="dialog" scrollable width= "100%" class="adressDialog">
-          <v-card class="foodDialog">
-            <v-card-title >
-              <!-- 품목 검색 -->
-              <div style="width:100%;"> 
-                <div class="search" >
-                  <input class="s" placeholder="음식재료 이름 검색" v-on:input="searchQuery=$event.target.value" style="text-align:left;">
-                  <ul style="display:none;" tabindex="3" >
-                    <li tabindex="24" 
-                        v-for="(el, index) in filterList" 
-                        :key="index"
-                        style="z-index:22;"
-                        >
-                      <span>{{ el.name_kor }}</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-              <div style=" z-index:20;">
-                <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
-                  <div>
-                    <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
-                  </div>
-                  <div>
-                    {{ food.name_kor }}
-                  </div>
-                </div>
-              </div>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="dialog = false">닫기</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
-      <!-- 마감일 -->
-      <div style="margin: 10px 0">
-        <div style="float: left; width: 15%; margin-right: 10px">
-          <span style="line-height: 40px">마감일</span>
-        </div>
-        <div>
-          <v-menu
-            ref="menu1"
-            v-model="menu1"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-          <!-- prepend-inner-icon="mdi-calendar-check" -->
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="dateFormatted"
-                persistent-hint
-                v-bind="attrs"
-                @blur="date = parseDate(dateFormatted)"
-                @click="removedate"
-                v-on="on"
-                color="#a0d469"
-                hide-details
-                outlined
-                placeholder="YYYY/MM/DD"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" no-title @input="menu1 = false" color="#a0d469"></v-date-picker>
-          </v-menu>
-        </div>
-      </div>
-      
-      <!-- 참여 인원 -->
-      <div style="margin: 10px 0">
-        <div style="float: left; width: 15%; margin-right: 10px">
-          <span style="line-height: 40px">참여인원</span>
-        </div>
-        <div style="overflow: hidden;">
-          <input v-model="numberPeople" class="cntPeople" type="text" placeholder="숫자만 입력해주세요." style="float:left; width: 100%; height: 40px; ">
-        </div>
-      </div>
-      <!-- 파일 링크 -->
-      <div style="margin: 10px 0">
-        <div style="float: left; width: 15%; margin-right: 10px">
-          <span style="line-height: 40px">파일</span>
-        </div>
-        <div style="overflow: hidden;">
-          <input v-model="fileLink" class="fileinput" type="text" placeholder="ex) https://www.coupang.com/" style="float:left; width: 100%; height: 40px;">
+          <input v-model="title" class="titleinput" type="text" placeholder="메일 제목을 입력해주세요." style="float:left; width: 100%; height: 40px; padding: 0 10px;">
         </div>
       </div>
       <!-- 글 내용 -->
-      <div style="margin: 10px 0">
+      <div style="margin: 20px 0 0 0">
         <div style="float: left; width: 15%; margin-right: 10px">
-          <span style="line-height: 30px">내용</span>
+          <span style="line-height: 300px">내용</span>
         </div>
         <div style="overflow: hidden;">
-          <textarea v-model="content" placeholder="공동구매글에 들어갈 내용을 적어주세요." class="contentinput"></textarea>
+          <textarea style="height:300px" v-model="content" placeholder="관리자에게 문의할 내용을 적어주세요." class="contentinput"></textarea>
         </div>
       </div>
     </div>
@@ -143,7 +42,7 @@
       :style="{width:frameSize.x+'px'}" style=" height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
-      작성하기
+      전송하기
       </v-btn>
     </div>
   </div>
@@ -245,12 +144,13 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && this.userinfo.address) {
+      if (this.title && this.content ) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`http://localhost:9999/food/api/account/qna`, {title:this.title, content:sendContent, email:this.userinfo.email, nickname:this.userinfo.nickname})
           .then(response => {
             Swal.fire({
-            title: '등록이 완료되었습니다.',
+            icon:'success',
+            title: '전송이 완료되었습니다.',
           })
             this.$router.go(-1);
           })

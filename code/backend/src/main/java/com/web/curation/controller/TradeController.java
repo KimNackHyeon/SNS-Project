@@ -159,6 +159,7 @@ public class TradeController {
 	@PostMapping("/trade/removetrademember")
 	@ApiOperation(value = "우리동네 장터 참가멤버 삭제하기")
 	public ResponseEntity<ArrayList<Member>> removeparticipate(@RequestBody TradeMember trademember) {
+		System.out.println("hihi");
 		System.out.println(trademember.toString());
 		Optional<TradeMember> deleteUser = tradememberRepo.findByTradeNoAndParticipantEmail(trademember.getTradeNo(), trademember.getParticipantEmail());
 		tradememberRepo.delete(deleteUser.get());

@@ -22,32 +22,24 @@ public class GroupBuying {
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long no;
 	
-	@NotEmpty
 	private String email;
 	
-	@NotEmpty
 	private String nickname;
 	
-	@NotEmpty
 	private String title;
 	
-	@NotEmpty
 	private String food;
 	
-	@NotEmpty
 	private String food_kor;
 	
-	@NotEmpty
 	private String address;
 	
-	@NotEmpty
 	private String end_date;
 	
 	private Long max_people;
 	
 	private Long now_people;
 	
-	@NotEmpty
 	private String link;
 	
 	private String content;
@@ -60,9 +52,9 @@ public class GroupBuying {
 	public GroupBuying() {
 		super();
 	}
-	public GroupBuying(Long no, @NotEmpty String email, @NotEmpty String nickname, @NotEmpty String title,
-			@NotEmpty String food, @NotEmpty String food_kor, @NotEmpty String address, @NotEmpty String end_date,
-			@NotEmpty Long max_people, @NotEmpty Long now_people, @NotEmpty String link, String content,
+	public GroupBuying(Long no,  String email,  String nickname,  String title,
+			 String food,  String food_kor,  String address,  String end_date,
+			 Long max_people,  Long now_people,  String link, String content,
 			LocalDateTime regist_date) {
 		super();
 		this.no = no;

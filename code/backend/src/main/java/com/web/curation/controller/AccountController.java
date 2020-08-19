@@ -37,6 +37,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Evaluate;
 import com.web.curation.model.FeedData;
 import com.web.curation.model.Follow;
+import com.web.curation.model.GroupBuying;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
@@ -233,6 +234,11 @@ public class AccountController {
 		}
 
 		return response;
+	}
+	@PostMapping("/account/qna")
+	@ApiOperation(value = "관리자에게 문의하기")
+	public void researchpwd(@RequestBody GroupBuying groupbuying) {
+		memberService.qnaMail(groupbuying.getNickname(), groupbuying.getTitle(), groupbuying.getContent());
 	}
 
 	@PostMapping("/account/findpwd")
