@@ -317,11 +317,11 @@ export default {
         -1
       );
     },
-    whiteReciptComplete() {
-      if (store.state.kakaoUserInfo.email != null) {
+whiteReciptComplete(){
+      if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
         // console.log(this.userinfo);
-      } else {
+      }else{
         this.userinfo = store.state.userInfo;
       }
       if(!this.title){
@@ -350,62 +350,62 @@ export default {
       this.loading = true;
 
       var formData = new FormData();
-      formData.append("email", this.userinfo.email);
+      formData.append('email',this.userinfo.email);
       const contents = [];
 
-      this.items.forEach((item) => {
-        if (item.desc != "" && item.desc != null) {
-          contents.push(item.desc.replace(/(?:\r\n|\r|\n)/g, "<br />"));
-        } else {
-          contents.push(" ");
+      this.items.forEach(item => {
+        if(item.desc != '' && item.desc!=null){
+          contents.push(item.desc.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+        }else{
+          contents.push(' ');
         }
-        formData.append("images", item.file);
+        formData.append('images',item.file);
       });
 
       const feedData = {
-        title: this.title,
-        email: this.userinfo.email,
-        nickname: this.userinfo.nickname,
-        profile: this.userinfo.profile_image_url,
-        likecount: 0,
-      };
+        title : this.title,
+        email : this.userinfo.email,
+        nickname : this.userinfo.nickname,
+        profile : this.userinfo.profile_image_url,
+        likecount : 0,
+      }
 
       const data = {
-        feedData: feedData,
-        food: this.foodlist,
-        tags: this.tags,
-        contents: contents,
-        images: this.images,
-      };
+        feedData : feedData,
+        food : this.foodlist,
+        tags : this.tags,
+        contents : contents,
+        images : this.images
+      }
 
       // console.log(data);
+      
 
       axios
-        .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((response) => {
-          // console.log(response.data);
-          this.images = response.data;
-          data.images = this.images;
-          // console.log(data);
+      .post(`https://i3b301.p.ssafy.io:9999/food/api/feed/img`, formData,{
+        headers: { 'Content-Type': 'multipart/form-data' } 
+      })
+      .then((response)=>{
+        // console.log(response.data);
+        this.images = response.data;
+        data.images = this.images;
+        // console.log(data);
 
-          let timerInterval;
-          Swal.fire({
-            title: "레시피 등록중",
-            // html: '전송까지 <b></b> 초 남았습니다.',
-            timer: 1000 * this.items.length + 2000,
-            timerProgressBar: true,
-            onBeforeOpen: () => {
-              Swal.showLoading();
-              Swal.color = "green";
-              timerInterval = setInterval(() => {
-                const content = Swal.getContent();
-                if (content) {
-                  const b = content.querySelector("b");
-                  if (b) {
-                    b.textContent = Swal.getTimerLeft();
-                  }
+        let timerInterval;
+        Swal.fire({
+          title: '레시피 등록중',
+          // html: '전송까지 <b></b> 초 남았습니다.',
+          timer: 1000*this.items.length + 2000,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            Swal.color= 'green';
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
                 }
               }
             }, 100)
@@ -426,9 +426,14 @@ export default {
             // console.log('I was closed by the timer')
           }
         })
-        .catch((error) => {
-          // console.log(error.response);
-        });
+      //   setTimeout(() => {
+        
+      // }, 1000*this.items.length + 2000);
+      })
+      .catch((error)=>{
+        // console.log(error.response);
+      });
+        
     },
     register(data) {
       // console.log(data);
