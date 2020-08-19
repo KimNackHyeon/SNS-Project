@@ -55,7 +55,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete1(food)" class="card" v-for="(food,index) in filterListImg1" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -120,7 +120,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style="z-index:20;">
                 <div @click="chooseComplete2(food)" class="card" v-for="(food,index) in filterListImg2" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -473,5 +473,8 @@ input{
   border: 1px solid lightgray;
   border-radius: 4px;
   padding: 5px 10px
+}
+.contentinput:hover {
+  border: 2px solid #a0d469;
 }
 </style>

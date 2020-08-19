@@ -15,3 +15,11 @@ fieldset {
 .v-text-field input {
   text-align: center;
 }
+.modifygroupbuying .v-input__slot {
+  min-height: unset !important;
+  height: 40px;
+  border: 1px solid lightgray;
+}
+.modifygroupbuying .v-input__slot:hover {
+  border: 2px solid #a0d469;
+}

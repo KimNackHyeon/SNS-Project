@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="modifygroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -433,7 +433,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

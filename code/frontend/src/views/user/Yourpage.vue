@@ -316,9 +316,6 @@ export default {
 }
 </script>
 <style scoped>
-  .v-dialog {
-    height: 70%;
-  }
   .follow {
     padding: 10px 0 10px 0;
     overflow: hidden;
@@ -343,5 +340,8 @@ export default {
   .followbtn {
     float: right;
     width: 50px;
+  }
+  .v-card {
+    height: 420px;
   }
 </style>

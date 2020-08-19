@@ -54,7 +54,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -257,7 +257,7 @@ export default {
           .catch(error => {
           })
       }
-      else if (!this.oknumPeople) {
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && !this.oknumPeople) {
         Swal.fire({
           title: '참여인원 수를 확인해 주세요',
           text: '참여인원은 2명 이상부터 가능합니다.',
@@ -425,7 +425,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

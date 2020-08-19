@@ -124,6 +124,11 @@
               <p style="margin: 0; font-size: 12px">{{comment.create_date}}</p>
             </div>
           </div>
+          <div style="float: right; width: 10%" v-if="comment.email==userinfo.email">
+            <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
+              <v-icon size="18px">mdi-trash-can-outline</v-icon>
+            </v-btn>
+          </div>
         </div>
       </div>
       
@@ -326,6 +331,10 @@ export default {
 
       this.feedData.comments.push(comment);
     },
+    // 댓글 삭제하기
+    deleteComment(feedData_id, comment) {
+      this.feedData.comments.splice(this.feedData.comments.indexOf(comment), 1);
+    },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
@@ -500,7 +509,7 @@ export default {
   }
   .content {
     float: left;
-    width: 85%;
+    width: 80%;
     height: 60px;
   }
   .commentUser {

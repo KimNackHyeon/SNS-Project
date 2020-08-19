@@ -307,9 +307,6 @@ export default {
 </script>
 
 <style scoped>
-  .v-dialog {
-    height: 70%;
-  }
   .follow {
     padding: 10px 0 10px 0;
     overflow: hidden;
