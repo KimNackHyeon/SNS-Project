@@ -381,8 +381,8 @@ data() {
                
                 var sum = 0;
                 if(this.changeFoodsTemp.length<2){
-                    if(this.totalShareAmount<=this.Nowgra.amount){
-                        if(this.nowmyamount>this.totalShareAmount){
+                    if(Number(this.totalShareAmount)<=Number(this.Nowgra.amount)){
+                        if(Number(this.nowmyamount)>Number(this.totalShareAmount)){
                             Swal.fire({
                                 icon: 'error',
                                 title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
@@ -448,7 +448,7 @@ data() {
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
@@ -469,7 +469,7 @@ data() {
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
