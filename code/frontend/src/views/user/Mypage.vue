@@ -7,6 +7,8 @@
             <div class="myphoto"><v-avatar size="100"><img :src="userinfo.profile_image_url" alt="John"></v-avatar></div>
             <div class="myprofil">
               <div style="margin: 10px">
+                <!-- <img style="width: 50px; height: 50px;" src="../../assets/images/fresh_grade/4.png" alt="신선도"> -->
+                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도">
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
                 <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
@@ -17,7 +19,7 @@
                     <h1>{{userData.recipe}}</h1>
                   </v-col>
                   <!-- 팔로워 -->
-                  <v-col class="myprofil-box" cols="4" @click="onFollower">
+                  <v-col class="onmyprofil-box" cols="4" @click="onFollower">
                     <span style="color: black;">팔로워</span>
                     <h1>{{userData.follower}}</h1>
                   </v-col>
@@ -45,7 +47,7 @@
                     </v-card>
                   </v-dialog>
                   <!-- 팔로잉 -->
-                  <v-col class="myprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
+                  <v-col class="onmyprofil-box" cols="4" style="border-right: 1px solid lightgray" @click="onFollowing">
                     <span>팔로잉</span>
                     <h1>{{userData.following}}</h1>
                   </v-col>
@@ -169,6 +171,7 @@ export default {
         recipe:"",
         follower:"",
         following:"",
+        score:"",
       },
       recipes:[],
       scraps:[],
@@ -279,30 +282,35 @@ export default {
     },
     scrapOn(){
       this.myscrap = true
+      $('.myprofil-scrap').css('background-color', 'rgb(202, 231, 171)')
+      $('.myprofil-feed').css('background-color', 'white')
     },
     scrapOff(){
       this.myscrap = false
+      $('.myprofil-feed').css('background-color', 'rgb(202, 231, 171)')
+      $('.myprofil-scrap').css('background-color', 'white')
     },
   },
   created() {
     if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-      }else{
-        this.userinfo = store.state.userInfo;
-      }
-      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/mypage/`+ this.userinfo.email)
-        .then(response => {
-          // console.log(response);
-          this.userData.recipe = response.data.recipe;
-          this.userData.following = response.data.following;
-          this.userData.follower = response.data.follower;
-          // console.log(this.userData.follower+" "+this.userData.following);
-        })
-        .catch(error => {
-          // console.log(error.response)
-        })
-      // console.log(this.kakaoUserInfo);
-  },
+    }else{
+      this.userinfo = store.state.userInfo;
+    }
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/mypage/`+ this.userinfo.email)
+      .then(response => {
+        this.userData.recipe = response.data.recipe;
+        this.userData.following = response.data.following;
+        this.userData.follower = response.data.follower;
+        const score = Math.floor(response.data.eval_point/response.data.eval_count);
+        this.userData.score = score +"";
+        // console.log(this.userData.follower+" "+this.userData.following);
+      })
+      .catch(error => {
+        // console.log(error.response)
+      })
+    // console.log(this.kakaoUserInfo);
+},
 }
 </script>
 

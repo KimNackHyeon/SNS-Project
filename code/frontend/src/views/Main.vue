@@ -23,7 +23,7 @@
     </div>
   </div>
   <div>
-   <div @click="opentutorial" class="introduce">
+   <div @click="opentutorial" class="introduce" style="cursor:pointer">
       <!-- <div class="introduce"> -->
       <div class="introduceIMG"></div>
       <div style="height:112px; width:186px; float:left; text-align:right;
@@ -43,6 +43,7 @@
       :width="frameSize.x"
       :height="frameSize.y"
       @click="openLink(item.link)"
+      style="cursor:pointer;"
     ></v-carousel-item>
   </v-carousel>
   </div> 

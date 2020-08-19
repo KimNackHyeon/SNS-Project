@@ -303,7 +303,7 @@
       border-top: 1px solid lightgray;
     }
     .profil {
-      height: 23%;
+      height: 27%;
       overflow: hidden;
     }
     .myphoto {
@@ -336,6 +336,14 @@
         padding-top: 5px;
       }
     }
+    .onmyprofil-box {
+      border-left: 1px solid lightgray;
+      text-align: center;
+      cursor: pointer;
+      h2 {
+        padding-top: 5px;
+      }
+    }
     .onmyprofil-box:hover {
       background-color: #eee;
     }
@@ -362,6 +370,9 @@
         padding-bottom: 5px;
       }
     }
+    .myprofil-feed:hover {
+      background-color: rgb(202, 231, 171);
+    }
     .myprofil-scrap {
       width: 50%;
       height: 100%;
@@ -375,8 +386,11 @@
         padding-bottom: 5px;
       }
     }
+    .myprofil-scrap:hover {
+      background-color: rgb(202, 231, 171);
+    }
     .myrecipe {
-      height: 100%;
+      height: 60%;
     }
     .myrecipe-title {
       text-align: center;
@@ -399,11 +413,11 @@
     //회원가입
     &.join {
       .btn-bottom {
-        position: inherit;
-        @include wrap;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        font-size: 18px;
+        // position: inherit;
+        // @include wrap;
+        // margin-top: 20px;
+        // margin-bottom: 20px;
+        // font-size: 18px;
       }
     }
   }
