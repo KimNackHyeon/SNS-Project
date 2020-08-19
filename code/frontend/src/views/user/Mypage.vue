@@ -10,7 +10,7 @@
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
                 <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
-              <v-container style="min-height: 0; padding: 10px" >
+              <v-container style="min-height: 0; padding: 10px; width: 250px" >
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
