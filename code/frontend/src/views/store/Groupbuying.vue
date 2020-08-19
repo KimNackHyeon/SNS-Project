@@ -63,9 +63,6 @@
                           <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
-                      <div>
-                        <p style="height: 60px; line-height: 60px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
-                      </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
                       <div>
@@ -122,6 +119,7 @@ export default {
       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       inputKeyword:'',
       originalList:[],
+      addresspoint: [],
     }
   },
   mounted(){
@@ -294,7 +292,7 @@ export default {
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
-        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
+        script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=fe4633478ebd650ea111ca4b11bea91c&libraries=services';
         document.head.appendChild(script);
         var geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch(this.userinfo.address, (result, status) => {
@@ -302,14 +300,15 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m < this.mapdata.length; m++) {
+        for (var m = 0; m <= this.mapdata.length; m++) {
           geocoder.addressSearch(this.mapdata[m], (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              // console.log(result[0])
               var distancedata = [
                 new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)]
+                new kakao.maps.LatLng(result[0].y, result[0].x)
+              ]
               // console.log(distancedata)
+              this.addresspoint.push([result[0].y, result[0].x])
               var polyline = new kakao.maps.Polyline({
                 path: distancedata,
               })
@@ -321,6 +320,7 @@ export default {
             }
           })
         }
+        console.log(this.addresspoint)
       })
       .catch(error => {
         console.log(error)
