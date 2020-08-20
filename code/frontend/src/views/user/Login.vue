@@ -3,8 +3,9 @@
     <div class="wrapC" :style="{'margin-top': ((frameSize.y*0.15)-40)/2 +'px'}">
       <!-- :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}" -->
       <div style="width:100%; height : 25%;">
-        <div :style="{ height: (frameSize.y*0.15)+'px', 'padding-top' : ((frameSize.y*0.15)-40)/2 +'px' }">
-          <p class="login-title" style="font-size : 40px">우리 동네 냉장고</p>
+        <div :style="{ height: (frameSize.y*0.15)+'px', 'padding-top' : ((frameSize.y*0.15)-90)/2 +'px','margin-bottom' : ((frameSize.y*0.15)-50)/2 +'px' }">
+          <!-- <p class="login-title" style="font-size : 40px">우리 동네 냉장고</p> -->
+          <img src="../../assets/images/title.gif" style="width:100%; height:100%;">
         </div>
         <!-- login 큰 클자 -->
         <div style="width : 100%; margin: auto;" :style="{height: (frameSize.x*0.4)+'px'}">
