@@ -438,7 +438,7 @@ export default {
         this.confirm = true;
         this.isConfirm = true;
         this.checkJoinForm();
-        // console.log('good')
+        // // console.log('good')
         Swal.fire({
           icon: "success",
           title: "인증이 완료되었습니다.",
@@ -446,7 +446,7 @@ export default {
           timer: 1500,
         });
       } else {
-        // console.log('실패')
+        // // console.log('실패')
 
         Swal.fire({
           title: "다시 한번 더 확인해주세요",
@@ -461,14 +461,14 @@ export default {
           this.signupData
         )
         .then((data) => {
-          // console.log(data.data.data)
+          // // console.log(data.data.data)
           if (data.data.data == "1") {
-            // console.log('중복')
+            // // console.log('중복')
             this.nickErrMsg = true;
             this.nickSucMsg = false;
             this.checkJoinForm();
           } else {
-            // console.log('가능')
+            // // console.log('가능')
             this.nickSucMsg = true;
             this.nickErrMsg = false;
             this.checkJoinForm();
@@ -523,7 +523,7 @@ export default {
         }).then((result) => {
           /* Read more about handling dismissals below */
           if (result.dismiss === Swal.DismissReason.timer) {
-            console.log("I was closed by the timer");
+            // console.log("I was closed by the timer");
           }
         });
         axios
@@ -533,17 +533,17 @@ export default {
           )
           .then((data) => {
             if (data.data.data == "1") {
-              // console.log('success')
+              // // console.log('success')
               this.completeMail = true;
               Swal.fire({
                 title: "다시 한번 더 확인해주세요",
                 text: "이미 가입된 이메일입니다.",
               });
             } else {
-              // console.log('no')
+              // // console.log('no')
               this.confirm = !confirm;
               this.checkCert = data.data.data;
-              // console.log(data.data.data)
+              // // console.log(data.data.data)
               this.completeMail = false;
             }
           });
@@ -561,19 +561,19 @@ export default {
         this.emailErrMsg = false;
         this.completeMail = false;
         if (this.emailSucMsg) {
-          // console.log('sucsess1')
-          // console.log(this.signupData.email)
+          // // console.log('sucsess1')
+          // // console.log(this.signupData.email)
           axios
             .post(
               `https://i3b301.p.ssafy.io:9999/food/api/account/checkemail`,
               this.signupData
             )
             .then((data) => {
-              // console.log('sucsess2')
+              // // console.log('sucsess2')
               if (data.data.data === "1") {
                 this.completeMail = true;
               } else {
-                // console.log('no')
+                // // console.log('no')
                 this.checkCert == data.data.data;
                 this.completeMail = false;
               }

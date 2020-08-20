@@ -12,7 +12,7 @@
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
                 <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
-              <v-container style="min-height: 0; padding: 10px; width: 250px" >
+              <v-container style="min-height: 0; padding: 10px;">
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
@@ -148,20 +148,20 @@ export default {
 
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myrecipe/`, {params: {email: this.userinfo.email}})
       .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.recipes = response.data;
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })
 
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myscrap/`, {params: {email: this.userinfo.email}})
       .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.scraps = response.data;
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })
     },
   data() {
@@ -211,11 +211,11 @@ export default {
       }
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`, {params: {email: this.userinfo.email}})
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.followers = response.data;
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })
     },
     onFollowing() {
@@ -226,7 +226,7 @@ export default {
       }
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/following/`, {params: {email: this.userinfo.email}})
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.followings = response.data
           this.followings.forEach(following => {
             this.$set(following, 'isfollow', true)
@@ -240,15 +240,15 @@ export default {
           // })
           // })
 
-          // console.log(this.followings)
+          // // console.log(this.followings)
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })
     },
     onFollowBtn(following) {
       following.isfollow = !following.isfollow
-      // console.log(following);
+      // // console.log(following);
       // this.isfollow = !this.isfollow;
       if(following.isfollow){
         this.addFollow(following.email);
@@ -282,22 +282,22 @@ export default {
       // axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.userinfo.email)
         .then(response => {
-          // console.log(response);
+          // // console.log(response);
           this.userData.nickname = response.data.nickname;
           this.userData.image = response.data.img;
           this.userData.following = response.data.following;
           this.userData.follower = response.data.follower;
-          // console.log(this.userData.follower+" "+this.userData.following);
+          // // console.log(this.userData.follower+" "+this.userData.following);
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     moveUser(user_email){
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        // console.log(user_email)
+        // // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
       }
     },
@@ -325,12 +325,12 @@ export default {
         this.userData.follower = response.data.follower;
         const score = Math.floor(response.data.eval_point/response.data.eval_count);
         this.userData.score = score +"";
-        // console.log(this.userData.follower+" "+this.userData.following);
+        // // console.log(this.userData.follower+" "+this.userData.following);
       })
       .catch(error => {
-        // console.log(error.response)
+        // // console.log(error.response)
       })
-    // console.log(this.kakaoUserInfo);
+    // // console.log(this.kakaoUserInfo);
 },
 }
 </script>

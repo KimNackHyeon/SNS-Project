@@ -208,13 +208,13 @@ export default {
           this.memberList = response.data
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
     },
     onParticipate() {
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/participate`, {tradeNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           if(response.data == "Fail"){
             Swal.fire({
               icon: 'error',
@@ -237,14 +237,14 @@ export default {
           window.location.reload();
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
     },
     moveUser(user_email){
       if(user_email == this.userinfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        // console.log(user_email)
+        // // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
         this.openMember = false;
       }
@@ -262,7 +262,7 @@ export default {
       })
       }
     })
-    console.log(user_email+" "+this.$route.params.id+" "+user_nickname)
+    // console.log(user_email+" "+this.$route.params.id+" "+user_nickname)
     axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/removetrademember`, {participantEmail:user_email, tradeNo:this.$route.params.id, participantNickname: user_nickname})
         .then(response => {
           this.memberList = response.data
@@ -273,7 +273,7 @@ export default {
   },
   created(){
     this.privatechat = this.$route.params.id
-    console.log(this.privatechat)
+    // console.log(this.privatechat)
     if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
@@ -294,7 +294,7 @@ export default {
       // 내용 엔터 변환
       this.detailinfo.content = this.detailinfo.content.split('^').join('<br />');
 
-      console.log(this.detailinfo.email);
+      // console.log(this.detailinfo.email);
     })
     .catch(error => {
     })
@@ -303,12 +303,12 @@ export default {
         .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
-            console.log(this.xmldata);
+            // console.log(this.xmldata);
             
             for(var i=0; i<this.xmldata.price.length;i++){
             var tF = this.xmldata.price[i];
             var tFname = tF.productName.split('/')[0];
-            console.log(tFname);
+            // console.log(tFname);
             if(tF.product_cls_code == '01' ){
               if(tFname == this.detailinfo.myfood_kor ){
                 this.myapi.name = tFname;

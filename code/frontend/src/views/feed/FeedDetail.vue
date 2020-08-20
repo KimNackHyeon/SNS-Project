@@ -80,6 +80,10 @@
         </div>
       </div>
       <!-- 제목 -->
+      <div style="text-align: center; padding: 5px 10px; border-bottom: 1px solid lightgray;">
+        <h3 style="font-weight: 500;text-overflow: ellipsis; overflow: hidden;">{{feedData.title}}</h3>
+      </div>
+
       <!-- 글 내용 -->
       <div style="">
         <div>
@@ -359,7 +363,7 @@ export default {
     deleteComment(feedData_id, comment) {
       var comm = this.feedData.comments[this.feedData.comments.indexOf(comment)];
       this.feedData.comments.splice(this.feedData.comments.indexOf(comment), 1);
-      console.log(comm);
+      // console.log(comm);
 
       axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
       .then(response =>{
@@ -395,7 +399,7 @@ export default {
                 showConfirmButton: false,
                 timer: 1500
             })
-            window.location.reload();
+            // window.location.reload();
             this.$router.push('/feed/main');
           })
         }

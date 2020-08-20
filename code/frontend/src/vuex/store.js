@@ -29,7 +29,7 @@ var db = firebase.firestore();
 window.db = db;
 
 db.settings({
-  timestampsInSnapshots: true
+  // timestampsInSnapshots: false,
 });
 
 Vue.use(Vuex)

@@ -24,7 +24,7 @@
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-flex style="width:90%; float:left;">
-            <v-toolbar color="rgba(160, 212, 105, 0.5)" text height="48px">
+            <v-toolbar color="rgba(202, 231, 171)" text height="48px">
               <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
@@ -159,7 +159,7 @@ export default {
               window.location.reload();
             })
             .catch(error => {
-              console.log(error.response)
+              // console.log(error.response)
             })
         }
       })
@@ -197,7 +197,7 @@ export default {
                     this.groupBuyings = response.data
                 })
                 .catch((error)=>{
-                    console.log(error.response);
+                    // console.log(error.response);
                 })
         this.distswitch = true;
         this.dateswitch = false;
@@ -210,7 +210,7 @@ export default {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.distswitch = false;
         this.dateswitch = false;
@@ -225,7 +225,7 @@ export default {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.dateswitch = true;
         this.distswitch = false;
@@ -238,7 +238,7 @@ export default {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.dateswitch = false;
         this.distswitch = false;
@@ -261,7 +261,7 @@ export default {
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      console.log(this.myList);
+      // console.log(this.myList);
         this.groupBuyings = this.originalList;
         this.groupBuyings = this.groupBuyings.filter(function (item) {
             return item.food_kor.indexOf(keyword)!=-1;
@@ -283,15 +283,15 @@ export default {
     // if(userinfo.email == )
     axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
       .then(response => {
-        // console.log(response)
+        // // console.log(response)
         this.groupBuyings = response.data;
         this.originalList = response.data;
-        // console.log(this.groupBuyings)
+        // // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
         }
-        // console.log(this.userinfo.address)
-        // console.log(this.mapdata)
+        // // console.log(this.userinfo.address)
+        // // console.log(this.mapdata)
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -303,30 +303,9 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m <= this.mapdata.length; m++) {
-          geocoder.addressSearch(this.mapdata[m], (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              var distancedata = [
-                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)
-              ]
-              // console.log(distancedata)
-              this.addresspoint.push([result[0].y, result[0].x])
-              var polyline = new kakao.maps.Polyline({
-                path: distancedata,
-              })
-              var distance = polyline.getLength();
-              // console.log(distance)
-              this.distancedata2.push(distance)
-              // this.otherdata.push(redata);
-          this.distancegroup.push(distancedata[1]) 
-            }
-          })
-        }
-        console.log(this.addresspoint)
       })
       .catch(error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 }
