@@ -10,7 +10,7 @@
       <div class="titleBox">
         <div class="pageTitle">
           <!-- <p style="margin: 11px; margin-left:162px;"> -->
-            "{{this.chatlist.otherNickname}}"님과의 채팅
+            "{{this.chatname}}"님과의 채팅
             <!-- </p> -->
         </div>
       </div>
@@ -199,14 +199,6 @@ export default {
       console.log(this.userinfo.email)
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
-      axios.get(`${SERVER_URL}/chattingrefresh/${this.chatNo}/${this.userinfo.email}`)
-        .then(response => {
-          this.chatlist = response.data
-          console.log(this.chatlist.otherNickname)
-        })
-        .catch(error => {
-          // console.log(error)
-        })
     }
 }
 </script>

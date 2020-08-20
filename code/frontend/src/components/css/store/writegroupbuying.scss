@@ -23,3 +23,6 @@ fieldset {
 .modifygroupbuying .v-input__slot:hover {
   border: 2px solid #a0d469;
 }
+.v-text-field__slot input {
+  border: unset;
+}
