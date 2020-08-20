@@ -303,27 +303,6 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m <= this.mapdata.length; m++) {
-          geocoder.addressSearch(this.mapdata[m], (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              var distancedata = [
-                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)
-              ]
-              // console.log(distancedata)
-              this.addresspoint.push([result[0].y, result[0].x])
-              var polyline = new kakao.maps.Polyline({
-                path: distancedata,
-              })
-              var distance = polyline.getLength();
-              // console.log(distance)
-              this.distancedata2.push(distance)
-              // this.otherdata.push(redata);
-          this.distancegroup.push(distancedata[1]) 
-            }
-          })
-        }
-        console.log(this.addresspoint)
       })
       .catch(error => {
         console.log(error)
