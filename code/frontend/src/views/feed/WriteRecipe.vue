@@ -66,10 +66,10 @@
     </div>
     <!-- end of 재료 등록 -->
     <div class="addFood" :style="{width:frameSize.x+'px',height:frameSize.y-50+'px'}">
-      <div @click="closeAddFood" style="width:40px; height:40px;">
-        <v-icon style="margin-left:330px;">mdi-close</v-icon>
+      <div @click="closeAddFood" style="width:40px; height:5%; margin-left: auto">
+        <v-icon style="">mdi-close</v-icon>
       </div>
-      <div style="width:100%; height:470px">
+      <div style="width:100%; height:83%">
         <search-food @addfood="addFood"></search-food>
       </div>
     </div>

@@ -100,24 +100,24 @@
             </div>
           </button>
         </div>
-        <div class="myrecipe" v-if="!myscrap">
+        <div class="myrecipe" style="overflow-y: scroll;" v-if="!myscrap">
           <h3 class="myrecipe-title">내 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+            <div class="myrecipe-img" style="width: 32%; height:32%" v-for="(recipe, i) in recipes" :key="i">
               <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
-                <img class="myrecipe-img-size" :src="recipe.img" alt="food">
+                <img class="myrecipe-img-size" style="width:100%; height:100%;" :src="recipe.img" alt="food">
                 <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food"> -->
               </router-link>
             </div>
           </div>
         </div>
         
-        <div class="myrecipe" v-if="myscrap">
+        <div class="myrecipe" style="overflow-y: scroll;" v-if="myscrap">
           <h3 class="myrecipe-title">내 스크랩</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img" v-for="(scrap, i) in scraps" :key="i">
+            <div class="myrecipe-img" style="width: 33%; height:33%" v-for="(scrap, i) in scraps" :key="i">
               <router-link :to="{ name: 'FeedDetail', params: { feedNo : scrap.feedNo }}">
-                <img class="myrecipe-img-size" :src="scrap.img" alt="food">
+                <img class="myrecipe-img-size" style="width:100%; height:100%;" :src="scrap.img" alt="food">
                 <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${scrap.img}`)" alt="food"> -->
               </router-link>
             </div>

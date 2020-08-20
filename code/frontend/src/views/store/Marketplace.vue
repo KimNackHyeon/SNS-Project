@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn   icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn text icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)"   height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" text height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -35,13 +35,13 @@
       </v-layout>
       
     </div>
-    <v-card  >
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
         <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
-            <v-col v-for="(info, i) in tradelist" :key="i" cols="12" class="onemarketplace">
+            <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onemarketplace" style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
                       <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
@@ -96,10 +96,10 @@
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2 btn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2 marketplacebtn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center btn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center marketplacebtn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -381,7 +381,11 @@ created() {
 .onemarketplace:hover {
   box-shadow: 0px 0px 10px rgb(160, 212, 105);
 }
-.btn:hover {
+.marketplacebtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.marketplacebtn:hover {
   box-shadow: 0px 0px 10px gray;
 }
 </style>

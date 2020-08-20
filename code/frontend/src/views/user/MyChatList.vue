@@ -30,7 +30,7 @@
         </div>
       </button>
     </div>
-    <v-card  >
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">

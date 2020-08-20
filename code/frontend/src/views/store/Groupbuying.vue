@@ -1,8 +1,8 @@
 <template>
   <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
   <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
-    <v-card  >
-      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', 'position': 'relative'}">
+    <v-card text>
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -12,7 +12,7 @@
             </router-link>
           </div>
           <v-flex>
-            <v-toolbar   style="border: solid 1px lightgrey" height="48px">
+            <v-toolbar text style="border: solid 1px lightgrey" height="48px">
               <div class="text-h6 mx-auto">
                 공동구매
               </div>
@@ -24,11 +24,11 @@
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-flex style="width:90%; float:left;">
-            <v-toolbar color="rgba(160, 212, 105, 0.5)"   height="48px">
-              <v-toolbar color="rgba(202, 231, 171)"   height="48px">
+            <v-toolbar color="rgba(160, 212, 105, 0.5)" text height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
-              <v-toolbar color="rgba(202, 231, 171)"   height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
             </v-toolbar>
@@ -41,9 +41,9 @@
         </v-layout>
         <div style="padding: 10px; padding-bottom: 40px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
-            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12" class="onegroupbuying">
+            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onegroupbuying" style="padding: 5px;" >
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                       <img height="80" width="80" padding="60" :src="require(`../../assets/images/food/${groupBuying.food}.png`)" style="border-radius: 5px;">
@@ -57,10 +57,10 @@
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
                       <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn class="btn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
+                          <v-btn class="groupbuyingbtn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn class="btn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
+                          <v-btn class="groupbuyingbtn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
                       <div>
@@ -312,6 +312,10 @@ export default {
 </script>
 
 <style scoped>
+.v-sheet.v-toolbar:not(.v-sheet--outlined) {
+  box-shadow: unset !important;
+  -webkit-box-shadow: unset !important;
+}
 .writeButton{
   width: 60px;
   height: 60px;
@@ -339,7 +343,11 @@ export default {
 .onegroupbuying:hover {
   box-shadow: 0px 0px 10px rgb(160, 212, 105);
 }
-.btn:hover {
+.groupbuyingbtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.groupbuyingbtn:hover {
   box-shadow: 0px 0px 10px gray;
 }
 </style>
