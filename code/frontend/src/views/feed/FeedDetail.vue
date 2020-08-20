@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%; height:100%;">
-    <div style="height:14.5%;">
+    <div :style="{height: (frameSize.y*0.15)+'px'}">
       <div style="width:100%; height:40px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
         <router-link to="/feed/main">
           <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div style="overflow: scroll; height: 85.5%; position: relative; padding-bottom: 20px;">
+    <div :style="{height: (frameSize.y*0.75)+'px'}" style="overflow: scroll; position: relative; padding-bottom: 20px;">
       <!-- 재료 -->
       <div style="overflow: hidden; border-bottom: 1px solid lightgray; height: 130px;">
         <!-- 나에게 있는 재료 -->
@@ -148,6 +148,11 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+      frameSize: {
+        x: window.innerHeight * 0.5625,
+        y: window.innerHeight,
+        per: 1,
+      },
       userinfo:'',
       nowFood : '',
       feedData: '',
@@ -169,7 +174,14 @@ export default {
       }
     },
   },
-
+  mounted() {
+    this.onResize();
+      if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
+  },
   created(){
      if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
@@ -267,6 +279,21 @@ export default {
         
   },
   methods: {
+    onResize() {
+      if (window.innerHeight * 0.5625 <= window.innerWidth) {
+        this.frameSize = {
+          x: window.innerHeight * 0.5625,
+          y: window.innerHeight,
+          per: innerHeight / 640,
+        };
+      } else {
+        this.frameSize = {
+          x: window.innerWidth,
+          y: window.innerWidth * 1.77,
+          per: innerWidth / 360,
+        };
+      }
+    },
     likedbtn() {
       this.feedData.isLike = !this.feedData.isLike;
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
