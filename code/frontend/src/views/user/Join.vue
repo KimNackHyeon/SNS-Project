@@ -74,7 +74,7 @@
           <span>약관을 동의합니다.</span>
         </label>
 
-      <v-dialog v-model="dialog" scrollable width= "100%">
+        <v-dialog v-model="dialog" scrollable width= "100%">
           <v-card>
             <v-card-title >약 관</v-card-title>
             <v-divider></v-divider>
@@ -208,8 +208,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      <span @click="handle_toggle" type="button">약관보기</span>
-      <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
+        <span @click="handle_toggle" type="button">약관보기</span>
+        <button v-if='JoinBtn' style="margin-top:60px;" class="btn-bottom" @click="$emit('signup', signupData)">가입하기</button>
+      </div>
     </div>
   </div>
 </template>

@@ -304,6 +304,7 @@ export default {
         this.userData.follower = response.data.follower;
         const score = Math.floor(response.data.eval_point/response.data.eval_count);
         this.userData.score = score +"";
+        console.log(this.userData.score)
         // console.log(this.userData.follower+" "+this.userData.following);
       })
       .catch(error => {
