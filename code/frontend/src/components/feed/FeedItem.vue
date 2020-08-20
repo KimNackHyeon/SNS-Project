@@ -1,6 +1,6 @@
 <template>
   <div class="feed-item">
-    <v-toolbar color="rgba(202, 231, 171)" flat height="36px">
+    <v-toolbar color="rgba(202, 231, 171)" text height="36px">
       <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch>
     </v-toolbar>
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
