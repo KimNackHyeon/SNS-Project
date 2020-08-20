@@ -196,7 +196,7 @@ import {foods} from '../Food/Foods.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
 import store from '../../vuex/store.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 export default {
   components: {
@@ -224,7 +224,7 @@ export default {
     }
   },
   created() {
-    axios.post(`http://localhost:9999/food/api/trade/beforeupdate` , {no:this.$route.params.pagenumber})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate` , {no:this.$route.params.pagenumber})
       .then(response => {
         this.beforedata = response.data
         // 줄바꿈 
@@ -234,33 +234,33 @@ export default {
         this.food2 = this.beforedata.tradefood2_kor
         this.food2_en = this.beforedata.tradefood2
         this.address = this.beforedata.address
-        console.log(this.beforedata)
+        // console.log(this.beforedata)
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   },
   methods: {
     getFood1(){
-      console.log('getFood1 실행')
+      // console.log('getFood1 실행')
       if (this.dialog1 === false) {
         this.dialog1 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog1 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     getFood2(){
-      console.log('getFood2 실행')
+      // console.log('getFood2 실행')
       if (this.dialog2 === false) {
         this.dialog2 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog2 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     chooseComplete1:function(food){
@@ -289,7 +289,7 @@ export default {
       }
     },
     handleAddress(data){
-      console.log(data)
+      // console.log(data)
       let fullAddress = data.address
       let extraAddress = ''
       if (data.addressType === 'R') {
@@ -312,7 +312,7 @@ export default {
       this.beforedata.tradefood2 = this.food2_en
       this.beforedata.address = this.address
       const sendContent = this.beforedata.content.replace(/\n/g, '^')
-      axios.post(`http://localhost:9999/food/api/trade/updatetrade`, 
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/updatetrade`, 
       {no:this.$route.params.pagenumber,address: this.beforedata.address, content: sendContent, 
       email: this.beforedata.email, myfood: this.beforedata.myfood, myfood_kor: this.beforedata.myfood_kor, 
       myfoodcount1: this.beforedata.myfoodcount1, myfoodcount2: this.beforedata.myfoodcount2, nickname: this.beforedata.nickname, 
@@ -320,10 +320,10 @@ export default {
       tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, 
       tradefoodcount2: this.beforedata.tradefoodcount2})
         .then(response => {
-          console.log(this.beforedata)
+          // console.log(this.beforedata)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
   },
@@ -331,7 +331,7 @@ export default {
     filterList1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -344,7 +344,7 @@ export default {
     filterListImg1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -360,7 +360,7 @@ export default {
     filterList2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -373,7 +373,7 @@ export default {
     filterListImg2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {

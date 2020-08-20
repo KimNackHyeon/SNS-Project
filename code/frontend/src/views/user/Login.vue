@@ -112,13 +112,13 @@ export default {
   methods: {
 
     // onSuccess(data){
-    //     // console.log("success");
-    //     // console.log(data);
+    //     // // console.log("success");
+    //     // // console.log(data);
     //     this.$cookies.set("auth-token", data.access_token);
     //     Kakao.API.request({
     //       url: '/v2/user/me',
     //         success: function(response) {
-    //           // console.log(response);
+    //           // // console.log(response);
     //           const kakaoUserInfo = {
     //             email: response.kakao_account.email,
     //             nickname: response.kakao_account.profile.nickname,
@@ -127,17 +127,17 @@ export default {
     //           };
     //           store.commit('deluserInfo');
     //           store.commit('setKakaoUserInfo', response.kakao_account)
-    //           // console.log(store.state.kakaoUserInfo)
+    //           // // console.log(store.state.kakaoUserInfo)
     //         },
     //         fail: function(error) {
-    //           // console.log(error);
+    //           // // console.log(error);
     //         }
     //     });
     //     this.$router.push("/main");
     // },
     // onFailure(data){
-    //     // console.log(data)
-    //     // console.log("failure")
+    //     // // console.log(data)
+    //     // // console.log("failure")
     // },
 
     checkForm() {

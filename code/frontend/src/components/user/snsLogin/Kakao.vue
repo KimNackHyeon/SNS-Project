@@ -57,21 +57,21 @@
                             image : kakao_account.profile.profile_image_url.replace("http://","https://"),
                             address : null,
                         }
-                        console.log(kakao_account);
+                        // console.log(kakao_account);
 
-                         axios.post(`http://localhost:9999/food/api/account/kakaologin`,{
+                         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/kakaologin`,{
                              email : userInfo.email,
                              nickname : userInfo.nickname,
                              image : userInfo.image,
                              password : userInfo.password
                          })
                          .then(res => {
-                             console.log(res);
-                             console.log(userInfo);
+                             // console.log(res);
+                             // console.log(userInfo);
                             if(res.data == "success"){
                                 // console.log(res);
                                 store.commit('setUserInfo', userInfo);
-                                console.log(store.state.userInfo);
+                                // console.log(store.state.userInfo);
                             } else{
                                 // console.log(res);
                                 store.commit('setUserInfo', res.data);
@@ -86,7 +86,7 @@
                     },
                     fail : error => {
                         this.$router.push("/error");
-                        console.log(error);
+                        // console.log(error);
                     }
                 })
             }

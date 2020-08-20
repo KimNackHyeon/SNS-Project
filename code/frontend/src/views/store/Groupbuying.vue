@@ -1,7 +1,7 @@
 <template>
   <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
   <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
-    <v-card flat>
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
@@ -12,7 +12,7 @@
             </router-link>
           </div>
           <v-flex>
-            <v-toolbar flat style="border: solid 1px lightgrey" height="48px">
+            <v-toolbar text style="border: solid 1px lightgrey" height="48px">
               <div class="text-h6 mx-auto">
                 공동구매
               </div>
@@ -24,11 +24,11 @@
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-flex style="width:90%; float:left;">
-            <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-toolbar color="rgba(202, 231, 171)" text height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
             </v-toolbar>
@@ -43,7 +43,7 @@
           <v-row dense style="padding: 0;">
             <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onegroupbuying" style="padding: 5px;" >
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                       <img height="80" width="80" padding="60" :src="require(`../../assets/images/food/${groupBuying.food}.png`)" style="border-radius: 5px;">
@@ -57,11 +57,14 @@
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
                       <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
+                          <v-btn class="groupbuyingbtn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
+                          <v-btn class="groupbuyingbtn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
+                      </div>
+                      <div>
+                        <p style="height: 80px; line-height: 80px; text-align: center; font-size: 35px; margin: 0;">{{ groupBuying.now_people }}/{{ groupBuying.max_people }}</p>
                       </div>
                     </v-col>
                     <v-col v-if="userinfo.email != groupBuying.email" cols="3" style="padding: 0;">
@@ -144,7 +147,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.post(`http://localhost:9999/food/api/groupbuying/delete` , {no:data})
+          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/delete` , {no:data})
             .then(response => {
               Swal.fire({
                   // position: 'top-end',
@@ -156,7 +159,7 @@ export default {
               window.location.reload();
             })
             .catch(error => {
-              console.log(error.response)
+              // console.log(error.response)
             })
         }
       })
@@ -186,7 +189,7 @@ export default {
                     }
                   })
         axios({
-                    url:`http://localhost:9999/food/api/groupbuying/orderbyaddress/`+this.mydata[0][0]+`/`+this.mydata[0][1],
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyaddress/`+this.mydata[0][0]+`/`+this.mydata[0][1],
                     method:'post',
                     data: JSON.stringify(this.groupBuyings),
                     headers: config.headers})
@@ -194,7 +197,7 @@ export default {
                     this.groupBuyings = response.data
                 })
                 .catch((error)=>{
-                    console.log(error.response);
+                    // console.log(error.response);
                 })
         this.distswitch = true;
         this.dateswitch = false;
@@ -202,12 +205,12 @@ export default {
         this.switched = true;
     }
     else{
-      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.distswitch = false;
         this.dateswitch = false;
@@ -217,12 +220,12 @@ export default {
     },
     call(){
       if(this.switched == true){
-        axios.get(`http://localhost:9999/food/api/groupbuying/orderbyenddate`)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/orderbyenddate`)
         .then(response => {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.dateswitch = true;
         this.distswitch = false;
@@ -230,12 +233,12 @@ export default {
         this.switched2 = true;
     }
     else{
-      axios.get(`http://localhost:9999/food/api/groupbuying/read`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
           this.groupBuyings = response.data
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
         this.dateswitch = false;
         this.distswitch = false;
@@ -258,7 +261,7 @@ export default {
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      console.log(this.myList);
+      // console.log(this.myList);
         this.groupBuyings = this.originalList;
         this.groupBuyings = this.groupBuyings.filter(function (item) {
             return item.food_kor.indexOf(keyword)!=-1;
@@ -278,17 +281,17 @@ export default {
       this.userinfo = store.state.userInfo;
     }
     // if(userinfo.email == )
-    axios.get(`http://localhost:9999/food/api/groupbuying/read`)
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
       .then(response => {
-        // console.log(response)
+        // // console.log(response)
         this.groupBuyings = response.data;
         this.originalList = response.data;
-        // console.log(this.groupBuyings)
+        // // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
         }
-        // console.log(this.userinfo.address)
-        // console.log(this.mapdata)
+        // // console.log(this.userinfo.address)
+        // // console.log(this.mapdata)
         const script = document.createElement('script');
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -300,36 +303,19 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m <= this.mapdata.length; m++) {
-          geocoder.addressSearch(this.mapdata[m], (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              var distancedata = [
-                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)
-              ]
-              // console.log(distancedata)
-              this.addresspoint.push([result[0].y, result[0].x])
-              var polyline = new kakao.maps.Polyline({
-                path: distancedata,
-              })
-              var distance = polyline.getLength();
-              // console.log(distance)
-              this.distancedata2.push(distance)
-              // this.otherdata.push(redata);
-          this.distancegroup.push(distancedata[1]) 
-            }
-          })
-        }
-        console.log(this.addresspoint)
       })
       .catch(error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 }
 </script>
 
 <style scoped>
+.v-sheet.v-toolbar:not(.v-sheet--outlined) {
+  box-shadow: unset !important;
+  -webkit-box-shadow: unset !important;
+}
 .writeButton{
   width: 60px;
   height: 60px;
@@ -354,5 +340,14 @@ export default {
   font-size: 21px;
   padding: 4px 6px;
 }
-
+.onegroupbuying:hover {
+  box-shadow: 0px 0px 10px rgb(160, 212, 105);
+}
+.groupbuyingbtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.groupbuyingbtn:hover {
+  box-shadow: 0px 0px 10px gray;
+}
 </style>

@@ -203,14 +203,14 @@ export default {
   },
   methods: {
     getFood(){
-      // console.log('getFood 실행')
+      // // console.log('getFood 실행')
       if (this.dialog === false) {
         this.dialog = true
-        // console.log('false')
+        // // console.log('false')
       }
       else {
         this.dialog = false
-        // console.log('true')
+        // // console.log('true')
       }
     },
     chooseComplete:function(food){
@@ -219,7 +219,7 @@ export default {
       // $('.setFood').text(food.name_kor);
       this.food = food.name
       this.food_kor = food.name_kor
-      console.log(this.food.food_kor)
+      // console.log(this.food.food_kor)
       this.searchQuery = ''
       document.querySelector('.s').value = '';
     },
@@ -268,7 +268,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -281,7 +281,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -303,14 +303,14 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-    console.log(typeof(this.$route.params.id))
+    // console.log(typeof(this.$route.params.id))
     axios({
-                    url:`http://localhost:9999/food/api/groupbuying/beforeupdate`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/beforeupdate`,
                     method:'post',
                     data:{no:this.$route.params.id},
                     headers: config.headers})
                 .then((response)=>{
-                    console.log(response);
+                    // console.log(response);
                     this.title = response.data.title
                     this.food = response.data.food
                     this.food_kor = response.data.food_kor
@@ -325,7 +325,7 @@ export default {
                     this.content = this.content.split('^').join('\n');
                 })
                 .catch((error)=>{
-                    console.log(error.response);
+                    // console.log(error.response);
                 })      
   },
 }

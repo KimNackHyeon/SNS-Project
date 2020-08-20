@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn flat icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn text icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" text height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -35,13 +35,13 @@
       </v-layout>
       
     </div>
-    <v-card flat>
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
         <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onemarketplace" style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
                       <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
@@ -96,10 +96,10 @@
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2 marketplacebtn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center marketplacebtn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -128,7 +128,7 @@ import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
 import {foods} from '../../views/Food/Foods.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -164,13 +164,13 @@ export default {
         $('.searchBox').css('display','unset');
       }else{
         if(document.getElementById("searchcontent").value != ""){
-          axios.get(`http://localhost:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -182,12 +182,12 @@ export default {
     },
     call(){
       if(this.switched == true){
-        console.log(this.userinfo.email)
-        axios.get(`http://localhost:9999/food/api/trade/filter/`+this.userinfo.email)
+        // console.log(this.userinfo.email)
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
-          // console.log(this.mapOtherUserInfo)
+          // // console.log(this.mapOtherUserInfo)
           
           this.mapOtherUserInfo.address.length = []
           if (this.mapOtherUserInfo.address.length === 0) {
@@ -195,43 +195,43 @@ export default {
               this.mapOtherUserInfo.address.push(this.tradelist[k].address)
             }
           }
-          console.log(store.state.mapOtherUserInfo.address)
+          // console.log(store.state.mapOtherUserInfo.address)
           this.originalList = this.tradelist;
           })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
         this.switched = false;
     }
     else{
-      axios.get(`http://localhost:9999/food/api/trade/`)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
           this.mapOtherUserInfo.address.length = []
           if (this.mapOtherUserInfo.address.length === 0) {
             for (var k = 0; k < this.tradelist.length; k++) {
               this.mapOtherUserInfo.address.push(this.tradelist[k].address)
             }
           }
-          console.log(store.state.mapOtherUserInfo.address)
-          // // console.log(this.mapOtherUserInfo)
+          // console.log(store.state.mapOtherUserInfo.address)
+          // // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         this.switched = true;
       }
     },
     edit(pageno) {
-      axios.post(`http://localhost:9999/food/api/trade/beforeupdate`, {no:pageno})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          // console.log(this.pagenumber)
+          // // console.log(this.pagenumber)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     del(pageno) {
@@ -245,7 +245,7 @@ export default {
   confirmButtonText: '네 삭제할게요!'
 }).then((result) => {
   if (result.value) {
-    axios.post(`http://localhost:9999/food/api/trade/deletetrade`, {no:pageno})
+    axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/deletetrade`, {no:pageno})
       .then(response => {
         this.pagenumber = pageno;
         Swal.fire({
@@ -258,14 +258,14 @@ export default {
         window.location.reload();
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   }
 })
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      console.log(this.myList);
+      // console.log(this.myList);
       if(this.myList.length == 0){
         this.tradelist = this.originalList;
         this.tradelist = this.tradelist.filter(function (item) {
@@ -285,12 +285,12 @@ created() {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  axios.get(`http://localhost:9999/food/api/trade/`)
+  axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      // console.log(this.tradelist)
-      // console.log(this.mapOtherUserInfo.address)
-      axios.get(`http://localhost:9999/food/api/account/apitest`)
+      // // console.log(this.tradelist)
+      // // console.log(this.mapOtherUserInfo.address)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             for(var m = 0; m < this.xmldata.price.length; m++){
@@ -311,7 +311,7 @@ created() {
                 if(tF.product_cls_code == '01' ){
                   if(tFname === this.tradelist[i].myfood_kor){
                     this.tradelist[i].price = tF.dpr1;
-                    // console.log(this.tradelist[i].price)
+                    // // console.log(this.tradelist[i].price)
                   }
                 }
               }
@@ -326,7 +326,7 @@ created() {
         this.originalList = this.tradelist;
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
   },
   updated(){
@@ -378,5 +378,14 @@ created() {
   text-align: center;
   padding-top: 7px;;
 }
-
+.onemarketplace:hover {
+  box-shadow: 0px 0px 10px rgb(160, 212, 105);
+}
+.marketplacebtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.marketplacebtn:hover {
+  box-shadow: 0px 0px 10px gray;
+}
 </style>

@@ -123,7 +123,6 @@ Vue.use(Vuetify, {
     },
     mounted(){
       this.onResize();
-      console.log(this.frameHeight);
     },
     components:{ },
     data () {

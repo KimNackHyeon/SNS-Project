@@ -212,14 +212,14 @@ export default {
         }
     },
     getFood(){
-      // console.log('getFood 실행')
+      // // console.log('getFood 실행')
       if (this.dialog === false) {
         this.dialog = true
-        // console.log('false')
+        // // console.log('false')
       }
       else {
         this.dialog = false
-        // console.log('true')
+        // // console.log('true')
       }
     },
     chooseComplete:function(food){
@@ -247,7 +247,7 @@ export default {
       // 모든 항목 다 작성되었는지 검사
       if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && this.userinfo.address) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`http://localhost:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '등록이 완료되었습니다.',
@@ -291,7 +291,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -304,7 +304,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {

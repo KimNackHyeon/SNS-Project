@@ -33,21 +33,19 @@
       <p style="margin: 0px;">{{groupbuying.address}}</p>
     </div>
     <div style="overflow: hidden; background: black;">
-      <div style="float: left;">
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: white; padding: 10px 0;">1일전</div>
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: orange;">감자/수미(등급:중품)</div>
-        <div style="font-size: 10px; display: inline-block; margin-left: 10px; color: white;">소매 개당 가격</div>
+      <div v-if="myapi.unit != ''" style="float: left;">
+        <div style="font-size: 10px; display: inline-block; margin-left: 15px; color: orange;">{{groupbuying.food_kor}}</div>
+        <div style="font-size: 10px; display: inline-block; margin-left: 15px; color: white;">소매 {{myapi.unit}}당 {{myapi.price}}가격</div>
+      </div>
+      <div v-if="myapi.unit == ''" style="text-align:center; padding:10px;">
+        <div style="font-size: 10px;  margin-left: 15px; color: white;">해당 음식의 가격정보가 없습니다.</div>
+        <div style="font-size: 10px;  margin-left: 15px; color: white;">게시물 작성자에게 문의해주세요.</div>
       </div>
       <div style="float: right;">
         <div style="font-size: 6px; display: inline-block; margin-right: 20px; color: gray; padding-top: 20px;">출처: 농산물 유통정보 KAMIS</div>
       </div>
     </div>
     <!-- 참가자 명단 -->
-    <div style="">
-      <v-btn color="rgb(160, 212, 105)" class="member" @click="member">
-        참가자 명단
-      </v-btn>
-    </div>
     <v-dialog v-model="openMember" scrollable width= "100%">
       <v-card>
         <v-card-title >참가자 {{groupbuying.now_people}}명</v-card-title>
@@ -87,7 +85,7 @@
           <v-icon style="margin-right: 5px">mdi-link</v-icon>제품 보러가기
         </v-btn>
       </div>
-      <div style="overflow: hidden;">
+      <div v-if="groupbuying.email != userinfo.email" style="overflow: hidden;">
         <div style="float: left; width: 49%">
           <v-btn @click="moveDirectChat"
             color="rgb(160, 212, 105)" 
@@ -104,6 +102,11 @@
             <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
             </v-btn>
         </div>
+      </div>
+      <div v-if="groupbuying.email == userinfo.email" style="overflow: hidden;">
+        <v-btn color="rgb(160, 212, 105)" class="member" @click="member">
+        참가자 명단
+      </v-btn>
       </div>
     </div>
     
@@ -127,6 +130,12 @@ export default {
       memberList: '',
       directchat: '',
       openMember: false,
+      xmldata:[],
+      myapi : {
+                    name : '',
+                    unit : '',
+                    price : '',
+                },
     }
   },
   computed: {
@@ -147,12 +156,12 @@ export default {
       this.$router.go(-1)
     }
     else {
-      axios.get(`http://localhost:9999/food/api/groupbuying/readdetail/`+id)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/readdetail/`+id)
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.groupbuying = response.data
-          console.log(this.groupbuying.now_people / this.groupbuying.max_people)
-          console.log(this.groupbuying)
+          // console.log(this.groupbuying.now_people / this.groupbuying.max_people)
+          // console.log(this.groupbuying)
           // 작성일, 마감일 형식변환
           const [year1, month1, day1] = this.groupbuying.end_date.split('-')
           this.groupbuying.end_date = `${year1}/${month1}/${day1}`
@@ -163,13 +172,32 @@ export default {
           this.groupbuying.content = this.groupbuying.content.split('^').join('<br />');
           axios.post(`${SERVER_URL}/chatting`, {otherNickname:this.groupbuying.nickname, myNickname:this.userinfo.nickname ,otherEmail:this.groupbuying.email, myEmail:this.userinfo.email, type:"2"})
           .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.directchat = response.data
           })
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
+
+axios
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            // console.log(this.xmldata);
+            for(var i=0; i<this.xmldata.price.length;i++){
+                        var tF = this.xmldata.price[i];
+                        var tFname = tF.productName.split('/')[0];
+                        if(tF.product_cls_code == '01' ){
+                            if(tFname==this.groupbuying.food_kor){
+                                this.myapi.name = tFname;
+                                this.myapi.unit = tF.unit;
+                                this.myapi.price = tF.dpr1;
+                            }
+                        }
+                    }
+            }
+        )
     }
   },
   mounted() {
@@ -205,13 +233,13 @@ export default {
           title: '자기자신에게 문의할 수 없습니다.',
         })
         }else{
-          console.log(response.data)
+          // console.log(response.data)
           this.directchat = response.data
-          console.log(this.groupbuying.nickname)
+          // console.log(this.groupbuying.nickname)
           this.$router.push({ name: 'DirectChat', params: { chatKey: this.directchat, receiverNickname: this.groupbuying.nickname }})
         }
       }).error(response=>{
-        console.log(response)
+        // console.log(response)
       })
     },
     onParticipate() {
@@ -221,7 +249,8 @@ export default {
           text: '인원이 가득 찼습니다.'
         })
       } else {
-        axios.post(`http://localhost:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
+        this.groupbuying.now_people += 1;
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
           .then(response => {
             if(response.data == "Fail"){
               Swal.fire({
@@ -232,10 +261,10 @@ export default {
                 text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
               })
             }
-            window.location.reload();
+            // window.location.reload();
           })
           .catch(error => {
-            // console.log(error)
+            // // console.log(error)
           })
       }
     },
@@ -246,20 +275,20 @@ export default {
       else {
         this.openMember = false
       }
-      axios.post(`http://localhost:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
-          // console.log(response.data)
+          // // console.log(response.data)
           this.memberList = response.data
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
     },
     moveUser(user_email){
       if(user_email == this.userinfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        // console.log(user_email)
+        // // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
         this.openMember = false;
       }
@@ -273,7 +302,7 @@ export default {
   -webkit-box-shadow: unset;
   box-shadow: unset;
   width: 100%; 
-  height: 20px; 
+  height: 50px; 
   color: white; 
   font-size: 18px; 
   padding: 0px 30px; 

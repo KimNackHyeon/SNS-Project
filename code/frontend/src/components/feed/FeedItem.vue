@@ -1,17 +1,18 @@
 <template>
   <div class="feed-item">
-    <v-toolbar color="rgba(202, 231, 171)" flat height="36px">
+    <v-toolbar color="rgba(202, 231, 171)" text height="36px">
       <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch>
     </v-toolbar>
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
         <div class="feed-user">
           <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px cursor : pointer;">{{feedData.nickname}}</h4>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:10px; cursor:pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100%">
+            <!-- <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100% border-right: 1px solid lightgray"> -->
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
           </router-link>
@@ -146,7 +147,7 @@ export default {
   },
   methods: {
     callList(){
-      axios.get(`http://localhost:9999/food/api/feed/searchAll`) // 피드 가져오기
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchAll`) // 피드 가져오기
         .then(response => {
           // console.log(response);
             // var data = {};
@@ -168,7 +169,7 @@ export default {
               foods:[],
             }
 
-          axios.get(`http://localhost:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
           .then(response => {
             // console.log(response);
             response.data.forEach(c =>{
@@ -185,7 +186,7 @@ export default {
             })
           });
 
-          axios.get(`http://localhost:9999/food/api/feed/check`,{
+          axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/check`,{
             params:
             {
               email:store.state.userInfo.email,
@@ -223,7 +224,7 @@ export default {
           // console.log(data);
         });
         // console.log(this.feedDatas);
-        this.originalDatas = this.feedDatas;
+        this.originalDatas = this.feedDatas.reverse();
       })
       .catch((error) => {
         // console.log(error.response);
@@ -249,7 +250,7 @@ export default {
         comment: this.inputComment
       }
       // console.log(comment);
-      axios.post(`http://localhost:9999/food/api/feed/register`,comment)
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/feed/register`,comment)
       .then(response=>{
         // console.log(response);
         this.inputComment = "";
@@ -268,9 +269,9 @@ export default {
         if (feedData.no == feedData_id) {
           var comm = feedData.comments[feedData.comments.indexOf(comment)];
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
-          console.log(comm);
+          // console.log(comm);
 
-          axios.delete(`http://localhost:9999/food/api/feed/comment`,{params:{no : comm.no}})
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
           .then(response =>{
 
           })
@@ -289,7 +290,7 @@ export default {
           feedData.islike = !feedData.islike
         }
       })
-      axios.get(`http://localhost:9999/food/api/feed/like`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/like`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -308,7 +309,7 @@ export default {
           feedData.isscrap = !feedData.isscrap
         }
       })
-      axios.get(`http://localhost:9999/food/api/feed/scrap`,{
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/scrap`,{
         params:{
           email : store.state.userInfo.email,
           feedNo : feedData_id,
@@ -326,7 +327,7 @@ export default {
       // }else{
       //   $('.btns').css('display','block');
       // }
-      console.log(feedNo)
+      // console.log(feedNo)
       if (this.btnsFeedNo) {
         this.btnsFeedNo = ''
       }
@@ -389,7 +390,7 @@ export default {
         confirmButtonText: '네 삭제할게요!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`http://localhost:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
           .then(response => {
             Swal.fire({
                 // position: 'top-end',
@@ -452,7 +453,7 @@ export default {
           this.myDatas = this.feedDatas;
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         });
 
         this.switched = false;

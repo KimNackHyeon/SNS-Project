@@ -79,7 +79,7 @@ import axios from 'axios';
 import PasswordValidator from 'password-validator'
 import Swal from 'sweetalert2'
 
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -136,47 +136,47 @@ export default {
       this.newUserInfo.newNickname = this.userinfo.nickname;
       this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
       this.newUserInfo.newAddress = this.userinfo.address;
-      // console.log(this.userinfo)
+      // // console.log(this.userinfo)
     }
     else{
-      // console.log(store.state.userInfo)
-      // console.log(this.userinfo)
+      // // console.log(store.state.userInfo)
+      // // console.log(this.userinfo)
       this.userinfo = store.state.userInfo;
       this.newUserInfo.newNickname = this.userinfo.nickname;
       this.newUserInfo.newImgUrl = this.userinfo.profile_image_url;
       this.newUserInfo.newAddress = this.userinfo.address;
       this.newUserInfo.newPassword = ''
     }
-    // // console.log(this.userinfo)
+    // // // console.log(this.userinfo)
   },
   methods: {
     checkUser() {
       var token = this.$cookies.get("auth-token");
-      axios.get(`http://localhost:9999/food/api/info`, {params: { token : token}})
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/info`, {params: { token : token}})
         .then((response) => {
-          // console.log(response);
+          // // console.log(response);
         })
         .catch(error => {
-          // console.log(error.response);
+          // // console.log(error.response);
           this.$cookies.remove('auth-token');
           this.$router.push('/');
         })
     },
     // 에러 확인(닉네임, 비밀번호, 비밀번호 확인, 주소)
     checkNickname() {
-      axios.post(`http://localhost:9999/food/api/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/nicknameconfirm`, { nickname : this.newUserInfo.newNickname })
       .then(data => {
-        // console.log(data.data.data)
+        // // console.log(data.data.data)
         if (data.data.data == "1" && this.userinfo.nickname != this.newUserInfo.newNickname) {
-          // console.log('중복')
+          // // console.log('중복')
           this.nickErrMsg = true;
         } else {
-          // console.log('가능')
+          // // console.log('가능')
           this.nickErrMsg = false;
         }
       })
       .catch(error => {
-        // console.log(error.response);
+        // // console.log(error.response);
       })
     },
     checkPasswordValidate() {
@@ -205,9 +205,9 @@ export default {
     changeImg(event) {
       const newImg = event.target.files[0];
       this.image = event.target.files[0];
-      // console.log(newImg)
+      // // console.log(newImg)
       this.newUserInfo.newImgUrl = URL.createObjectURL(newImg);
-      // console.log(this.userinfo.profile_image_url)
+      // // console.log(this.userinfo.profile_image_url)
       // this.createImage(newImg);
       this.uploadImage();
     },
@@ -219,7 +219,7 @@ export default {
       }
     },
     handleAddress(data){
-      // console.log(data)
+      // // console.log(data)
       let fullAddress = data.address
       let extraAddress = ''
       if (data.addressType === 'R') {
@@ -242,28 +242,32 @@ export default {
         if(store.state.kakaoUserInfo.email != null) {
           store.commit('modifyKakaoUserInfo', this.newUserInfo)
           this.$router.go(-1)
-          // console.log(store.state.kakaoUserInfo)
+          // // console.log(store.state.kakaoUserInfo)
         }
         else {
-          axios.put(`http://localhost:9999/food/api/account/update/`,{
+          if(!this.image){
+            this.image = this.userinfo.profile_image_url;
+          }
+          // console.log(this.newUserInfo);
+          axios.put(`https://i3b301.p.ssafy.io:9999/food/api/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
             address : this.newUserInfo.newAddress,
             password : this.newUserInfo.newPassword,
             image : this.image
           }).then(response => {
-            // console.log(response);
+            // // console.log(response);
             this.newUserInfo.newImgUrl = this.image;
             store.commit('modifyUserInfo', this.newUserInfo)
-            // console.log(this.newUserInfo)
-            this.$router.go(-1)
+            // // console.log(this.newUserInfo)
+            this.$router.push('/user/mypage');
           }).catch(error => {
-            // console.log(error.response);
+            // // console.log(error.response);
           })
         }
       }
       else {
-        // console.log('입력칸이 비어있습니다.')
+        // // console.log('입력칸이 비어있습니다.')
         Swal.fire({
           icon: 'warning',
           title: '입력칸이 비어있습니다.',
@@ -279,10 +283,10 @@ export default {
       formData.append("image", this.image); // 변경할 프로필 사진
       formData.append("email",store.state.userInfo.email); // 사용자 이메일
 
-      axios.post(`http://localhost:9999/food/api/account/upload/`, formData, { 
+      axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/upload/`, formData, { 
           headers: { 'Content-Type': 'multipart/form-data' } 
       }).then(response => {
-        // console.log(response);
+        // // console.log(response);
         this.image = response.data;
       });
     }
@@ -291,9 +295,6 @@ export default {
 </script>
 
 <style scoped>
-  .left-icon:hover {
-    color: #a0d469;
-  }
   .titleBox {
     display: inline-block;
     width: 90%;
