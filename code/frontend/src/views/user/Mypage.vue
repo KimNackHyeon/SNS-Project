@@ -343,5 +343,8 @@ export default {
   .v-card {
     height: 420px;
   }
+  .myprofil .container{
+    width: 100%;
+  }
 
 </style>

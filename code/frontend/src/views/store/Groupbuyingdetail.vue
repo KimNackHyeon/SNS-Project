@@ -249,7 +249,7 @@ axios
           text: '인원이 가득 찼습니다.'
         })
       } else {
-        this.groupbuying.now_people += 1;
+        
         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
           .then(response => {
             if(response.data == "Fail"){
@@ -257,6 +257,7 @@ axios
               text: "이미 참가하신 공동구매 방입니다.",
             })
             } else {
+              this.groupbuying.now_people += 1;
               Swal.fire({
                 text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
               })
