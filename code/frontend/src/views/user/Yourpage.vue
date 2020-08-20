@@ -4,13 +4,13 @@
       <div class="mypage-body">
         <div class="profil">
           <div style="overflow: hidden; margin: 20px 0;">
-            <div class="myphoto"><v-avatar size="100"><img :src="yourData.image" alt="John"></v-avatar></div>
-            <div class="myprofil">
+            <div class="myphoto" :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}"><v-avatar :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}"><img :src="yourData.image" alt="John"></v-avatar></div>
+            <div class="myprofil" :style="{width: (frameSize.x*0.7)+'px', height: (frameSize.x*0.4)+'px'}">
               <div style="margin: 10px">
-                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${yourData.score}.png`)" alt="신선도">
+                <img :style="{width: (frameSize.x*0.15)+'px', height: (frameSize.x*0.15)+'px'}" :src="require(`../../assets/images/fresh_grade/${yourData.score}.png`)" alt="신선도">
                 <h2 class="user-name">{{yourData.nickname}}</h2>
               </div>
-              <v-container style="min-height: 0; padding: 10px; width: 250px" >
+              <v-container style="min-height: 0; padding: 10px;" >
                 <v-row class="myprofil-boxes" no-gutters>
                   <v-col class="myprofil-box" cols="4">
                     <span>레시피 수</span>
@@ -114,6 +114,11 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+      frameSize: {
+        x: window.innerHeight * 0.5625,
+        y: window.innerHeight,
+        per: 1,
+      },
       userinfo:'',
       yourData:{
         email: '',
@@ -138,6 +143,12 @@ export default {
     },
   },
   mounted(){
+      this.onResize();
+        if(store.state.kakaoUserInfo.email != null){
+          this.userinfo = store.state.kakaoUserInfo;
+        }else{
+          this.userinfo = store.state.userInfo;
+        }
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
@@ -155,6 +166,21 @@ export default {
         })
     },
   methods: {
+    onResize() {
+      if (window.innerHeight * 0.5625 <= window.innerWidth) {
+        this.frameSize = {
+          x: window.innerHeight * 0.5625,
+          y: window.innerHeight,
+          per: innerHeight / 640,
+        };
+      } else {
+        this.frameSize = {
+          x: window.innerWidth,
+          y: window.innerWidth * 1.77,
+          per: innerWidth / 360,
+        };
+      }
+    },
     onFollow(){
       this.isfollow = !this.isfollow;
       if(this.isfollow){
@@ -348,7 +374,7 @@ export default {
   .v-card {
     height: 420px;
   }
-  .myprofil .container{
-    width: 100%;
+  .myprofil .container {
+    width: 100% !important;
   }
 </style>

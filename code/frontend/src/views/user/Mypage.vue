@@ -4,11 +4,11 @@
       <div class="mypage-body">
         <div class="profil">
           <div style="overflow: hidden; margin: 20px 0;">
-            <div class="myphoto"><v-avatar size="100"><img :src="userinfo.profile_image_url" alt="John"></v-avatar></div>
-            <div class="myprofil">
-              <div style="margin: 10px">
+            <div class="myphoto" :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}"><v-avatar :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}"><img :src="userinfo.profile_image_url" alt="John"></v-avatar></div>
+            <div class="myprofil" :style="{width: (frameSize.x*0.7)+'px', height: (frameSize.x*0.4)+'px'}">
+              <div style="margin-bottom: 10px">
                 <!-- <img style="width: 50px; height: 50px;" src="../../assets/images/fresh_grade/4.png" alt="신선도"> -->
-                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도" v-if="userData.score">
+                <img :style="{width: (frameSize.x*0.15)+'px', height: (frameSize.x*0.15)+'px'}" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도">
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
                 <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>
@@ -139,6 +139,7 @@ const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   mounted(){
+    this.onResize();
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
@@ -165,6 +166,11 @@ export default {
     },
   data() {
     return {
+      frameSize: {
+        x: window.innerHeight * 0.5625,
+        y: window.innerHeight,
+        per: 1,
+      },
       userinfo:'',
       myscrap: false,
       userData:{
@@ -182,6 +188,21 @@ export default {
     }
   },
   methods: {
+    onResize() {
+      if (window.innerHeight * 0.5625 <= window.innerWidth) {
+        this.frameSize = {
+          x: window.innerHeight * 0.5625,
+          y: window.innerHeight,
+          per: innerHeight / 640,
+        };
+      } else {
+        this.frameSize = {
+          x: window.innerWidth,
+          y: window.innerWidth * 1.77,
+          per: innerWidth / 360,
+        };
+      }
+    },
     onFollower() {
       if(this.openFollower==false){
         this.openFollower = true;
@@ -343,8 +364,7 @@ export default {
   .v-card {
     height: 420px;
   }
-  .myprofil .container{
-    width: 100%;
+  .myprofil .container {
+    width: 100% !important;
   }
-
 </style>
