@@ -183,7 +183,7 @@ export default {
     created(){
       this.chatNo = this.$route.params.privatechat;
       // console.log(this.chatNo)
-      console.log(this.$route.params)
+      // console.log(this.$route.params)
       this.chatname = this.$route.params.chatName;
       // console.log(this.chatname)
       if(store.state.kakaoUserInfo.email != null){

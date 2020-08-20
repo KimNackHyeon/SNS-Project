@@ -158,10 +158,10 @@ export default {
     else {
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/readdetail/`+id)
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.groupbuying = response.data
-          console.log(this.groupbuying.now_people / this.groupbuying.max_people)
-          console.log(this.groupbuying)
+          // console.log(this.groupbuying.now_people / this.groupbuying.max_people)
+          // console.log(this.groupbuying)
           // 작성일, 마감일 형식변환
           const [year1, month1, day1] = this.groupbuying.end_date.split('-')
           this.groupbuying.end_date = `${year1}/${month1}/${day1}`
@@ -172,19 +172,19 @@ export default {
           this.groupbuying.content = this.groupbuying.content.split('^').join('<br />');
           axios.post(`${SERVER_URL}/chatting`, {otherNickname:this.groupbuying.nickname, myNickname:this.userinfo.nickname ,otherEmail:this.groupbuying.email, myEmail:this.userinfo.email, type:"2"})
           .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.directchat = response.data
           })
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
 
 axios
         .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
-            console.log(this.xmldata);
+            // console.log(this.xmldata);
             for(var i=0; i<this.xmldata.price.length;i++){
                         var tF = this.xmldata.price[i];
                         var tFname = tF.productName.split('/')[0];
@@ -233,13 +233,13 @@ axios
           title: '자기자신에게 문의할 수 없습니다.',
         })
         }else{
-          console.log(response.data)
+          // console.log(response.data)
           this.directchat = response.data
-          console.log(this.groupbuying.nickname)
+          // console.log(this.groupbuying.nickname)
           this.$router.push({ name: 'DirectChat', params: { chatKey: this.directchat, receiverNickname: this.groupbuying.nickname }})
         }
       }).error(response=>{
-        console.log(response)
+        // console.log(response)
       })
     },
     onParticipate() {
@@ -264,7 +264,7 @@ axios
             // window.location.reload();
           })
           .catch(error => {
-            // console.log(error)
+            // // console.log(error)
           })
       }
     },
@@ -277,18 +277,18 @@ axios
       }
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participatelist`, {groupNo:this.$route.params.id})
         .then(response => {
-          // console.log(response.data)
+          // // console.log(response.data)
           this.memberList = response.data
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
     },
     moveUser(user_email){
       if(user_email == this.userinfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        // console.log(user_email)
+        // // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
         this.openMember = false;
       }

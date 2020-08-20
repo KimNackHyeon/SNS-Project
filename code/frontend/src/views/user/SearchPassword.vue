@@ -59,7 +59,7 @@ export default {
     ...mapMutations(['confirmPwd', 'userEmail']),
     onOkBtn() {
       if (this.emailVaild) {
-        // console.log('ok')
+        // // console.log('ok')
           this.okBtn = true
       } else {
         this.okBtn = false
@@ -93,28 +93,28 @@ Swal.fire({
 }).then((result) => {
   /* Read more about handling dismissals below */
   if (result.dismiss === Swal.DismissReason.timer) {
-    console.log('I was closed by the timer')
+    // console.log('I was closed by the timer')
   }
 })
       // Swal.fire({
       //     title: '잠시만 기다려주세요',
       //     text: '가입된 이메일인지 확인하고 있습니다.',
       //   })
-      // console.log(typeof(emailData))
-      // console.log(email)
+      // // console.log(typeof(emailData))
+      // // console.log(email)
       axios
       .post(`https://i3b301.p.ssafy.io:9999/food/api/account/searchpwd`, emailData)
       .then((data) => {
-        // console.log("성공")
+        // // console.log("성공")
         console.dir(data)
         if (data.data.data) {
-          // console.log(data.data.data)
-          // console.log(data.data.email)
+          // // console.log(data.data.data)
+          // // console.log(data.data.email)
           this.confirmPwd(data.data.data)
           this.userEmail(data.data.email)
           this.$router.push("/user/checkcertification")
         } else {
-          // console.log('실패')
+          // // console.log('실패')
           Swal.fire({
           title: '다시 한번 더 확인해주세요',
           text: '이메일이 틀렸어요',
@@ -122,15 +122,15 @@ Swal.fire({
         }
       })
       .catch(data => {
-        // console.log(data)
+        // // console.log(data)
       });
     },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
-        { // console.log('올바르지 않습니다.'); 
+        { // // console.log('올바르지 않습니다.'); 
         this.emailVaild = false;
         }
-      else { // console.log('올바릅니다.'); 
+      else { // // console.log('올바릅니다.'); 
       this.emailVaild = true;
       }
     },

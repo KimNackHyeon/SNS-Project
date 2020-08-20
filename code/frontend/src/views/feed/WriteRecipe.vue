@@ -279,8 +279,8 @@ export default {
       if (this.items.length <= 9) {
         $(".plusBtnArea").css("display", "unset");
       }
-      // console.log(this.item);
-      // console.log(this.items);
+      // // console.log(this.item);
+      // // console.log(this.items);
     },
     clicktoLeftBtn() {
       if(this.thisPage>1){
@@ -292,10 +292,10 @@ export default {
       $(".carousel-slide").css("margin-left", afterMargin);
         this.thisPage -=1;
       }
-        console.log(this.thisPage);
+        // console.log(this.thisPage);
       // transform:translateX(10px);
-      // console.log(this.item);
-      // console.log(this.items);
+      // // console.log(this.item);
+      // // console.log(this.items);
     },
     clicktoRightBtn() {
       if(this.thisPage < this.items.length+1){
@@ -303,11 +303,11 @@ export default {
       var thisMargin = Number(thisMarginStr.split("p")[0]);
       var afterMargin = thisMargin - (this.frameSize.x-20) + "px";
       $(".carousel-slide").css("margin-left", afterMargin);
-      // console.log(this.item);
-      // console.log(this.items);
+      // // console.log(this.item);
+      // // console.log(this.items);
         this.thisPage += 1;
       }
-        console.log(this.thisPage+" "+this.items.length);
+        // console.log(this.thisPage+" "+this.items.length);
     },
     closeAddFood() {
       $(".addFood").css("display", "none");
@@ -343,7 +343,7 @@ export default {
 whiteReciptComplete(){
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-        // console.log(this.userinfo);
+        // // console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
       }
@@ -401,7 +401,7 @@ whiteReciptComplete(){
         images : this.images
       }
 
-      // console.log(data);
+      // // console.log(data);
       
 
       axios
@@ -409,10 +409,10 @@ whiteReciptComplete(){
         headers: { 'Content-Type': 'multipart/form-data' } 
       })
       .then((response)=>{
-        // console.log(response.data);
+        // // console.log(response.data);
         this.images = response.data;
         data.images = this.images;
-        // console.log(data);
+        // // console.log(data);
 
         let timerInterval;
         Swal.fire({
@@ -446,7 +446,7 @@ whiteReciptComplete(){
         }).then((result) => {
           /* Read more about handling dismissals below */
           if (result.dismiss === Swal.DismissReason.timer) {
-            // console.log('I was closed by the timer')
+            // // console.log('I was closed by the timer')
           }
         })
       //   setTimeout(() => {
@@ -454,20 +454,20 @@ whiteReciptComplete(){
       // }, 1000*this.items.length + 2000);
       })
       .catch((error)=>{
-        // console.log(error.response);
+        // // console.log(error.response);
       });
         
     },
     register(data) {
-      // console.log(data);
+      // // console.log(data);
       axios
         .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/write`, data)
         .then((response) => {
-          // console.log(response);
+          // // console.log(response);
           this.$router.push("/feed/main");
         })
         .catch((error) => {
-          // console.log(error.response);
+          // // console.log(error.response);
         });
     },
   },

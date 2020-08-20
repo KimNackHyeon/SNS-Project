@@ -40,7 +40,7 @@ export default {
   created(){
     axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
     .then(response => {
-      console.log(response);
+      // console.log(response);
       response.data.reverse();
       this.alarms = response.data;
       this.alarms.forEach(alarm => {
@@ -50,7 +50,7 @@ export default {
           alarm.confirm = "likebox";
         }
       })
-      console.log(this.alarms);
+      // console.log(this.alarms);
     });
 
   },
@@ -59,7 +59,7 @@ export default {
       this.$router.push('/main')
     },
     move(alarm){
-      console.log(alarm);
+      // console.log(alarm);
       switch(alarm.type){
         case "1": 
           this.$router.push({name: 'Yourpage', params: {email : alarm.semail}});
@@ -92,7 +92,7 @@ export default {
 
         })
       }
-      // console.log(this.alarms);
+      // // console.log(this.alarms);
     }
   }
 }

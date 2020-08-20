@@ -336,7 +336,7 @@ export default {
     deleteComment(feedData_id, comment) {
       var comm = this.feedData.comments[this.feedData.comments.indexOf(comment)];
       this.feedData.comments.splice(this.feedData.comments.indexOf(comment), 1);
-      console.log(comm);
+      // console.log(comm);
 
       axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
       .then(response =>{

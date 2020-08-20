@@ -187,16 +187,16 @@ export default {
     },
     created(){
       this.chatNo = this.$route.params.chatKey;
-      console.log(this.chatNo)
-      console.log(this.$route.params)
+      // console.log(this.chatNo)
+      // console.log(this.$route.params)
       this.chatname = this.$route.params.receiverNickname;
-      console.log(this.chatname)
+      // console.log(this.chatname)
       if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
       }else{
         this.userinfo = store.state.userInfo;
       }
-      console.log(this.userinfo.email)
+      // console.log(this.userinfo.email)
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
     }

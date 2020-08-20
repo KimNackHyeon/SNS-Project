@@ -167,10 +167,10 @@ export default {
           axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -182,12 +182,12 @@ export default {
     },
     call(){
       if(this.switched == true){
-        console.log(this.userinfo.email)
+        // console.log(this.userinfo.email)
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
-          // console.log(this.mapOtherUserInfo)
+          // // console.log(this.mapOtherUserInfo)
           
           this.mapOtherUserInfo.address.length = []
           if (this.mapOtherUserInfo.address.length === 0) {
@@ -195,11 +195,11 @@ export default {
               this.mapOtherUserInfo.address.push(this.tradelist[k].address)
             }
           }
-          console.log(store.state.mapOtherUserInfo.address)
+          // console.log(store.state.mapOtherUserInfo.address)
           this.originalList = this.tradelist;
           })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
         this.switched = false;
     }
@@ -208,18 +208,18 @@ export default {
         .then(response => {
           this.tradelist = response.data.list
           this.myList = this.tradelist
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
           this.mapOtherUserInfo.address.length = []
           if (this.mapOtherUserInfo.address.length === 0) {
             for (var k = 0; k < this.tradelist.length; k++) {
               this.mapOtherUserInfo.address.push(this.tradelist[k].address)
             }
           }
-          console.log(store.state.mapOtherUserInfo.address)
-          // // console.log(this.mapOtherUserInfo)
+          // console.log(store.state.mapOtherUserInfo.address)
+          // // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         this.switched = true;
       }
@@ -228,10 +228,10 @@ export default {
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          // console.log(this.pagenumber)
+          // // console.log(this.pagenumber)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     del(pageno) {
@@ -258,14 +258,14 @@ export default {
         window.location.reload();
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   }
 })
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      console.log(this.myList);
+      // console.log(this.myList);
       if(this.myList.length == 0){
         this.tradelist = this.originalList;
         this.tradelist = this.tradelist.filter(function (item) {
@@ -288,8 +288,8 @@ created() {
   axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      // console.log(this.tradelist)
-      // console.log(this.mapOtherUserInfo.address)
+      // // console.log(this.tradelist)
+      // // console.log(this.mapOtherUserInfo.address)
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
@@ -311,7 +311,7 @@ created() {
                 if(tF.product_cls_code == '01' ){
                   if(tFname === this.tradelist[i].myfood_kor){
                     this.tradelist[i].price = tF.dpr1;
-                    // console.log(this.tradelist[i].price)
+                    // // console.log(this.tradelist[i].price)
                   }
                 }
               }
@@ -326,7 +326,7 @@ created() {
         this.originalList = this.tradelist;
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
   },
   updated(){

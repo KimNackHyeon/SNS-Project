@@ -146,12 +146,12 @@ export default {
 
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/myrecipe/`, {params: {email: this.$route.params.email}})
       .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.recipes = response.data;
           this.yourData.recipe = this.recipes.length;
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })
     },
   methods: {
@@ -191,15 +191,15 @@ export default {
       // axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.yourData.email)
         .then(response => {
-          // console.log(response);
+          // // console.log(response);
           this.yourData.nickname = response.data.nickname;
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
-          // console.log(this.yourData.follower+" "+this.yourData.following);
+          // // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     onFollower() {
@@ -210,12 +210,12 @@ export default {
       }
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/follow/`, {params: {email: this.yourData.email}})
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.followers = response.data
         })
         .catch(error =>{
-          // console.log(error)
-          // console.log('에러')
+          // // console.log(error)
+          // // console.log('에러')
         })
     },
     onFollowing() {
@@ -226,12 +226,12 @@ export default {
       }
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/following/`, {params: {email: this.yourData.email}})
         .then(response => {
-          // console.log(response)
+          // // console.log(response)
           this.followings = response.data
-          // console.log(this.followings)
+          // // console.log(this.followings)
         })
         .catch(error =>{
-          // console.log(error)
+          // // console.log(error)
         })      
     },
     updateFollowBtn() {
@@ -246,17 +246,17 @@ export default {
           }
         })
         .then(response => {
-          // console.log('성공')
+          // // console.log('성공')
           this.$set(following, 'isfollow', response.data)
         })
         .catch(error => {
-          // console.log(error)
+          // // console.log(error)
         })
       })
     },
     onFollowBtn(following) {
       following.isfollow = !following.isfollow
-      // console.log(following);
+      // // console.log(following);
       // this.isfollow = !this.isfollow;
       if(following.isfollow){
         this.addFollow(following.email);
@@ -268,7 +268,7 @@ export default {
       if(user_email == store.state.userInfo.email){
         this.$router.push({name: 'Mypage'});
       }else{
-        // console.log(user_email)
+        // // console.log(user_email)
         this.$router.push({name: 'Yourpage', params: {email : user_email}});
         this.openFollowing = false;
         this.openFollower = false;
@@ -296,25 +296,25 @@ export default {
         }
       })
       .then(response => {
-        // console.log(response.data);
+        // // console.log(response.data);
         this.isfollow = response.data;
       })
 
 
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/yourpage/`+ this.$route.params.email)
         .then(response => {
-          // console.log(response);
+          // // console.log(response);
           this.yourData.email = this.$route.params.email;
           this.yourData.nickname = response.data.nickname;
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
           this.yourData.score = Math.floor(Number(response.data.eval_point) / Number(response.data.eval_count));
-          console.log(this.yourData)
-          // console.log(this.yourData.follower+" "+this.yourData.following);
+          // console.log(this.yourData)
+          // // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
   },
 }

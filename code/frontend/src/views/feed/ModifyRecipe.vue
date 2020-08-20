@@ -241,7 +241,7 @@ export default {
     var feedNo = this.$route.params.feedNo;
     axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/search`,{params:{feedNo:feedNo}}) // 피드 가져오기
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         this.title = response.data.feeddata.title
         this.likecount = response.data.feeddata.likecount
         this.createDate = response.data.feeddata.create_date
@@ -260,7 +260,7 @@ export default {
           this.images.push(data.imageUrl);
           this.items.push(data)
         }
-        console.log(this.items)
+        // console.log(this.items)
       })
   },
   methods: {
@@ -422,13 +422,13 @@ export default {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           response.data.forEach(url => {
             this.images.push(url);
           })
           // this.images = response.data;
           data.images = this.images;
-          console.log(data);
+          // console.log(data);
           let timerInterval;
           Swal.fire({
             title: '레시피 수정중',
@@ -461,7 +461,7 @@ export default {
           }).then((result) => {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
+              // console.log('I was closed by the timer')
             }
           })
           // setTimeout(() => {
@@ -473,15 +473,15 @@ export default {
         });
     },
     updateData(data) {
-      console.log(data);
+      // console.log(data);
       axios
         .put(`https://i3b301.p.ssafy.io:9999/food/api/feed/update`, data)
         .then((response) => {
-          // console.log(response);
+          // // console.log(response);
           this.$router.push("/feed/main");
         })
         .catch((error) => {
-          // console.log(error.response);
+          // // console.log(error.response);
         });
     },
   },

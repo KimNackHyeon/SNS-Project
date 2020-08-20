@@ -234,33 +234,33 @@ export default {
         this.food2 = this.beforedata.tradefood2_kor
         this.food2_en = this.beforedata.tradefood2
         this.address = this.beforedata.address
-        console.log(this.beforedata)
+        // console.log(this.beforedata)
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   },
   methods: {
     getFood1(){
-      console.log('getFood1 실행')
+      // console.log('getFood1 실행')
       if (this.dialog1 === false) {
         this.dialog1 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog1 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     getFood2(){
-      console.log('getFood2 실행')
+      // console.log('getFood2 실행')
       if (this.dialog2 === false) {
         this.dialog2 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog2 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     chooseComplete1:function(food){
@@ -289,7 +289,7 @@ export default {
       }
     },
     handleAddress(data){
-      console.log(data)
+      // console.log(data)
       let fullAddress = data.address
       let extraAddress = ''
       if (data.addressType === 'R') {
@@ -320,10 +320,10 @@ export default {
       tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, 
       tradefoodcount2: this.beforedata.tradefoodcount2})
         .then(response => {
-          console.log(this.beforedata)
+          // console.log(this.beforedata)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
   },
@@ -331,7 +331,7 @@ export default {
     filterList1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -344,7 +344,7 @@ export default {
     filterListImg1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -360,7 +360,7 @@ export default {
     filterList2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -373,7 +373,7 @@ export default {
     filterListImg2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {

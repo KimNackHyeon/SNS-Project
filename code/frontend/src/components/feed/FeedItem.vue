@@ -269,7 +269,7 @@ export default {
         if (feedData.no == feedData_id) {
           var comm = feedData.comments[feedData.comments.indexOf(comment)];
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
-          console.log(comm);
+          // console.log(comm);
 
           axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
           .then(response =>{
@@ -327,7 +327,7 @@ export default {
       // }else{
       //   $('.btns').css('display','block');
       // }
-      console.log(feedNo)
+      // console.log(feedNo)
       if (this.btnsFeedNo) {
         this.btnsFeedNo = ''
       }
@@ -453,7 +453,7 @@ export default {
           this.myDatas = this.feedDatas;
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         });
 
         this.switched = false;
