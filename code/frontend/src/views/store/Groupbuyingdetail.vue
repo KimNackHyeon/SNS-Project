@@ -46,11 +46,6 @@
       </div>
     </div>
     <!-- 참가자 명단 -->
-    <div style="">
-      <v-btn color="rgb(160, 212, 105)" class="member" @click="member">
-        참가자 명단
-      </v-btn>
-    </div>
     <v-dialog v-model="openMember" scrollable width= "100%">
       <v-card>
         <v-card-title >참가자 {{groupbuying.now_people}}명</v-card-title>
@@ -90,7 +85,7 @@
           <v-icon style="margin-right: 5px">mdi-link</v-icon>제품 보러가기
         </v-btn>
       </div>
-      <div style="overflow: hidden;">
+      <div v-if="groupbuying.email != userinfo.email" style="overflow: hidden;">
         <div style="float: left; width: 49%">
           <v-btn @click="moveDirectChat"
             color="rgb(160, 212, 105)" 
@@ -107,6 +102,11 @@
             <v-icon style="margin-right: 5px">mdi-account-multiple-outline</v-icon>참가하기
             </v-btn>
         </div>
+      </div>
+      <div v-if="groupbuying.email == userinfo.email" style="overflow: hidden;">
+        <v-btn color="rgb(160, 212, 105)" class="member" @click="member">
+        참가자 명단
+      </v-btn>
       </div>
     </div>
     
@@ -181,7 +181,7 @@ export default {
         })
 
 axios
-        .get(`http://localhost:9999/food/api/account/apitest`)
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);
@@ -249,6 +249,7 @@ axios
           text: '인원이 가득 찼습니다.'
         })
       } else {
+        this.groupbuying.now_people += 1;
         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/participate`, {groupNo: this.$route.params.id, participantEmail: this.userinfo.email, participantNickname: this.userinfo.nickname,})
           .then(response => {
             if(response.data == "Fail"){
@@ -260,7 +261,7 @@ axios
                 text: this.groupbuying.title+"공동구매에 참가하셨습니다.",
               })
             }
-            window.location.reload();
+            // window.location.reload();
           })
           .catch(error => {
             // console.log(error)
@@ -301,7 +302,7 @@ axios
   -webkit-box-shadow: unset;
   box-shadow: unset;
   width: 100%; 
-  height: 20px; 
+  height: 50px; 
   color: white; 
   font-size: 18px; 
   padding: 0px 30px; 
