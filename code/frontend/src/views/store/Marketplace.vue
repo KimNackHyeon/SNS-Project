@@ -96,10 +96,10 @@
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2 btn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2 marketplacebtn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center btn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center marketplacebtn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -381,7 +381,11 @@ created() {
 .onemarketplace:hover {
   box-shadow: 0px 0px 10px rgb(160, 212, 105);
 }
-.btn:hover {
+.marketplacebtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.marketplacebtn:hover {
   box-shadow: 0px 0px 10px gray;
 }
 </style>

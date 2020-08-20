@@ -57,10 +57,10 @@
                     <v-col v-if="userinfo.email == groupBuying.email" cols="3" style="padding: 0;">
                       <div style="text-align:center">
                         <router-link :to="`/store/modify/groupbuying/${groupBuying.no}`">
-                          <v-btn class="btn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
+                          <v-btn class="groupbuyingbtn" color="rgba(159, 201, 114)" style="margin-right: 5px; width: 35px; height: 25px; color: white">수정</v-btn>
                         </router-link>
                         <router-link :to="`/store/groupbuying`">
-                          <v-btn class="btn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
+                          <v-btn class="groupbuyingbtn" @click="deleteGroupbuying(groupBuying.no)" color="red" style="width: 35px; height: 25px; color: white">삭제</v-btn>
                         </router-link>
                       </div>
                       <div>
@@ -360,7 +360,11 @@ export default {
 .onegroupbuying:hover {
   box-shadow: 0px 0px 10px rgb(160, 212, 105);
 }
-.btn:hover {
+.groupbuyingbtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.groupbuyingbtn:hover {
   box-shadow: 0px 0px 10px gray;
 }
 </style>

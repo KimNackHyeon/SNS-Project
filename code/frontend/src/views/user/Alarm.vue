@@ -1,6 +1,6 @@
 <template>
   <div style="height: 590px;">
-    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15)">
+    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <div @click="onleft" style="width:40px; height:100%; border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
           <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
       </div>
