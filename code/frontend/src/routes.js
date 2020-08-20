@@ -174,15 +174,7 @@ export default [
   {
     path: "/user/join",
     name: "Join",
-    component: Join,
-    beforeEnter(to, from, next) {
-      if (Vue.$cookies.isKey('auth-token')) {
-        next()
-      }
-      else {
-        next('/')
-      }
-    }
+    component: Join
   },
   {
     path: "/chat/mychatlist",
@@ -291,28 +283,12 @@ export default [
   {
     path: "/user/searchpassword",
     name: "SearchPassword",
-    component: SearchPassword,
-    beforeEnter(to, from, next) {
-      if (Vue.$cookies.isKey('auth-token')) {
-        next()
-      }
-      else {
-        next('/')
-      }
-    }
+    component: SearchPassword
   },
   {
     path: "/user/checkcertification",
     name: "CheckCertification",
-    component: CheckCertification,
-    beforeEnter(to, from, next) {
-      if (Vue.$cookies.isKey('auth-token')) {
-        next()
-      }
-      else {
-        next('/')
-      }
-    }
+    component: CheckCertification
   },
   {
     path: "/store/marketplace",

@@ -359,9 +359,19 @@ export default {
               }
             })
             return isTag;
-          })
+          });
+
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
         }
       } else{
+        this.feedDatas = this.myDatas;
         if(tags.length != 0){
           this.feedDatas = this.feedDatas.filter(function (item) {
             var isTag = false;
@@ -374,7 +384,15 @@ export default {
               }
             })
             return isTag;
-          })
+          });
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
         }
       }
       // console.log(this.feedDatas);
@@ -455,6 +473,15 @@ export default {
         .catch(error => {
           // console.log(error.response)
         });
+
+        if(this.feedDatas.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: '만들 수 있는 레시피가 없습니다!',
+            text: '냉장고에 재료를 등록해주세요!',
+            footer: ''
+          })
+        }
 
         this.switched = false;
       }
