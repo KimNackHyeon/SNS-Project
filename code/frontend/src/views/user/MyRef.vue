@@ -606,6 +606,115 @@ export default {
                 title: "공유할 재료의 양식을 모두 채워주세요",
               });
             }
+        },
+            openregistMater: function () {
+                this.closeShare();
+                $('.registMaterial').css('display','unset');
+                $('#FillBtn').css('display','none');
+            },
+            closeregistMater:function(){
+                $('.registMaterial').css('display','none');
+                $('#FillBtn').css('display','unset');
+            },
+            getSrc:function(food) {
+               var src = '../../assets/images/food/'+food+'.png';
+               alert(src);
+                return src;
+            },
+            
+            openShare:function(sendData){
+                console.log("openshare");
+                this.closeregistMater();
+                var nowfood = sendData.nowfood;
+                var index = sendData.index;
+                this.Nowgra_kor = nowfood.name_kor;
+                this.Nowgra = nowfood;
+                this.nowmyamount = 1;
+                this.selectedFood = '';
+                this.nowCamount= 1;
+                $('.setFood').text("");
+                $('#shareField').css('display','unset');
+                $('#FillBtn').css('display','none');
+                this.NowClassNum = index;
+                var className = '.F'+(this.NowClassNum+1);
+                var classN = 'F'+(this.NowClassNum+1);
+                this.intoFood =  this.Nowgra.name;
+                $('#justMoveImg').attr('src',nowfood.img);
+                $('#justMove').attr('class',classN);
+                $('#justMove').css('display','unset');
+                this.intoFood = this.Nowgra.name;
+                this.changeFoodsTemp = [];
+                this.myapi = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade1api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                this.trade2api = {
+                    name : '',
+                    unit : '',
+                    price : '',
+                };
+                    this.apiPrice = '';
+                for(var i=0; i<this.xmldata.price.length;i++){
+                    var tF = this.xmldata.price[i];
+                    var tFname = tF.productName.split('/')[0];
+                    if(tF.product_cls_code == '01' ){
+                        if(tFname==this.Nowgra.name_kor){
+                            this.myapi.name = tFname;
+                            this.myapi.unit = tF.unit;
+                            this.myapi.price = tF.dpr1;
+                        }
+                    }
+                }
+            },
+            openShareBox:function(){
+                if($('.sharebox').css('display')=='none'){
+                    $('.sharebox').css('display','block');
+                    $('.shareButton').css('background-color','rgb(160,212,105)');
+                }else{
+                     $('.sharebox').css('display','none');
+                    $('.shareButton').css('background-color','#80808066');
+                }
+            },
+            closeShare:function(){
+                $('#shareField').css('display','none');
+                $('#FillBtn').css('display','unset');
+            },
+            addChangeGradient:function(){
+               
+                var sum = 0;
+                if(this.changeFoodsTemp.length<2){
+                    if(Number(this.totalShareAmount)<=Number(this.Nowgra.amount)){
+                        if(Number(this.nowmyamount)>Number(this.totalShareAmount)){
+                            Swal.fire({
+                                icon: 'error',
+                                title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
+                            })
+                        this.nowmyamount = this.totalShareAmount;
+                    }else{
+                        if(this.nowmyamount>=1 && (this.selectedFood!='')&&this.nowCamount>=1){
+
+                            var sellPrice = Number(this.nowSellPrice);
+                            var sellAmount = Number(this.nowSellAmount);
+                            this.changeFoodsTemp.push({
+                                Mygradient:this.Nowgra.name,
+                                Mygradient_kor:this.Nowgra.name_kor,
+                                myamount:this.nowmyamount,
+                                Cgradient:this.selectedFood.name,
+                                Cgradient_kor:this.selectedFood.name_kor,
+                                Camount:this.nowCamount,
+                            });
+                        }else{
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '공유할 재료의 양식을 모두 채워주세요',
+                            })
+                        }
 
             for (var i = 0; i < this.xmldata.price.length; i++) {
               var tF = this.xmldata.price[i];

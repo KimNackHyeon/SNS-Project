@@ -3,7 +3,8 @@
     <div class="wrapC">
       <!-- :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}" -->
       <div style="width:100%; height : 400px;">
-        <div :style="{'margin-top': (frameSize.y*0.05)+'px', height: (frameSize.y*0.15)+'px'}">
+        <div style="height : 25%;">
+          
           <p class="login-title">LOGIN</p>
         </div>
         <!-- login 큰 클자 -->

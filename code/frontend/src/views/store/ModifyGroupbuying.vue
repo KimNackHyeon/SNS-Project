@@ -44,6 +44,8 @@
                         >
                       <span>{{ el.name_kor }}</span>
                     </li>
+                    
+          
                   </ul>
                 </div>
               </div>
@@ -58,6 +60,18 @@
                   <div>
                     {{ food.name_kor }}
                   </div>
+                </div>
+                <div style="width:100%;height:100%;" v-if="filterListImg.length==0">
+                <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:150px; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <v-btn @click="chooseComplete({name:'etc',
+            name_kor:etcName,
+            img:'etc' })" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">등록하기</v-btn>
+          </div>
+          </div>
                 </div>
               </div>
             </v-card-text>
@@ -181,6 +195,7 @@ export default {
       // 품목 선택
       searchQuery: '',
       names : foods,
+      etcName:'',
     }
   },
   watch: {
