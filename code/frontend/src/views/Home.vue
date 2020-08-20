@@ -42,14 +42,14 @@
                     <img class="circlePhoto" :src="userinfo.profile_image_url" />
                 </div>
                 <router-link to="/user/mypage"><div style=" width:100px; height:100%; display: inline-table; overflow: hidden;">
-                    <h3>{{userinfo.nickname}} 님</h3>
+                    <p style="font-size: 17px; color: black; font-weight: bold; margin: 0;">{{userinfo.nickname}} 님</p>
                     <h4>안녕하세요.</h4>
                 </div></router-link>
             </div>
             <div  style="width:100%; height:48%;">
                 <div class="grayLine" @click="chatlist" style="cursor:pointer; width:50%; height:100%; display: inline-block; text-align: center;">
                   <div class="iconBox">
-                    <v-badge  color="red" dot><v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon></v-badge>
+                    <v-icon size="30px" color="rgb(160,212,105)" >mdi-comment-multiple-outline</v-icon>
                   </div>
                   <div class="subBox">
                     <h4>내 채팅방</h4>
@@ -58,7 +58,7 @@
                 <div class="grayLine" style="width:50%; height:100%; display: inline-block; text-align: center;">
                   <router-link to="/alarm">
                   <div class="iconBox"> 
-                   <v-badge color="red" dot> <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon></v-badge>
+                   <v-icon size="30px" color="rgb(160,212,105)">mdi-bell</v-icon>
                   </div>
                     <div class="subBox">
                       <h4>새 소식</h4>

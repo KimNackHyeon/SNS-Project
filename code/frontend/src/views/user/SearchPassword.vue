@@ -20,8 +20,8 @@
           <label for="email">이메일</label>
         </div>
       </div>
-      <button v-if='!okBtn' class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px; background-color: gray;">인증번호 보내기</button>
-      <button v-if='okBtn' @click="searchPwd(email)" class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 320px">인증번호 보내기</button>
+      <button v-if='!okBtn' class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 100%; background-color: gray;">인증번호 보내기</button>
+      <button v-if='okBtn' @click="searchPwd(email)" class="btn-bottom" style="margin-bottom: 0px; bottom: 0; width: 100%">인증번호 보내기</button>
     </div>
   </div>
 </template>

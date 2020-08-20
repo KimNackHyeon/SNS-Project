@@ -21,8 +21,8 @@
           <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
           <span id="times">03:00</span>
           <label for="certificationNumber">인증번호</label>
-          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
-          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; width : 100%;">인증</button>
+          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red; width : 100%;">인증번호 재전송</button>
         </div>
       </div>
     </div>
