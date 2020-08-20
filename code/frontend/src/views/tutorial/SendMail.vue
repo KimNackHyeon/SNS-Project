@@ -15,9 +15,11 @@
       <textarea placeholder="제목을 입력해주세요" style="width:100%; height:100%; paddng:5px; text-align:center; font-size:19px; font-weight:700; resize: none; overflow:hidden;"  v-model="title"></textarea>
     </div> -->
     <!-- 글작성 본문 -->
-    <div style="padding: 10px 20px">
+    <div style="padding: 10px 20px; text-align:center;">
       <!-- 제목 -->
-      <div style="margin: 80px 0 0 0">
+      <h4>궁금한게 있다면 저희에게 메일 보내주세요!</h4>
+      <h4>최대한 빨리 답장을 해서 궁금증을 풀어드릴게요.</h4>
+      <div style="margin: 45px 0 0 0">
         <div style="float: left; width: 15%; margin-right: 10px">
           <span style="line-height: 40px">제목</span>
         </div>
