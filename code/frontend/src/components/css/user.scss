@@ -37,8 +37,9 @@
       font-size: x-large;
     }
     .login-title {
-      margin-bottom: 15px;
-      margin-top: 60px;
+      // margin-bottom: 15px;
+      // margin-top: 60px;
+      margin: unset;
       color: rgb(255, 255, 255);
       text-align: center;
       font-size: 55px;
@@ -310,7 +311,7 @@
       width: 30%;
       height: 100px;
       float: left;
-      margin: 1rem;
+      // margin: 1rem;
     }
     .myprofil {
       // margin: 1rem 0;

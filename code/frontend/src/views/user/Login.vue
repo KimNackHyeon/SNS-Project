@@ -1,16 +1,21 @@
 <template>
   <div class="user" id="login">
     <div class="wrapC">
-      <!-- -------------------------------- -->
+      <!-- :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}" -->
       <div style="width:100%; height : 400px;">
         <div style="height : 25%;">
           
           <p class="login-title">LOGIN</p>
         </div>
         <!-- login 큰 클자 -->
-        <div style="width : 100%; height:25%; margin: auto;">
+        <div style="width : 100%; margin: auto;" :style="{height: (frameSize.x*0.4)+'px'}">
+          
+          <div style="color: white; padding-left: 10px; padding-bottom: 10px;">
+            <span style="margin: 0">우리 동네 냉장고에서 신선한 재료로 맛있는 음식을 만드세요!</span>
+          </div>
+        <div style="overflow: hidden; padding-bottom: 10px;">
           <!-- 로그인 입력 큰 틀 -->
-          <div style="float : left; width: 77%;">
+          <div style="float : left; width: 75%;">
             <!-- 로그인 입력 -->
             <div style="margin : 5px auto;">
               <div id="describe" class="login-input-text">이메일</div>
@@ -39,16 +44,18 @@
             </div>
             <!-- 비밀번호 -->
           </div>
-          <div style="margin-top:5px; float:right; width:20%;">
+          <div style="margin:5px 0 0 5px; float:left; width:20%;">
             <v-btn class="login-btn" @click="$emit('login', email, password)">LOGIN</v-btn>
             <!-- <button  >LOGIN</button> -->
           </div>
+          </div>
           <!-- 로그인 버튼 -->
+          <div style="width : 100%; margin: auto; text-align: center; color: white">
+            <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기 </router-link>|
+            <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
+          </div>
         </div>
-        <div style="width : 100%; height:5%; margin: auto; text-align: center; color: white">
-          <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기 </router-link>|
-          <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
-        </div>
+        
         <!-- 아이디 찾기 ~ 회원가입 -->
         <div id="otherLogin" style="display: inline-block; float: right">
           <KakaoLogin :component="component" />
@@ -64,9 +71,9 @@
       </div>
       <!-- -------------------------------- -->
     </div>
-    <div class="error-message" v-if="error.email">{{error.email}}</div>
+    <!-- <div class="error-message" v-if="error.email">{{error.email}}</div>
     <div class="error-message" v-if="error.password">{{error.password}}</div>
-    <div class="error-message" v-if="error.email&&error.password">이메일 형식과 영문,숫자 포함 8 자리이상이어야 합니다.</div>
+    <div class="error-message" v-if="error.email&&error.password">이메일 형식과 영문,숫자 포함 8 자리이상이어야 합니다.</div> -->
   </div>
 </template>
  
@@ -87,6 +94,14 @@ export default {
   components: {
     KakaoLogin,
     // GoogleLogin,
+  },
+  mounted() {
+    this.onResize();
+      if(store.state.kakaoUserInfo.email != null){
+        this.userinfo = store.state.kakaoUserInfo;
+      }else{
+        this.userinfo = store.state.userInfo;
+      }
   },
   created() {
     this.component = this;
@@ -111,15 +126,29 @@ export default {
     },
   }, 
   methods: {
-
+    onResize() {
+      if (window.innerHeight * 0.5625 <= window.innerWidth) {
+        this.frameSize = {
+          x: window.innerHeight * 0.5625,
+          y: window.innerHeight,
+          per: innerHeight / 640,
+        };
+      } else {
+        this.frameSize = {
+          x: window.innerWidth,
+          y: window.innerWidth * 1.77,
+          per: innerWidth / 360,
+        };
+      }
+    },
     // onSuccess(data){
-    //     // console.log("success");
-    //     // console.log(data);
+    //     // // console.log("success");
+    //     // // console.log(data);
     //     this.$cookies.set("auth-token", data.access_token);
     //     Kakao.API.request({
     //       url: '/v2/user/me',
     //         success: function(response) {
-    //           // console.log(response);
+    //           // // console.log(response);
     //           const kakaoUserInfo = {
     //             email: response.kakao_account.email,
     //             nickname: response.kakao_account.profile.nickname,
@@ -128,17 +157,17 @@ export default {
     //           };
     //           store.commit('deluserInfo');
     //           store.commit('setKakaoUserInfo', response.kakao_account)
-    //           // console.log(store.state.kakaoUserInfo)
+    //           // // console.log(store.state.kakaoUserInfo)
     //         },
     //         fail: function(error) {
-    //           // console.log(error);
+    //           // // console.log(error);
     //         }
     //     });
     //     this.$router.push("/main");
     // },
     // onFailure(data){
-    //     // console.log(data)
-    //     // console.log("failure")
+    //     // // console.log(data)
+    //     // // console.log("failure")
     // },
 
     checkForm() {
@@ -167,6 +196,11 @@ export default {
   },
   data: () => {
     return {
+      frameSize: {
+        x: window.innerHeight * 0.5625,
+        y: window.innerHeight,
+        per: 1,
+      },
       email: "",
       password: "",
       passwordSchema: new PV(),

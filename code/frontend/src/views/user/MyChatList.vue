@@ -30,7 +30,7 @@
         </div>
       </button>
     </div>
-    <v-card flat>
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;">
         <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
           <v-row dense style="padding: 0;">
@@ -67,7 +67,7 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -93,10 +93,10 @@ export default {
           axios.get(`${SERVER_URL}/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -117,14 +117,14 @@ export default {
     },
     call(){
       if(this.switched == true){
-        console.log(this.userinfo.email)
+        // console.log(this.userinfo.email)
         axios.get(`${SERVER_URL}/trade/filter/`+this.userinfo.email)
         .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.mapOtherUserInfo)
+          // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
         this.switched = false;
     }
@@ -132,14 +132,14 @@ export default {
       axios.get(`${SERVER_URL}/trade/`)
         .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
           this.mapOtherUserInfo = store.state.mapOtherUserInfo
           this.mapOtherUserInfo.address = this.tradelist[0].address
           this.mapOtherUserInfo.food = this.tradelist[0].myfood
-          // // console.log(this.mapOtherUserInfo)
+          // // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         this.switched = true;
       }
@@ -148,10 +148,10 @@ export default {
       axios.post(`${SERVER_URL}/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          // console.log(this.pagenumber)
+          // // console.log(this.pagenumber)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     del(pageno) {
@@ -178,7 +178,7 @@ export default {
         window.location.reload();
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   }
 })
@@ -193,11 +193,11 @@ created() {
   axios.get(`${SERVER_URL}/chatting/`+ this.userinfo.email)
   .then(response => {
     this.chatlist = response.data.list
-    console.log(this.chatlist)
+    // console.log(this.chatlist)
     this.marketOn()
   })
   .catch(error => {
-    // console.log(error)
+    // // console.log(error)
   })
 }
 }

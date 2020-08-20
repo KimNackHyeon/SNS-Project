@@ -68,9 +68,9 @@ export default {
     }
   },
   created(){
-    axios.get(`http://localhost:9999/food/api/account/evaluate`,{params:{no : this.$route.params.no}})
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/evaluate`,{params:{no : this.$route.params.no}})
     .then(response => {
-      console.log(response);
+      // console.log(response);
       this.evalData = response.data;
     }).catch(error => {
       Swal.fire({
@@ -177,7 +177,7 @@ export default {
       .then((result) => {
         if (result.value) {
           // 평가한거 axios 보내기
-          axios.post(`http://localhost:9999/food/api/account/evaluate`,{
+          axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/evaluate`,{
               no : this.evalData.no, 
               email : this.evalData.email, 
               score : this.score
@@ -194,7 +194,7 @@ export default {
             this.$router.push('/alarm')
           })
           .catch(error => {
-            console.log(error.response)
+            // console.log(error.response)
           })
         }
       })

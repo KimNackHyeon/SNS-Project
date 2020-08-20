@@ -1302,7 +1302,7 @@ function SimpleMDE(options) {
 		this.element = options.element;
 	} else if(options.element === null) {
 		// This means that the element option was specified, but no element was found
-		console.log("SimpleMDE: Error. No element was found.");
+		// console.log("SimpleMDE: Error. No element was found.");
 		return;
 	}
 
@@ -1547,7 +1547,7 @@ SimpleMDE.prototype.autosave = function() {
 		var simplemde = this;
 
 		if(this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-			console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
+			// console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
 			return;
 		}
 
@@ -1591,20 +1591,20 @@ SimpleMDE.prototype.autosave = function() {
 			simplemde.autosave();
 		}, this.options.autosave.delay || 10000);
 	} else {
-		console.log("SimpleMDE: localStorage not available, cannot autosave");
+		// console.log("SimpleMDE: localStorage not available, cannot autosave");
 	}
 };
 
 SimpleMDE.prototype.clearAutosavedValue = function() {
 	if(isLocalStorageAvailable()) {
 		if(this.options.autosave == undefined || this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-			console.log("SimpleMDE: You must set a uniqueId to clear the autosave value");
+			// console.log("SimpleMDE: You must set a uniqueId to clear the autosave value");
 			return;
 		}
 
 		localStorage.removeItem("smde_" + this.options.autosave.uniqueId);
 	} else {
-		console.log("SimpleMDE: localStorage not available, cannot autosave");
+		// console.log("SimpleMDE: localStorage not available, cannot autosave");
 	}
 };
 

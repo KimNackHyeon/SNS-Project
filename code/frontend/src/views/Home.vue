@@ -1,6 +1,6 @@
 <template>
   <v-layout wrap style="width:100%;height:50px; margin: 0px auto; max-height: 50px;">
-    <div style="width:100%; height:50px;background-color:white; z-index:100">
+    <div v-if="$route.name!='Error'" style="width:100%; height:50px;background-color:white; z-index:100">
       <v-btn icon @click.stop="drawer = !drawer" style="height: 100%">
         <v-icon size="30px">
           fas fa-list
@@ -123,7 +123,6 @@ Vue.use(Vuetify, {
     },
     mounted(){
       this.onResize();
-      console.log(this.frameHeight);
     },
     components:{ },
     data () {

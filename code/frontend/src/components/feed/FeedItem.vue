@@ -1,17 +1,18 @@
 <template>
   <div class="feed-item">
-    <v-toolbar color="rgba(202, 231, 171)" flat height="36px">
+    <v-toolbar color="rgba(202, 231, 171)" text height="36px">
       <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch>
     </v-toolbar>
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
         <div class="feed-user">
           <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px cursor : pointer;">{{feedData.nickname}}</h4>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:10px; cursor:pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
             <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100%">
+            <!-- <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100% border-right: 1px solid lightgray"> -->
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
           </router-link>
@@ -268,7 +269,7 @@ export default {
         if (feedData.no == feedData_id) {
           var comm = feedData.comments[feedData.comments.indexOf(comment)];
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
-          console.log(comm);
+          // console.log(comm);
 
           axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
           .then(response =>{
@@ -326,7 +327,7 @@ export default {
       // }else{
       //   $('.btns').css('display','block');
       // }
-      console.log(feedNo)
+      // console.log(feedNo)
       if (this.btnsFeedNo) {
         this.btnsFeedNo = ''
       }
@@ -358,9 +359,19 @@ export default {
               }
             })
             return isTag;
-          })
+          });
+
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
         }
       } else{
+        this.feedDatas = this.myDatas;
         if(tags.length != 0){
           this.feedDatas = this.feedDatas.filter(function (item) {
             var isTag = false;
@@ -373,7 +384,15 @@ export default {
               }
             })
             return isTag;
-          })
+          });
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
         }
       }
       // console.log(this.feedDatas);
@@ -452,8 +471,17 @@ export default {
           this.myDatas = this.feedDatas;
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         });
+
+        if(this.feedDatas.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: '만들 수 있는 레시피가 없습니다!',
+            text: '냉장고에 재료를 등록해주세요!',
+            footer: ''
+          })
+        }
 
         this.switched = false;
       }

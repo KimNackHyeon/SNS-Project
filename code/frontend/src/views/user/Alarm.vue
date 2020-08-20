@@ -1,6 +1,6 @@
 <template>
   <div style="height: 590px;">
-    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15)">
+    <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <div @click="onleft" style="width:40px; height:100%; border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
           <v-icon size="30px" style="padding:6px 0px;">mdi-chevron-left</v-icon>
       </div>
@@ -38,9 +38,9 @@ export default {
     }
   },
   created(){
-    axios.get(`http://localhost:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
+    axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarm`,{params : {email : store.state.userInfo.email}})
     .then(response => {
-      console.log(response);
+      // console.log(response);
       response.data.reverse();
       this.alarms = response.data;
       this.alarms.forEach(alarm => {
@@ -50,16 +50,16 @@ export default {
           alarm.confirm = "likebox";
         }
       })
-      console.log(this.alarms);
+      // console.log(this.alarms);
     });
 
   },
   methods: {
     onleft() {
-      this.$router.go(-1)
+      this.$router.push('/main')
     },
     move(alarm){
-      console.log(alarm);
+      // console.log(alarm);
       switch(alarm.type){
         case "1": 
           this.$router.push({name: 'Yourpage', params: {email : alarm.semail}});
@@ -87,12 +87,12 @@ export default {
             a.confirm = "alarmbox";
           }
         })
-        axios.get(`http://localhost:9999/food/api/account/alarmcheck`,{ params: { no : alarm.no } })
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/alarmcheck`,{ params: { no : alarm.no } })
         .then(response => {
 
         })
       }
-      // console.log(this.alarms);
+      // // console.log(this.alarms);
     }
   }
 }
