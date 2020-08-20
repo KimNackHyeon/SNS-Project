@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     onleft() {
-      this.$router.go(-1)
+      this.$router.push('/main')
     },
     move(alarm){
       console.log(alarm);

@@ -6,7 +6,7 @@
       </v-btn>
       <div class="titleBox">
         <div class="pageTitle">
-            {{this.chatlist.chatName}}
+            {{this.chatname}}
         </div>
       </div>
     </div>
@@ -193,14 +193,6 @@ export default {
       }
         this.authUser = {name:this.userinfo.nickname};
         this.fetchMessages();
-      axios.get(`${SERVER_URL}/chattingrefresh/${this.chatNo}/${this.userinfo.email}`)
-        .then(response => {
-          this.chatlist = response.data
-          console.log(this.chatlist.chatName)
-        })
-        .catch(error => {
-          // console.log(error)
-        })
     }
 }
 </script>

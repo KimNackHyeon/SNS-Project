@@ -244,6 +244,10 @@ export default {
           // console.log(store.state.kakaoUserInfo)
         }
         else {
+          if(!this.image){
+            this.image = this.userinfo.profile_image_url;
+          }
+          console.log(this.newUserInfo);
           axios.put(`https://i3b301.p.ssafy.io:9999/food/api/account/update/`,{
             email : store.state.userInfo.email,
             nickname : this.newUserInfo.newNickname,
@@ -255,7 +259,7 @@ export default {
             this.newUserInfo.newImgUrl = this.image;
             store.commit('modifyUserInfo', this.newUserInfo)
             // console.log(this.newUserInfo)
-            this.$router.go(-1)
+            this.$router.push('/user/mypage');
           }).catch(error => {
             // console.log(error.response);
           })
