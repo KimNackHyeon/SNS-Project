@@ -88,12 +88,12 @@
           <v-btn color="#EEE" style="width: 100%; height: 35px;" v-if="isfollow">팔로잉</v-btn>
         </div>
         
-        <div class="myrecipe">
+        <div class="myrecipe" style="overflow-y: scroll;">
           <h3 class="myrecipe-title">{{yourData.nickname}}님의 레시피</h3>
           <div class="myrecipe-body">
-            <div class="myrecipe-img" v-for="(recipe, i) in recipes" :key="i">
+            <div class="myrecipe-img" style="width: 33%; height:33%" v-for="(recipe, i) in recipes" :key="i">
               <router-link :to="{ name: 'FeedDetail', params: { feedNo : recipe.feedNo }}">
-                <img class="myrecipe-img-size" :src="recipe.img" alt="food">
+                <img class="myrecipe-img-size" style="width:100%; height:100%;" :src="recipe.img" alt="food">
                 <!-- <img class="myrecipe-img-size" :src="require(`../../assets/images${recipe.img}`)" alt="food"> -->
               </router-link>
             </div>
