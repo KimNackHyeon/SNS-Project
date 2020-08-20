@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%; height:100%;">
+  <div style="width:100%; height:94%;">
       <div style="width:100%; height:10%; z-index:23;" v-on:keyup.down="selectValue('down')"
        v-on:keyup.up="selectValue('up')"> <!-- 검색 -->
             <div class="search" >
