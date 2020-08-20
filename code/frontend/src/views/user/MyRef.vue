@@ -316,6 +316,7 @@ data() {
             },
             
             openShare:function(sendData){
+                console.log("openshare");
                 this.closeregistMater();
                 var nowfood = sendData.nowfood;
                 var index = sendData.index;

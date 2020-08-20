@@ -69,7 +69,7 @@
       <div @click="closeAddFood" style="width:40px; height:40px;">
         <v-icon style="margin-left:330px;">mdi-close</v-icon>
       </div>
-      <div style="width:100%; height:470px">
+      <div style="width:100%;" :style="{height:frameSize.y-130+'px'}">
         <search-food @addfood="addFood"></search-food>
       </div>
     </div>

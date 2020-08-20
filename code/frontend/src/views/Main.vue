@@ -25,10 +25,10 @@
   <div>
    <div @click="opentutorial" class="introduce" style="cursor:pointer">
       <!-- <div class="introduce"> -->
-      <div class="introduceIMG" :style="{'background-position-x': (360-frameSize.x)/2+'px'}"></div>
-      <div style="height:112px;width:50%; float:right; text-align:right;
+      <div class="introduceIMG" :style="{'background-position-x': -7+'px'}"></div>
+      <div style="height:112px; float:right; text-align:right;
     font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;padding-top: 17px;
-    padding-right: 5px;  text-overflow:hidden;">
+    padding-right: 5px;  text-overflow:hidden;" :style="{width:frameSize.x-230+'px'}">
         <h4>남는 식재료</h4>
         <h4>더이상 버리지 마세요</h4>
         <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span>
@@ -164,7 +164,7 @@ h4{
 .introduceIMG{
     background-image: url(/img/login_backgroundimg.3ff816a3.gif);
     height: 112px;
-    width: 50%;
+    width: 225px;
     background-size: 242px 314px;
 
     background-position-y: -141px;
