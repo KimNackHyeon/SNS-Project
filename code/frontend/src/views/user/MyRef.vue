@@ -244,7 +244,7 @@ data() {
             };
             axios
             // .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
-            .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
+            .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
                 window.location.reload();
@@ -262,7 +262,7 @@ data() {
         };
         axios
         // .post(`http://localhost:9999/food/api/myref/regist`,registFood)
-        .post(`http://localhost:9999/food/api/myref/regist`,registFood)
+        .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
             Swal.fire({
@@ -520,7 +520,7 @@ data() {
                     
                     console.log(typeof(this.changeFoods));
                 axios({
-                    url:`http://localhost:9999/food/api/myref/share`,
+                    url:`https://i3b301.p.ssafy.io:9999/food/api/myref/share`,
                     method:'post',
                     data: JSON.stringify(this.changeFoods),
                     headers: config.headers})
@@ -585,7 +585,7 @@ data() {
       }else{
         this.userinfo = store.state.userInfo;
       }
-      axios.get(`http://localhost:9999/food/api/myref/search/`+this.userinfo.email)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+this.userinfo.email)
         .then(response => {
         //   this.myreflist = response.data.myreflist
           this.foods = response.data.myreflist;
@@ -595,7 +595,7 @@ data() {
         })
 
         axios
-        .get(`http://localhost:9999/food/api/account/apitest`)
+        .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
             console.log(this.xmldata);
