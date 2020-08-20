@@ -12,7 +12,7 @@
           <div style="color: white; padding-left: 10px; padding-bottom: 10px;">
             <span style="margin: 0">우리 동네 냉장고에서 신선한 재료로 맛있는 음식을 만드세요!</span>
           </div>
-        <div style="overflow: hidden">
+        <div style="overflow: hidden; padding-bottom: 10px;">
           <!-- 로그인 입력 큰 틀 -->
           <div style="float : left; width: 75%;">
             <!-- 로그인 입력 -->
