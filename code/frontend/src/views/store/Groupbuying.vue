@@ -1,7 +1,7 @@
 <template>
   <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
   <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
-    <v-card flat>
+    <v-card text>
       <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
@@ -12,7 +12,7 @@
             </router-link>
           </div>
           <v-flex>
-            <v-toolbar flat style="border: solid 1px lightgrey" height="48px">
+            <v-toolbar text style="border: solid 1px lightgrey" height="48px">
               <div class="text-h6 mx-auto">
                 공동구매
               </div>
@@ -24,11 +24,11 @@
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-flex style="width:90%; float:left;">
-            <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-toolbar color="rgba(160, 212, 105, 0.5)" text height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+              <v-toolbar color="rgba(202, 231, 171)" text height="48px">
                 <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
             </v-toolbar>
