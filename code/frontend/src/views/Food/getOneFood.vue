@@ -71,7 +71,7 @@ export default {
       this.$emit('addfood',food);
     },
     changeValue(food) {
-      // console.log(`change value: ${food}`);
+      console.log(`change value: ${food}`);
       this.isActive = false;
       document.querySelector('.s').value = '';
       // this.selectedFood.push(food);
@@ -163,7 +163,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -176,7 +176,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
