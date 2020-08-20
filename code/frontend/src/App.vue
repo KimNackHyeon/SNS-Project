@@ -81,13 +81,15 @@ export default {
         )
         })
         .catch((error) => {
+          this.$router.push('/error');
           // console.log(error.response);
         });
     },
 
     onLogout() {
       var token = this.$cookies.get("auth-token");
-      if (store.state.userInfo) {
+      if (store.state.userInfo.email) {
+        // alert("여기?");
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/logout`, {params: { token : token}})
         .then(() => {
           // console.log(this.$cookies.keys());
@@ -103,6 +105,7 @@ export default {
         })
         .catch(error => {
           // console.log(error.response);
+          this.$router.push('/error');
         })
       }
       else {
