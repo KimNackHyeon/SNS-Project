@@ -1,17 +1,15 @@
 <template>
   <div class="user" id="login">
-    <div class="wrapC">
+    <div class="wrapC" :style="{'margin-top': ((frameSize.y*0.15)-40)/2 +'px'}">
       <!-- :style="{width: (frameSize.x*0.3)+'px', height: (frameSize.x*0.3)+'px'}" -->
-      <div style="width:100%; height : 400px;">
-        <div style="height : 25%;">
-          
-          <p class="login-title">LOGIN</p>
+      <div style="width:100%; height : 25%;">
+        <div :style="{ height: (frameSize.y*0.15)+'px', 'padding-top' : ((frameSize.y*0.15)-40)/2 +'px' }">
+          <p class="login-title" style="font-size : 40px">우리 동네 냉장고</p>
         </div>
         <!-- login 큰 클자 -->
         <div style="width : 100%; margin: auto;" :style="{height: (frameSize.x*0.4)+'px'}">
           
-          <div style="color: white; padding-left: 10px; padding-bottom: 10px;">
-            <span style="margin: 0">우리 동네 냉장고에서 신선한 재료로 맛있는 음식을 만드세요!</span>
+          <div style="color: white; padding-left: 10px; padding-bottom: 10px;" align="center">
           </div>
         <div style="overflow: hidden; padding-bottom: 10px;">
           <!-- 로그인 입력 큰 틀 -->
@@ -54,11 +52,14 @@
             <router-link to="/user/searchpassword" class="bottom-btn">비밀번호 찾기 </router-link>|
             <router-link to="/user/join" class="bottom-btn"> 회원가입</router-link>
           </div>
+          <div style="float:right;">
+            <KakaoLogin :component="component" />
+          </div>
         </div>
         
         <!-- 아이디 찾기 ~ 회원가입 -->
-        <div id="otherLogin" style="display: inline-block; float: right">
-          <KakaoLogin :component="component" />
+        <!-- <div id="otherLogin" style="display: inline-block; float: right"> -->
+          
           <!-- <KakaoLogin
             api-key="4c86227162ae9066234fa38d59d75010"
             image="kakao_login_btn_small"
@@ -66,10 +67,13 @@
             :on-failure=onFailure
           /> -->
           <!-- <GoogleLogin :component="component" /> -->
-        </div>
+        <!-- </div> -->
         <!-- 다른 플랫폼으로 로그인 -->
       </div>
       <!-- -------------------------------- -->
+    </div>
+    <div class="project" align="center">
+      <span style="margin: 0">우리 동네 냉장고에서 신선한 재료로<br> 맛있는 음식을 만드세요!</span>
     </div>
     <!-- <div class="error-message" v-if="error.email">{{error.email}}</div>
     <div class="error-message" v-if="error.password">{{error.password}}</div>
@@ -214,3 +218,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .project {
+    box-sizing: border-box;
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    height: 50px;
+    padding-left: 5px;
+  }
+</style>
