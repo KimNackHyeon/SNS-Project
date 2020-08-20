@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="modifyBody">
+    <div class="modifyBody" style="width: inherit">
       <div class="myphoto">
         <v-avatar size="95"><img :src="newUserInfo.newImgUrl" alt="John"></v-avatar>
         <div class="filebox">
@@ -56,10 +56,11 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <div>
+      <div class="input-with-label" style="position: fixed; bottom: 0; width: inherit">
         <v-btn 
-        color="rgb(160, 212, 105)" 
-        style="width: 100%; height: 50px; color: white; font-size: 18px; margin-top: 35px;" 
+        color="rgb(160, 212, 105)"
+        class="m_button"
+        style="width: 95%; height: 50px; color: white; font-size: 18px; margin-top: 35px;" 
         @click="onModify()"
         >
         수정하기

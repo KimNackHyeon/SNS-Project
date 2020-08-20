@@ -309,9 +309,9 @@ export default {
           this.yourData.image = response.data.img;
           this.yourData.following = response.data.following;
           this.yourData.follower = response.data.follower;
-          this.yourData.score = Math.floor(Number(response.data.eval_point) / Number(response.data.eval_count));
-          // console.log(this.yourData)
-          // // console.log(this.yourData.follower+" "+this.yourData.following);
+          this.yourData.score = Math.floor((response.data.eval_point) / (response.data.eval_count));
+          console.log(this.yourData)
+          // console.log(this.yourData.follower+" "+this.yourData.following);
         })
         .catch(error => {
           // // console.log(error.response)
