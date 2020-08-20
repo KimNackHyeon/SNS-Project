@@ -41,9 +41,9 @@
         </v-layout>
         <div style="padding: 10px; padding-bottom: 40px; margin: 0; overflow-y: scroll;overflow-x: hidden;" grid-list-lg :style="{height:(frameSize.y-146)+'px'}">
           <v-row dense style="padding: 0;">
-            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12" class="onegroupbuying">
+            <v-col v-for="(groupBuying, i) in groupBuyings" :key="i" cols="12">
               <router-link :to="`/store/groupbuying/${ groupBuying.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onegroupbuying" style="padding: 5px;" >
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="3" style="padding: 0; padding-right: 8px; border-right: solid 1px lightgray;">
                       <img height="80" width="80" padding="60" :src="require(`../../assets/images/food/${groupBuying.food}.png`)" style="border-radius: 5px;">
@@ -333,6 +333,10 @@ export default {
 </script>
 
 <style scoped>
+.v-sheet.v-toolbar:not(.v-sheet--outlined) {
+  box-shadow: unset !important;
+  -webkit-box-shadow: unset !important;
+}
 .writeButton{
   width: 60px;
   height: 60px;
