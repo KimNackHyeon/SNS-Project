@@ -8,7 +8,7 @@
             <div class="myprofil">
               <div style="margin: 10px">
                 <!-- <img style="width: 50px; height: 50px;" src="../../assets/images/fresh_grade/4.png" alt="신선도"> -->
-                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도">
+                <img style="width: 50px; height: 50px;" :src="require(`../../assets/images/fresh_grade/${userData.score}.png`)" alt="신선도" v-if="userData.score">
                 <h2 class="user-name">{{userinfo.nickname}}</h2>
                 <router-link to="/user/modifyuser"><v-btn class="myprofil-icon" icon><v-icon>mdi-cog</v-icon></v-btn></router-link>
               </div>

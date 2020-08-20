@@ -126,6 +126,8 @@ public class AccountController {
 		Member userOpt = memberRepo.getUserByEmail(member.getEmail());
 		if (userOpt == null) { // 중복된 이메일이 없으면
 			System.out.println("로그인된 아이디 정보");
+			member.setEvalCount(1L);
+			member.setEvalPoint(3L);
 			memberRepo.save(member);
 			return new ResponseEntity<Object>("success", HttpStatus.OK);
 		} else {
@@ -190,6 +192,8 @@ public class AccountController {
 		final BasicResponse result = new BasicResponse();
 		// 회원가입단을 생성해 보세요.'
 		member.setImage("/img/profile_default.png");
+		member.setEvalCount(1L);
+		member.setEvalPoint(3L);
 		memberRepo.save(member);
 		result.status = true;
 		result.data = "success";
@@ -421,10 +425,11 @@ public class AccountController {
 	public Object update(@RequestBody Member member) {
 		System.out.println(member);
 		Member temp = memberRepo.getUserByEmail(member.getEmail());
-		System.out.println(temp);
 		final BasicResponse result = new BasicResponse();
 		member.setNo(temp.getNo());
 		member.setCreate_date(temp.getCreate_date());
+		member.setEvalCount(temp.getEvalCount());
+		member.setEvalPoint(temp.getEvalPoint());
 		memberRepo.save(member);
 //		memberRepo.saveAndFlush(member);
 		result.status = true;

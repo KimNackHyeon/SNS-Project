@@ -1,8 +1,8 @@
 <template>
   <div style="overflow-x:hidden; width:100%; height:100%; overflow-y:hidden;">
   <v-app style="overflow-x:hidden;  width:100%; height:100%; overflow-y:hidden;">
-    <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', position: relative}">
+    <v-card  >
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px', 'position': 'relative'}">
         <v-layout row wrap justify-space-between style="padding: 0; margin: 0; height: 48px;">
           <div style="border: solid 1px lightgrey">
             <router-link to="/Main">
@@ -12,7 +12,7 @@
             </router-link>
           </div>
           <v-flex>
-            <v-toolbar flat style="border: solid 1px lightgrey" height="48px">
+            <v-toolbar   style="border: solid 1px lightgrey" height="48px">
               <div class="text-h6 mx-auto">
                 공동구매
               </div>
@@ -24,11 +24,11 @@
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
           <v-flex style="width:90%; float:left;">
-            <v-toolbar color="rgba(160, 212, 105, 0.5)" flat height="48px">
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+            <v-toolbar color="rgba(160, 212, 105, 0.5)"   height="48px">
+              <v-toolbar color="rgba(202, 231, 171)"   height="48px">
                 <v-switch :input-value="distswitch" @change="callwithaddress" label="가까운순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
-              <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+              <v-toolbar color="rgba(202, 231, 171)"   height="48px">
                 <v-switch id="date" :input-value="dateswitch" @change="call" label="마감임박순" style="margin-top:20px;"></v-switch>
               </v-toolbar>
             </v-toolbar>
@@ -303,27 +303,6 @@ export default {
             this.mydata.push([result[0].y, result[0].x])
           }
         })
-        for (var m = 0; m <= this.mapdata.length; m++) {
-          geocoder.addressSearch(this.mapdata[m], (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              var distancedata = [
-                new kakao.maps.LatLng(this.mydata[0][0], this.mydata[0][1]),
-                new kakao.maps.LatLng(result[0].y, result[0].x)
-              ]
-              // console.log(distancedata)
-              this.addresspoint.push([result[0].y, result[0].x])
-              var polyline = new kakao.maps.Polyline({
-                path: distancedata,
-              })
-              var distance = polyline.getLength();
-              // console.log(distance)
-              this.distancedata2.push(distance)
-              // this.otherdata.push(redata);
-          this.distancegroup.push(distancedata[1]) 
-            }
-          })
-        }
-        console.log(this.addresspoint)
       })
       .catch(error => {
         console.log(error)
