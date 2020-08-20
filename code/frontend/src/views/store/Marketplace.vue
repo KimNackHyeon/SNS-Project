@@ -185,7 +185,7 @@ export default {
         // console.log(this.userinfo.email)
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
-          this.tradelist = response.data.list
+          this.tradelist = response.data.list.reverse();
           this.myList = this.tradelist
           // // console.log(this.mapOtherUserInfo)
           
@@ -206,7 +206,7 @@ export default {
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
-          this.tradelist = response.data.list
+          this.tradelist = response.data.list.reverse();
           this.myList = this.tradelist
           // // console.log(this.tradelist)
           this.mapOtherUserInfo.address.length = []
@@ -271,11 +271,30 @@ export default {
         this.tradelist = this.tradelist.filter(function (item) {
             return item.myfood_kor.indexOf(keyword)!=-1;
           });
+        if(this.tradelist.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: '',
+            text: '검색어와 일치하는 재료가 없습니다!',
+            footer: ''
+          })
+        }
       }else{
         this.tradelist = this.myList;
         this.tradelist = this.tradelist.filter(function (item) {
             return item.myfood_kor.indexOf(keyword)!=-1;
           });
+        console.log(this.tradelist);
+        if(this.tradelist.length == 0){
+          if(this.tradelist.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 재료가 없습니다!',
+              footer: ''
+            })
+          }
+        }
       }
     }
   },
@@ -323,7 +342,7 @@ created() {
             store.state.mapOtherUserInfo.address.push(this.tradelist[k].address)
           }
         }
-        this.originalList = this.tradelist;
+        this.originalList = this.tradelist.reverse();
         })
         .catch(error => {
           // // console.log(error.response)

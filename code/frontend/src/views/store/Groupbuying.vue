@@ -207,7 +207,7 @@ export default {
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
-          this.groupBuyings = response.data
+          this.groupBuyings = response.data.reverse();
         })
         .catch(error => {
           // console.log(error.response)
@@ -235,7 +235,7 @@ export default {
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
         .then(response => {
-          this.groupBuyings = response.data
+          this.groupBuyings = response.data.reverse();
         })
         .catch(error => {
           // console.log(error.response)
@@ -261,17 +261,19 @@ export default {
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      // console.log(this.myList);
-        this.groupBuyings = this.originalList;
-        this.groupBuyings = this.groupBuyings.filter(function (item) {
-            return item.food_kor.indexOf(keyword)!=-1;
-          });
-      // else{
-      //   this.groupBuyings = this.myList;
-      //   this.groupBuyings = this.groupBuyings.filter(function (item) {
-      //       return item.myfood_kor.indexOf(keyword)!=-1;
-      //     });
-      // }
+      this.groupBuyings = this.originalList;
+      this.groupBuyings = this.groupBuyings.filter(function (item) {
+          return item.food_kor.indexOf(keyword)!=-1;
+        });
+
+      if(this.groupBuyings.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: '',
+            text: '검색어와 일치하는 재료가 없습니다!',
+            footer: ''
+          })
+      }
     }
   },
   created(){
@@ -284,8 +286,8 @@ export default {
     axios.get(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/read`)
       .then(response => {
         // // console.log(response)
-        this.groupBuyings = response.data;
-        this.originalList = response.data;
+        this.groupBuyings = response.data.reverse();
+        this.originalList = this.groupBuyings;
         // // console.log(this.groupBuyings)
         for (var i = 0; i < this.groupBuyings.length; i++) {
           this.mapdata.push(this.groupBuyings[i].address)
