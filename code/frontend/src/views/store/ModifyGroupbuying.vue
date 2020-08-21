@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="modifygroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -44,6 +44,8 @@
                         >
                       <span>{{ el.name_kor }}</span>
                     </li>
+                    
+          
                   </ul>
                 </div>
               </div>
@@ -58,6 +60,18 @@
                   <div>
                     {{ food.name_kor }}
                   </div>
+                </div>
+                <div style="width:100%;height:100%;" v-if="filterListImg.length==0">
+                <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:150px; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <v-btn @click="chooseComplete({name:'etc',
+            name_kor:etcName,
+            img:'etc' })" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">등록하기</v-btn>
+          </div>
+          </div>
                 </div>
               </div>
             </v-card-text>
@@ -133,10 +147,10 @@
       </div>
     </div>
     <!-- 글 수정 버튼 -->
-    <div>
+    <div style="width: inherit">
       <v-btn 
       color="rgb(160, 212, 105)" 
-      style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+      style="width: inherit; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
       수정하기
@@ -181,6 +195,7 @@ export default {
       // 품목 선택
       searchQuery: '',
       names : foods,
+      etcName:'',
     }
   },
   watch: {
@@ -203,14 +218,14 @@ export default {
   },
   methods: {
     getFood(){
-      // console.log('getFood 실행')
+      // // console.log('getFood 실행')
       if (this.dialog === false) {
         this.dialog = true
-        // console.log('false')
+        // // console.log('false')
       }
       else {
         this.dialog = false
-        // console.log('true')
+        // // console.log('true')
       }
     },
     chooseComplete:function(food){
@@ -219,7 +234,7 @@ export default {
       // $('.setFood').text(food.name_kor);
       this.food = food.name
       this.food_kor = food.name_kor
-      console.log(this.food.food_kor)
+      // console.log(this.food.food_kor)
       this.searchQuery = ''
       document.querySelector('.s').value = '';
     },
@@ -240,7 +255,7 @@ export default {
       // 모든 항목 다 작성되었는지 검사
       if (this.title && this.food && this.dateFormatted && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
         const sendContent = this.content.replace(/\n/g, '^')
-        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.dateFormatted, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
+        axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/update`, {no:this.$route.params.id, title:this.title, food:this.food, food_kor:this.food_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
             Swal.fire({
             title: '수정이 완료되었습니다.',
@@ -268,7 +283,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -281,7 +296,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -303,14 +318,14 @@ export default {
       }else{
         this.userinfo = store.state.userInfo;
       }
-    console.log(typeof(this.$route.params.id))
+    // console.log(typeof(this.$route.params.id))
     axios({
                     url:`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/beforeupdate`,
                     method:'post',
                     data:{no:this.$route.params.id},
                     headers: config.headers})
                 .then((response)=>{
-                    console.log(response);
+                    // console.log(response);
                     this.title = response.data.title
                     this.food = response.data.food
                     this.food_kor = response.data.food_kor
@@ -325,7 +340,7 @@ export default {
                     this.content = this.content.split('^').join('\n');
                 })
                 .catch((error)=>{
-                    console.log(error.response);
+                    // console.log(error.response);
                 })      
   },
 }
@@ -433,7 +448,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

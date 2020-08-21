@@ -34,59 +34,59 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/api/myref")
 public class MyRefController {
-	
+
 	@Autowired
 	private MyRefRepo myrefRepo;
 	@Autowired
 	private TradeRepo tradeRepo;
-	
-	//Create
+
+	// Create
 	@PostMapping("/regist")
 	@ApiOperation(value = "나의 음식재료 등록")
-	public ResponseEntity<String> registMyRef(@RequestBody MyRef myref){
+	public ResponseEntity<String> registMyRef(@RequestBody MyRef myref) {
 		MyRef food = myrefRepo.findByEmailAndName(myref.getEmail(), myref.getName());
-		if(food == null) {
+		if (food == null) {
 			myrefRepo.save(myref);
-		}else {
+		} else {
 			myrefRepo.update(myref.getEmail(), myref.getName(), myref.getAmount());
 		}
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
-	
-	//Read
+
+	// Read
 	@GetMapping("/search/{email}")
 	@ApiOperation(value = "나의 음식재료 조회")
 	public ResponseEntity<Map> myRef(@PathVariable String email) {
 		System.out.println(email);
 		ArrayList<MyRef> myrefList = myrefRepo.findByEmail(email);
 		Map<String, ArrayList<MyRef>> map = new HashMap<String, ArrayList<MyRef>>();
-		if (!myrefList.isEmpty()) {
-			map.put("myreflist", myrefList);
-			return new ResponseEntity<Map>(map, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Map>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+
+		map.put("myreflist", myrefList);
+		return new ResponseEntity<Map>(map, HttpStatus.OK);
+
 	}
-	//Delete
+
+	// Delete
 	@PostMapping("/delete")
 	@ApiOperation(value = "나의 음식 삭제")
-	public ResponseEntity<String> deleteMyRef(@RequestBody MyRef myref){
+	public ResponseEntity<String> deleteMyRef(@RequestBody MyRef myref) {
 		System.out.println(myref.toString());
 		MyRef food = myrefRepo.findByEmailAndName(myref.getEmail(), myref.getName());
-		if(food == null) {
+		if (food == null) {
 			return new ResponseEntity<String>("삭제할 재료가 없습니다.", HttpStatus.NOT_ACCEPTABLE);
-		}else {
-			if(food.getAmount()+myref.getAmount() <= 0) {
+		} else {
+			if (food.getAmount() + myref.getAmount() <= 0) {
 				myrefRepo.deleteByEmailAndName(myref.getEmail(), myref.getName());
-			}else {
+			} else {
 				myrefRepo.update(myref.getEmail(), myref.getName(), myref.getAmount());
 			}
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		}
 	}
+
 	@PostMapping("/share")
 	@ApiOperation(value = "나의 음식 공유")
-	public ResponseEntity<String> shareMyRef(@RequestBody ArrayList<Trade> trade){
+	public ResponseEntity<String> shareMyRef(@RequestBody ArrayList<Trade> trade) {
 		System.out.println(trade.toString());
 		for (Trade trade2 : trade) {
 			tradeRepo.save(trade2);

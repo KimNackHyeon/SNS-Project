@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="writegroupbuying" style="height: 100%">
     <div style="width:100%; height:40px; border-top: 1px solid rgba(128, 128, 128, 0.15); border-bottom: 1px solid rgba(128, 128, 128, 0.15)">
       <router-link to="/store/groupbuying">
         <div style="width:40px; height:100%;border-right: 1px solid rgba(128, 128, 128, 0.15); float:left;">
@@ -54,7 +54,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete(food)" class="card" v-for="(food,index) in filterListImg" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -63,6 +63,18 @@
                     {{ food.name_kor }}
                   </div>
                 </div>
+                <div style="width:100%;height:100%;" v-if="filterListImg.length==0">
+          <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:150px; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <v-btn @click="chooseComplete({name:'etc',
+            name_kor:etcName,
+            img:'etc' })" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">등록하기</v-btn>
+          </div>
+          </div>
+        </div>
               </div>
             </v-card-text>
             <v-divider></v-divider>
@@ -140,7 +152,7 @@
     <div>
       <v-btn 
       color="rgb(160, 212, 105)" 
-      style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+      :style="{width:frameSize.x+'px'}" style=" height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
       @click="onCreate()"
       >
       작성하기
@@ -163,6 +175,7 @@ const SERVER_URL = store.state.SERVER_URL;
 export default {
   data() {
     return {
+       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       userinfo:'',
       title: '',
       food: '',
@@ -181,6 +194,9 @@ export default {
       names : foods,
     }
   },
+  mounted(){
+    this.onResize();
+  },
   watch: {
     date (val) {
       this.dateFormatted = this.formatDate(this.date)
@@ -188,10 +204,10 @@ export default {
     numberPeople () {
       if (Number(this.numberPeople) == 1){
         this.oknumPeople = false
-        Swal.fire({
-          title: '참여인원 수를 확인해 주세요',
-          text: '참여인원은 2명 이상부터 가능합니다.',
-        })
+        // Swal.fire({
+        //   title: '참여인원 수를 확인해 주세요',
+        //   text: '참여인원은 2명 이상부터 가능합니다.',
+        // })
       }
       else {
         this.oknumPeople = true;
@@ -200,15 +216,22 @@ export default {
     }
   },
   methods: {
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     getFood(){
-      // console.log('getFood 실행')
+      // // console.log('getFood 실행')
       if (this.dialog === false) {
         this.dialog = true
-        // console.log('false')
+        // // console.log('false')
       }
       else {
         this.dialog = false
-        // console.log('true')
+        // // console.log('true')
       }
     },
     chooseComplete:function(food){
@@ -234,7 +257,7 @@ export default {
     },
     onCreate(){
       // 모든 항목 다 작성되었는지 검사
-      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople) {
+      if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && this.userinfo.address) {
         const sendContent = this.content.replace(/\n/g, '^')
         axios.post(`https://i3b301.p.ssafy.io:9999/food/api/groupbuying/create`, {title:this.title, food:this.food.name, food_kor:this.food.name_kor, address:this.userinfo.address, end_date:this.date, max_people:this.numberPeople, now_people:0, link:this.fileLink, nickname:this.userinfo.nickname, email:this.userinfo.email, content:sendContent})
           .then(response => {
@@ -246,10 +269,26 @@ export default {
           .catch(error => {
           })
       }
-      else if (!this.oknumPeople) {
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && !this.oknumPeople && this.userinfo.address) {
         Swal.fire({
           title: '참여인원 수를 확인해 주세요',
           text: '참여인원은 2명 이상부터 가능합니다.',
+        })
+      }
+      else if (this.title && this.food && this.date && this.numberPeople && this.fileLink && this.content && this.oknumPeople && !this.userinfo.address) {
+        Swal.fire({
+            title: '필수 정보가 부족합니다.',
+            text: "회원정보수정에서 주소를 입력해주세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '회원정보수정'
+        })
+        .then((result) => {
+        if (result.value) {
+            this.$router.push('/user/modifyuser')
+        }
         })
       }
       else{
@@ -264,7 +303,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -277,7 +316,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      // console.log(`typing value: ${str}`);
+      // // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -379,6 +418,9 @@ input{
   margin: 0 !important;
   padding: 0 !important;
 }
+.v-input__control {
+  border: 1px solid lightgray !important;
+}
 .v-input__slot:before{
   border-color: unset !important;
 }
@@ -411,7 +453,7 @@ input{
   border: 1px solid lightgray;
   padding: 5px 10px
 }
-/* .contentinput:hover {
+.contentinput:hover {
   border: 2px solid #a0d469;
-} */
+}
 </style>

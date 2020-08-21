@@ -1,21 +1,22 @@
 <template>
+<div style="width:100%; height:100%; background-color:#f5efb3;">
   <div class="rootContainer">
-      <div class="selectfood" style="width:360px; height:600px; background-color:white; display:none; position:fixed; z-index:80;">
-          <div style="height:50px; width:100%; background-color:white">
+      <div class="selectfood" style="width:100%; height:100%; background-color:white; display:none; position:fixed; z-index:80;">
+          <div style="height:50px; background-color:white" :style="{width:frameSize.x+'px'}">
               <div style="float:right; margin: 11px;" @click="closeGetOneFood"><v-icon>mdi-close</v-icon></div>
           </div>
-          <get-one-food @addfood="addFood" ></get-one-food>
+          <get-one-food @addfood="addFood" :style="{width:frameSize.x+'px', height:(frameSize.y-90)+'px'}"></get-one-food>
       </div>
-      <div id="dark" @click="closeCheckBasket()" style="width:360px; height:640px; background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
+      <div id="dark" @click="closeCheckBasket()" :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="background-color:#00000075; z-index:99; position:fixed; display:none;"></div>
     
-        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef">
+        <ref-paging :list-array="foods" @openShare="openShare"  id="insideRef" >
             
         </ref-paging>
-        <div id="basket">
-            <v-btn @click="openCheckBasket()" icon width="200px" height="150px"><img style="width:auto; height:150px;" src="../../assets/images/basket.png"></v-btn>
+            <div id="basket">
+            <v-btn @click="openCheckBasket()" icon :style="{width:(frameSize.per*200)+'px',height:(frameSize.per*150)+'px'}"><img style="width:100%; height:100%;" src="../../assets/images/basket.png"></v-btn>
 
         </div>
-        <div id="FillBtn" style="position:fixed; margin-left: 256px; margin-top: 10px; display:unset;">
+        <div id="FillBtn" :style="{'margin-left': (256*frameSize.per)+'px'}" style="position:fixed; margin-top: 10px; display:unset;">
             <v-btn  v-on:click="openregistMater" color="rgb(160,212,105)" width="90px" height="50px" >
                 <v-icon >mdi-cart</v-icon>
                 <h4>채우기</h4>
@@ -73,6 +74,7 @@
                 </div>
             </div>
             <div style="width:100%; height:74px; background-color:black; color:white; font-size: 15px; padding: 5px; overflow-y:scroll;">
+             <div style="color: white; font-size: 15px; text-align: center;">- 실시간 시세 정보 -</div>
              <div v-if="myapi.name!=''">{{myapi.name}} {{myapi.unit}} 당 {{myapi.price}}원</div>
              <div v-if="trade1api.name!=''">{{trade1api.name}} {{trade1api.unit}} 당 {{trade1api.price}}원</div>
              <div v-if="trade2api.name!=''">{{trade2api.name}} {{trade2api.unit}} 당 {{trade2api.price}}원</div>
@@ -121,7 +123,7 @@
         <div class="checkBasket"> <!-- 장바구니 안 보기 -->
             <div style="width:100%; height:30px; background-color:rgba(224, 224, 224, 0.51); text-align:center; font-weight:bold; padding-top:5px; overflow:hidden;">공유 바구니</div>
            <div style="width:100%; height:196px; overflow:scroll; text-align: center;">
-           <div class="textArea" v-for="(food,index) in changeFoods" :key="index">
+           <div class="textArea" v-for="(food,index) in changeFoods" :key="index" style="height:auto;">
                <h3>{{food.myfood_kor}}와 교환할 재료</h3> <h4 style="fload:left; font-size:12px;">(개당 {{food.price}} 원)</h4>
                 <div style=" height: 20px; font-size: 15px;">
                     <h4 style="float:left; width:100%; float:left;">{{food.myfoodcount1}}개당 {{food.tradefood1_kor}} {{food.tradefoodcount1}}개</h4>
@@ -134,10 +136,11 @@
            </div>
         </div><!-- end of 장바구니 안 보기 -->
         
-        <div style="position:fixed; margin-top: 590px; width:360px;">
+        <div :style="{'margin-top':frameSize.y-85+'px',width:frameSize.x+'px'}" style="position:fixed;">
             <button @click="shareFinish" type="button" style="width:100%; height:40px;background-color:rgb(160, 212, 105); font-weight:bold; color:white; font-size:20px;">장터에 글올리기</button>
         
         </div>
+  </div>
   </div>
 </template>
 
@@ -170,6 +173,7 @@ export default {
     components:{getOneFood,RefPaging},
 data() {
     return {
+        frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
         selectedFood:'',  //냉장고에 채우고싶은 재료 
         fillFoodNum:1, //냉장고에 채우고 싶은 재료 개수
         fillFoodDate:'', //냉장고에 채우고 싶은 재료를 산 날짜
@@ -217,7 +221,17 @@ data() {
         xmldata:[],
     }
   },
+  mounted(){
+     this.onResize();
+  },
     methods:{
+        onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
         deleteFoodfromRef(){
             var minusAmount = this.totalShareAmount * -1;
             const deleteFood = {
@@ -229,7 +243,7 @@ data() {
                 img:this.Nowgra.img,
             };
             axios
-            // .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
+            // .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
             .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
             .then((response)=>{
                 console.log(response);
@@ -247,7 +261,7 @@ data() {
             // food:{name:this.selectedFood.name,name_kor:this.selectedFood.name_kor,img:this.selectedFood.img,expire_date:this.fillFoodExpireDate,amount:this.fillFoodNum},
         };
         axios
-        // .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
+        // .post(`http://localhost:9999/food/api/myref/regist`,registFood)
         .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
         .then((response)=>{
             console.log(response);
@@ -302,6 +316,7 @@ data() {
             },
             
             openShare:function(sendData){
+                console.log("openshare");
                 this.closeregistMater();
                 var nowfood = sendData.nowfood;
                 var index = sendData.index;
@@ -367,8 +382,8 @@ data() {
                
                 var sum = 0;
                 if(this.changeFoodsTemp.length<2){
-                    if(this.totalShareAmount<=this.Nowgra.amount){
-                        if(this.nowmyamount>this.totalShareAmount){
+                    if(Number(this.totalShareAmount)<=Number(this.Nowgra.amount)){
+                        if(Number(this.nowmyamount)>Number(this.totalShareAmount)){
                             Swal.fire({
                                 icon: 'error',
                                 title: '교환하고싶은 양이 총 공유양보다 많으면 안됩니다!',
@@ -427,13 +442,14 @@ data() {
                 }
             },
             putIntoBasket:function(){
+                if(this.sharedesc !=''){
                 if(this.changeFoodsTemp.length==2){
                     this.changeFoods.push({
                          email : this.userinfo.email,
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
@@ -454,7 +470,7 @@ data() {
                          nickname : this.userinfo.nickname,
                          myfood: this.changeFoodsTemp[0].Mygradient,
                          myfood_kor : this.changeFoodsTemp[0].Mygradient_kor,
-                         price: 300,
+                         price: 0,
                          myfoodcount1 : this.changeFoodsTemp[0].myamount,
                          tradefood1 : this.changeFoodsTemp[0].Cgradient,
                          tradefood1_kor : this.changeFoodsTemp[0].Cgradient_kor,
@@ -475,7 +491,12 @@ data() {
                         title: '교환목록을 채워주세요.',
                     })
                 }
-                
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '장터에 올릴때 들어갈 부가설명을 적어주세요.',
+                    })
+                }
             },
             openCheckBasket:function(){
                 if($('.checkBasket').css('display')=='none'){
@@ -494,8 +515,9 @@ data() {
             },
             shareFinish:function(){
                 // const shareList = this.changeFoods;
-                if(this.changeFoods.length>0){
-
+                
+                if(this.changeFoods.length>0 && this.userinfo.address){
+                    
                     console.log(typeof(this.changeFoods));
                 axios({
                     url:`https://i3b301.p.ssafy.io:9999/food/api/myref/share`,
@@ -509,7 +531,24 @@ data() {
                 .catch((error)=>{
                     console.log(error.response);
                 })
-                }else{
+                }
+                else if (!this.userinfo.address) {
+                    Swal.fire({
+                        title: '필수 정보가 부족합니다.',
+                        text: "회원정보수정에서 주소를 입력해주세요.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: '회원정보수정'
+                    })
+                    .then((result) => {
+                    if (result.value) {
+                        this.$router.push('/user/modifyuser')
+                    }
+                    })
+                }
+                else{
                     Swal.fire({
                         icon: 'error',
                         title: '장터에 올릴 재료를 바구니에 넣어주세요.',
@@ -590,19 +629,19 @@ data() {
 }
 .rootContainer{
     width:360px;
-    height:100%;
+    height:590px;
     background-image: url(../../assets/images/myref.png);
     background-size: contain;
     position:relative;
     overflow-x: hidden;
 }
 #insideRef{
-    width: 183px;
-    height: 452px;
+    width:183px;
+    height:452px;
+    margin-left: 18px;
+    margin-top:82px;
     border: 1px solid transparent;
     position: fixed;
-    margin-left: 18px;
-    margin-top: 82px;
 }
 .smallboxInside{
     width: 183px;
@@ -712,22 +751,18 @@ box-shadow: -2px -2px 1px #70b526;
     box-shadow: 2px 2px 1px #ab1b29;
 }
 .F1{
-width: 60px;
-height: 60px;
 position:fixed;
 margin-left: 15px;
 margin-top:10px;
 }
 .F2{
-width: 60px;
-height: 60px;
+
 position:fixed;
 margin-left: 108px;
 margin-top:10px;
 }
 .F3{
-width: 60px; 
-height: 60px;
+
 /* float: left;
 margin: 10px 15px; */
 position:fixed;
@@ -735,8 +770,7 @@ margin-left: 15px;
 margin-top:87px;
 }
 .F4{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 10px 15px; */
 position:fixed;
@@ -744,8 +778,7 @@ margin-left: 108px;
 margin-top:87px;
 }
 .F5{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 46px 15px 10px 15px; */
 position:fixed;
@@ -754,8 +787,7 @@ margin-left: 15px;
 }
 
 .F6{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin: 46px 15px 10px 15px; */
 position:fixed;
@@ -763,8 +795,7 @@ position:fixed;
     margin-top: 202px;
 }
 .F7{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin:20px 106px 10px 15px; */
 position:fixed;
@@ -772,8 +803,7 @@ position:fixed;
     margin-top: 291px;
 }
 .F8{
-width: 60px;
-height: 60px;
+
 /* float: left;
 margin:14px 106px 10px 15px; */
 position:fixed;

@@ -34,12 +34,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Evaluate;
 import com.web.curation.model.FeedData;
 import com.web.curation.model.Follow;
+import com.web.curation.model.GroupBuying;
 import com.web.curation.model.Member;
 import com.web.curation.model.MyBoard;
 import com.web.curation.model.MyRef;
 import com.web.curation.model.Scrap;
+import com.web.curation.repo.AlarmRepo;
+import com.web.curation.repo.EvaluateRepo;
 import com.web.curation.repo.FeedDataRepo;
 import com.web.curation.repo.FollowRepo;
 import com.web.curation.repo.MemberRepo;
@@ -90,6 +94,12 @@ public class AccountController {
 	@Autowired
 	ScrapRepo scrapRepo;
 
+	@Autowired
+	AlarmRepo alarmRepo;
+	
+	@Autowired
+	EvaluateRepo evaluateRepo;
+
 	@ApiOperation(value = "로그인 처리")
 	@PostMapping("/account/login")
 	public ResponseEntity<Map> login(@RequestBody Member member) {
@@ -116,6 +126,8 @@ public class AccountController {
 		Member userOpt = memberRepo.getUserByEmail(member.getEmail());
 		if (userOpt == null) { // 중복된 이메일이 없으면
 			System.out.println("로그인된 아이디 정보");
+			member.setEvalCount(1L);
+			member.setEvalPoint(3L);
 			memberRepo.save(member);
 			return new ResponseEntity<Object>("success", HttpStatus.OK);
 		} else {
@@ -180,6 +192,8 @@ public class AccountController {
 		final BasicResponse result = new BasicResponse();
 		// 회원가입단을 생성해 보세요.'
 		member.setImage("/img/profile_default.png");
+		member.setEvalCount(1L);
+		member.setEvalPoint(3L);
 		memberRepo.save(member);
 		result.status = true;
 		result.data = "success";
@@ -225,6 +239,11 @@ public class AccountController {
 
 		return response;
 	}
+	@PostMapping("/account/qna")
+	@ApiOperation(value = "관리자에게 문의하기")
+	public void researchpwd(@RequestBody GroupBuying groupbuying) {
+		memberService.qnaMail(groupbuying.getNickname(), groupbuying.getTitle(), groupbuying.getContent());
+	}
 
 	@PostMapping("/account/findpwd")
 	@ApiOperation(value = "비밀번호 전송")
@@ -250,12 +269,16 @@ public class AccountController {
 		Long recipe = myboardRepo.countByEmail(email);
 		Long following = followRepo.countByEmail(email);
 		Long follower = followRepo.countByYourEmail(email);
+		Long eval_count = memberRepo.findByEmail(email).get().getEvalCount();
+		Long eval_point = memberRepo.findByEmail(email).get().getEvalPoint();
 		Map<String, Long> map = new HashMap<String, Long>();
 //		final BasicResponse result = new BasicResponse();
 //		result.status = true;
 		map.put("recipe", recipe);
 		map.put("following", following);
 		map.put("follower", follower);
+		map.put("eval_count",eval_count);
+		map.put("eval_point",eval_point);
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
 	}
 
@@ -266,12 +289,16 @@ public class AccountController {
 		Member member = memberRepo.getUserByEmail(email);
 		Long following = followRepo.countByEmail(email);
 		Long follower = followRepo.countByYourEmail(email);
+		Long eval_count = memberRepo.findByEmail(email).get().getEvalCount();
+		Long eval_point = memberRepo.findByEmail(email).get().getEvalPoint();
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("nickname", member.getNickname());
 		map.put("img", member.getImage());
 		map.put("following", following);
 		map.put("follower", follower);
+		map.put("eval_count",eval_count);
+		map.put("eval_point",eval_point);
 		// 게시글 수 추가
 
 		return new ResponseEntity<Map>(map, HttpStatus.OK);
@@ -318,9 +345,25 @@ public class AccountController {
 	@PostMapping("/account/follow/")
 	@ApiOperation(value = "팔로우 추가")
 	public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
-
 		System.out.println(follow);
+		/* 팔로우 디비에 저장 */
 		followRepo.save(follow);
+
+		/* 알람 디비에 저장 */
+		Alarm alarm = new Alarm();
+		String sMember = memberRepo.getUserByEmail(follow.getEmail()).getNickname();
+		String content = sMember + "님이 회원님을 팔로우합니다.";
+
+		alarm.setEmail(follow.getYourEmail()); // 알람을 받을 사람
+		alarm.setType("1"); // 알람 타입 ( 1 : 팔로우 )
+		alarm.setConfirm(0L); // 알람 확인 체크 ( 0 : 확인 x 1 : 확인 o )
+		alarm.setContent(content);
+		alarm.setImage(memberRepo.getUserByEmail(follow.getEmail()).getImage());
+		alarm.setSemail(memberRepo.getUserByEmail(follow.getEmail()).getEmail());
+
+		System.out.println(alarm);
+		alarmRepo.save(alarm);
+
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
@@ -335,18 +378,31 @@ public class AccountController {
 
 	@PostMapping("/account/emailconfirm")
 	@ApiOperation(value = "이메일 인증하기")
-	public Object emailconfirm(@RequestBody Member member) {
-		final BasicResponse result = new BasicResponse();
+	public ResponseEntity<HashMap<String, String>> emailconfirm(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
 		// 이메일, 닉네임 중복처리 필수
+		System.out.println("hihi");
 		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			result.status = true;
-			result.data = "1";
+			hashmap.put("data", "1");
 		} else {
 			String code = memberService.sendMail(member.getEmail());
-			result.status = true;
-			result.data = code;
+			hashmap.put("data", code);
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
+	}
+
+	@PostMapping("/account/checkemail")
+	@ApiOperation(value = "이메일 중복체크")
+	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
+		HashMap<String, String> hashmap = new HashMap<String, String>();
+		// 이메일, 닉네임 중복처리 필수
+		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
+			hashmap.put("data", "1");
+		} else {
+//			String code = memberService.sendMail(member.getEmail());
+			hashmap.put("data", "0");
+		}
+		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
 	}
 
 	@PostMapping("/account/nicknameconfirm")
@@ -369,10 +425,11 @@ public class AccountController {
 	public Object update(@RequestBody Member member) {
 		System.out.println(member);
 		Member temp = memberRepo.getUserByEmail(member.getEmail());
-		System.out.println(temp);
 		final BasicResponse result = new BasicResponse();
 		member.setNo(temp.getNo());
 		member.setCreate_date(temp.getCreate_date());
+		member.setEvalCount(temp.getEvalCount());
+		member.setEvalPoint(temp.getEvalPoint());
 		memberRepo.save(member);
 //		memberRepo.saveAndFlush(member);
 		result.status = true;
@@ -468,18 +525,65 @@ public class AccountController {
 		return result.toString();
 	}
 
-	@PostMapping("/account/checkemail")
-	@ApiOperation(value = "이메일 중복체크")
-	public ResponseEntity<HashMap<String, String>> checkemail(@RequestBody Member member) {
-		HashMap<String, String> hashmap = new HashMap<String, String>();
-		// 이메일, 닉네임 중복처리 필수
-		if (memberRepo.getUserByEmail(member.getEmail()) != null) {
-			hashmap.put("data", "1");
-		} else {
-//	         String code = memberService.sendMail(member.getEmail());
-			hashmap.put("data", "0");
+	@GetMapping("/account/alarm")
+	@ApiOperation(value = "내 알람 탐색")
+	public List<Alarm> alarmList(@RequestParam String email) {
+		System.out.println(email);
+		List<Alarm> alarmList = alarmRepo.findByEmail(email);
+		for (Alarm alarm : alarmList) {
+			System.out.println(alarm);
 		}
-		return new ResponseEntity<HashMap<String, String>>(hashmap, HttpStatus.OK);
+
+		return alarmList;
+	}
+
+	@PostMapping("/account/freshalarm")
+	@ApiOperation(value = "평가 알람")
+	public ResponseEntity<String> freshAlarm(@RequestBody Alarm alarm) {
+		System.out.println(alarm.toString());
+		
+		Evaluate eval = new Evaluate();
+		eval.setEmail(alarm.getSemail());
+		eval.setNickname(memberRepo.findByEmail(alarm.getSemail()).get().getNickname());
+		
+		Evaluate e = evaluateRepo.save(eval);
+		System.out.println(e);
+		
+		alarm.setConfirm(0L);
+		alarm.setFeedNo(e.getNo());
+		alarmRepo.save(alarm);
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/account/alarmcheck")
+	@ApiOperation(value = "알람 체크")
+	public ResponseEntity<String> alarmCheck(@RequestParam Long no) {
+		Optional<Alarm> alarm = alarmRepo.findById(no);
+		alarm.get().setConfirm(1L);
+		System.out.println(alarm.get().toString());
+		alarmRepo.save(alarm.get());
+		return new ResponseEntity<String>("Success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/account/evaluate")
+	@ApiOperation(value = "신선도 페이지 이동")
+	public ResponseEntity<Evaluate> moveEval(@RequestParam Long no) {
+		Optional<Evaluate> eval = evaluateRepo.findById(no);
+		return new ResponseEntity<Evaluate>(eval.get(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/account/evaluate")
+	@ApiOperation(value = "신선도 평가")
+	public ResponseEntity<String> addEval(@RequestBody Map<String, String> map) {
+		Optional<Evaluate> eval = evaluateRepo.findById(Long.parseLong(map.get("no")));
+		
+		Member member = memberRepo.findByEmail(map.get("email")).get();
+		member.setEvalCount(member.getEvalCount()+1L);
+		member.setEvalPoint(member.getEvalPoint()+ Long.parseLong(map.get("score")));
+		
+		evaluateRepo.delete(eval.get());
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
 	static Signer signer = HMACSigner.newSHA256Signer("coldudong");

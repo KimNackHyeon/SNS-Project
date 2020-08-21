@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%; position: relative;">
     <div style="height:48px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
       <router-link to="/Main">
         <v-btn icon color="gray" style="float: left; background-color: #f1f3f5; border-radius: unset; height: 100%; border-right: 1px solid lightgray">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <router-link to="/store/marketmap" style="">
-        <v-btn  flat icon style="width:30x; height:30px; background-size:cover;">
+        <v-btn text icon style="width:30x; height:30px; background-size:cover;">
           <img v-show="$route.name=='MarketPlace'" id="mapIcon" style="margin-left:5px; margin-bottom: 8px; width:auto; height:35px;" src="../../assets/images/map.png">
         </v-btn>
       </router-link>
@@ -23,7 +23,7 @@
           <div class="searchBox">
             <input type="text" placeholder="  검색하기  (ex '달걀')" style="resize:none; width:100%; height:100%;" id="searchcontent" v-model="inputKeyword" @keyup.enter="searchKeyword">
           </div>
-          <v-toolbar color="rgba(202, 231, 171)" flat height="48px">
+          <v-toolbar color="rgba(202, 231, 171)" text height="48px">
             <v-switch @change="call" label="물물교환 가능 물품만 보기" style="margin-top:20px; margin-right: 18px;"></v-switch>
           </v-toolbar>
         </v-flex>
@@ -33,14 +33,15 @@
           </v-btn>
         </div>
       </v-layout>
+      
     </div>
-    <v-card flat>
-      <v-container fluid style="padding: 0; margin: 0; width:360px;">
-        <div style="padding: 10px; margin: 0; overflow: scroll; height: 544px;" grid-list-lg>
+    <v-card text>
+      <v-container fluid style="padding: 0; margin: 0;" :style="{width:frameSize.x+'px'}">
+        <div style="padding: 10px; padding-bottom: 50px; margin: 0; overflow: scroll;" :style="{height:(frameSize.y-146)+'px'}" grid-list-lg>
           <v-row dense style="padding: 0;">
             <v-col v-for="(info, i) in tradelist" :key="i" cols="12">
               <router-link :to="`/store/marketplace/${ info.no }`">
-                <v-card style="padding: 5px;">
+                <v-card class="onemarketplace" style="padding: 5px;">
                   <v-row style="padding: 0; margin: 0;">
                     <v-col cols="4" style="padding: 0; padding-right: 1px; border-right: solid 1px lightgray;">
                       <v-img height="105" width="105" padding="60" :src="require(`../../assets/images/food/${info.myfood}.png`)" style="border-radius: 5px;"></v-img>
@@ -56,13 +57,13 @@
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount1 }}개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.myfoodcount1 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood1}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.tradefoodcount1 }}개</v-card-text>
                         </v-col>
                       </v-row>
                       <v-row class="pa-0 ma-1" v-if="info.tradefood2!=null">
@@ -70,13 +71,13 @@
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount2 }}개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.myfoodcount2 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood2}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount2 }}개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.tradefoodcount2 }}개</v-card-text>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -85,19 +86,20 @@
                         <v-col cols="12" style="padding: 0; padding-bottom: 13px">
                           <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
                         </v-col>
-                        <v-col cols="12" style="padding: 0; padding-bottom: 13px">
-                          <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
+                        <v-col v-if="!(info.price === '0')" cols="12" style="padding: 0; padding-bottom: 13px">
+                          <v-card-text class="text-center pa-0" style="font-size: 10px;">{{ tradeunit[i] }}당</v-card-text>
                         </v-col>
                         <v-col cols="12" class="pa-1 text-center">
-                          <span class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
-                          <span class="text-center pa-0" style="font-size: 18px;">원</span>
+                          <span v-if="!(info.price === '0' || info.price === '300')" class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
+                          <span v-if="!(info.price === '0' || info.price === '300')" class="text-center pa-0" style="font-size: 18px;">원</span>
+                          <span v-if="info.price === '0' || info.price === '300'" class="text-center pa-0" style="font-size: 12px; color: red;">가격정보가 없습니다. 직접 문의해주세요</span>
                         </v-col>
-                        <v-col cols="12" class="pa-1 text-center" v-if="userinfo.email === tradelist[i].email">
+                        <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
-                            <v-btn @click="edit(info.no)" class="text-center mr-2" style="font-size: 10px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
+                            <v-btn @click="edit(info.no)" class="text-center mr-2 marketplacebtn" style="font-size: 11px; background-color: rgb(159 201 114); color: white;">수정</v-btn>
                           </router-link>
                           <router-link to="/store/marketplace">
-                            <v-btn @click="del(info.no)" class="text-center" style="font-size: 10px; background-color: red; color: white;">삭제</v-btn>
+                            <v-btn @click="del(info.no)" class="text-center marketplacebtn" style="font-size: 11px; background-color: red; color: white;">삭제</v-btn>
                           </router-link>
                         </v-col>
                       </v-row>
@@ -110,6 +112,12 @@
         </div>
       </v-container>
     </v-card>
+        <router-link to="/MyRef">
+          <div class="writeButton">
+            <v-icon color="white">mdi-lead-pencil</v-icon>
+            <h4 style="color:whiste; font-size:14px;">글쓰기</h4>
+          </div>
+        </router-link>
   </div>
 </template>
 
@@ -119,23 +127,38 @@ import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
 import store from '../../vuex/store.js'
 import Swal from 'sweetalert2'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+import {foods} from '../../views/Food/Foods.js'
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
   data() {
     return {
+      frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       tradelist: [
       ],
+      tradeunit: [],
       pagenumber: '',
       switched:true,
       userinfo:'',
       show:false,
       inputKeyword:'',
       originalList:[],
+      myList:[],
     }
   },
+  mounted(){
+    this.onResize();
+    
+  },
   methods:{
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
     ...mapMutations(['setMapOtherUserInfo']),
     search(){
       if($('.searchBox').css('display')=='none'){
@@ -145,10 +168,10 @@ export default {
           axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/search/`+document.getElementById("searchcontent").value)
           .then(response => {
           this.tradelist = response.data.list
-          // console.log(this.tradelist)
+          // // console.log(this.tradelist)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         $('.searchBox').css('display','none')
         document.getElementById("searchcontent").value = ""
@@ -156,32 +179,48 @@ export default {
           $('.searchBox').css('display','none')
         }
       }
+      this.inputKeyword = "";
     },
     call(){
       if(this.switched == true){
-        console.log(this.userinfo.email)
+        // console.log(this.userinfo.email)
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/filter/`+this.userinfo.email)
         .then(response => {
-          this.tradelist = response.data.list
-          // console.log(this.mapOtherUserInfo)
-        })
+          this.tradelist = response.data.list.reverse();
+          this.myList = this.tradelist
+          // // console.log(this.mapOtherUserInfo)
+          
+          this.mapOtherUserInfo.address.length = []
+          if (this.mapOtherUserInfo.address.length === 0) {
+            for (var k = 0; k < this.tradelist.length; k++) {
+              this.mapOtherUserInfo.address.push(this.tradelist[k].address)
+            }
+          }
+          // console.log(store.state.mapOtherUserInfo.address)
+          this.originalList = this.tradelist;
+          })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
         this.switched = false;
     }
     else{
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
         .then(response => {
-          this.tradelist = response.data.list
-          // console.log(this.tradelist)
-          this.mapOtherUserInfo = store.state.mapOtherUserInfo
-          this.mapOtherUserInfo.address = this.tradelist[0].address
-          this.mapOtherUserInfo.food = this.tradelist[0].myfood
-          // // console.log(this.mapOtherUserInfo)
+          this.tradelist = response.data.list.reverse();
+          this.myList = this.tradelist
+          // // console.log(this.tradelist)
+          this.mapOtherUserInfo.address.length = []
+          if (this.mapOtherUserInfo.address.length === 0) {
+            for (var k = 0; k < this.tradelist.length; k++) {
+              this.mapOtherUserInfo.address.push(this.tradelist[k].address)
+            }
+          }
+          // console.log(store.state.mapOtherUserInfo.address)
+          // // // console.log(this.mapOtherUserInfo)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
         this.switched = true;
       }
@@ -190,10 +229,10 @@ export default {
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/trade/beforeupdate`, {no:pageno})
         .then(response => {
           this.pagenumber = pageno;
-          // console.log(this.pagenumber)
+          // // console.log(this.pagenumber)
         })
         .catch(error => {
-          // console.log(error.response)
+          // // console.log(error.response)
         })
     },
     del(pageno) {
@@ -220,17 +259,44 @@ export default {
         window.location.reload();
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   }
 })
     },
     searchKeyword(){
       var keyword = this.inputKeyword;
-      this.tradelist = this.originalList;
-      this.tradelist = this.tradelist.filter(function (item) {
-          return item.myfood_kor.indexOf(keyword)!=-1;
-        });
+      // console.log(this.myList);
+      if(this.myList.length == 0){
+        this.tradelist = this.originalList;
+        this.tradelist = this.tradelist.filter(function (item) {
+            return item.myfood_kor.indexOf(keyword)!=-1;
+          });
+        if(this.tradelist.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: '',
+            text: '검색어와 일치하는 재료가 없습니다!',
+            footer: ''
+          })
+        }
+      }else{
+        this.tradelist = this.myList;
+        this.tradelist = this.tradelist.filter(function (item) {
+            return item.myfood_kor.indexOf(keyword)!=-1;
+          });
+        console.log(this.tradelist);
+        if(this.tradelist.length == 0){
+          if(this.tradelist.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 재료가 없습니다!',
+              footer: ''
+            })
+          }
+        }
+      }
     }
   },
 created() {
@@ -242,20 +308,56 @@ created() {
   axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      // console.log(this.tradelist)
-      // console.log(this.mapOtherUserInfo.address)
-      if (this.mapOtherUserInfo.address.length === 0) {
-        for (var i = 0; i < this.tradelist.length; i++) {
-          store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
+      // // console.log(this.tradelist)
+      // // console.log(this.mapOtherUserInfo.address)
+      axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
+        .then(response => {
+            this.xmldata = response.data;
+            // console.log(this.xmldata.price)
+            for (var i = 0; i < this.tradelist.length; i++) {
+              for(var m = 0; m < this.xmldata.price.length; m++){
+                for (var j = 0; j < foods.length; j++) {
+                  if (this.tradelist[i].myfood === foods[j].name) {
+                    this.tradelist[i].myfood = foods[j].img
+                  }
+                  if (this.tradelist[i].tradefood1 === foods[j].name) {
+                    this.tradelist[i].tradefood1 = foods[j].img
+                  }
+                  if (this.tradelist[i].tradefood2 === foods[j].name) {
+                    this.tradelist[i].tradefood2 = foods[j].img
+                  }
+                }
+                var tF = this.xmldata.price[m];
+
+                var tFname = tF.productName.split('/')[0];
+                if(tF.product_cls_code == '01' ){
+                  if (this.tradelist[i].price === '0' || this.tradelist[i].price === '300') {
+                    if(tFname === this.tradelist[i].myfood_kor){
+                      this.tradelist[i].price = tF.dpr1;
+                      this.tradeunit.push(tF.unit)
+                      console.log(tF)
+                      // // console.log(this.tradelist[i].price)
+                    }
+                  }
+                }
+              }
+              if (this.tradelist[i].price === '0' || this.tradelist[i].price === '300') {
+                this.tradeunit.push('1개')
+              }
+            }
+            // console.log(this.tradeunit)
+          }
+        )
+        if (this.mapOtherUserInfo.address.length === 0) {
+          for (var k = 0; k < this.tradelist.length; k++) {
+            store.state.mapOtherUserInfo.address.push(this.tradelist[k].address)
+          }
         }
-        // console.log('good')
-        // console.log(store.state.mapOtherUserInfo)
-      }
-      this.originalList = this.tradelist;
-    })
-    .catch(error => {
-      // console.log(error.response)
-    })
+        this.originalList = this.tradelist.reverse();
+        })
+        .catch(error => {
+          // // console.log(error.response)
+        })
   },
   updated(){
     
@@ -266,7 +368,7 @@ created() {
 }
 </script>
 
-<style>
+<style scoped>
   .titleBox {
     display: inline-block;
     width: 77%;
@@ -291,4 +393,29 @@ created() {
     font-size: 21px;
     padding: 4px 6px;
   }
+  .writeButton{
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  /* margin-top: 427px;
+  margin-left: 280px; */
+  top: 88%;
+  left: 82%;
+  background-color: rgb(147 203 88);
+  z-index: 90;
+  border-radius: 30px;
+  box-shadow: 7px 7px 10px rgb(0 0 0 / 44%);
+  text-align: center;
+  padding-top: 7px;;
+}
+.onemarketplace:hover {
+  box-shadow: 0px 0px 10px rgb(160, 212, 105);
+}
+.marketplacebtn {
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}
+.marketplacebtn:hover {
+  box-shadow: 0px 0px 10px gray;
+}
 </style>

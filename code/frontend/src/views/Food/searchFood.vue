@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%; height:100%;">
+  <div style="width:100%; height:94%;">
       <div style="width:100%; height:10%; z-index:23;" v-on:keyup.down="selectValue('down')"
        v-on:keyup.up="selectValue('up')"> <!-- 검색 -->
             <div class="search" >
@@ -30,6 +30,30 @@
           {{ food.name_kor }}
         </div>
       </div>
+      <div style="width:100%;height:100%;" v-if="filterListImg.length==0">
+          <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:50%; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <div style="width:100%; height:60px; padding: 14px 0px;">
+            <h5 >필요한 갯수 : </h5>
+          <button @click="selectAmountType" id="natureBtn" class="nature" style="float:right;">1개 미만</button>
+            <div class="Nature" style="float:right;">
+                <input type="text" style="float:left" v-model="amount">
+                <h5>개</h5>
+            </div>
+            <div class="underNature" style="display:none; float:right;">
+                <input type="text" style="float:left;" v-model="amount">
+                <h5 style="float:left">/</h5>
+                <input type="text" style="float:left;" v-model="amountundernature">
+                <h5>개</h5>
+            </div>
+        </div>
+            <v-btn @click="addEtcIngradient()" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">추가하기</v-btn>
+          </div>
+          </div>
+        </div>
       <div class="putFoodInform">
         <div style="width:100%; height:50px; overflow:hidden text-align:center; padding:13px; font-size:17px; border-bottom:1px solid #80808033;">
           <div style="width:63px; overflow:hidden; float:left;">
@@ -72,7 +96,7 @@
         </div>
       </div>
       </div>
-      <div style="width:100%; height:8%; background-color:white; overflow-x:scroll; white-space: nowrap; box-shadow: 0px -1px 13px #0000002b;">
+      <div style="width:100%; height:8%; background-color:white; overflow-x: hidden; white-space: nowrap; box-shadow: 0px -1px 13px #0000002b;">
         <div v-for="(food,index) in selectedFood" :key="index" class="addedfood">
           {{food.name_kor}} {{food.amount}}개
         </div>
@@ -82,6 +106,7 @@
     width: 100%;
     background-color: rgb(160,212,105); text-align:center; padding:4px;"><h3>등록하기</h3></div>
       </div>
+  
   </div>
 </template>
 
@@ -96,11 +121,23 @@ export default {
         return {
             isActive: false,
             searchQuery: '',
-            selectedFood:[],
+            selectedFood: [],
             thisSelectedFood:'',
             amount:'',
             amountundernature:'',
             names : foods,
+            etcName:''
+    }
+  },
+  props: ['foodlist'],
+  watch: {
+    foodlist() {
+      if (this.foodlist == undefined) {
+        this.selectedFood = []
+      }
+      else {
+        this.selectedFood = this.foodlist
+      }
     }
   },
   methods: {
@@ -108,7 +145,7 @@ export default {
       this.$emit('addfood',this.selectedFood);
     },
     changeValue(food) {
-      console.log(`change value: ${food}`);
+      // console.log(`change value: ${food}`);
       this.isActive = false;
       document.querySelector('.s').value = '';
       // this.selectedFood.push(food);
@@ -129,6 +166,25 @@ export default {
         resultamount = this.amount;
       }
       this.selectedFood.push({name:this.thisSelectedFood.name,name_kor:this.thisSelectedFood.name_kor,img:this.thisSelectedFood.img,amount:resultamount});
+      $('.putFoodInform').css('display','none');
+        }
+        this.amount = '';
+        this.amountundernature = '';
+    },
+    addEtcIngradient(){
+       var resultamount ='';
+      if(this.amount==''){
+        Swal.fire({
+          icon: 'info',
+          title: '필요한 갯수를 적어주세요.',
+        })
+      }else{
+        if(this.amountundernature !=''){
+          resultamount = this.amount + '/'+this.amountundernature;
+      }else{
+        resultamount = this.amount;
+      }
+      this.selectedFood.push({name:'etc',name_kor:this.etcName,img:'etc',amount:resultamount});
       $('.putFoodInform').css('display','none');
         }
         this.amount = '';
@@ -200,7 +256,7 @@ export default {
     filterList() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -213,7 +269,7 @@ export default {
     filterListImg() {
       const str = this.searchQuery;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -255,7 +311,7 @@ input{
     
 }
 .nature{
-float: left;
+  float:left;
     background-color: #e0e0e0bf;
     padding: 5px;
     border-radius: 7px;

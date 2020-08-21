@@ -42,8 +42,12 @@ export var foods=[
             name_kor:'새우',
             img:'shrimp'
             },
+            {name:'shrimp_saltsoup',
+            name_kor:'새우젓',
+            img:'shrimp'
+            },
             {name:'beef',
-            name_kor:'소고기',
+            name_kor:'쇠고기',
             img:'beef'
             },
             {name:'pasta',
@@ -105,6 +109,118 @@ export var foods=[
             {name:'cheese',
             name_kor:'치즈',
             img:'cheese'               
-            }
+            },
+            {name:'rice',
+            name_kor:'쌀',
+            img:'rice'               
+            },
+            {name:'rice',
+            name_kor:'찹쌀',
+            img:'rice'               
+            },
+            {name:'bean',
+            name_kor:'콩',
+            img:'seed'               
+            },
+            {name:'green_bean',
+            name_kor:'녹두',
+            img:'seed'               
+            },
+            {name:'lettuce',
+            name_kor:'상추',
+            img:'lettuce'               
+            },
+            {name:'cabbage',
+            name_kor:'배추',
+            img:'cabbage'               
+            },
+            {name:'yang_cabbage',
+            name_kor:'양배추',
+            img:'yang_cabbage'               
+            },
+            {name:'spinach',
+            name_kor:'시금치',
+            img:'spinach' 
+            },
+            {name:'cucumber',
+            name_kor:'오이',
+            img:'cucumber' 
+            },
+            {name:'squash',
+            name_kor:'애호박',
+            img:'cucumber' 
+            },
+            {name:'pumpkin',
+            name_kor:'호박',
+            img:'pumpkin' 
+            },
+            {name:'tomato',
+            name_kor:'토마토',
+            img:'tomato' 
+            },
+            {name:'cherry_tomato',
+            name_kor:'방울토마토',
+            img:'tomato' 
+            },
+            {name:'radish',
+            name_kor:'무',
+            img:'radish' 
+            },
+            {name:'yeolmu',
+            name_kor:'열무',
+            img:'radish' 
+            },
+            {name:'dry_pepper',
+            name_kor:'건고추',
+            img:'pepper' 
+            },
+            {name:'put_pepper',
+            name_kor:'풋고추',
+            img:'pepper' 
+            },
+            {name:'ginger',
+            name_kor:'생강',
+            img:'ginger' 
+            },
+            {name:'pepper_powder',
+            name_kor:'고춧가루',
+            img:'pepper' 
+            },
+            {name:'jonmat_leaf',
+            name_kor:'깻잎',
+            img:'spinach' 
+            },
+            {name:'minari',
+            name_kor:'미나리',
+            img:'spinach' 
+            },
+            {name:'peanut',
+            name_kor:'땅콩',
+            img:'seed' 
+            },
+            {name:'nutari_mushroom',
+            name_kor:'느타리버섯',
+            img:'mushroom' 
+            },
+            {name:'pange_mushroom',
+            name_kor:'팽이버섯',
+            img:'mushroom' 
+            },
+            {name:'newsonge_mushroom',
+            name_kor:'새송이버섯',
+            img:'mushroom' 
+            },
+            {name:'jonmat_leaf',
+            name_kor:'깻잎',
+            img:'spinach' 
+            },
+            {name:'butter',
+            name_kor:'버터',
+            img:'butter'
+            },
+            {name:'honey',
+            name_kor:'꿀',
+            img:'honey'
+            },
 
 ]

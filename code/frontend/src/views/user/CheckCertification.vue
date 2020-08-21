@@ -21,8 +21,8 @@
           <input v-model="certificationNumber" id="certificationNumber" type="text" placeholder="인증번호를 입력해주세요." style="margin-bottom: 10px;"/>
           <span id="times">03:00</span>
           <label for="certificationNumber">인증번호</label>
-          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px;">인증</button>
-          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red;">인증번호 재전송</button>
+          <button class="btn-bottom" @click="sendPwd" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; width : 100%;">인증</button>
+          <button class="btn-bottom" @click="retry" style="border-radius: 10px; float: right; position: unset; margin: 0 0 10px; background-color: red; width : 100%;">인증번호 재전송</button>
         </div>
       </div>
     </div>
@@ -95,35 +95,35 @@ Swal.fire({
 }).then((result) => {
   /* Read more about handling dismissals below */
   if (result.dismiss === Swal.DismissReason.timer) {
-    console.log('I was closed by the timer')
+    // console.log('I was closed by the timer')
   }
 })
       const emailData = {
         email: this.pwd,
       }
-      // console.log(emailData)
+      // // console.log(emailData)
       clearInterval(this.resetTime);
       var threeMin = 60 * 3,
       display = document.querySelector('#times');
       this.countTimer(threeMin, display);
       axios.post(`https://i3b301.p.ssafy.io:9999/food/api/account/researchpwd`, emailData)
       .then(data => {
-        console.log("성공")
+        // console.log("성공")
         // console.dir(data)
         this.confirmPwd(data.data.data)
         this.userEmail(data.data.email)
       })
       .catch(data => {
-        // console.log(data)
+        // // console.log(data)
       });
     },
     sendPwd() {
       const emailData = {
         email: this.pwd,
       }
-      // console.log('ok')
+      // // console.log('ok')
       if (this.certificationNumber === this.confirm) {
-        // console.log('ok2')
+        // // console.log('ok2')
         Swal.fire({
   icon: 'success',
   title: '인증에 성공했습니다.',
@@ -134,12 +134,12 @@ Swal.fire({
         axios
         .post(`https://i3b301.p.ssafy.io:9999/food/api/account/findpwd`, emailData)
         .then((data) => {
-          // console.log(data.data.data)
+          // // console.log(data.data.data)
           
           this.$router.push("/")
         })
         .catch((data) => {
-          // console.log(data)
+          // // console.log(data)
         })
       } else {
         Swal.fire({

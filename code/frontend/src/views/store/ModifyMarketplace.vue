@@ -49,13 +49,14 @@
                         >
                       <span>{{ el.name_kor }}</span>
                     </li>
+                    
                   </ul>
                 </div>
               </div>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style=" z-index:20;">
                 <div @click="chooseComplete1(food)" class="card" v-for="(food,index) in filterListImg1" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -64,6 +65,18 @@
                     {{ food.name_kor }}
                   </div>
                 </div>
+                <div style="width:100%;height:100%;" v-if="filterListImg1.length==0">
+          <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:150px; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName1" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <v-btn @click="chooseComplete1({name:'etc',
+            name_kor:etcName1,
+            img:'etc' })" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">등록하기</v-btn>
+          </div>
+          </div>
+        </div>
               </div>
             </v-card-text>
             <v-divider></v-divider>
@@ -120,7 +133,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <div style="overflow-y: scroll; z-index:20;">
+              <div style="z-index:20;">
                 <div @click="chooseComplete2(food)" class="card" v-for="(food,index) in filterListImg2" :key="index">
                   <div>
                     <img style="margin:10px auto 5px auto;width:60px; height:auto; font-size:20px;" v-bind:src="require(`../../assets/images/food/${food.img}.png`)"/>
@@ -129,6 +142,18 @@
                     {{ food.name_kor }}
                   </div>
                 </div>
+                <div style="width:100%;height:100%;" v-if="filterListImg2.length==0">
+          <div style="width:80%; height:50%;text-align:center;margin-top:50px;">
+            <h4>해당 음식이</h4>  <h4>아직 등록되지 않았어요</h4> <h4>기타 이미지로 등록해주세요.</h4>
+            <img src="../../assets/images/fruit.png" style="width:80px;">
+            <div style="width:150px; margin:auto;">
+            <h4 style="float:left;">이름 : </h4><input v-model="etcName2" type="text" class="inputText" style=" float:left;width: 80px; height: 35px; text-align: center;">
+            <v-btn @click="chooseComplete2({name:'etc',
+            name_kor:etcName2,
+            img:'etc' })" width="100%" style="margin-top:30px;" color="rgb(160,212,105)">등록하기</v-btn>
+          </div>
+          </div>
+        </div>
               </div>
             </v-card-text>
             <v-divider></v-divider>
@@ -177,11 +202,11 @@
       </div>
     </div>
     <!-- 글 작성 버튼 -->
-    <div>
-      <router-link to="/store/marketplace">
+    <div style="width: inherit">
+      <router-link to="/store/marketplace" style="width: inherit">
         <v-btn 
         color="rgb(160, 212, 105)" 
-        style="width: 100%; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
+        style="width: inherit; height: 50px; color: white; font-size: 18px; position:fixed; bottom: 0; border-radius: unset;" 
         @click="onModify()"
         >
         수정하기
@@ -196,7 +221,7 @@ import {foods} from '../Food/Foods.js'
 import DaumPostcode from "vuejs-daum-postcode";
 import axios from 'axios'
 import store from '../../vuex/store.js'
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 export default {
   components: {
@@ -221,6 +246,9 @@ export default {
       addressDialog: false,
       content: '',
       names : foods,
+      etcName1:'',
+      etcName2:'',
+
     }
   },
   created() {
@@ -234,33 +262,33 @@ export default {
         this.food2 = this.beforedata.tradefood2_kor
         this.food2_en = this.beforedata.tradefood2
         this.address = this.beforedata.address
-        console.log(this.beforedata)
+        // console.log(this.beforedata)
       })
       .catch(error => {
-        console.log(error.response)
+        // console.log(error.response)
       })
   },
   methods: {
     getFood1(){
-      console.log('getFood1 실행')
+      // console.log('getFood1 실행')
       if (this.dialog1 === false) {
         this.dialog1 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog1 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     getFood2(){
-      console.log('getFood2 실행')
+      // console.log('getFood2 실행')
       if (this.dialog2 === false) {
         this.dialog2 = true
-        console.log('false')
+        // console.log('false')
       }
       else {
         this.dialog2 = false
-        console.log('true')
+        // console.log('true')
       }
     },
     chooseComplete1:function(food){
@@ -289,7 +317,7 @@ export default {
       }
     },
     handleAddress(data){
-      console.log(data)
+      // console.log(data)
       let fullAddress = data.address
       let extraAddress = ''
       if (data.addressType === 'R') {
@@ -320,10 +348,10 @@ export default {
       tradefood2: this.beforedata.tradefood2, tradefood2_kor: this.beforedata.tradefood2_kor, tradefoodcount1: this.beforedata.tradefoodcount1, 
       tradefoodcount2: this.beforedata.tradefoodcount2})
         .then(response => {
-          console.log(this.beforedata)
+          // console.log(this.beforedata)
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
     },
   },
@@ -331,7 +359,7 @@ export default {
     filterList1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -344,7 +372,7 @@ export default {
     filterListImg1() {
       const str = this.searchQuery1;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -360,7 +388,7 @@ export default {
     filterList2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -373,7 +401,7 @@ export default {
     filterListImg2() {
       const str = this.searchQuery2;
       const reg = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9|\s]/.test(str);
-      console.log(`typing value: ${str}`);
+      // console.log(`typing value: ${str}`);
       if (reg === false && str !== '' && str !== ' ') {
         // this.isActive = true;
         return this.names.filter((el) => {
@@ -473,5 +501,8 @@ input{
   border: 1px solid lightgray;
   border-radius: 4px;
   padding: 5px 10px
+}
+.contentinput:hover {
+  border: 2px solid #a0d469;
 }
 </style>

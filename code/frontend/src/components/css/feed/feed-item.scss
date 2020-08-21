@@ -1,6 +1,17 @@
 @charset "utf-8";
 @import "../../css/common";
 
+.searchBar .v-input__slot:hover {
+  border: unset !important;
+}
+.searchBar .v-input__slot{
+  border: none !important;
+  height: inherit !important;
+}
+.v-input__control {
+  height: inherit !important;
+  min-height: unset !important;
+}
 .feed-wrapB {
   padding: 0;
 }
@@ -32,7 +43,7 @@
 }
 .v-select__selections input {
   text-align: left !important;
-
+  border: unset !important;
 }
 .mdi-close-circle {
     color: white !important;
@@ -139,9 +150,6 @@ input:hover {
         padding: 5px 0;
         background-color: #f1f3f5;
         border-left: 1px solid lightgray;
-    }
-    .feed-right-icon:hover {
-        color: #a0d469;
     }
     .v-carousel__controls {
         height: 30px;

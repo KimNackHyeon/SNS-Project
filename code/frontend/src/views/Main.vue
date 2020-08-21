@@ -1,6 +1,6 @@
 <template>
 <div style="width:100%; height:100%;">
-  <div class="tutorialBox">
+  <div class="tutorialBox" :style="{width:frameSize.x+'px',height:frameSize.y+'px'}">
     <div class="confirmBox">
       <h1>튜토리얼을 진행하시겠습니까?</h1>
       <button @click="closetutorial" class="confirmbtn" style="background-color:red;">아니오</button>
@@ -8,7 +8,7 @@
         <button class="confirmbtn" style="background-color:rgb(160,212,105);">네</button>
       </router-link>
     </div>
-    <div style="width: 100%; height: 116px; background-color: #000000a6; position: absolute; bottom: 0;">
+    <div style="width: 100%; height: 116px; background-color: #000000a6; ">
       <img src="../assets/images/talkRef.gif" style="float:left;width: 118px;
     height: auto;
     margin-top: -77px;">
@@ -23,25 +23,25 @@
     </div>
   </div>
   <div>
-   <!-- <div @click="opentutorial" class="introduce"> -->
-      <div class="introduce">
-      <div class="introduceIMG"></div>
-      <div style="height:112px; width:186px; float:left; text-align:right;
-    padding: 28px 16px; font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;;  ">
+   <div @click="opentutorial" class="introduce" style="cursor:pointer">
+      <!-- <div class="introduce"> -->
+      <div class="introduceIMG" :style="{'background-position-x': -7+'px'}"></div>
+      <div style="height:112px; float:right; text-align:right;
+    font-size:25px; color:white; text-shadow: #80808075 1px 1px 1px;padding-top: 17px;
+    padding-right: 5px;  text-overflow:hidden;" :style="{width:frameSize.x-230+'px'}">
         <h4>남는 식재료</h4>
         <h4>더이상 버리지 마세요</h4>
-        <!-- <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span> -->
+        <span class="blinking">튜토리얼 하러가기<v-icon color="white" size="15px">mdi-play</v-icon></span>
       </div>
     </div>
     <div style=" box-shadow: 0px 0px 10px #00000078 ;">
-  <v-carousel style="margin:20px 0px; " height="300px" hide-delimiters cycle vertical-delimiters="true" interval="2000" show-arrows-on-hover>
+  <v-carousel style="margin:20px 0px; " :style="{height:frameSize.y-330+'px'}" hide-delimiters cycle vertical-delimiters="true" interval="2000" show-arrows-on-hover>
     <v-carousel-item  cycle 
       v-for="(item,i) in items"
       :key="i"
       :src="item.src"
       hide-delimiters
-      width="360px"
-      height="300px"
+      style="width:100%;height:100%;cursor:pointer;"
       @click="openLink(item.link)"
     ></v-carousel-item>
   </v-carousel>
@@ -75,7 +75,7 @@
    export default {
     data () {
       return {
-        
+        frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
         script:'안녕하세요! 우리동네 냉장고의 마스코트 냉장고입니다.',
         ref_script2:'튜토리얼하기를 눌러줘서 고마워요.',
         ref_script3:'튜토리얼을 진행하시겠어요?',
@@ -103,8 +103,20 @@
         ],
       }
     },
+    mounted(){
+         this.onResize();
+         $('.v-image').css('height','100%');
+    },
     methods:{
+       onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight,per:innerHeight/640};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth*1.77,per:innerWidth/360};
+        }
+    },
       openLink(link){
+      // var newWindow = window.open("about:blank");
       window.location.href = link;
       },
       opentutorial(){
@@ -123,8 +135,6 @@ body{
   overflow: hidden;
 }
 .tutorialBox{
-  width:360px;
-  height:593px;
   background-color: #00000085;
   position:fixed;
   z-index:1000;
@@ -152,16 +162,16 @@ h4{
       background-color:rgb(129 203 104); 
 }
 .introduceIMG{
-     background-image: url(/img/login_backgroundimg.3ff816a3.gif);
+    background-image: url(/img/login_backgroundimg.3ff816a3.gif);
     height: 112px;
-    width: 174px;
-    background-size: 109%;
-    background-position-x: -14px;
-    background-position-y: -134px;
+    width: 225px;
+    background-size: 242px 314px;
+
+    background-position-y: -141px;
     float: left;
 }
-.v-image__image--cover{
-  background-size: contain;
+.v-image__image--cover {
+    background-size: contain;
 }
 .confirmBox{
   width: 300px;
@@ -171,8 +181,8 @@ h4{
     border-radius: 22px;
     -webkit-box-shadow: 1px 1px 30px black;
     box-shadow: 1px 1px 30px #00000052;
-    margin: auto;
-    margin-top: 133px;
+    margin:133px auto ;
+    /* margin-top: 133px; */
 }
 .confirmbtn{
   width: 100px;

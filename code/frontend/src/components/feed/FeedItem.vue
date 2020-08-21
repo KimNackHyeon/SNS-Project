@@ -1,20 +1,24 @@
 <template>
   <div class="feed-item">
+    <v-toolbar color="rgba(202, 231, 171)" text height="36px">
+      <v-switch @change="call" label="나의 재료로 만들 수 있는 레시피 보기" style="margin-top:20px; margin-right: 10px;"></v-switch>
+    </v-toolbar>
     <div v-for="(feedData, i) in feedDatas" :key="i" style="position:relative">
       <div class="feed-profil"  >
         <div class="feed-user">
-          <v-avatar size="35"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
-          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:5px">{{feedData.nickname}}</h4>
+          <v-avatar size="35" style="cursor : pointer;"><img :src="feedData.profile" alt="John" @click="moveUser(feedData.email)"></v-avatar>
+          <h4 @click="moveUser(feedData.email)" style="display:inline-block; padding-left:10px; cursor:pointer;">{{feedData.nickname}}</h4>
         </div>
         <div style="height: 45px; float: right; width: 10%;">
           <router-link :to="{ name: 'FeedDetail', params: { feedNo : feedData.no }}">
-            <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px;">
+            <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100%">
+            <!-- <v-btn icon color="gray" style="background-color: #f1f3f5; border-radius: unset; height: 45px; width: 100% border-right: 1px solid lightgray"> -->
               <v-icon class="feed-right-icon" size="35px">mdi-chevron-right</v-icon>
             </v-btn>
           </router-link>
         </div>
       </div>
-      <div  style=" width:360px;">
+      <div  style=" width:inherit">
         <v-carousel v-model="feedData.pictureNum">
         <!-- <v-carousel show-arrows-on-hover> -->
           <v-carousel-item
@@ -28,8 +32,9 @@
             class="ma-2 imgCount"
             color="#2c2c2c"
             style="
-    top: 49px;
-    width: 46px;">
+            top: 49px;
+            width: 46px;
+            left: 83%;">
             {{feedData.pictureNum + 1}}/{{feedData.items.length}} 
           </v-chip>
       </div>
@@ -52,11 +57,11 @@
           </v-btn>
           <!-- 수정 삭제 -->
           <div style="display: inline-block" v-if="feedData.email==userInfo.email">
-            <v-btn @click="openBtn" icon style="width: 25px; height: 25px">
+            <v-btn @click="openBtn(feedData.no)" icon style="width: 25px; height: 25px">
               <v-icon color="black" size="25px" style="">mdi-dots-vertical</v-icon>
             </v-btn>
-            <div class="btns">
-              <!-- <v-btn class="btn" >수정</v-btn> -->
+            <div class="btns" v-if="feedData.no == btnsFeedNo">
+              <router-link :to="{ name: 'ModifyRecipe', params: { feedNo : feedData.no }}"><v-btn class="btn" >수정</v-btn></router-link>
               <v-btn class="btn" @click="deleteNo(feedData.no)">삭제</v-btn>
             </div>
           </div>
@@ -72,19 +77,19 @@
         </div>
         <div class="comments" v-for="(comment, i) in feedData.comments" :key="i">
           <div class="userImg">
-            <v-avatar size="35"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
+            <v-avatar size="35" style="cursor : pointer;"><img :src="comment.img" alt="John" @click="moveUser(comment.email)"></v-avatar>
           </div>
           <div class="content" style="display: table; height: 35px; margin-left: 10px">
             <div style="display: table-cell; vertical-align: middle;">
-              <span class="commentUser" style="margin: 0 5px 0 0;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
+              <span class="commentUser" style="margin: 0 5px 0 0; cursor : pointer;" @click="moveUser(comment.email)">{{comment.nickname}}</span>
               <span>{{comment.comment}}</span>
             </div>
           </div>
-          <!-- <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
+          <div style="float: right; width: 10%" v-if="comment.email==userInfo.email">
             <v-btn icon color="black" @click="deleteComment(feedData.no, comment)">
               <v-icon size="18px">mdi-trash-can-outline</v-icon>
             </v-btn>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -96,6 +101,7 @@ import axios from "axios";
 import store from '../../vuex/store'
 import moment from "moment";
 import $ from 'jquery';
+import Swal from 'sweetalert2'
 import defaultImage from "../../assets/images/img-placeholder.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 
@@ -110,6 +116,9 @@ export default {
       inputComment: '',
       commentData: [],
       originalDatas: [],
+      btnsFeedNo: '',
+      myDatas:[],
+      switched:true,
     };
   },
   computed: {
@@ -153,11 +162,11 @@ export default {
               isscrap: false,
               openComment: false,
               comment: "",
-              items: [    
-              ],
+              items: [],
               tags:[],
               comments:[],
               likecount: d.likecount,
+              foods:[],
             }
 
           axios.get(`https://i3b301.p.ssafy.io:9999/food/api/feed/searchComment`,{params:{feedNo : d.no}}) // 피드에 해당하는 댓글 불러오기
@@ -165,11 +174,13 @@ export default {
             // console.log(response);
             response.data.forEach(c =>{
               var comment = { // 피드에 해당하는 하나의 댓글
+                no : c.no,
+                feed_no : d.no,
                 img : c.img,
                 nickname : c.nickname,
                 email: c.email,
                 comment : c.comment,
-                created_at : c.create_date,
+                create_date : c.create_date,
               }
               data.comments.push(comment);
             })
@@ -202,11 +213,18 @@ export default {
             }
           });
 
+          response.data.foodlist.forEach(f => {
+            if(f.feedNo == d.no){
+              var food = {foodName : f.name_kor};
+              data.foods.push(food);
+            }
+          })
+
           this.feedDatas.push(data); // 피드 데이터 저장
           // console.log(data);
         });
         // console.log(this.feedDatas);
-        this.originalDatas = this.feedDatas;
+        this.originalDatas = this.feedDatas.reverse();
       })
       .catch((error) => {
         // console.log(error.response);
@@ -249,7 +267,14 @@ export default {
     deleteComment(feedData_id, comment) {
       this.feedDatas.forEach(feedData => {
         if (feedData.no == feedData_id) {
+          var comm = feedData.comments[feedData.comments.indexOf(comment)];
           feedData.comments.splice(feedData.comments.indexOf(comment), 1);
+          // console.log(comm);
+
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/comment`,{params:{no : comm.no}})
+          .then(response =>{
+
+          })
         }
       })
     },
@@ -296,11 +321,18 @@ export default {
           // console.log(error.response);
         });
     },
-    openBtn() {
-      if($('.btns').css('display')=='block'){
-        $('.btns').css('display','none');  
-      }else{
-        $('.btns').css('display','block');
+    openBtn(feedNo) {
+      // if($('.btns').css('display')=='block'){
+      //   $('.btns').css('display','none');  
+      // }else{
+      //   $('.btns').css('display','block');
+      // }
+      // console.log(feedNo)
+      if (this.btnsFeedNo) {
+        this.btnsFeedNo = ''
+      }
+      else{
+        this.btnsFeedNo = feedNo
       }
     },
     moveUser(user_email){
@@ -313,46 +345,169 @@ export default {
     },
     searchTag(tags){
       // console.log(tags);
-      this.feedDatas = this.originalDatas;
-      if(tags.length != 0){
-        this.feedDatas = this.feedDatas.filter(function (item) {
-          var isTag = false;
-          item.tags.forEach(tag => {
-            if(tags.indexOf("#"+tag.tagName) != -1){
-              // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
-              // console.log(item);
-              isTag = true;
-              return;
-            }
-          })
-          return isTag;
-        })
+      if(this.myDatas.length == 0){
+        this.feedDatas = this.originalDatas;
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
+          });
+
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
+        }
+      } else{
+        this.feedDatas = this.myDatas;
+        if(tags.length != 0){
+          this.feedDatas = this.feedDatas.filter(function (item) {
+            var isTag = false;
+            item.tags.forEach(tag => {
+              if(tags.indexOf("#"+tag.tagName) != -1){
+                // console.log("#"+tag.tagName + " " + tags.indexOf("#"+tag.tagName));
+                // console.log(item);
+                isTag = true;
+                return;
+              }
+            })
+            return isTag;
+          });
+          if(this.feedDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '',
+              text: '검색어와 일치하는 레시피가 없습니다!',
+              footer: ''
+            })
+          }
+        }
       }
       // console.log(this.feedDatas);
     },
     deleteNo(feed_no){
-      axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
-      .then(response => {
-        this.$router.push('/feed/main');
+      Swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: "되돌릴 수 없습니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네 삭제할게요!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b301.p.ssafy.io:9999/food/api/feed/delete`,{params:{feedNo : feed_no}})
+          .then(response => {
+            Swal.fire({
+                // position: 'top-end',
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            window.location.reload();
+            this.$router.push('/feed/main');
+          })
+        }
       })
-    }
+    },
+    call(){
+      if(this.switched == true){
+        let timerInterval
+        Swal.fire({
+          title: '레시피를 찾는 중입니다.',
+          html: '',
+          timer: 500,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
+                }
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        })
+        var myFood = [];
+        axios.get(`https://i3b301.p.ssafy.io:9999/food/api/myref/search/`+store.state.userInfo.email)
+        .then(response => {
+          this.feedDatas = this.originalDatas;  //  원본 데이터
+          response.data.myreflist.forEach(d => {
+            myFood.push(d.name_kor);
+          })
+          // console.log(myFood);
+          this.feedDatas = this.feedDatas.filter(function (feed) {
+            var hasFood = false;
+            feed.foods.forEach(food => {
+              if(myFood.indexOf(food.foodName) != -1){
+                // console.log(feed.no);
+                hasFood = true;
+                // this.myDatas.push(feed);
+                return;
+              }
+            });
+            return hasFood;
+          });
+          // console.log(this.feedDatas);
+          this.myDatas = this.feedDatas;
+          if(this.myDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '만들 수 있는 레시피가 없습니다!',
+              text: '냉장고에 재료를 등록해주세요!',
+              footer: ''
+            })
+          }
+        })
+        .catch(error => {
+          // console.log(error.response)
+        });
+        // console.log(this.feedDatas);
+        
+
+        this.switched = false;
+      }
+      else{
+          this.feedDatas = this.originalDatas;
+          this.switched = true;
+        }
+    },
   },
 };
 </script>
 <style scoped>
 .btns {
-  display: none;
+  /* display: none; */
   position: absolute;
-  width: 50px;
+  width: 80px;
   /* height: 60px; */
   z-index: 80;
-  left: 300px;
-  top: 375px;
+  left: 77%;
+  top: 83%;
   border: 1px solid lightgray;
   border-radius: 4px;
 }
 .btn {
-  width: 100%;
+  /* width: 100%; */
   background-color: white !important;
   border-radius: unset;
   box-shadow: unset;

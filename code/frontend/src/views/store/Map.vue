@@ -8,7 +8,7 @@ import store from '../../vuex/store.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-// const SERVER_URL = 'http://localhost:9999/food/api';
+// const SERVER_URL = 'https://i3b301.p.ssafy.io:9999/food/api';
 const SERVER_URL = store.state.SERVER_URL;
 
 export default {
@@ -25,14 +25,14 @@ export default {
   mounted() {
     this.mapdata = store.state.mapOtherUserInfo.address
     if (window.kakao && window.kakao.maps) {
-      // console.log(this.mapdata)
+      // // console.log(this.mapdata)
       this.initMap();
       this.searchSubmit();
       this.getLocation();
     } else {
       const script = document.createElement('script');
       /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap);
+      // script.onload = () => kakao.maps.load(this.initMap);
       script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=93896045350a4c0fb6b7c93ae2527085&libraries=services';
       document.head.appendChild(script);
     }
@@ -44,7 +44,7 @@ export default {
         mapcenter = new kakao.maps.LatLng(33.450701, 126.570667),
         options = {
           center: mapcenter,
-          level: 3
+          level: 1,
         };
       var map = new kakao.maps.Map(container, options);
       this.map = map;
@@ -60,16 +60,16 @@ export default {
       for (var ad = 0; ad < this.mapdata.length; ad++) {
         address.push(this.mapdata[ad])
       }
-      // console.log('address')
-      // console.log(address)
+      // // console.log('address')
+      // // console.log(address)
       for (var i = 0; i < address.length; i ++) {
         geocoder.addressSearch(address[i], (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
             var bounds = new kakao.maps.LatLngBounds();
-            // console.log('ok')
+            // // console.log('ok')
             for (var r = 0; r < result.length; r++) {
               var data = result[r];
-              // console.log(data)
+              // // console.log(data)
               bounds.extend(new kakao.maps.LatLng(data.y, data.x));
             }
             this.map.setBounds(bounds);
@@ -107,7 +107,7 @@ export default {
         // navigator.geolocation.getCurrentPosition(function(position) {
           location.latitude = position.coords.latitude
           location.longitude = position.coords.longitude
-          // console.log(location.latitude, location.longitude)
+          // // console.log(location.latitude, location.longitude)
         }, function(error) {
           console.error(error);
         }, {
@@ -132,11 +132,11 @@ export default {
   }else{
     this.userinfo = store.state.userInfo;
   }
-  // console.log(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
+  // // console.log(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
   axios.get(`https://i3b301.p.ssafy.io:9999/food/api/trade/`)
     .then(response => {
       this.tradelist = response.data.list
-      // console.log(this.tradelist)
+      // // console.log(this.tradelist)
       if (this.mapOtherUserInfo.address.length === 0) {
         for (var i = 0; i < this.tradelist.length; i++) {
           store.state.mapOtherUserInfo.address.push(this.tradelist[i].address)
@@ -145,7 +145,7 @@ export default {
       }
     })
     .catch(error => {
-      // console.log(error.response)
+      // // console.log(error.response)
     })
   },
 }

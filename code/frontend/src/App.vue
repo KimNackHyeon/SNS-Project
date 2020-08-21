@@ -1,8 +1,8 @@
 <template>
-<div style="width:360px; height:640px; margin:auto; overflow-y:hidden; overflow-x:hidden;">
-  <v-app id="app">
+<div :style="{width:frameSize.x+'px', height:frameSize.y+'px'}" style="margin: 0px auto; overflow-y:hidden; overflow-x:hidden;">
+  <v-app id="app" style="width:100%; height:100%; overflow:hidden;">
     <Home  @logout="onLogout" v-if="$route.path !== '/'&&$route.path !== '/user/join'&&$route.path !=='/user/searchpassword'&&$route.path !=='/user/checkcertification'"/>
-    <router-view @login="onLogin" @signup="onSignup"></router-view>
+    <router-view :style="{width:frameSize.x+'px', height:(frameSize.y-50)+'px'}" @login="onLogin" @signup="onSignup"></router-view>
   </v-app>
 </div>
 </template>
@@ -24,9 +24,20 @@ export default {
     return {
       isLoggedIn: false,
       userInfo: {},
+      frameSize:{
+        x:0,
+        y:0,
+      }
     };
   },
   methods: {
+    onResize(){
+      if(window.innerHeight*0.5625 <=window.innerWidth){
+        this.frameSize = {x:window.innerHeight*0.5625, y:window.innerHeight};
+      }else{
+        this.frameSize = {x:window.innerWidth, y:window.innerWidth *1.77};
+      }
+    },
     onLogin(email, password) {
       const loginData = {
         email: email,
@@ -70,13 +81,15 @@ export default {
         )
         })
         .catch((error) => {
+          this.$router.push('/error');
           // console.log(error.response);
         });
     },
 
     onLogout() {
       var token = this.$cookies.get("auth-token");
-      if (store.state.userInfo) {
+      if (store.state.userInfo.email) {
+        // alert("여기?");
         axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/logout`, {params: { token : token}})
         .then(() => {
           // console.log(this.$cookies.keys());
@@ -92,6 +105,7 @@ export default {
         })
         .catch(error => {
           // console.log(error.response);
+          this.$router.push('/error');
         })
       }
       else {
@@ -109,7 +123,11 @@ export default {
   },
   mounted() { 
     this.isLoggedIn = this.$cookies.isKey("auth-token");
+    this.onResize();
   },
   
 };
 </script>
+<style>
+
+</style>
