@@ -57,13 +57,13 @@
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount1 }}개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.myfoodcount1 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood1}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount1 }}개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.tradefoodcount1 }}개</v-card-text>
                         </v-col>
                       </v-row>
                       <v-row class="pa-0 ma-1" v-if="info.tradefood2!=null">
@@ -71,13 +71,13 @@
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.myfood}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.myfoodcount2 }}개당</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.myfoodcount2 }}개당</v-card-text>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
                           <v-img height="30" width="30" class="ma-0 pa-0" :src="require(`../../assets/images/food/${info.tradefood2}.png`)"></v-img>
                         </v-col>
                         <v-col cols="3" class="pa-0" style="margin-bottom: 13px">
-                          <v-card-text class="pa-0" style="font-size: 13px;">{{ info.tradefoodcount2 }}개</v-card-text>
+                          <v-card-text class="pa-0" style="font-size: 11px;">{{ info.tradefoodcount2 }}개</v-card-text>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -87,12 +87,12 @@
                           <v-card-text class="text-center pa-0" style="font-size: 15px; font-weight: bold;">구매</v-card-text>
                         </v-col>
                         <v-col v-if="!(info.price === '0')" cols="12" style="padding: 0; padding-bottom: 13px">
-                          <v-card-text class="text-center pa-0" style="font-size: 10px;">1개당</v-card-text>
+                          <v-card-text class="text-center pa-0" style="font-size: 10px;">{{ tradeunit[i] }}당</v-card-text>
                         </v-col>
                         <v-col cols="12" class="pa-1 text-center">
-                          <span v-if="!(info.price === '0')" class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
-                          <span v-if="!(info.price === '0')" class="text-center pa-0" style="font-size: 18px;">원</span>
-                          <span v-if="info.price === '0'" class="text-center pa-0" style="font-size: 12px; color: red;">가격정보가 없습니다. 직접 문의해주세요</span>
+                          <span v-if="!(info.price === '0' || info.price === '300')" class="text-center pa-0" style="font-size: 18px; color: red;">{{ info.price }}</span>
+                          <span v-if="!(info.price === '0' || info.price === '300')" class="text-center pa-0" style="font-size: 18px;">원</span>
+                          <span v-if="info.price === '0' || info.price === '300'" class="text-center pa-0" style="font-size: 12px; color: red;">가격정보가 없습니다. 직접 문의해주세요</span>
                         </v-col>
                         <v-col cols="12" class=" text-center" v-if="userinfo.email === tradelist[i].email" style="padding: 0">
                           <router-link :to="{ name: 'ModifyMarketPlace', params: { pagenumber: info.no }}">
@@ -137,6 +137,7 @@ export default {
       frameSize : {x:window.innerHeight*0.5625, y:window.innerHeight,per:1},
       tradelist: [
       ],
+      tradeunit: [],
       pagenumber: '',
       switched:true,
       userinfo:'',
@@ -312,8 +313,9 @@ created() {
       axios.get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
-            for(var m = 0; m < this.xmldata.price.length; m++){
-              for (var i = 0; i < this.tradelist.length; i++) {
+            // console.log(this.xmldata.price)
+            for (var i = 0; i < this.tradelist.length; i++) {
+              for(var m = 0; m < this.xmldata.price.length; m++){
                 for (var j = 0; j < foods.length; j++) {
                   if (this.tradelist[i].myfood === foods[j].name) {
                     this.tradelist[i].myfood = foods[j].img
@@ -326,15 +328,24 @@ created() {
                   }
                 }
                 var tF = this.xmldata.price[m];
+
                 var tFname = tF.productName.split('/')[0];
                 if(tF.product_cls_code == '01' ){
-                  if(tFname === this.tradelist[i].myfood_kor){
-                    this.tradelist[i].price = tF.dpr1;
-                    // // console.log(this.tradelist[i].price)
+                  if (this.tradelist[i].price === '0' || this.tradelist[i].price === '300') {
+                    if(tFname === this.tradelist[i].myfood_kor){
+                      this.tradelist[i].price = tF.dpr1;
+                      this.tradeunit.push(tF.unit)
+                      console.log(tF)
+                      // // console.log(this.tradelist[i].price)
+                    }
                   }
                 }
               }
+              if (this.tradelist[i].price === '0' || this.tradelist[i].price === '300') {
+                this.tradeunit.push('1개')
+              }
             }
+            // console.log(this.tradeunit)
           }
         )
         if (this.mapOtherUserInfo.address.length === 0) {

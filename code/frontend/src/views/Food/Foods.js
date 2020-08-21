@@ -214,22 +214,6 @@ export var foods=[
             name_kor:'깻잎',
             img:'spinach' 
             },
-            {name:'jonmat_leaf',
-            name_kor:'깻잎',
-            img:'spinach' 
-            },
-            {name:'jonmat_leaf',
-            name_kor:'깻잎',
-            img:'spinach' 
-            },
-            {name:'jonmat_leaf',
-            name_kor:'깻잎',
-            img:'spinach' 
-            },
-            {name:'jonmat_leaf',
-            name_kor:'깻잎',
-            img:'spinach' 
-            },
             {name:'butter',
             name_kor:'버터',
             img:'butter'

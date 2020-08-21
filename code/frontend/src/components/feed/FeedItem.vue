@@ -469,19 +469,20 @@ export default {
           });
           // console.log(this.feedDatas);
           this.myDatas = this.feedDatas;
+          if(this.myDatas.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: '만들 수 있는 레시피가 없습니다!',
+              text: '냉장고에 재료를 등록해주세요!',
+              footer: ''
+            })
+          }
         })
         .catch(error => {
           // console.log(error.response)
         });
-
-        if(this.feedDatas.length == 0){
-          Swal.fire({
-            icon: 'error',
-            title: '만들 수 있는 레시피가 없습니다!',
-            text: '냉장고에 재료를 등록해주세요!',
-            footer: ''
-          })
-        }
+        // console.log(this.feedDatas);
+        
 
         this.switched = false;
       }

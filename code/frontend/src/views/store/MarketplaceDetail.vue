@@ -38,8 +38,9 @@
           </tr>
           <tr class="tableBody">
             <td><img :src="'/img/food/' + detailinfo.myfood + '.png'" :alt="detailinfo.myfood" style="width: 30px; height: 30px; margin: 0 10px;"></td>
-            <td><h4>{{ detailinfo.myfood_kor }} {{ detailinfo.myfoodcount1 }}개</h4></td>
-            <td style="padding-left: 5px;">를</td>
+            <td v-if="myapi.unit === '1개'"><h4>{{ detailinfo.myfood_kor }} {{myapi.unit}}</h4></td>
+            <td v-if="myapi.unit !== '1개'"><h4>{{ detailinfo.myfood_kor }} {{myapi.unit}}</h4></td>
+            <td style="padding-left: 5px;">을/를</td>
             <td><img :src="'/img/food/' + detailinfo.tradefood1 + '.png'" :alt="detailinfo.tradefood1" style="width: 30px; height: 30px; margin: 0 10px;"></td>
             <td><h4>{{ detailinfo.tradefood1_kor }} {{ detailinfo.tradefoodcount1 }}개</h4></td>
             <td style="padding-left: 5px;">와 바꾸고 싶어요</td>
@@ -84,7 +85,7 @@
       <div style="padding: 5px; background: #eee; overflow: hidden;">
         <div style="float: left"><h4>현금 거래시</h4></div>
         <div style="float: right">
-          <div v-if="!(myapi.name==''&&trade1api.name==''&&trade2api.name=='')" style="display: inline-block"><h6>1개당</h6></div>
+          <div v-if="!(myapi.name==''&&trade1api.name==''&&trade2api.name=='')" style="display: inline-block"><h6>{{myapi.unit}}당</h6></div>
           <div v-if="!(myapi.name==''&&trade1api.name==''&&trade2api.name=='')" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>{{ myapi.price }}</h4></div>
           <div v-if="!(myapi.name==''&&trade1api.name==''&&trade2api.name=='')" style="display: inline-block"><h4>원</h4></div>
           <div v-if="myapi.name==''&&trade1api.name==''&&trade2api.name==''" style="display: inline-block; color: rgb(209, 77, 0); margin: 0 5px 0 10px;"><h4>직접 문의해주세요.</h4></div>
