@@ -315,7 +315,7 @@ export default {
                 this.myapi.name = tFname;
                 this.myapi.unit = tF.unit;
                 this.myapi.price = tF.dpr1;
-                console.log(this.myapi.price)
+                // console.log(this.myapi.price)
                 continue;
               }
               if(tFname == this.detailinfo.tradefood1_kor){

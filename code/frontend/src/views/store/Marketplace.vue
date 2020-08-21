@@ -285,7 +285,7 @@ export default {
         this.tradelist = this.tradelist.filter(function (item) {
             return item.myfood_kor.indexOf(keyword)!=-1;
           });
-        console.log(this.tradelist);
+        // console.log(this.tradelist);
         if(this.tradelist.length == 0){
           if(this.tradelist.length == 0){
             Swal.fire({
@@ -335,7 +335,7 @@ created() {
                     if(tFname === this.tradelist[i].myfood_kor){
                       this.tradelist[i].price = tF.dpr1;
                       this.tradeunit.push(tF.unit)
-                      console.log(tF)
+                      // console.log(tF)
                       // // console.log(this.tradelist[i].price)
                     }
                   }
