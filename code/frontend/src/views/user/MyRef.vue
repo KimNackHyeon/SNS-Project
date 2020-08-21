@@ -246,7 +246,7 @@ data() {
             // .post(`http://localhost:9999/food/api/myref/delete`,deleteFood)
             .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/delete`,deleteFood)
             .then((response)=>{
-                console.log(response);
+                // // console.log(response);
                 window.location.reload();
             })
         },
@@ -264,7 +264,7 @@ data() {
         // .post(`http://localhost:9999/food/api/myref/regist`,registFood)
         .post(`https://i3b301.p.ssafy.io:9999/food/api/myref/regist`,registFood)
         .then((response)=>{
-            console.log(response);
+            // // console.log(response);
             Swal.fire({
                 icon: 'success',
                 title: registFood.name_kor+"(이)가 냉장고에 들어갔습니다!",
@@ -272,7 +272,7 @@ data() {
             window.location.reload();
         })
         .catch((error)=>{
-                console.log(error.response);
+                // console.log(error.response);
                 
         })   
 
@@ -316,7 +316,7 @@ data() {
             },
             
             openShare:function(sendData){
-                console.log("openshare");
+                // console.log("openshare");
                 this.closeregistMater();
                 var nowfood = sendData.nowfood;
                 var index = sendData.index;
@@ -518,18 +518,18 @@ data() {
                 
                 if(this.changeFoods.length>0 && this.userinfo.address){
                     
-                    console.log(typeof(this.changeFoods));
+                    // console.log(typeof(this.changeFoods));
                 axios({
                     url:`https://i3b301.p.ssafy.io:9999/food/api/myref/share`,
                     method:'post',
                     data: JSON.stringify(this.changeFoods),
                     headers: config.headers})
                 .then((response)=>{
-                    console.log(response);
+                    // console.log(response);
                     this.$router.push("/store/marketplace");
                 })
                 .catch((error)=>{
-                    console.log(error.response);
+                    // console.log(error.response);
                 })
                 }
                 else if (!this.userinfo.address) {
@@ -581,7 +581,7 @@ data() {
     created() {
         if(store.state.kakaoUserInfo.email != null){
         this.userinfo = store.state.kakaoUserInfo;
-        console.log(this.userinfo);
+        // console.log(this.userinfo);
       }else{
         this.userinfo = store.state.userInfo;
       }
@@ -591,14 +591,14 @@ data() {
           this.foods = response.data.myreflist;
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
 
         axios
         .get(`https://i3b301.p.ssafy.io:9999/food/api/account/apitest`)
         .then(response => {
             this.xmldata = response.data;
-            console.log(this.xmldata);
+            // console.log(this.xmldata);
             }
         )
   },

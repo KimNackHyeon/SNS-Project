@@ -326,7 +326,7 @@ export default {
       $(".carousel-slide").css("margin-left", afterMargin);
         this.thisPage -=1;
       }
-        console.log(this.thisPage);
+        // console.log(this.thisPage);
       // transform:translateX(10px);
       // console.log(this.item);
       // console.log(this.items);
@@ -341,7 +341,7 @@ export default {
       // console.log(this.items);
         this.thisPage += 1;
       }
-        console.log(this.thisPage+" "+this.items.length);
+        // console.log(this.thisPage+" "+this.items.length);
     },
     closeAddFood() {
       $(".addFood").css("display", "none");
