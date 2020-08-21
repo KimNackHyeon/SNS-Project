@@ -56,7 +56,7 @@ export default {
         }else{
           this.Page += 1;
         }
-       console.log(this.Page)
+      //  console.log(this.Page)
      }
  }
 }
