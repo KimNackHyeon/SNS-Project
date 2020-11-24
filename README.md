@@ -1,13 +1,4 @@
 # ❄️우리동네 냉장고
-- 팀명 : 냉 우 동 (B301)
-
-- 팀원 소개
-
-  팀장 : 김낙현(nack)
-
-  팀원 : 권남선(kwon), 류혜명(myong), 박건호(park), 윤종현(yoon)
-
-
 
 ## 주제
 - 프로젝트명 : 우리 동네 냉장고
@@ -71,7 +62,7 @@
 **branch**
 
 ``` 
-master -> develop -> feature/fe(권남선, 류혜명, 윤종현) or feature/be(김낙현, 박건호)
+master -> develop -> feature/fe or feature/be
 ```
 
 **merge**
